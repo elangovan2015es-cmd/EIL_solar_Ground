@@ -347,7 +347,7 @@ tr.debt-row td{background:#EEF5FB;}
 <div id="tab-finance" class="section">
   <div class="card">
     <div class="card-title">Capital Structure</div>
-    <div class="ir"><span class="il">Debt fraction (%)</span><input type="range" id="i-debt" min="50" max="80" step="5" value="70" oninput="upd('debt');calculate()"><span class="iv" id="v-debt">70%</span></div>
+    <div class="ir"><span class="il">Debt fraction (%)</span><input type="range" id="i-debt" min="50" max="80" step="5" value="50" oninput="upd('debt');calculate()"><span class="iv" id="v-debt">50%</span></div>
     <div class="ir"><span class="il">Cost of debt (%/yr)</span><input type="range" id="i-ir" min="7" max="13" step="0.25" value="9" oninput="upd('ir');calculate()"><span class="iv" id="v-ir">9.00%</span></div>
     <div class="ir"><span class="il">Loan tenure (years)</span><input type="range" id="i-tenure" min="7" max="15" step="1" value="10" oninput="upd('tenure');calculate()"><span class="iv" id="v-tenure">10 yrs</span></div>
     <div class="ir"><span class="il">Moratorium (years)</span><input type="range" id="i-moro" min="0" max="2" step="1" value="1" oninput="upd('moro');calculate()"><span class="iv" id="v-moro">1 yr</span></div>
@@ -673,54 +673,93 @@ function calculate(){
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>'₹'+v,font:{size:10}}},x:{ticks:{font:{size:10}}}}}
   });
 
-  // Debt schedule
-  const annPrin=debtAmt/Math.max(tenure-moro,1);
-  const debtSch=[];let ob=debtAmt;
-  for(let y=1;y<=tenure;y++){
-    const int=ob*ir,prin=y<=moro?0:annPrin,cb=Math.max(0,ob-prin);
-    debtSch.push({y,ob,int,prin,cb,ds:int+prin});ob=cb;
+  // Debt schedule — principal repaid from Yr1 (matches Excel Payback_Analysis)
+  // Note: Financial_Model has 1-yr moratorium but Payback_Analysis (the correct
+  // payback calculation) has principal from Yr1. We follow Payback_Analysis.
+  const annPrin = debtAmt / tenure;
+  const debtSch = [];
+  let ob = debtAmt;
+  for(let y=1; y<=tenure; y++){
+    const int  = ob * ir;
+    const prin = annPrin;          // principal every year, no moratorium
+    const cb   = Math.max(0, ob - prin);
+    debtSch.push({y, ob, int, prin, cb, ds:int+prin});
+    ob = cb;
   }
-  document.getElementById('debt-tbody').innerHTML=debtSch.map(d=>
-    `<tr><td>Yr ${d.y}${d.y<=moro?' (M)':''}</td><td>${d.ob.toFixed(1)}</td><td>${d.int.toFixed(1)}</td><td>${d.prin.toFixed(1)}</td><td>${d.cb.toFixed(1)}</td><td>${d.ds.toFixed(1)}</td></tr>`
+  document.getElementById('debt-tbody').innerHTML = debtSch.map(d=>
+    `<tr><td>Yr ${d.y}</td><td>${d.ob.toFixed(2)}</td><td>${d.int.toFixed(2)}</td><td>${d.prin.toFixed(2)}</td><td>${d.cb.toFixed(2)}</td><td>${d.ds.toFixed(2)}</td></tr>`
   ).join('');
 
-  // 25-year CF
+  // ── 25-YEAR CASH FLOW ──────────────────────────────────────────────────
+  // Tax logic matches Excel Financial_Model exactly (verified against v9):
+  //   Yr 1  : IT depreciation = 0 (accel dep claimed but taxable income not sheltered)
+  //            Tax = max(0, EBITDA − Interest) × taxRate × (1+cess)
+  //   Yr 2+ : IT dep = WDV opening × 15% (true WDV declining balance)
+  //            WDV opening Yr2 = solarCapex (no dep in Yr1, so WDV unchanged)
+  //            Tax = max(0, EBITDA − Interest − IT_dep) × taxRate × (1+cess)
+  //   Debt  : principal paid from Yr1 (no moratorium in payback calculation)
+  //   This produces payback Year 4 matching Excel Payback_Analysis exactly.
+  // ───────────────────────────────────────────────────────────────────────
   const cfData=[];
-  let degF=1,tarC=tariff,oaC=oa,omC=omYr1,insC=insYr1,battOMC=battOM;
-  let wdv=solarCapex,cumCF=-eqAmt,payYr=null;
+  let degF=1, tarC=tariff, oaC=oa, omC=omYr1, insC=insYr1, battOMC=battOM;
+  let wdv=solarCapex;   // WDV for IT depreciation (starts at solar capex)
+  let cumCF=-eqAmt;     // cumulative CF starts negative at equity invested
+  let payYr=null;
 
   for(let y=1;y<=25;y++){
-    if(y===1) degF=1-deg1;
-    else if(y<=10) degF*=(1-0.0068);
-    else degF*=(1-0.007);
+    // ── Plant degradation ──
+    if(y===1)       degF=1-deg1;
+    else if(y<=10)  degF*=(1-0.0068);
+    else            degF*=(1-0.007);
 
-    const ng_gate=netGenGate*degF;          // at plant gate (degraded)
-    const ng_meter=ng_gate*(1-gridLossPct); // at buyer meter
-    const wt=tarC*(1+peakPct*surcharge);
-    const sp=wt*disc;
+    // ── Generation ──
+    const ng_gate  = netGenGate * degF;          // kWh at plant gate
+    const ng_meter = ng_gate * (1-gridLossPct);  // kWh at buyer meter (after TNERC grid loss)
 
+    // ── Tariff ──
+    const wt = tarC*(1+peakPct*surcharge);
+    const sp = wt*disc;
+
+    // ── Battery extra revenue ──
     let battExtra=0;
     if(hasBatt){
       const storedMWh=(ng_gate/1e6)*battStore*1000;
       const dischMWh=storedMWh*rte*Math.pow(1-battDeg,y-1);
-      battExtra=dischMWh*evPrem/1e7;
+      battExtra=dischMWh*evPrem/1e7;  // ₹ Cr
     }
 
-    const gr=ng_meter*sp/1e7,oc=ng_meter*oaC/1e7;
-    const nr=gr-oc+battExtra;
-    const opex=omC+insC+(hasBatt?battOMC:0);
-    const ebitda=nr-opex;
-    const dr=debtSch.find(d=>d.y===y)||{int:0,prin:0};
-    let dep=0;
-    if(y===1) dep=wdv*addep;
-    else if(wdv>0) dep=wdv*0.15;
-    wdv=Math.max(0,wdv-dep);
-    const pbt=ebitda-dr.int-dep;
-    const tax=Math.max(0,pbt)*taxRate*1.04;
-    const salvAmt=y===25?totalCapex*salvage:0;
-    const fcf=ebitda-dr.int-dr.prin-tax+salvAmt;
-    cumCF+=fcf;
-    if(cumCF>=0&&!payYr) payYr=y;
+    // ── Revenue (on meter units) ──
+    const gr    = ng_meter*sp/1e7;
+    const oc    = ng_meter*oaC/1e7;
+    const nr    = gr - oc + battExtra;
+    const opex  = omC + insC + (hasBatt?battOMC:0);
+    const ebitda= nr - opex;
+
+    // ── Debt service ──
+    const dr = debtSch.find(d=>d.y===y)||{int:0,prin:0};
+
+    // ── IT Depreciation (WDV) — matched exactly to Excel ──
+    // Yr1: dep=0 (WDV stays at solarCapex)
+    // Yr2+: dep = wdv × 15%, then wdv reduces
+    let itDep=0;
+    if(y===1){
+      itDep=0;              // no dep shelter Yr1 per Excel model
+      // wdv unchanged this year
+    } else {
+      itDep = wdv * 0.15;
+      wdv   = Math.max(0, wdv - itDep);
+    }
+
+    // ── Tax — exactly as Excel ──
+    // Taxable = EBITDA - Interest - IT_dep (floor zero)
+    const taxable = Math.max(0, ebitda - dr.int - itDep);
+    const tax     = taxable * taxRate * (1 + 0.04);  // 4% H&E cess
+
+    // ── Free Cash Flow ──
+    const salvAmt = (y===25) ? totalCapex*salvage : 0;
+    const fcf = ebitda - dr.int - dr.prin - tax + salvAmt;
+    cumCF += fcf;
+    if(cumCF>=0 && !payYr) payYr=y;
 
     cfData.push({y,ng:(ng_meter/1e6).toFixed(2),sp:sp.toFixed(2),oa:oaC.toFixed(2),
       nr:(sp-oaC).toFixed(2),netRev:nr.toFixed(2),ebitda:ebitda.toFixed(2),
