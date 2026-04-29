@@ -6,308 +6,191 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="EIL Solar">
+<meta name="apple-mobile-web-app-title" content="EIL Ground">
 <meta name="theme-color" content="#0F6E56">
-<title>EIL Solar — 26 MW Model</title>
+<title>EIL Solar Ground — 26 MW</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root {
-  --green:#0F6E56; --green-d:#085041; --green-mid:#1D9E75; --green-pale:#9FE1CB; --green-bg:#E1F5EE;
-  --amber:#BA7517; --amber-mid:#EF9F27; --amber-bg:#FAEEDA;
-  --red:#A32D2D; --red-mid:#E24B4A; --red-bg:#FCEBEB;
-  --blue:#185FA5; --blue-mid:#378ADD; --blue-bg:#E6F1FB;
-  --text:#1A1A18; --text2:#5F5E5A; --text3:#888780;
-  --border:#D3D1C7; --border2:#EDEBE5;
-  --bg:#F7F6F3; --card:#FFFFFF;
-  --r:12px; --r-sm:8px;
-  --header-h:56px;
-  --nav-h:64px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+:root{
+  --green:#0F6E56;--green-d:#085041;--green-mid:#1D9E75;--green-pale:#9FE1CB;--green-bg:#E1F5EE;
+  --amber:#BA7517;--amber-mid:#EF9F27;--amber-bg:#FAEEDA;
+  --red:#A32D2D;--red-mid:#E24B4A;--red-bg:#FCEBEB;
+  --blue:#185FA5;--blue-mid:#378ADD;--blue-bg:#E6F1FB;
+  --teal:#0F6E56;--purple:#534AB7;--purple-bg:#EEEDFE;
+  --text:#1A1A18;--text2:#5F5E5A;--text3:#888780;
+  --border:#D3D1C7;--border2:#EDEBE5;
+  --bg:#F7F6F3;--card:#FFFFFF;
+  --r:12px;--r-sm:8px;
+  --header-h:56px;--nav-h:64px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
 }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
 
-* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+/* HEADER */
+.app-header{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--header-h);background:var(--green);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-top:env(safe-area-inset-top,0);box-shadow:0 2px 12px rgba(0,0,0,0.2);}
+.app-header-left{display:flex;flex-direction:column;}
+.app-title{font-size:16px;font-weight:600;color:white;line-height:1.2;}
+.app-sub{font-size:11px;color:rgba(255,255,255,0.7);}
+.recalc-btn{background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.4);color:white;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:background 0.15s;}
+.recalc-btn:active{background:rgba(255,255,255,0.32);}
 
-body {
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  font-size:15px;
-  line-height:1.55;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
+/* SCROLL */
+.scroll-area{position:fixed;top:var(--header-h);bottom:calc(var(--nav-h) + var(--safe-bottom));left:0;right:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 13px 24px;}
 
-/* ── HEADER ── */
-.app-header {
-  position:fixed; top:0; left:0; right:0; z-index:200;
-  height:var(--header-h);
-  background:var(--green);
-  display:flex; align-items:center; justify-content:space-between;
-  padding:0 16px;
-  padding-top:env(safe-area-inset-top,0);
-  box-shadow:0 2px 12px rgba(0,0,0,0.18);
-}
-.app-header-left { display:flex; flex-direction:column; }
-.app-title { font-size:16px; font-weight:600; color:white; line-height:1.2; }
-.app-sub { font-size:11px; color:rgba(255,255,255,0.7); font-weight:400; }
-.recalc-btn {
-  background:rgba(255,255,255,0.18);
-  border:1.5px solid rgba(255,255,255,0.4);
-  color:white;
-  border-radius:8px;
-  padding:8px 14px;
-  font-size:13px; font-weight:600;
-  font-family:'DM Sans',sans-serif;
-  cursor:pointer; letter-spacing:0.01em;
-  transition:background 0.15s;
-}
-.recalc-btn:active { background:rgba(255,255,255,0.3); }
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:calc(var(--nav-h) + var(--safe-bottom));padding-bottom:var(--safe-bottom);background:var(--card);border-top:1px solid var(--border);display:flex;align-items:stretch;box-shadow:0 -2px 12px rgba(0,0,0,0.07);}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;border:none;background:none;padding:6px 2px;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.nav-icon{font-size:19px;line-height:1;}
+.nav-label{font-size:10px;font-weight:500;color:var(--text3);line-height:1;}
+.nav-item.active .nav-label{color:var(--green);font-weight:600;}
+.nav-item.active .nav-icon{transform:translateY(-1px);}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--green);display:none;margin-top:-2px;}
+.nav-item.active .nav-dot{display:block;}
 
-/* ── SCROLL AREA ── */
-.scroll-area {
-  position:fixed;
-  top:var(--header-h);
-  bottom:calc(var(--nav-h) + var(--safe-bottom));
-  left:0; right:0;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:16px 14px 24px;
-}
+/* SECTIONS */
+.section{display:none;}
+.section.active{display:block;}
 
-/* ── BOTTOM NAV ── */
-.bottom-nav {
-  position:fixed; bottom:0; left:0; right:0; z-index:200;
-  height:calc(var(--nav-h) + var(--safe-bottom));
-  padding-bottom:var(--safe-bottom);
-  background:var(--card);
-  border-top:1px solid var(--border);
-  display:flex; align-items:stretch;
-  box-shadow:0 -2px 12px rgba(0,0,0,0.08);
-}
-.nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:3px; cursor:pointer; border:none; background:none;
-  padding:6px 2px; font-family:'DM Sans',sans-serif;
-  transition:all 0.15s;
-}
-.nav-icon { font-size:20px; line-height:1; }
-.nav-label { font-size:10px; font-weight:500; color:var(--text3); line-height:1; }
-.nav-item.active .nav-label { color:var(--green); font-weight:600; }
-.nav-item.active .nav-icon { transform:translateY(-1px); }
-.nav-dot {
-  width:4px; height:4px; border-radius:50%; background:var(--green);
-  display:none; margin-top:-2px;
-}
-.nav-item.active .nav-dot { display:block; }
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border2);border-radius:var(--r);padding:15px;margin-bottom:13px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text3);margin-bottom:13px;padding-bottom:7px;border-bottom:1px solid var(--border2);}
 
-/* ── SECTIONS ── */
-.section { display:none; }
-.section.active { display:block; }
+/* LOSS HIGHLIGHT CARD */
+.loss-card{background:var(--purple-bg);border:1px solid #AFA9EC;border-radius:var(--r);padding:13px;margin-bottom:13px;}
+.loss-card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);margin-bottom:10px;}
 
-/* ── CARDS ── */
-.card {
-  background:var(--card);
-  border:1px solid var(--border2);
-  border-radius:var(--r);
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:0 1px 4px rgba(0,0,0,0.05);
-}
-.card-title {
-  font-size:11px; font-weight:600;
-  text-transform:uppercase; letter-spacing:0.08em;
-  color:var(--text3);
-  margin-bottom:14px;
-  padding-bottom:8px;
-  border-bottom:1px solid var(--border2);
-}
+/* METRICS */
+.mg2{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+.mg4{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px;}
+.mc{background:var(--bg);border:1px solid var(--border2);border-radius:var(--r-sm);padding:11px 10px;text-align:center;}
+.ml{font-size:10px;color:var(--text3);font-weight:500;letter-spacing:0.03em;margin-bottom:4px;}
+.mv{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;color:var(--text);line-height:1.1;}
+.mv.green{color:var(--green);}
+.mv.amber{color:var(--amber);}
+.mv.red{color:var(--red);}
+.mv.blue{color:var(--blue);}
+.mv.purple{color:var(--purple);}
+.mv.sm{font-size:14px;}
 
-/* ── METRICS GRID ── */
-.metrics-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-.metrics-grid-4 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-.metric-card {
-  background:var(--bg);
-  border:1px solid var(--border2);
-  border-radius:var(--r-sm);
-  padding:12px 10px;
-  text-align:center;
-}
-.metric-label { font-size:10px; color:var(--text3); font-weight:500; letter-spacing:0.03em; margin-bottom:4px; }
-.metric-value { font-size:19px; font-weight:600; font-family:'DM Mono',monospace; color:var(--text); line-height:1.1; }
-.metric-value.green { color:var(--green); }
-.metric-value.amber { color:var(--amber); }
-.metric-value.red { color:var(--red); }
-.metric-value.blue { color:var(--blue); }
-.metric-value.sm { font-size:15px; }
+/* INPUTS */
+.ir{display:flex;align-items:center;gap:8px;margin-bottom:12px;min-height:36px;}
+.ir:last-child{margin-bottom:0;}
+.il{font-size:13px;color:var(--text2);font-weight:500;flex:1;line-height:1.3;}
+.iv{font-size:12px;font-weight:600;font-family:'DM Mono',monospace;color:var(--text);min-width:66px;text-align:right;flex-shrink:0;}
+input[type=range]{width:108px;flex-shrink:0;accent-color:var(--green-mid);height:28px;cursor:pointer;}
+input[type=number]{width:88px;flex-shrink:0;font-size:13px;padding:7px 9px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--card);color:var(--text);font-family:'DM Mono',monospace;-webkit-appearance:none;text-align:right;}
+input[type=number]:focus{outline:none;border-color:var(--green-mid);}
+select{flex:1;font-size:13px;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--r-sm);background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888780' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;}
+select:focus{outline:none;border-color:var(--green-mid);}
+.sel-row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.sel-label{font-size:13px;color:var(--text2);font-weight:500;}
 
-/* ── INPUT ROWS ── */
-.input-row {
-  display:flex; align-items:center;
-  gap:8px; margin-bottom:13px;
-  min-height:38px;
-}
-.input-row:last-child { margin-bottom:0; }
-.input-label {
-  font-size:13px; color:var(--text2); font-weight:500;
-  flex:1; line-height:1.3;
-}
-.input-val {
-  font-size:12px; font-weight:600; font-family:'DM Mono',monospace;
-  color:var(--text); min-width:68px; text-align:right; flex-shrink:0;
-}
-input[type=range] {
-  width:110px; flex-shrink:0;
-  accent-color:var(--green-mid);
-  height:28px; cursor:pointer;
-}
-input[type=number] {
-  width:90px; flex-shrink:0;
-  font-size:14px; padding:8px 10px;
-  border:1.5px solid var(--border);
-  border-radius:var(--r-sm);
-  background:var(--card); color:var(--text);
-  font-family:'DM Mono',monospace;
-  -webkit-appearance:none;
-  text-align:right;
-}
-input[type=number]:focus { outline:none; border-color:var(--green-mid); }
-select {
-  flex:1; max-width:100%;
-  font-size:13px; padding:9px 10px;
-  border:1.5px solid var(--border);
-  border-radius:var(--r-sm);
-  background:var(--card); color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  -webkit-appearance:none;
-  cursor:pointer;
-}
-select:focus { outline:none; border-color:var(--green-mid); }
+/* VOLTAGE TABLE */
+.vt{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px;}
+.vt th{background:var(--purple-bg);color:var(--purple);font-size:10px;font-weight:600;padding:7px 8px;text-align:center;border-bottom:1px solid #AFA9EC;letter-spacing:0.03em;}
+.vt td{padding:6px 8px;text-align:center;border-bottom:1px solid var(--border2);font-family:'DM Mono',monospace;font-size:11px;}
+.vt td:first-child{text-align:left;font-family:'DM Sans',sans-serif;color:var(--text2);font-weight:500;}
+.vt tr.active-row td{background:var(--green-bg);color:var(--green);font-weight:600;}
+.vt tr:last-child td{border-bottom:none;}
 
-/* ── ALERTS ── */
-.alert {
-  padding:11px 13px;
-  border-radius:var(--r-sm);
-  font-size:12.5px;
-  margin-bottom:12px;
-  border-left:3px solid;
-  line-height:1.5;
-}
-.alert.info { background:var(--blue-bg); color:var(--blue); border-color:var(--blue-mid); }
-.alert.warn { background:var(--amber-bg); color:var(--amber); border-color:var(--amber-mid); }
-.alert.success { background:var(--green-bg); color:var(--green); border-color:var(--green-mid); }
-.alert.danger { background:var(--red-bg); color:var(--red); border-color:var(--red-mid); }
+/* ALERTS */
+.alert{padding:10px 13px;border-radius:var(--r-sm);font-size:12.5px;margin-bottom:11px;border-left:3px solid;line-height:1.5;}
+.alert.info{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-mid);}
+.alert.warn{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-mid);}
+.alert.success{background:var(--green-bg);color:var(--green);border-color:var(--green-mid);}
+.alert.danger{background:var(--red-bg);color:var(--red);border-color:var(--red-mid);}
+.alert.purple{background:var(--purple-bg);color:var(--purple);border-color:#7F77DD;}
 
-/* ── TABLES (mobile scrollable) ── */
-.table-wrap { overflow-x:auto; border-radius:var(--r-sm); border:1px solid var(--border2); margin-bottom:14px; -webkit-overflow-scrolling:touch; }
-table { width:100%; border-collapse:collapse; font-size:11.5px; min-width:420px; }
-th {
-  background:var(--bg); color:var(--text3); font-weight:600;
-  padding:8px 9px; text-align:right;
-  border-bottom:1px solid var(--border);
-  white-space:nowrap; font-size:10px; text-transform:uppercase; letter-spacing:0.03em;
-}
-th:first-child { text-align:left; }
-td {
-  padding:7px 9px; text-align:right;
-  border-bottom:1px solid var(--border2);
-  font-family:'DM Mono',monospace; white-space:nowrap;
-}
-td:first-child { text-align:left; font-family:'DM Sans',sans-serif; color:var(--text2); font-weight:500; font-size:11px; }
-tr:last-child td { border-bottom:none; }
-tr.payback-row td { background:var(--green-bg); color:var(--green); font-weight:600; }
-tr.debt-row td { background:#EEF5FB; }
+/* TABLES */
+.tw{overflow-x:auto;border-radius:var(--r-sm);border:1px solid var(--border2);margin-bottom:13px;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:400px;}
+th{background:var(--bg);color:var(--text3);font-weight:600;padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap;font-size:10px;text-transform:uppercase;letter-spacing:0.03em;}
+th:first-child{text-align:left;}
+td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--border2);font-family:'DM Mono',monospace;white-space:nowrap;font-size:11px;}
+td:first-child{text-align:left;font-family:'DM Sans',sans-serif;color:var(--text2);font-weight:500;font-size:11px;}
+tr:last-child td{border-bottom:none;}
+tr.payback-row td{background:var(--green-bg);color:var(--green);font-weight:600;}
+tr.debt-row td{background:#EEF5FB;}
 
-/* ── DIVIDER ── */
-.divider { height:1px; background:var(--border2); margin:12px 0; }
+.divider{height:1px;background:var(--border2);margin:11px 0;}
 
-/* ── REG ITEMS ── */
-.reg-item { display:flex; gap:10px; margin-bottom:13px; align-items:flex-start; }
-.reg-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
-.reg-dot.green { background:var(--green-mid); }
-.reg-dot.amber { background:var(--amber-mid); }
-.reg-dot.red { background:var(--red-mid); }
-.reg-title { font-size:13px; font-weight:600; color:var(--text); margin-bottom:2px; }
-.reg-sub { font-size:11.5px; color:var(--text2); line-height:1.45; }
+/* REG */
+.ri{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;}
+.rd{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.rd.green{background:var(--green-mid);}
+.rd.amber{background:var(--amber-mid);}
+.rd.red{background:var(--red-mid);}
+.rd.purple{background:var(--purple);}
+.rt{font-size:13px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.rs{font-size:11.5px;color:var(--text2);line-height:1.45;}
 
-/* ── EVAC FLOW ── */
-.evac-flow { display:flex; flex-direction:column; gap:0; margin-top:8px; }
-.evac-node { padding:9px 13px; font-size:12px; font-weight:600; border-radius:0; }
-.evac-node:first-child { border-radius:8px 8px 0 0; }
-.evac-node:last-child { border-radius:0 0 8px 8px; }
-.evac-arr { text-align:center; font-size:14px; color:var(--text3); padding:1px 0; background:var(--bg); }
+/* EVAC */
+.evac-flow{display:flex;flex-direction:column;gap:0;margin-top:8px;}
+.en{padding:9px 13px;font-size:12px;font-weight:600;}
+.en:first-child{border-radius:8px 8px 0 0;}
+.en:last-child{border-radius:0 0 8px 8px;}
+.ea{text-align:center;font-size:13px;color:var(--text3);padding:1px 0;background:var(--bg);}
 
-/* ── SUMMARY ROWS ── */
-.sum-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--border2); font-size:13px; }
-.sum-row:last-child { border-bottom:none; }
-.sum-key { color:var(--text2); flex:1; padding-right:8px; }
-.sum-val { font-weight:600; font-family:'DM Mono',monospace; flex-shrink:0; }
+/* SUM ROWS */
+.sr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13px;}
+.sr:last-child{border-bottom:none;}
+.sk{color:var(--text2);flex:1;padding-right:8px;}
+.sv{font-weight:600;font-family:'DM Mono',monospace;flex-shrink:0;}
 
-/* ── BADGE ── */
-.badge { display:inline-block; font-size:10px; padding:2px 8px; border-radius:20px; font-weight:600; }
-.badge.green { background:var(--green-bg); color:var(--green); }
-.badge.amber { background:var(--amber-bg); color:var(--amber); }
-.badge.red { background:var(--red-bg); color:var(--red); }
+/* BADGE */
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-weight:600;}
+.badge.green{background:var(--green-bg);color:var(--green);}
+.badge.amber{background:var(--amber-bg);color:var(--amber);}
+.badge.red{background:var(--red-bg);color:var(--red);}
+.badge.purple{background:var(--purple-bg);color:var(--purple);}
 
-/* ── MILESTONE TABLE ── */
-.milestone-card { padding:12px; border:1px solid var(--border2); border-radius:var(--r-sm); margin-bottom:10px; background:var(--card); }
-.milestone-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:4px; }
-.milestone-name { font-size:13px; font-weight:600; color:var(--text); }
-.milestone-time { font-size:12px; font-family:'DM Mono',monospace; color:var(--text2); }
-.milestone-action { font-size:12px; color:var(--text2); line-height:1.4; }
+.mc-card{padding:11px;border:1px solid var(--border2);border-radius:var(--r-sm);margin-bottom:9px;background:var(--card);}
+.mc-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.mc-name{font-size:13px;font-weight:600;color:var(--text);}
+.mc-time{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);}
+.mc-act{font-size:12px;color:var(--text2);line-height:1.4;}
 
-/* ── PRICE CARDS ── */
-.price-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-
-/* ── INSTALL BANNER ── */
-#install-banner {
-  background:var(--green); color:white;
-  padding:12px 16px; border-radius:var(--r); margin-bottom:14px;
-  display:none; align-items:center; justify-content:space-between; gap:10px;
-}
-#install-banner p { font-size:13px; font-weight:500; }
-#install-btn { background:white; color:var(--green); border:none; border-radius:6px; padding:8px 14px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; flex-shrink:0; }
+#install-banner{background:var(--green);color:white;padding:11px 14px;border-radius:var(--r);margin-bottom:13px;display:none;align-items:center;justify-content:space-between;gap:10px;}
+#install-banner p{font-size:13px;font-weight:500;}
+#install-btn{background:white;color:var(--green);border:none;border-radius:6px;padding:7px 13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="app-header">
   <div class="app-header-left">
-    <span class="app-title">EIL Solar — 26 MW</span>
-    <span class="app-sub">Group Captive CPP · Tamil Nadu</span>
+    <span class="app-title">EIL Solar Ground — 26 MW</span>
+    <span class="app-sub">Group Captive CPP · Tamil Nadu · TNERC Loss Model</span>
   </div>
   <button class="recalc-btn" onclick="calculate()">⟳ Calculate</button>
 </div>
 
-<!-- SCROLL CONTENT -->
 <div class="scroll-area">
+<div id="install-banner"><p>Install EIL Ground on home screen for offline use</p><button id="install-btn" onclick="installApp()">Install</button></div>
 
-<!-- INSTALL BANNER -->
-<div id="install-banner">
-  <p>Add EIL Solar to your home screen for offline access</p>
-  <button id="install-btn" onclick="installApp()">Install</button>
-</div>
-
-<!-- TAB: INPUTS -->
+<!-- ══════════════════════════════════════════
+     TAB 1 — PROJECT INPUTS
+═══════════════════════════════════════════ -->
 <div id="tab-inputs" class="section active">
   <div class="card">
     <div class="card-title">Generation</div>
-    <div class="input-row"><span class="input-label">DC capacity (kWp)</span><input type="number" id="i-dc" value="26000" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">DC : AC ratio</span><input type="number" id="i-dac" value="1.30" step="0.05" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Plant load factor (%)</span><input type="range" id="i-plf" min="18" max="26" step="0.1" value="20.42" oninput="upd('plf');calculate()"><span class="input-val" id="v-plf">20.42%</span></div>
-    <div class="input-row"><span class="input-label">Technical losses (%)</span><input type="range" id="i-loss" min="4" max="12" step="0.5" value="7" oninput="upd('loss');calculate()"><span class="input-val" id="v-loss">7.0%</span></div>
-    <div class="input-row"><span class="input-label">Morning peak % (solar)</span><input type="range" id="i-peak" min="0" max="30" step="1" value="15" oninput="upd('peak');calculate()"><span class="input-val" id="v-peak">15%</span></div>
-    <div class="input-row"><span class="input-label">TNERC peak surcharge (%)</span><input type="range" id="i-surcharge" min="0" max="40" step="5" value="25" oninput="upd('surcharge');calculate()"><span class="input-val" id="v-surcharge">25%</span></div>
-    <div class="input-row"><span class="input-label">LID degradation Yr-1 (%)</span><input type="range" id="i-deg1" min="1" max="3" step="0.5" value="2" oninput="upd('deg1');calculate()"><span class="input-val" id="v-deg1">2.0%</span></div>
+    <div class="ir"><span class="il">DC capacity (kWp)</span><input type="number" id="i-dc" value="26000" onchange="calculate()"></div>
+    <div class="ir"><span class="il">DC : AC ratio</span><input type="number" id="i-dac" value="1.30" step="0.05" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Plant load factor / CUF (%)</span><input type="range" id="i-plf" min="18" max="26" step="0.1" value="20.42" oninput="upd('plf');calculate()"><span class="iv" id="v-plf">20.42%</span></div>
+    <div class="ir"><span class="il">Plant internal tech losses (%)</span><input type="range" id="i-loss" min="4" max="12" step="0.5" value="7" oninput="upd('loss');calculate()"><span class="iv" id="v-loss">7.0%</span></div>
+    <div class="ir"><span class="il">Morning peak % (6–10 AM solar)</span><input type="range" id="i-peak" min="0" max="30" step="1" value="15" oninput="upd('peak');calculate()"><span class="iv" id="v-peak">15%</span></div>
+    <div class="ir"><span class="il">TNERC peak surcharge (%)</span><input type="range" id="i-surcharge" min="0" max="40" step="5" value="25" oninput="upd('surcharge');calculate()"><span class="iv" id="v-surcharge">25%</span></div>
+    <div class="ir"><span class="il">LID degradation Yr-1 (%)</span><input type="range" id="i-deg1" min="1" max="3" step="0.5" value="2" oninput="upd('deg1');calculate()"><span class="iv" id="v-deg1">2.0%</span></div>
   </div>
+
   <div class="card">
     <div class="card-title">Tariff &amp; Buyer</div>
-    <div class="input-row" style="flex-direction:column;align-items:stretch;gap:6px">
-      <span class="input-label">Buyer category</span>
+    <div class="sel-row"><span class="sel-label">Buyer category</span>
       <select id="i-buyer" onchange="updateBuyer();calculate()">
         <option value="9.40">HT-III Commercial — ₹9.40/kWh</option>
         <option value="7.69">HT-I Industry — ₹7.69/kWh</option>
@@ -316,32 +199,110 @@ tr.debt-row td { background:#EEF5FB; }
         <option value="9.64">HT-III Comm alt — ₹9.64/kWh</option>
       </select>
     </div>
-    <div class="input-row"><span class="input-label">TNEB base tariff (₹/kWh)</span><input type="number" id="i-tariff" value="9.40" step="0.01" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Discount to buyer (%)</span><input type="range" id="i-disc" min="85" max="97" step="0.5" value="90" oninput="upd('disc');calculate()"><span class="input-val" id="v-disc">90%</span></div>
-    <div class="input-row"><span class="input-label">OA charge all-in (₹/kWh)</span><input type="number" id="i-oa" value="1.33" step="0.01" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">TNEB escalation (%/yr)</span><input type="range" id="i-taresc" min="1" max="7" step="0.5" value="3" oninput="upd('taresc');calculate()"><span class="input-val" id="v-taresc">3.0%</span></div>
-    <div class="input-row"><span class="input-label">OA escalation (%/yr)</span><input type="range" id="i-oaesc" min="1" max="7" step="0.5" value="3" oninput="upd('oaesc');calculate()"><span class="input-val" id="v-oaesc">3.0%</span></div>
+    <div class="ir"><span class="il">TNEB base tariff Yr-1 (₹/kWh)</span><input type="number" id="i-tariff" value="9.40" step="0.01" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Discount to buyer (% of weighted)</span><input type="range" id="i-disc" min="85" max="97" step="0.5" value="90" oninput="upd('disc');calculate()"><span class="iv" id="v-disc">90%</span></div>
+    <div class="ir"><span class="il">OA charge all-in Yr-1 (₹/kWh)</span><input type="number" id="i-oa" value="1.33" step="0.01" onchange="calculate()"></div>
+    <div class="ir"><span class="il">TNEB escalation (%/yr)</span><input type="range" id="i-taresc" min="1" max="7" step="0.5" value="3" oninput="upd('taresc');calculate()"><span class="iv" id="v-taresc">3.0%</span></div>
+    <div class="ir"><span class="il">OA escalation (%/yr)</span><input type="range" id="i-oaesc" min="1" max="7" step="0.5" value="3" oninput="upd('oaesc');calculate()"><span class="iv" id="v-oaesc">3.0%</span></div>
     <div class="alert info" style="margin-top:8px;margin-bottom:0">CSS &amp; Additional Surcharge — ZERO (Group Captive CPP, TNERC T.O. 7/2022)</div>
   </div>
+
   <div class="card">
-    <div class="card-title">Project Costs (₹ Crores)</div>
-    <div class="input-row"><span class="input-label">Base EPC — 20 MW AC</span><input type="number" id="i-epc" value="60" step="1" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Extra panels — 6 MW DC</span><input type="number" id="i-expanel" value="7.2" step="0.1" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Land — 78 acres</span><input type="number" id="i-land" value="11.7" step="0.1" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Evacuation (HT+SS)</span><input type="number" id="i-evac" value="9" step="0.5" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">SCADA / Misc</span><input type="number" id="i-misc" value="4.1" step="0.1" onchange="calculate()"></div>
+    <div class="card-title">Project Costs (₹ Crores) — Solar Only</div>
+    <div class="ir"><span class="il">Base EPC — 20 MW AC</span><input type="number" id="i-epc" value="60" step="1" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Extra panels — 6 MW DC</span><input type="number" id="i-expanel" value="7.2" step="0.1" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Land — 78 acres</span><input type="number" id="i-land" value="11.7" step="0.1" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Evacuation (HT line + SS)</span><input type="number" id="i-evac" value="9" step="0.5" onchange="calculate()"></div>
+    <div class="ir"><span class="il">SCADA / Misc</span><input type="number" id="i-misc" value="4.1" step="0.1" onchange="calculate()"></div>
     <div class="divider"></div>
-    <div class="metric-card"><div class="metric-label">Solar-only capex (₹ Cr)</div><div class="metric-value blue" id="v-capex-solar">₹92.0</div></div>
+    <div class="mc"><div class="ml">Solar-only capex (₹ Cr)</div><div class="mv blue" id="v-capex-solar">₹92.0</div></div>
   </div>
 </div>
 
-<!-- TAB: BATTERY -->
+<!-- ══════════════════════════════════════════
+     TAB 2 — TRANSMISSION LOSS (TNERC)
+═══════════════════════════════════════════ -->
+<div id="tab-loss" class="section">
+
+  <div class="alert purple">TNERC publishes fixed deemed loss % based on injection and receiving voltage. These are deducted <strong>in kind</strong> — units physically not delivered to the buyer's meter. This directly reduces your billable units and revenue.</div>
+
+  <!-- Injection voltage -->
+  <div class="card">
+    <div class="card-title">Injection Voltage (at plant step-up output)</div>
+    <div class="sel-row"><span class="sel-label">Plant injection voltage into TNEB grid</span>
+      <select id="i-inj" onchange="updateLoss()">
+        <option value="33">33 kV — standard ground mount step-up</option>
+        <option value="110">110 kV — if stepping up to EHT</option>
+        <option value="230">230 kV — EHT direct injection</option>
+      </select>
+    </div>
+    <div class="alert info" style="margin-bottom:0;font-size:12px">Most 20–50 MW ground mount plants in TN inject at 33 kV. Confirm with TNEB evacuation approval letter.</div>
+  </div>
+
+  <!-- Receiving voltage -->
+  <div class="card">
+    <div class="card-title">Receiving Voltage (at buyer's HT connection)</div>
+    <div class="sel-row"><span class="sel-label">Buyer's HT metering / receiving voltage</span>
+      <select id="i-recv" onchange="updateLoss()">
+        <option value="11">11 kV — standard HT commercial / industrial</option>
+        <option value="33">33 kV — large HT industrial</option>
+        <option value="110">110 kV — EHT bulk consumer</option>
+        <option value="230">230 kV — very large EHT consumer</option>
+      </select>
+    </div>
+    <div class="alert info" style="margin-bottom:0;font-size:12px">HT-III Commercial buyers typically receive at 11 kV. Verify from buyer's TNEB sanction letter.</div>
+  </div>
+
+  <!-- TNERC Loss table -->
+  <div class="loss-card">
+    <div class="loss-card-title">TNERC Deemed Loss Table — Injection → Receiving</div>
+    <table class="vt" id="loss-table">
+      <thead>
+        <tr><th>Injection kV</th><th>Receiving kV</th><th>Transmission %</th><th>Distribution %</th><th>Total Deemed %</th></tr>
+      </thead>
+      <tbody>
+        <tr data-inj="33" data-recv="11"><td>33 kV</td><td>11 kV</td><td>3.91%</td><td>1.52%</td><td>5.43%</td></tr>
+        <tr data-inj="33" data-recv="33"><td>33 kV</td><td>33 kV</td><td>3.91%</td><td>0.00%</td><td>3.91%</td></tr>
+        <tr data-inj="33" data-recv="110"><td>33 kV</td><td>110 kV</td><td>1.50%</td><td>0.00%</td><td>1.50%</td></tr>
+        <tr data-inj="110" data-recv="11"><td>110 kV</td><td>11 kV</td><td>0.00%</td><td>1.52%</td><td>1.52%</td></tr>
+        <tr data-inj="110" data-recv="33"><td>110 kV</td><td>33 kV</td><td>0.00%</td><td>0.50%</td><td>0.50%</td></tr>
+        <tr data-inj="110" data-recv="110"><td>110 kV</td><td>110 kV</td><td>0.00%</td><td>0.00%</td><td>0.00%</td></tr>
+        <tr data-inj="230" data-recv="11"><td>230 kV</td><td>11 kV</td><td>0.00%</td><td>1.52%</td><td>1.52%</td></tr>
+        <tr data-inj="230" data-recv="33"><td>230 kV</td><td>33 kV</td><td>0.00%</td><td>0.50%</td><td>0.50%</td></tr>
+        <tr data-inj="230" data-recv="110"><td>230 kV</td><td>110 kV</td><td>0.00%</td><td>0.00%</td><td>0.00%</td></tr>
+        <tr data-inj="230" data-recv="230"><td>230 kV</td><td>230 kV</td><td>0.00%</td><td>0.00%</td><td>0.00%</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:10px;font-size:11px;color:var(--purple)">Source: TNERC T.O. No.7 of 2022 — Table 5-12, Applicable Losses for OA Transactions. Transmission loss 3.91% up to 110 kV, Distribution loss 1.52% up to 33 kV. Update on each new TNERC order.</div>
+  </div>
+
+  <!-- Override -->
+  <div class="card">
+    <div class="card-title">Active Loss Selection &amp; Override</div>
+    <div class="mg2" style="margin-bottom:10px">
+      <div class="mc"><div class="ml">Deemed loss (auto)</div><div class="mv purple" id="v-loss-auto">5.43%</div></div>
+      <div class="mc"><div class="ml">Applied loss (model)</div><div class="mv purple" id="v-loss-applied">5.43%</div></div>
+    </div>
+    <div class="ir"><span class="il">Override deemed loss % (0 = use auto)</span><input type="number" id="i-loss-override" value="0" step="0.1" min="0" max="15" onchange="updateLoss();calculate()"></div>
+    <div class="ir"><span class="il">Additional HT line loss — plant to grid (km×loss)</span><input type="range" id="i-htloss" min="0" max="3" step="0.25" value="0.5" oninput="upd('htloss');updateLoss();calculate()"><span class="iv" id="v-htloss">0.5%</span></div>
+    <div class="alert warn" style="margin-bottom:0">Total grid loss = deemed TNERC loss + HT line loss. Both reduce units at buyer's meter and cut your revenue. Override field lets you enter SLDC-confirmed actual loss if different from TNERC table.</div>
+  </div>
+
+  <!-- Revenue impact -->
+  <div class="card">
+    <div class="card-title">Revenue Impact of Transmission Loss — Year 1</div>
+    <div id="loss-impact"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — BATTERY & EVACUATION
+═══════════════════════════════════════════ -->
 <div id="tab-battery" class="section">
-  <div class="alert warn">Grid congestion during solar hours is increasing in TN. Battery enables evening evacuation &amp; peak premium revenue.</div>
+  <div class="alert warn">Grid congestion during solar hours is increasing in TN. Battery enables evening evacuation, reduces curtailment risk, and earns peak premium revenue.</div>
   <div class="card">
     <div class="card-title">Battery Storage (BESS)</div>
-    <div class="input-row" style="flex-direction:column;align-items:stretch;gap:6px">
-      <span class="input-label">Include battery?</span>
+    <div class="sel-row"><span class="sel-label">Include battery?</span>
       <select id="i-batt" onchange="toggleBattery();calculate()">
         <option value="0">No — solar only</option>
         <option value="1">Yes — add BESS</option>
@@ -349,90 +310,90 @@ tr.debt-row td { background:#EEF5FB; }
     </div>
     <div id="batt-params" style="display:none">
       <div class="divider"></div>
-      <div class="input-row"><span class="input-label">Battery capacity (MWh)</span><input type="range" id="i-battmwh" min="10" max="120" step="5" value="40" oninput="upd('battmwh');calculate()"><span class="input-val" id="v-battmwh">40 MWh</span></div>
-      <div class="input-row"><span class="input-label">Battery cost (₹ Cr/MWh)</span><input type="range" id="i-battcost" min="0.7" max="2.5" step="0.05" value="1.2" oninput="upd('battcost');calculate()"><span class="input-val" id="v-battcost">₹1.20</span></div>
-      <div class="input-row"><span class="input-label">Round-trip efficiency (%)</span><input type="range" id="i-rte" min="80" max="95" step="1" value="88" oninput="upd('rte');calculate()"><span class="input-val" id="v-rte">88%</span></div>
-      <div class="input-row"><span class="input-label">Battery degradation (%/yr)</span><input type="range" id="i-battdeg" min="1" max="4" step="0.5" value="2" oninput="upd('battdeg');calculate()"><span class="input-val" id="v-battdeg">2.0%</span></div>
-      <div class="input-row"><span class="input-label">% solar stored in battery</span><input type="range" id="i-battstore" min="5" max="30" step="1" value="15" oninput="upd('battstore');calculate()"><span class="input-val" id="v-battstore">15%</span></div>
-      <div class="input-row"><span class="input-label">Evening peak premium (₹/kWh)</span><input type="range" id="i-evprem" min="0" max="3.5" step="0.25" value="1.5" oninput="upd('evprem');calculate()"><span class="input-val" id="v-evprem">₹1.50</span></div>
-      <div class="input-row"><span class="input-label">BESS O&amp;M Yr-1 (₹ Cr/yr)</span><input type="number" id="i-battom" value="0.3" step="0.05" onchange="calculate()"></div>
-      <div class="metric-card" style="margin-top:10px"><div class="metric-label">BESS total capex (₹ Cr)</div><div class="metric-value amber" id="v-battcapex">₹48.0</div></div>
-      <div class="alert info" style="margin-top:10px;margin-bottom:0">LFP battery cost ₹1.0–1.5 Cr/MWh (2024–25). Falling ~8–10%/yr. Lock at procurement.</div>
+      <div class="ir"><span class="il">Battery capacity (MWh)</span><input type="range" id="i-battmwh" min="10" max="120" step="5" value="40" oninput="upd('battmwh');calculate()"><span class="iv" id="v-battmwh">40 MWh</span></div>
+      <div class="ir"><span class="il">Battery cost (₹ Cr/MWh)</span><input type="range" id="i-battcost" min="0.7" max="2.5" step="0.05" value="1.2" oninput="upd('battcost');calculate()"><span class="iv" id="v-battcost">₹1.20</span></div>
+      <div class="ir"><span class="il">Round-trip efficiency (%)</span><input type="range" id="i-rte" min="80" max="95" step="1" value="88" oninput="upd('rte');calculate()"><span class="iv" id="v-rte">88%</span></div>
+      <div class="ir"><span class="il">Battery degradation (%/yr)</span><input type="range" id="i-battdeg" min="1" max="4" step="0.5" value="2" oninput="upd('battdeg');calculate()"><span class="iv" id="v-battdeg">2.0%</span></div>
+      <div class="ir"><span class="il">% solar stored in battery</span><input type="range" id="i-battstore" min="5" max="30" step="1" value="15" oninput="upd('battstore');calculate()"><span class="iv" id="v-battstore">15%</span></div>
+      <div class="ir"><span class="il">Evening peak premium (₹/kWh)</span><input type="range" id="i-evprem" min="0" max="3.5" step="0.25" value="1.5" oninput="upd('evprem');calculate()"><span class="iv" id="v-evprem">₹1.50</span></div>
+      <div class="ir"><span class="il">BESS O&amp;M Yr-1 (₹ Cr/yr)</span><input type="number" id="i-battom" value="0.3" step="0.05" onchange="calculate()"></div>
+      <div class="mc" style="margin-top:10px"><div class="ml">BESS total capex (₹ Cr)</div><div class="mv amber" id="v-battcapex">₹48.0</div></div>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Evacuation Infrastructure</div>
-    <div class="input-row"><span class="input-label">HT line length (km)</span><input type="number" id="i-htlen" value="5" step="0.5" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">HT line cost (₹ Cr/km)</span><input type="number" id="i-htcost" value="1.0" step="0.1" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Substation (₹ Cr)</span><input type="number" id="i-sscost" value="4.0" step="0.5" onchange="calculate()"></div>
-    <div class="input-row"><span class="input-label">Metering &amp; protection (₹ Cr)</span><input type="number" id="i-metercost" value="0.5" step="0.1" onchange="calculate()"></div>
-    <div class="metric-card" style="margin-top:4px"><div class="metric-label">Evacuation capex (computed, ₹ Cr)</div><div class="metric-value" id="v-evapcalc">₹9.5</div></div>
+    <div class="ir"><span class="il">HT line length (km)</span><input type="number" id="i-htlen" value="5" step="0.5" onchange="calculate()"></div>
+    <div class="ir"><span class="il">HT line cost (₹ Cr/km)</span><input type="number" id="i-htcost" value="1.0" step="0.1" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Substation (₹ Cr)</span><input type="number" id="i-sscost" value="4.0" step="0.5" onchange="calculate()"></div>
+    <div class="ir"><span class="il">Metering &amp; protection (₹ Cr)</span><input type="number" id="i-metercost" value="0.5" step="0.1" onchange="calculate()"></div>
+    <div class="mc" style="margin-top:6px"><div class="ml">Evacuation capex (₹ Cr)</div><div class="mv" id="v-evapcalc">₹9.5</div></div>
   </div>
   <div class="card">
     <div class="card-title">Total Capex Summary</div>
-    <div class="metrics-grid">
-      <div class="metric-card"><div class="metric-label">Solar (₹ Cr)</div><div class="metric-value blue sm" id="v-solar-sum">₹92.0</div></div>
-      <div class="metric-card"><div class="metric-label">BESS (₹ Cr)</div><div class="metric-value amber sm" id="v-bess-sum">₹0.0</div></div>
+    <div class="mg2">
+      <div class="mc"><div class="ml">Solar (₹ Cr)</div><div class="mv blue sm" id="v-solar-sum">₹92.0</div></div>
+      <div class="mc"><div class="ml">BESS (₹ Cr)</div><div class="mv amber sm" id="v-bess-sum">₹0.0</div></div>
     </div>
-    <div class="metrics-grid">
-      <div class="metric-card"><div class="metric-label">Total capex (₹ Cr)</div><div class="metric-value sm" id="v-total-sum">₹92.0</div></div>
-      <div class="metric-card"><div class="metric-label">₹/Wp (DC, all-in)</div><div class="metric-value sm" id="v-wp-all">₹35.4</div></div>
+    <div class="mg2">
+      <div class="mc"><div class="ml">Total capex (₹ Cr)</div><div class="mv sm" id="v-total-sum">₹92.0</div></div>
+      <div class="mc"><div class="ml">₹/Wp DC (all-in)</div><div class="mv sm" id="v-wp-all">₹35.4</div></div>
     </div>
   </div>
 </div>
 
-<!-- TAB: FINANCE -->
+<!-- ══════════════════════════════════════════
+     TAB 4 — DEBT & EQUITY
+═══════════════════════════════════════════ -->
 <div id="tab-finance" class="section">
   <div class="card">
     <div class="card-title">Capital Structure</div>
-    <div class="input-row"><span class="input-label">Debt fraction (%)</span><input type="range" id="i-debt" min="50" max="80" step="5" value="70" oninput="upd('debt');calculate()"><span class="input-val" id="v-debt">70%</span></div>
-    <div class="input-row"><span class="input-label">Cost of debt (%/yr)</span><input type="range" id="i-ir" min="7" max="13" step="0.25" value="9" oninput="upd('ir');calculate()"><span class="input-val" id="v-ir">9.00%</span></div>
-    <div class="input-row"><span class="input-label">Loan tenure (years)</span><input type="range" id="i-tenure" min="7" max="15" step="1" value="10" oninput="upd('tenure');calculate()"><span class="input-val" id="v-tenure">10 yrs</span></div>
-    <div class="input-row"><span class="input-label">Moratorium (years)</span><input type="range" id="i-moro" min="0" max="2" step="1" value="1" oninput="upd('moro');calculate()"><span class="input-val" id="v-moro">1 yr</span></div>
+    <div class="ir"><span class="il">Debt fraction (%)</span><input type="range" id="i-debt" min="50" max="80" step="5" value="70" oninput="upd('debt');calculate()"><span class="iv" id="v-debt">70%</span></div>
+    <div class="ir"><span class="il">Cost of debt (%/yr)</span><input type="range" id="i-ir" min="7" max="13" step="0.25" value="9" oninput="upd('ir');calculate()"><span class="iv" id="v-ir">9.00%</span></div>
+    <div class="ir"><span class="il">Loan tenure (years)</span><input type="range" id="i-tenure" min="7" max="15" step="1" value="10" oninput="upd('tenure');calculate()"><span class="iv" id="v-tenure">10 yrs</span></div>
+    <div class="ir"><span class="il">Moratorium (years)</span><input type="range" id="i-moro" min="0" max="2" step="1" value="1" oninput="upd('moro');calculate()"><span class="iv" id="v-moro">1 yr</span></div>
     <div class="divider"></div>
-    <div class="metrics-grid">
-      <div class="metric-card"><div class="metric-label">Debt (₹ Cr)</div><div class="metric-value blue sm" id="v-debt-amt">₹64.4</div></div>
-      <div class="metric-card"><div class="metric-label">Equity (₹ Cr)</div><div class="metric-value green sm" id="v-eq-amt">₹27.6</div></div>
+    <div class="mg2">
+      <div class="mc"><div class="ml">Debt (₹ Cr)</div><div class="mv blue sm" id="v-debt-amt">₹64.4</div></div>
+      <div class="mc"><div class="ml">Equity (₹ Cr)</div><div class="mv green sm" id="v-eq-amt">₹27.6</div></div>
     </div>
   </div>
   <div class="card">
     <div class="card-title">O&amp;M, Insurance &amp; Tax</div>
-    <div class="input-row"><span class="input-label">O&amp;M Yr-1 (% of solar capex)</span><input type="range" id="i-om" min="0.6" max="1.5" step="0.1" value="1.0" oninput="upd('om');calculate()"><span class="input-val" id="v-om">1.0%</span></div>
-    <div class="input-row"><span class="input-label">O&amp;M escalation (%/yr)</span><input type="range" id="i-omesc" min="3" max="8" step="0.5" value="5" oninput="upd('omesc');calculate()"><span class="input-val" id="v-omesc">5.0%</span></div>
-    <div class="input-row"><span class="input-label">Insurance (% of solar capex)</span><input type="range" id="i-ins" min="0.3" max="1.0" step="0.1" value="0.5" oninput="upd('ins');calculate()"><span class="input-val" id="v-ins">0.5%</span></div>
-    <div class="input-row"><span class="input-label">Insurance escalation (%/yr)</span><input type="range" id="i-insesc" min="2" max="5" step="0.5" value="3" oninput="upd('insesc');calculate()"><span class="input-val" id="v-insesc">3.0%</span></div>
-    <div class="input-row"><span class="input-label">Corporate tax rate (%)</span><input type="range" id="i-tax" min="22" max="30" step="1" value="25" oninput="upd('tax');calculate()"><span class="input-val" id="v-tax">25%</span></div>
-    <div class="input-row"><span class="input-label">Accel. dep Yr-1 Sec 32 (%)</span><input type="range" id="i-addep" min="30" max="40" step="5" value="40" oninput="upd('addep');calculate()"><span class="input-val" id="v-addep">40%</span></div>
-    <div class="input-row"><span class="input-label">Salvage at Yr-25 (% capex)</span><input type="range" id="i-salvage" min="5" max="15" step="1" value="10" oninput="upd('salvage');calculate()"><span class="input-val" id="v-salvage">10%</span></div>
+    <div class="ir"><span class="il">O&amp;M Yr-1 (% of solar capex)</span><input type="range" id="i-om" min="0.6" max="1.5" step="0.1" value="1.0" oninput="upd('om');calculate()"><span class="iv" id="v-om">1.0%</span></div>
+    <div class="ir"><span class="il">O&amp;M escalation (%/yr)</span><input type="range" id="i-omesc" min="3" max="8" step="0.5" value="5" oninput="upd('omesc');calculate()"><span class="iv" id="v-omesc">5.0%</span></div>
+    <div class="ir"><span class="il">Insurance (% of solar capex)</span><input type="range" id="i-ins" min="0.3" max="1.0" step="0.1" value="0.5" oninput="upd('ins');calculate()"><span class="iv" id="v-ins">0.5%</span></div>
+    <div class="ir"><span class="il">Insurance escalation (%/yr)</span><input type="range" id="i-insesc" min="2" max="5" step="0.5" value="3" oninput="upd('insesc');calculate()"><span class="iv" id="v-insesc">3.0%</span></div>
+    <div class="ir"><span class="il">Corporate tax rate (%)</span><input type="range" id="i-tax" min="22" max="30" step="1" value="25" oninput="upd('tax');calculate()"><span class="iv" id="v-tax">25%</span></div>
+    <div class="ir"><span class="il">Accel. dep Yr-1 Sec 32 (%)</span><input type="range" id="i-addep" min="30" max="40" step="5" value="40" oninput="upd('addep');calculate()"><span class="iv" id="v-addep">40%</span></div>
+    <div class="ir"><span class="il">Salvage at Yr-25 (% capex)</span><input type="range" id="i-salvage" min="5" max="15" step="1" value="10" oninput="upd('salvage');calculate()"><span class="iv" id="v-salvage">10%</span></div>
   </div>
   <div class="card">
     <div class="card-title">Debt Service Schedule (₹ Cr)</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Yr</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Closing</th><th>Total DS</th></tr></thead>
-        <tbody id="debt-tbody"></tbody>
-      </table>
-    </div>
+    <div class="tw"><table><thead><tr><th>Yr</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Closing</th><th>Total DS</th></tr></thead><tbody id="debt-tbody"></tbody></table></div>
   </div>
 </div>
 
-<!-- TAB: RESULTS -->
+<!-- ══════════════════════════════════════════
+     TAB 5 — RESULTS
+═══════════════════════════════════════════ -->
 <div id="tab-results" class="section">
   <div id="results-alerts"></div>
-  <div class="metrics-grid-4">
-    <div class="metric-card"><div class="metric-label">Total capex (₹ Cr)</div><div class="metric-value blue sm" id="r-capex">—</div></div>
-    <div class="metric-card"><div class="metric-label">Equity (₹ Cr)</div><div class="metric-value green sm" id="r-equity">—</div></div>
-    <div class="metric-card"><div class="metric-label">Net realise Yr-1 (₹/kWh)</div><div class="metric-value sm" id="r-netr">—</div></div>
-    <div class="metric-card"><div class="metric-label">Net gen Yr-1 (MU)</div><div class="metric-value sm" id="r-gen">—</div></div>
+  <div class="mg4">
+    <div class="mc"><div class="ml">Total capex (₹ Cr)</div><div class="mv blue sm" id="r-capex">—</div></div>
+    <div class="mc"><div class="ml">Equity (₹ Cr)</div><div class="mv green sm" id="r-equity">—</div></div>
+    <div class="mc"><div class="ml">Deemed grid loss</div><div class="mv purple sm" id="r-gridloss">—</div></div>
+    <div class="mc"><div class="ml">Yr-1 net gen at meter (MU)</div><div class="mv sm" id="r-gen">—</div></div>
   </div>
-  <div class="metrics-grid-4">
-    <div class="metric-card"><div class="metric-label">EBITDA Yr-1 (₹ Cr)</div><div class="metric-value green sm" id="r-ebitda">—</div></div>
-    <div class="metric-card"><div class="metric-label">FCF Yr-1 (₹ Cr)</div><div class="metric-value sm" id="r-fcf">—</div></div>
-    <div class="metric-card"><div class="metric-label">Payback (years)</div><div class="metric-value sm" id="r-payback">—</div></div>
-    <div class="metric-card"><div class="metric-label">25-yr FCF (₹ Cr)</div><div class="metric-value green sm" id="r-tfcf">—</div></div>
+  <div class="mg4">
+    <div class="mc"><div class="ml">Net realise Yr-1 (₹/kWh)</div><div class="mv sm" id="r-netr">—</div></div>
+    <div class="mc"><div class="ml">EBITDA Yr-1 (₹ Cr)</div><div class="mv green sm" id="r-ebitda">—</div></div>
+    <div class="mc"><div class="ml">FCF Yr-1 (₹ Cr)</div><div class="mv sm" id="r-fcf">—</div></div>
+    <div class="mc"><div class="ml">Payback (years)</div><div class="mv sm" id="r-payback">—</div></div>
   </div>
+  <div class="mc" style="margin-bottom:12px;padding:14px"><div class="ml">25-year total FCF (₹ Cr)</div><div class="mv green" id="r-tfcf" style="font-size:22px">—</div></div>
+
   <div class="card">
-    <div class="card-title">Price Breakdown — Year 1</div>
+    <div class="card-title">Price &amp; Loss Breakdown — Year 1</div>
     <div id="price-breakdown"></div>
   </div>
   <div class="card">
@@ -440,204 +401,183 @@ tr.debt-row td { background:#EEF5FB; }
     <div id="yr1-summary"></div>
   </div>
   <div class="card">
-    <div class="card-title">Net Realisation vs OA Charge</div>
-    <div style="position:relative;width:100%;height:200px"><canvas id="sensiChart" role="img" aria-label="Sensitivity of net realisation to OA charge">Sensitivity chart</canvas></div>
+    <div class="card-title">Net Realisation Sensitivity vs OA Charge</div>
+    <div style="position:relative;width:100%;height:190px"><canvas id="sensiChart" role="img" aria-label="Net realisation vs OA charge">Sensitivity</canvas></div>
   </div>
 </div>
 
-<!-- TAB: CASHFLOW -->
+<!-- ══════════════════════════════════════════
+     TAB 6 — CASH FLOW
+═══════════════════════════════════════════ -->
 <div id="tab-cashflow" class="section">
   <div id="payback-alert" class="alert success">—</div>
-  <div class="card" style="padding:14px 14px 8px">
+  <div class="card" style="padding:13px 13px 8px">
     <div class="card-title">25-Year Cash Flow</div>
-    <div style="position:relative;width:100%;height:220px"><canvas id="cfChart" role="img" aria-label="25-year cash flow chart">Cash flow chart</canvas></div>
+    <div style="position:relative;width:100%;height:210px"><canvas id="cfChart" role="img" aria-label="25-year cash flow">Chart</canvas></div>
   </div>
-  <div class="table-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Yr</th><th>Net gen MU</th><th>SP ₹/kWh</th><th>OA ₹/kWh</th>
-          <th>NetR ₹/kWh</th><th>Net Rev ₹Cr</th><th>EBITDA ₹Cr</th>
-          <th>Int ₹Cr</th><th>Prin ₹Cr</th><th>Tax ₹Cr</th>
-          <th>FCF ₹Cr</th><th>Cum CF ₹Cr</th><th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="cf-tbody"></tbody>
-    </table>
+  <div class="tw">
+    <table><thead>
+      <tr><th>Yr</th><th>MU (meter)</th><th>SP ₹/kWh</th><th>OA ₹/kWh</th><th>NetR ₹/kWh</th><th>Net Rev ₹Cr</th><th>EBITDA ₹Cr</th><th>Int ₹Cr</th><th>Prin ₹Cr</th><th>Tax ₹Cr</th><th>FCF ₹Cr</th><th>Cum CF ₹Cr</th><th>Status</th></tr>
+    </thead><tbody id="cf-tbody"></tbody></table>
   </div>
 </div>
 
-<!-- TAB: REGULATORY -->
+<!-- ══════════════════════════════════════════
+     TAB 7 — REGULATORY
+═══════════════════════════════════════════ -->
 <div id="tab-regulatory" class="section">
   <div class="card">
     <div class="card-title">Group Captive CPP — TN Regulations</div>
-    <div class="reg-item"><div class="reg-dot green"></div><div><div class="reg-title">CSS — ZERO (waived)</div><div class="reg-sub">Fully waived for Group Captive CPP. TNERC T.O. 7/2022. Major cost benefit vs commercial OA.</div></div></div>
-    <div class="reg-item"><div class="reg-dot green"></div><div><div class="reg-title">Additional Surcharge — ZERO</div><div class="reg-sub">Waived for Group Captive CPP structure. Ensure PSA is signed before commissioning.</div></div></div>
-    <div class="reg-item"><div class="reg-dot green"></div><div><div class="reg-title">OA all-in ₹1.33/kWh</div><div class="reg-sub">Includes wheeling, transmission, SLDC, losses. No separate charges. T.O. 7/2022.</div></div></div>
-    <div class="reg-item"><div class="reg-dot amber"></div><div><div class="reg-title">26% equity — buyer must hold</div><div class="reg-sub">Each captive consumer must hold minimum 26% equity in the generating company (CERC Captive Rules 2001).</div></div></div>
-    <div class="reg-item"><div class="reg-dot amber"></div><div><div class="reg-title">51% captive consumption</div><div class="reg-sub">At least 51% of annual generation must be consumed by captive users. Shortfall risks CSS reinstatement.</div></div></div>
-    <div class="reg-item"><div class="reg-dot amber"></div><div><div class="reg-title">Proportional consumption</div><div class="reg-sub">Each member must consume proportional to equity stake. Annual compliance certificate required.</div></div></div>
-    <div class="reg-item"><div class="reg-dot green"></div><div><div class="reg-title">TNEB empanelment (EIL Solar)</div><div class="reg-sub">EIL Solar / Kaveri Power Solutions is TNEB-empanelled. Maintain empanelment for OA benefits.</div></div></div>
+    <div class="ri"><div class="rd green"></div><div><div class="rt">CSS — ZERO (waived)</div><div class="rs">Fully waived for Group Captive CPP. TNERC T.O. 7/2022. Major cost benefit vs commercial OA.</div></div></div>
+    <div class="ri"><div class="rd green"></div><div><div class="rt">Additional Surcharge — ZERO</div><div class="rs">Waived for Group Captive CPP. Ensure PSA is signed before commissioning.</div></div></div>
+    <div class="ri"><div class="rd green"></div><div><div class="rt">OA all-in ₹1.33/kWh</div><div class="rs">Includes wheeling, transmission, SLDC charges. Monetary charge — separate from physical deemed loss deduction in kind.</div></div></div>
+    <div class="ri"><div class="rd amber"></div><div><div class="rt">Deemed loss — deducted in kind</div><div class="rs">Physical units lost in grid are deducted at injection point. Buyer receives fewer units. This model computes this correctly based on your injection/receiving voltage selection.</div></div></div>
+    <div class="ri"><div class="rd amber"></div><div><div class="rt">26% equity — buyer must hold</div><div class="rs">Each captive consumer must hold minimum 26% equity in the generating company (CERC Captive Rules 2001).</div></div></div>
+    <div class="ri"><div class="rd amber"></div><div><div class="rt">51% captive consumption</div><div class="rs">At least 51% of annual generation must be consumed by captive users. Shortfall risks CSS reinstatement.</div></div></div>
+    <div class="ri"><div class="rd green"></div><div><div class="rt">TNEB empanelment (EIL Solar)</div><div class="rs">EIL Solar / Kaveri Power Solutions is TNEB-empanelled. Maintain empanelment for OA benefits.</div></div></div>
   </div>
   <div class="card">
     <div class="card-title">Battery, Evacuation &amp; Land</div>
-    <div class="reg-item"><div class="reg-dot amber"></div><div><div class="reg-title">Grid congestion — solar hours</div><div class="reg-sub">SLDC may curtail injection during morning peak. Battery evening evacuation avoids curtailment risk.</div></div></div>
-    <div class="reg-item"><div class="reg-dot green"></div><div><div class="reg-title">BESS — same-day OA treatment</div><div class="reg-sub">Power stored and discharged same day treated as single solar transaction. No extra OA charge currently.</div></div></div>
-    <div class="reg-item"><div class="reg-dot red"></div><div><div class="reg-title">OA regulation risk</div><div class="reg-sub">TNERC reviews OA every ~3 years (MYT). OA may rise. Model uses 3%/yr escalation as buffer.</div></div></div>
-    <div class="reg-item"><div class="reg-dot amber"></div><div><div class="reg-title">HT feeder — TNEB approval</div><div class="reg-sub">DPR and REC approval needed. Budget 6–18 months. Get LOA before EPC contract is signed.</div></div></div>
-    <div class="reg-item"><div class="reg-dot red"></div><div><div class="reg-title">Land conversion — agriculture</div><div class="reg-sub">78 acres likely agricultural land. Requires District Collector order. Budget 12–18 months in timeline.</div></div></div>
-    <div class="reg-item"><div class="reg-dot amber"></div><div><div class="reg-title">SLDC scheduling (BESS)</div><div class="reg-sub">Battery dispatch needs separate day-ahead schedule filing with SLDC. Metering at delivery point.</div></div></div>
+    <div class="ri"><div class="rd amber"></div><div><div class="rt">Grid congestion — solar hours</div><div class="rs">SLDC may curtail injection during morning peak. Battery evening evacuation avoids curtailment risk.</div></div></div>
+    <div class="ri"><div class="rd green"></div><div><div class="rt">BESS — same-day OA treatment</div><div class="rs">Power stored and discharged same day treated as single solar transaction. No extra OA charge currently.</div></div></div>
+    <div class="ri"><div class="rd red"></div><div><div class="rt">OA regulation risk</div><div class="rs">TNERC reviews OA every ~3 years (MYT). OA may rise. Model uses 3%/yr escalation as buffer.</div></div></div>
+    <div class="ri"><div class="rd amber"></div><div><div class="rt">HT feeder — TNEB approval</div><div class="rs">DPR and REC approval needed. Budget 6–18 months. Get LOA before EPC contract is signed.</div></div></div>
+    <div class="ri"><div class="rd red"></div><div><div class="rt">Land conversion — agriculture</div><div class="rs">78 acres likely agricultural. Requires District Collector order. Budget 12–18 months in timeline.</div></div></div>
+    <div class="ri"><div class="rd purple"></div><div><div class="rt">Deemed loss — update each TNERC order</div><div class="rs">Transmission and distribution loss % is specified in Table 5-12 of each TNERC Tariff Order. Update in the Transmission Loss tab whenever TNERC issues a new order.</div></div></div>
   </div>
   <div class="card">
     <div class="card-title">Evacuation Pathway</div>
     <div class="evac-flow">
-      <div class="evac-node" style="background:var(--green-bg);color:var(--green)">26 MW Solar + BESS</div>
-      <div class="evac-arr">↓</div>
-      <div class="evac-node" style="background:var(--blue-bg);color:var(--blue)">11 kV plant bus</div>
-      <div class="evac-arr">↓</div>
-      <div class="evac-node" style="background:var(--blue-bg);color:var(--blue)">Step-up transformer (33/110 kV)</div>
-      <div class="evac-arr">↓</div>
-      <div class="evac-node" style="background:var(--amber-bg);color:var(--amber)">TNEB HT feeder</div>
-      <div class="evac-arr">↓</div>
-      <div class="evac-node" style="background:var(--amber-bg);color:var(--amber)">SLDC injection metering point</div>
-      <div class="evac-arr">↓</div>
-      <div class="evac-node" style="background:#EDEBE5;color:var(--text)">Buyer HT connection</div>
+      <div class="en" style="background:var(--green-bg);color:var(--green)">26 MW Solar + BESS</div>
+      <div class="ea">↓</div>
+      <div class="en" style="background:var(--blue-bg);color:var(--blue)">11 kV plant bus</div>
+      <div class="ea">↓</div>
+      <div class="en" style="background:var(--blue-bg);color:var(--blue)">Step-up 33 kV (injection point → TNEB)</div>
+      <div class="ea">↓ Deemed loss deducted here</div>
+      <div class="en" style="background:var(--amber-bg);color:var(--amber)">TNEB HT feeder / TANTRANSCO</div>
+      <div class="ea">↓</div>
+      <div class="en" style="background:var(--amber-bg);color:var(--amber)">SLDC injection metering point</div>
+      <div class="ea">↓</div>
+      <div class="en" style="background:#EDEBE5;color:var(--text)">Buyer HT meter (11 kV receiving)</div>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Key Milestones &amp; Risk</div>
-    <div class="milestone-card">
-      <div class="milestone-header"><span class="milestone-name">TNEB evacuation DPR &amp; REC</span><span class="badge amber">6–18 months</span></div>
-      <div class="milestone-action">File application immediately after site finalisation</div>
-    </div>
-    <div class="milestone-card">
-      <div class="milestone-header"><span class="milestone-name">Land conversion order</span><span class="badge red">12–18 months</span></div>
-      <div class="milestone-action">Engage District Collector / CMDA early. Start process in parallel.</div>
-    </div>
-    <div class="milestone-card">
-      <div class="milestone-header"><span class="milestone-name">Group captive PSA signing</span><span class="badge green">2–4 months</span></div>
-      <div class="milestone-action">Draft PSA in parallel with regulatory filings</div>
-    </div>
-    <div class="milestone-card">
-      <div class="milestone-header"><span class="milestone-name">TNERC OA approval</span><span class="badge amber">3–6 months</span></div>
-      <div class="milestone-action">File post PSA. Ensure 26% / 51% compliance documentation ready.</div>
-    </div>
-    <div class="milestone-card">
-      <div class="milestone-header"><span class="milestone-name">EPC procurement &amp; build</span><span class="badge amber">12–15 months</span></div>
-      <div class="milestone-action">Lock EPC contract only after land order + evacuation LOA</div>
-    </div>
-    <div class="milestone-card">
-      <div class="milestone-header"><span class="milestone-name">BESS procurement</span><span class="badge green">6–10 months</span></div>
-      <div class="milestone-action">Procure alongside EPC for best price. LFP chemistry preferred.</div>
-    </div>
+    <div class="mc-card"><div class="mc-hdr"><span class="mc-name">TNEB evacuation DPR &amp; REC</span><span class="badge amber">6–18 months</span></div><div class="mc-act">File application immediately after site finalisation</div></div>
+    <div class="mc-card"><div class="mc-hdr"><span class="mc-name">Land conversion order</span><span class="badge red">12–18 months</span></div><div class="mc-act">Engage District Collector / CMDA early</div></div>
+    <div class="mc-card"><div class="mc-hdr"><span class="mc-name">Group captive PSA signing</span><span class="badge green">2–4 months</span></div><div class="mc-act">Draft PSA in parallel with regulatory filings</div></div>
+    <div class="mc-card"><div class="mc-hdr"><span class="mc-name">TNERC OA approval</span><span class="badge amber">3–6 months</span></div><div class="mc-act">File post PSA. Ensure 26% / 51% compliance ready.</div></div>
+    <div class="mc-card"><div class="mc-hdr"><span class="mc-name">EPC procurement &amp; build</span><span class="badge amber">12–15 months</span></div><div class="mc-act">Lock EPC only after land order + evacuation LOA</div></div>
+    <div class="mc-card"><div class="mc-hdr"><span class="mc-name">BESS procurement</span><span class="badge green">6–10 months</span></div><div class="mc-act">Procure alongside EPC. LFP chemistry preferred.</div></div>
   </div>
 </div>
 
 </div><!-- /scroll-area -->
 
-<!-- BOTTOM NAV -->
+<!-- BOTTOM NAV — 7 tabs -->
 <div class="bottom-nav">
-  <button class="nav-item active" onclick="showTab('inputs',this)">
-    <span class="nav-icon">⚡</span>
-    <span class="nav-label">Inputs</span>
-    <div class="nav-dot"></div>
-  </button>
-  <button class="nav-item" onclick="showTab('battery',this)">
-    <span class="nav-icon">🔋</span>
-    <span class="nav-label">Battery</span>
-    <div class="nav-dot"></div>
-  </button>
-  <button class="nav-item" onclick="showTab('finance',this)">
-    <span class="nav-icon">🏦</span>
-    <span class="nav-label">Finance</span>
-    <div class="nav-dot"></div>
-  </button>
-  <button class="nav-item" onclick="showTab('results',this)">
-    <span class="nav-icon">📊</span>
-    <span class="nav-label">Results</span>
-    <div class="nav-dot"></div>
-  </button>
-  <button class="nav-item" onclick="showTab('cashflow',this)">
-    <span class="nav-icon">📈</span>
-    <span class="nav-label">Cash Flow</span>
-    <div class="nav-dot"></div>
-  </button>
-  <button class="nav-item" onclick="showTab('regulatory',this)">
-    <span class="nav-icon">📋</span>
-    <span class="nav-label">Regulatory</span>
-    <div class="nav-dot"></div>
-  </button>
+  <button class="nav-item active" onclick="showTab('inputs',this)"><span class="nav-icon">⚡</span><span class="nav-label">Inputs</span><div class="nav-dot"></div></button>
+  <button class="nav-item" onclick="showTab('loss',this)"><span class="nav-icon">🔌</span><span class="nav-label">Loss</span><div class="nav-dot"></div></button>
+  <button class="nav-item" onclick="showTab('battery',this)"><span class="nav-icon">🔋</span><span class="nav-label">Battery</span><div class="nav-dot"></div></button>
+  <button class="nav-item" onclick="showTab('finance',this)"><span class="nav-icon">🏦</span><span class="nav-label">Finance</span><div class="nav-dot"></div></button>
+  <button class="nav-item" onclick="showTab('results',this)"><span class="nav-icon">📊</span><span class="nav-label">Results</span><div class="nav-dot"></div></button>
+  <button class="nav-item" onclick="showTab('cashflow',this)"><span class="nav-icon">📈</span><span class="nav-label">Cash Flow</span><div class="nav-dot"></div></button>
+  <button class="nav-item" onclick="showTab('regulatory',this)"><span class="nav-icon">📋</span><span class="nav-label">Regs</span><div class="nav-dot"></div></button>
 </div>
 
 <script>
-let cfInst = null, sensiInst = null, deferredPrompt = null;
+/* ── PWA ── */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('install-banner').style.display='flex';});
+window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').style.display='none';});
+function installApp(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>{deferredPrompt=null;});}}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredPrompt = e;
-  document.getElementById('install-banner').style.display = 'flex';
-});
-window.addEventListener('appinstalled', () => {
-  document.getElementById('install-banner').style.display = 'none';
-});
-function installApp() {
-  if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); }
-}
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+/* ── TNERC DEEMED LOSS TABLE ── */
+const LOSS_TABLE = {
+  '33-11':5.43,'33-33':3.91,'33-110':1.50,'33-230':0.00,
+  '110-11':1.52,'110-33':0.50,'110-110':0.00,'110-230':0.00,
+  '230-11':1.52,'230-33':0.50,'230-110':0.00,'230-230':0.00
+};
+
+let currentDeemedLoss = 5.43; // default 33kV inject → 11kV receive
+
+function updateLoss(){
+  const inj = document.getElementById('i-inj').value;
+  const recv = document.getElementById('i-recv').value;
+  const key = inj+'-'+recv;
+  const auto = LOSS_TABLE[key] !== undefined ? LOSS_TABLE[key] : 5.43;
+  const override = parseFloat(document.getElementById('i-loss-override').value)||0;
+  const htloss = parseFloat(document.getElementById('i-htloss').value)||0;
+  const applied = override > 0 ? override + htloss : auto + htloss;
+  currentDeemedLoss = applied;
+  document.getElementById('v-loss-auto').textContent = auto.toFixed(2)+'%';
+  document.getElementById('v-loss-applied').textContent = applied.toFixed(2)+'%';
+  // highlight active row in table
+  document.querySelectorAll('#loss-table tbody tr').forEach(tr=>{
+    tr.classList.toggle('active-row', tr.dataset.inj===inj && tr.dataset.recv===recv);
+  });
+  calculate();
 }
 
-function showTab(t, btn) {
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+/* ── NAV ── */
+function showTab(t,btn){
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.section').forEach(el=>el.classList.remove('active'));
   btn.classList.add('active');
-  document.getElementById('tab-' + t).classList.add('active');
-  document.querySelector('.scroll-area').scrollTop = 0;
+  document.getElementById('tab-'+t).classList.add('active');
+  document.querySelector('.scroll-area').scrollTop=0;
 }
 
-function upd(id) {
-  const v = parseFloat(document.getElementById('i-' + id).value);
-  const out = document.getElementById('v-' + id);
-  if (!out) return;
-  const fmt = {
-    plf: v.toFixed(2)+'%', loss: v.toFixed(1)+'%', peak: v+'%', surcharge: v+'%',
-    disc: v+'%', taresc: v.toFixed(1)+'%', oaesc: v.toFixed(1)+'%',
-    debt: v+'%', ir: v.toFixed(2)+'%', tenure: v+' yrs', moro: v+' yr',
-    om: v.toFixed(1)+'%', omesc: v.toFixed(1)+'%', ins: v.toFixed(1)+'%',
-    insesc: v.toFixed(1)+'%', tax: v+'%', addep: v+'%', salvage: v+'%',
-    battmwh: v+' MWh', battcost: '₹'+v.toFixed(2), rte: v+'%',
-    battdeg: v.toFixed(1)+'%', battstore: v+'%', evprem: '₹'+v.toFixed(2), deg1: v.toFixed(1)+'%'
+/* ── SLIDER DISPLAY ── */
+function upd(id){
+  const v=parseFloat(document.getElementById('i-'+id).value);
+  const out=document.getElementById('v-'+id);if(!out)return;
+  const fmt={
+    plf:v.toFixed(2)+'%',loss:v.toFixed(1)+'%',peak:v+'%',surcharge:v+'%',
+    disc:v+'%',taresc:v.toFixed(1)+'%',oaesc:v.toFixed(1)+'%',
+    debt:v+'%',ir:v.toFixed(2)+'%',tenure:v+' yrs',moro:v+' yr',
+    om:v.toFixed(1)+'%',omesc:v.toFixed(1)+'%',ins:v.toFixed(1)+'%',
+    insesc:v.toFixed(1)+'%',tax:v+'%',addep:v+'%',salvage:v+'%',
+    battmwh:v+' MWh',battcost:'₹'+v.toFixed(2),rte:v+'%',
+    battdeg:v.toFixed(1)+'%',battstore:v+'%',evprem:'₹'+v.toFixed(2),
+    deg1:v.toFixed(1)+'%',htloss:v.toFixed(2)+'%'
   };
-  out.textContent = fmt[id] !== undefined ? fmt[id] : v;
+  out.textContent=fmt[id]!==undefined?fmt[id]:v;
 }
 
-function updateBuyer() {
-  const v = parseFloat(document.getElementById('i-buyer').value).toFixed(2);
-  document.getElementById('i-tariff').value = v;
+function updateBuyer(){
+  const v=parseFloat(document.getElementById('i-buyer').value).toFixed(2);
+  document.getElementById('i-tariff').value=v;
 }
-
-function toggleBattery() {
-  const on = document.getElementById('i-batt').value === '1';
-  document.getElementById('batt-params').style.display = on ? 'block' : 'none';
+function toggleBattery(){
+  document.getElementById('batt-params').style.display=document.getElementById('i-batt').value==='1'?'block':'none';
 }
+function g(id){return parseFloat(document.getElementById('i-'+id).value)||0;}
 
-function g(id) { return parseFloat(document.getElementById('i-' + id).value) || 0; }
+/* ── CHARTS ── */
+let cfInst=null,sensiInst=null;
 
-function calculate() {
-  const dc=g('dc'), dac=g('dac'), plf=g('plf')/100, loss=g('loss')/100;
-  const peakPct=g('peak')/100, surcharge=g('surcharge')/100, deg1=g('deg1')/100;
-  const tariff=g('tariff'), disc=g('disc')/100, oa=g('oa');
-  const tarEsc=g('taresc')/100, oaEsc=g('oaesc')/100;
-  const epc=g('epc'), expanel=g('expanel'), land=g('land'), evac=g('evac'), misc=g('misc');
-  const ir=g('ir')/100, debtFrac=g('debt')/100, tenure=g('tenure'), moro=g('moro');
-  const omPct=g('om')/100, omEsc=g('omesc')/100;
-  const insPct=g('ins')/100, insEsc=g('insesc')/100;
-  const taxRate=g('tax')/100, addep=g('addep')/100, salvage=g('salvage')/100;
+/* ── MAIN CALCULATE ── */
+function calculate(){
+  const dc=g('dc'),dac=g('dac'),plf=g('plf')/100,loss=g('loss')/100;
+  const peakPct=g('peak')/100,surcharge=g('surcharge')/100,deg1=g('deg1')/100;
+  const tariff=g('tariff'),disc=g('disc')/100,oa=g('oa');
+  const tarEsc=g('taresc')/100,oaEsc=g('oaesc')/100;
+  const epc=g('epc'),expanel=g('expanel'),land=g('land'),evac=g('evac'),misc=g('misc');
+  const ir=g('ir')/100,debtFrac=g('debt')/100,tenure=g('tenure'),moro=g('moro');
+  const omPct=g('om')/100,omEsc=g('omesc')/100;
+  const insPct=g('ins')/100,insEsc=g('insesc')/100;
+  const taxRate=g('tax')/100,addep=g('addep')/100,salvage=g('salvage')/100;
   const hasBatt=document.getElementById('i-batt').value==='1';
-  const battMWh=hasBatt?g('battmwh'):0, battCostCr=hasBatt?g('battcost'):0;
-  const rte=g('rte')/100, battDeg=g('battdeg')/100;
+  const battMWh=hasBatt?g('battmwh'):0,battCostCr=hasBatt?g('battcost'):0;
+  const rte=g('rte')/100,battDeg=g('battdeg')/100;
   const battStore=hasBatt?g('battstore')/100:0;
-  const evPrem=hasBatt?g('evprem'):0, battOM=hasBatt?g('battom'):0;
-  const htLen=g('htlen'), htCost=g('htcost'), ssCost=g('sscost'), meterCost=g('metercost');
+  const evPrem=hasBatt?g('evprem'):0,battOM=hasBatt?g('battom'):0;
+  const htLen=g('htlen'),htCost=g('htcost'),ssCost=g('sscost'),meterCost=g('metercost');
+
+  // DEEMED GRID LOSS (from voltage selection)
+  const gridLossPct = currentDeemedLoss / 100;
 
   const evacCalc=htLen*htCost+ssCost+meterCost;
   const solarCapex=epc+expanel+land+evac+misc;
@@ -657,46 +597,73 @@ function calculate() {
   set('v-debt-amt','₹'+debtAmt.toFixed(1));
   set('v-eq-amt','₹'+eqAmt.toFixed(1));
 
+  // Generation — plant gate
   const grossGenYr1=dc*plf*8760;
-  const netGenYr1=grossGenYr1*(1-loss);
+  const netGenGate=grossGenYr1*(1-loss);            // after plant internal loss
+  const netGenMeter=netGenGate*(1-gridLossPct);     // after TNERC deemed grid loss → units at buyer meter
+
   const wtTNEB1=tariff*(1+peakPct*surcharge);
   const sp1=wtTNEB1*disc;
   const netR1=sp1-oa;
-  const omYr1=solarCapex*omPct, insYr1=solarCapex*insPct;
+
+  // Revenue based on units at METER (not gate)
+  const omYr1=solarCapex*omPct,insYr1=solarCapex*insPct;
   const opexYr1=omYr1+insYr1+battOM;
-  const grossRevYr1=netGenYr1*sp1/1e7;
-  const oaChgYr1=netGenYr1*oa/1e7;
+  const grossRevYr1=netGenMeter*sp1/1e7;
+  const oaChgYr1=netGenMeter*oa/1e7;
   const netRevYr1=grossRevYr1-oaChgYr1;
   const ebitdaYr1=netRevYr1-opexYr1;
 
+  // Loss impact section
+  const lostUnits=(netGenGate-netGenMeter)/1e6;
+  const lostRev=lostUnits*netR1*1e6/1e7;
+  const liEl=document.getElementById('loss-impact');
+  liEl.innerHTML=[
+    ['Net gen at plant gate (Yr-1)',(netGenGate/1e6).toFixed(2)+' MU'],
+    ['Grid loss ('+currentDeemedLoss.toFixed(2)+'%)','-'+(lostUnits).toFixed(2)+' MU'],
+    ['Net gen at buyer meter (Yr-1)',(netGenMeter/1e6).toFixed(2)+' MU'],
+    ['Revenue lost to grid loss (Yr-1)','−₹'+lostRev.toFixed(2)+' Cr'],
+    ['25-yr cumulative revenue lost (approx)','−₹'+(lostRev*18).toFixed(1)+' Cr'],
+  ].map((r,i)=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv" style="${i>=3?'color:var(--red)':''}">${r[1]}</span></div>`).join('');
+
+  // Results
   set('r-capex','₹'+totalCapex.toFixed(1));
   set('r-equity','₹'+eqAmt.toFixed(1));
+  set('r-gridloss',currentDeemedLoss.toFixed(2)+'%');
+  set('r-gen',(netGenMeter/1e6).toFixed(2)+' MU');
   set('r-netr','₹'+netR1.toFixed(2));
-  set('r-gen',(netGenYr1/1e6).toFixed(2)+' MU');
   set('r-ebitda','₹'+ebitdaYr1.toFixed(2));
 
+  // Price breakdown
   const pb=document.getElementById('price-breakdown');
   pb.innerHTML=[
     ['TNEB base tariff','₹'+tariff.toFixed(2),''],
     ['Weighted TNEB ('+Math.round(peakPct*100)+'% peak)','₹'+wtTNEB1.toFixed(3),''],
     ['Selling price ('+Math.round(disc*100)+'% of weighted)','₹'+sp1.toFixed(3),'green'],
-    ['Less: OA charge (all-in)','−₹'+oa.toFixed(2),'red'],
+    ['Less: OA charge (monetary)','−₹'+oa.toFixed(2),'red'],
     ['Net realisation / kWh','₹'+netR1.toFixed(3),'green'],
-    ['Buyer saving vs TNEB','₹'+(wtTNEB1-sp1).toFixed(3),'amber']
-  ].map(r=>`<div class="sum-row"><span class="sum-key">${r[0]}</span><span class="sum-val" style="color:${r[2]==='green'?'var(--green)':r[2]==='red'?'var(--red)':r[2]==='amber'?'var(--amber)':'var(--text)'}">${r[1]}</span></div>`).join('');
+    ['Plant internal loss','−'+((loss)*100).toFixed(1)+'%',''],
+    ['TNERC deemed grid loss','−'+currentDeemedLoss.toFixed(2)+'%','purple'],
+    ['Units billed (at buyer meter)',(netGenMeter/1e6).toFixed(2)+' MU',''],
+  ].map((r,i)=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv" style="color:${r[2]==='green'?'var(--green)':r[2]==='red'?'var(--red)':r[2]==='purple'?'var(--purple)':'var(--text)'}">${r[1]}</span></div>`).join('');
 
+  // Yr1 income statement
   const yr1=document.getElementById('yr1-summary');
   yr1.innerHTML=[
-    ['Net generation Yr-1',(netGenYr1/1e6).toFixed(2)+' MU'],
+    ['Gross generation (rated)',(grossGenYr1/1e6).toFixed(2)+' MU'],
+    ['Less: plant internal loss ('+((loss)*100).toFixed(1)+'%)','-'+((grossGenYr1-netGenGate)/1e6).toFixed(2)+' MU'],
+    ['Net gen at plant gate',(netGenGate/1e6).toFixed(2)+' MU'],
+    ['Less: TNERC grid loss ('+currentDeemedLoss.toFixed(2)+'%)','-'+lostUnits.toFixed(2)+' MU'],
+    ['Net gen at buyer meter (billed)',(netGenMeter/1e6).toFixed(2)+' MU'],
     ['Gross revenue','₹'+grossRevYr1.toFixed(2)+' Cr'],
-    ['OA charges','−₹'+oaChgYr1.toFixed(2)+' Cr'],
+    ['Less: OA charges','−₹'+oaChgYr1.toFixed(2)+' Cr'],
     ['Net revenue','₹'+netRevYr1.toFixed(2)+' Cr'],
-    ['Total opex','₹'+opexYr1.toFixed(2)+' Cr'],
+    ['Less: Total opex','−₹'+opexYr1.toFixed(2)+' Cr'],
     ['EBITDA','₹'+ebitdaYr1.toFixed(2)+' Cr'],
     ['EBITDA margin',((ebitdaYr1/netRevYr1)*100).toFixed(1)+'%'],
-  ].map(r=>`<div class="sum-row"><span class="sum-key">${r[0]}</span><span class="sum-val">${r[1]}</span></div>`).join('');
+  ].map((r,i)=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv" style="${i>=8&&i<10?'color:var(--green)':i===6||i===7?'color:var(--red)':''}">${r[1]}</span></div>`).join('');
 
-  // Sensitivity
+  // Sensitivity chart
   const sensiOA=[0.8,1.0,1.2,1.33,1.5,1.8,2.2,2.8];
   const sensiNR=sensiOA.map(o=>parseFloat((sp1-o).toFixed(3)));
   if(sensiInst)sensiInst.destroy();
@@ -708,37 +675,38 @@ function calculate() {
 
   // Debt schedule
   const annPrin=debtAmt/Math.max(tenure-moro,1);
-  const debtSch=[];
-  let ob=debtAmt;
+  const debtSch=[];let ob=debtAmt;
   for(let y=1;y<=tenure;y++){
-    const int=ob*ir, prin=y<=moro?0:annPrin, cb=Math.max(0,ob-prin);
-    debtSch.push({y,ob,int,prin,cb,ds:int+prin});
-    ob=cb;
+    const int=ob*ir,prin=y<=moro?0:annPrin,cb=Math.max(0,ob-prin);
+    debtSch.push({y,ob,int,prin,cb,ds:int+prin});ob=cb;
   }
   document.getElementById('debt-tbody').innerHTML=debtSch.map(d=>
     `<tr><td>Yr ${d.y}${d.y<=moro?' (M)':''}</td><td>${d.ob.toFixed(1)}</td><td>${d.int.toFixed(1)}</td><td>${d.prin.toFixed(1)}</td><td>${d.cb.toFixed(1)}</td><td>${d.ds.toFixed(1)}</td></tr>`
   ).join('');
 
-  // 25-year model
+  // 25-year CF
   const cfData=[];
-  let degF=1, tarC=tariff, oaC=oa, omC=omYr1, insC=insYr1, battOMC=battOM;
-  let wdv=solarCapex, cumCF=-eqAmt, payYr=null;
+  let degF=1,tarC=tariff,oaC=oa,omC=omYr1,insC=insYr1,battOMC=battOM;
+  let wdv=solarCapex,cumCF=-eqAmt,payYr=null;
 
   for(let y=1;y<=25;y++){
     if(y===1) degF=1-deg1;
     else if(y<=10) degF*=(1-0.0068);
     else degF*=(1-0.007);
 
-    const ng=netGenYr1*degF;
+    const ng_gate=netGenGate*degF;          // at plant gate (degraded)
+    const ng_meter=ng_gate*(1-gridLossPct); // at buyer meter
     const wt=tarC*(1+peakPct*surcharge);
     const sp=wt*disc;
+
     let battExtra=0;
     if(hasBatt){
-      const storedMWh=(ng/1e6)*battStore*1000;
+      const storedMWh=(ng_gate/1e6)*battStore*1000;
       const dischMWh=storedMWh*rte*Math.pow(1-battDeg,y-1);
       battExtra=dischMWh*evPrem/1e7;
     }
-    const gr=ng*sp/1e7, oc=ng*oaC/1e7;
+
+    const gr=ng_meter*sp/1e7,oc=ng_meter*oaC/1e7;
     const nr=gr-oc+battExtra;
     const opex=omC+insC+(hasBatt?battOMC:0);
     const ebitda=nr-opex;
@@ -753,34 +721,34 @@ function calculate() {
     const fcf=ebitda-dr.int-dr.prin-tax+salvAmt;
     cumCF+=fcf;
     if(cumCF>=0&&!payYr) payYr=y;
-    cfData.push({y,ng:(ng/1e6).toFixed(2),sp:sp.toFixed(2),oa:oaC.toFixed(2),
+
+    cfData.push({y,ng:(ng_meter/1e6).toFixed(2),sp:sp.toFixed(2),oa:oaC.toFixed(2),
       nr:(sp-oaC).toFixed(2),netRev:nr.toFixed(2),ebitda:ebitda.toFixed(2),
       int:dr.int.toFixed(2),prin:dr.prin.toFixed(2),tax:tax.toFixed(2),
       fcf:fcf.toFixed(2),cum:cumCF.toFixed(2)});
-    tarC*=(1+tarEsc); oaC*=(1+oaEsc); omC*=(1+omEsc); insC*=(1+insEsc);
+
+    tarC*=(1+tarEsc);oaC*=(1+oaEsc);omC*=(1+omEsc);insC*=(1+insEsc);
     if(hasBatt) battOMC*=1.05;
   }
 
   const tFCF=cfData.reduce((s,r)=>s+parseFloat(r.fcf),0);
   const pyEl=document.getElementById('r-payback');
   pyEl.textContent=payYr?payYr+' yrs':'>25';
-  pyEl.className='metric-value sm '+(payYr&&payYr<=6?'green':payYr&&payYr<=10?'amber':'red');
+  pyEl.className='mv sm '+(payYr&&payYr<=6?'green':payYr&&payYr<=10?'amber':'red');
   set('r-fcf','₹'+cfData[0].fcf);
-  set('r-tfcf','₹'+tFCF.toFixed(1));
+  set('r-tfcf','₹'+tFCF.toFixed(1)+' Cr');
 
-  const aEl=document.getElementById('results-alerts');
-  aEl.innerHTML='';
-  if(netR1<3) aEl.innerHTML+='<div class="alert danger">Net realisation below ₹3/kWh — thin margins. Review OA &amp; tariff.</div>';
+  const aEl=document.getElementById('results-alerts');aEl.innerHTML='';
+  if(netR1<3) aEl.innerHTML+='<div class="alert danger">Net realisation below ₹3/kWh — thin margins.</div>';
   if(payYr&&payYr<=6) aEl.innerHTML+='<div class="alert success">Excellent: equity payback in '+payYr+' years.</div>';
   else if(payYr&&payYr<=10) aEl.innerHTML+='<div class="alert success">Good: payback in '+payYr+' years.</div>';
   else if(payYr&&payYr>12) aEl.innerHTML+='<div class="alert warn">Payback beyond 12 years — review capex / OA.</div>';
   if(!payYr) aEl.innerHTML+='<div class="alert danger">Equity not recovered in 25 years.</div>';
+  if(currentDeemedLoss>4) aEl.innerHTML+='<div class="alert purple">TNERC deemed loss '+currentDeemedLoss.toFixed(2)+'% — revenue impact ₹'+lostRev.toFixed(2)+' Cr/yr. Consider stepping up to higher injection voltage to reduce loss.</div>';
 
   const paEl=document.getElementById('payback-alert');
   paEl.className='alert '+(payYr&&payYr<=10?'success':'warn');
-  paEl.textContent=payYr
-    ?'Equity payback Year '+payYr+'. Total 25-yr FCF: ₹'+tFCF.toFixed(1)+' Cr.'
-    :'Equity not recovered within 25 years.';
+  paEl.textContent=payYr?'Equity payback Year '+payYr+'. Grid loss: '+currentDeemedLoss.toFixed(2)+'%. Total 25-yr FCF: ₹'+tFCF.toFixed(1)+' Cr.':'Equity not recovered within 25 years.';
 
   document.getElementById('cf-tbody').innerHTML=cfData.map(r=>{
     const cls=r.y===payYr?'payback-row':r.y<=tenure?'debt-row':'';
@@ -791,20 +759,18 @@ function calculate() {
   if(cfInst)cfInst.destroy();
   cfInst=new Chart(document.getElementById('cfChart'),{
     type:'line',
-    data:{
-      labels:cfData.map(r=>'Yr '+r.y),
-      datasets:[
-        {label:'Cum CF (₹Cr)',data:cfData.map(r=>parseFloat(r.cum).toFixed(1)),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.1)',fill:true,tension:0.35,pointRadius:2,yAxisID:'y'},
-        {label:'FCF (₹Cr)',data:cfData.map(r=>parseFloat(r.fcf).toFixed(1)),borderColor:'#378ADD',backgroundColor:'transparent',tension:0.35,pointRadius:2,borderDash:[4,3],yAxisID:'y'}
-      ]
-    },
+    data:{labels:cfData.map(r=>'Yr '+r.y),datasets:[
+      {label:'Cum CF (₹Cr)',data:cfData.map(r=>parseFloat(r.cum).toFixed(1)),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.1)',fill:true,tension:0.35,pointRadius:2,yAxisID:'y'},
+      {label:'FCF (₹Cr)',data:cfData.map(r=>parseFloat(r.fcf).toFixed(1)),borderColor:'#378ADD',backgroundColor:'transparent',tension:0.35,pointRadius:2,borderDash:[4,3],yAxisID:'y'}
+    ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:12}}},
       scales:{y:{ticks:{callback:v=>'₹'+v,font:{size:10}}},x:{ticks:{maxTicksLimit:10,maxRotation:0,font:{size:10}}}}}
   });
 }
 
-calculate();
+// init
+updateLoss();
 </script>
 </body>
 </html>
