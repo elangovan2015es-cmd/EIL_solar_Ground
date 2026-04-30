@@ -15,20 +15,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-:root{--g7:#085041;--g6:#0F6E56;--g5:#1D9E75;--g1:#E1F5EE;--g0:#F0FAF6;
+:root{
+  --g7:#085041;--g6:#0F6E56;--g5:#1D9E75;--g1:#E1F5EE;--g0:#F0FAF6;
   --a6:#BA7517;--a1:#FAEEDA;--r6:#A32D2D;--r1:#FCEBEB;
   --b6:#185FA5;--b1:#E6F1FB;--p6:#534AB7;--p1:#EEEDFE;
   --n9:#111827;--n7:#374151;--n5:#6B7280;--n3:#D1D5DB;--n1:#F9FAFB;--w:#FFFFFF;
-  --hh:56px;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);}
+  --hh:56px;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-font-smoothing:antialiased}
 
 /* HEADER */
 .hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--g6);box-shadow:0 2px 10px rgba(0,0,0,.2);}
 .hdr-in{height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 16px;padding-top:var(--safe-top);}
-.hdr-t{font-size:14px;font-weight:700;color:#fff;line-height:1.2}
+.hdr-t{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2}
 .hdr-s{font-size:10px;color:rgba(255,255,255,.65);margin-top:1px}
-.hbtn{width:40px;height:40px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;}
+.hbtn{width:40px;height:40px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;flex-shrink:0;}
 .hl{width:17px;height:2px;background:#fff;border-radius:2px}
 
 /* OVERLAY + DRAWER */
@@ -36,68 +38,81 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 .ovl.on{opacity:1;pointer-events:all}
 .drw{position:fixed;top:0;right:0;bottom:0;z-index:500;width:min(290px,82vw);background:var(--w);transform:translateX(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 30px rgba(0,0,0,.15);display:flex;flex-direction:column;}
 .drw.on{transform:translateX(0)}
-.drw-hdr{background:var(--g6);padding:18px 16px 16px;padding-top:calc(18px + var(--safe-top));flex-shrink:0;position:relative}
+.drw-hdr{background:var(--g6);padding:18px 16px 14px;padding-top:calc(18px + var(--safe-top));flex-shrink:0;position:relative}
 .drw-title{font-size:15px;font-weight:700;color:#fff}
 .drw-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
-.drw-x{position:absolute;top:calc(14px + var(--safe-top));right:14px;width:30px;height:30px;background:rgba(255,255,255,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:#fff;border:none;font-family:'Inter',sans-serif;}
-.drw-body{flex:1;overflow-y:auto;padding:10px 0}
-.di{display:flex;align-items:center;gap:12px;padding:13px 18px;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;transition:background .1s}
+.drw-x{position:absolute;top:calc(14px + var(--safe-top));right:14px;width:30px;height:30px;background:rgba(255,255,255,.15);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:#fff;border:none;font-family:'Inter',sans-serif;}
+.drw-body{flex:1;overflow-y:auto;padding:8px 0}
+.di{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;transition:background .1s}
 .di:active,.di.on{background:var(--g0)}
 .di.on .di-lbl{color:var(--g6);font-weight:600}
 .di.on .di-ic{background:var(--g1)}
-.di-ic{width:38px;height:38px;border-radius:9px;background:var(--n1);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.di-ic{width:36px;height:36px;border-radius:8px;background:var(--n1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .di-lbl{font-size:14px;font-weight:500;color:var(--n7)}
 .di-dsc{font-size:11px;color:var(--n5);margin-top:1px}
-.drw-sep{height:1px;background:var(--n3);margin:6px 18px}
+.drw-sep{height:1px;background:var(--n3);margin:5px 16px}
 
 /* CANVAS */
-.cvs{margin-top:var(--hh);padding-top:var(--safe-top);padding:20px 15px calc(80px + var(--safe-bot));max-width:620px;margin-left:auto;margin-right:auto}
+.cvs{padding-top:calc(var(--hh) + var(--safe-top) + 16px);padding-left:15px;padding-right:15px;padding-bottom:calc(80px + var(--safe-bot));max-width:600px;margin:0 auto;}
 
 /* SECTIONS */
 .sec{display:none}.sec.on{display:block}
 
-/* SEC HEADING */
-.sec-h{display:flex;align-items:center;gap:11px;margin-bottom:20px;padding-bottom:12px;border-bottom:2.5px solid var(--g5)}
-.sec-ic{font-size:24px}
-.sec-ti{font-size:19px;font-weight:700;color:var(--n9)}
+/* SECTION HEADING */
+.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding-bottom:12px;border-bottom:2.5px solid var(--g5)}
+.sec-ic{font-size:22px}
+.sec-ti{font-size:18px;font-weight:700;color:var(--n9)}
 .sec-su{font-size:12px;color:var(--n5);margin-top:2px}
 
 /* CARDS */
-.card{background:var(--w);border-radius:14px;padding:18px;margin-bottom:15px;box-shadow:0 1px 3px rgba(0,0,0,.07);border:1px solid var(--n3)}
-.chdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--n5);margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid #F0F0F0}
+.card{background:var(--w);border-radius:14px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid var(--n3)}
+.chdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--n5);margin-bottom:13px;padding-bottom:8px;border-bottom:1px solid #F0F0F0}
 .chdr.gn{color:var(--g6);border-color:var(--g1)}
 .chdr.pu{color:var(--p6);border-color:var(--p1)}
 
 /* METRICS */
-.mg2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
-.mg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:14px}
-.met{background:var(--n1);border-radius:11px;padding:13px 11px;text-align:center;border:1px solid var(--n3)}
-.met.hero{background:var(--g6);border-color:var(--g6);padding:16px 14px}
-.met.gn{background:var(--g0);border-color:var(--g1)}.met.am{background:var(--a1);border-color:#EED08A}
-.met.rd{background:var(--r1);border-color:#F1A8A8}.met.bl{background:var(--b1);border-color:#A8C8F0}
+.mg2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.mg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.met{background:var(--n1);border-radius:10px;padding:12px 8px;text-align:center;border:1px solid var(--n3);overflow:hidden}
+.met.hero{background:var(--g6);border-color:var(--g6);padding:14px 10px}
+.met.gn{background:var(--g0);border-color:var(--g1)}
+.met.am{background:var(--a1);border-color:#EED08A}
+.met.rd{background:var(--r1);border-color:#F1A8A8}
+.met.bl{background:var(--b1);border-color:#A8C8F0}
 .met.pu{background:var(--p1);border-color:#AFA9EC}
-.ml{font-size:10px;color:var(--n5);font-weight:500;letter-spacing:.02em;margin-bottom:4px;line-height:1.3}
+.ml{font-size:10px;color:var(--n5);font-weight:500;margin-bottom:4px;line-height:1.3;word-break:break-word}
 .met.hero .ml{color:rgba(255,255,255,.7)}
-.mv{font-size:20px;font-weight:700;color:var(--n9);font-family:'JetBrains Mono',monospace;line-height:1}
-.mv.lg{font-size:26px}.met.hero .mv{color:#fff}
-.met.gn .mv{color:var(--g6)}.met.am .mv{color:var(--a6)}.met.rd .mv{color:var(--r6)}
-.met.bl .mv{color:var(--b6)}.met.pu .mv{color:var(--p6)}
-.mu{font-size:10px;color:var(--n5);margin-top:3px}.met.hero .mu{color:rgba(255,255,255,.6)}
+.mv{font-size:18px;font-weight:700;color:var(--n9);font-family:'JetBrains Mono',monospace;line-height:1.1;word-break:break-all;overflow-wrap:anywhere}
+.mv.lg{font-size:28px}
+.met.hero .mv{color:#fff}
+.met.gn .mv{color:var(--g6)}.met.am .mv{color:var(--a6)}.met.rd .mv{color:var(--r6)}.met.bl .mv{color:var(--b6)}.met.pu .mv{color:var(--p6)}
+.mu{font-size:10px;color:var(--n5);margin-top:3px}
+.met.hero .mu{color:rgba(255,255,255,.6)}
 
-/* FIELDS */
-.fld{margin-bottom:17px}.fld:last-child{margin-bottom:0}
-.flbl{font-size:14px;font-weight:500;color:var(--n7);margin-bottom:7px;display:block}
-.flbl span{font-size:11px;color:var(--n5);font-weight:400;margin-left:3px}
-.frow{display:flex;align-items:center;gap:10px}
-input[type=range]{flex:1;height:34px;accent-color:var(--g5);cursor:pointer}
-.rv{font-size:14px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;min-width:70px;text-align:right;flex-shrink:0}
-input[type=number]{width:105px;flex-shrink:0;font-size:15px;font-weight:500;padding:10px 11px;border:2px solid var(--n3);border-radius:8px;background:var(--w);color:var(--n9);font-family:'JetBrains Mono',monospace;-webkit-appearance:none;text-align:right}
-input[type=number]:focus{outline:none;border-color:var(--g5)}
-select{width:100%;font-size:14px;font-weight:500;padding:11px 13px;border:2px solid var(--n3);border-radius:8px;background:var(--w);color:var(--n9);font-family:'Inter',sans-serif;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+/* PLUS-MINUS STEPPER */
+.pm-row{display:flex;align-items:center;gap:0;margin-bottom:0}
+.pm-val{flex:1;text-align:center;font-size:18px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--n9);padding:2px 6px;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pm-btn{width:44px;height:44px;border:2px solid var(--n3);background:var(--w);font-size:22px;font-weight:300;color:var(--n7);cursor:pointer;flex-shrink:0;transition:all .12s;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;line-height:1;-webkit-appearance:none;}
+.pm-btn:active{background:var(--g1);border-color:var(--g5);color:var(--g6)}
+.pm-btn.left{border-radius:10px 0 0 10px;border-right:1px solid var(--n3)}
+.pm-btn.right{border-radius:0 10px 10px 0;border-left:1px solid var(--n3)}
+
+/* FIELD */
+.fld{margin-bottom:16px}.fld:last-child{margin-bottom:0}
+.flbl{font-size:14px;font-weight:500;color:var(--n7);margin-bottom:8px;display:block;line-height:1.4}
+.flbl span{font-size:11px;color:var(--n5);font-weight:400}
+.fhint{font-size:11px;color:var(--n5);margin-top:5px;line-height:1.4}
+
+/* SELECT */
+select{width:100%;font-size:14px;font-weight:500;padding:11px 12px;border:2px solid var(--n3);border-radius:9px;background:var(--w);color:var(--n9);font-family:'Inter',sans-serif;-webkit-appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
 select:focus{outline:none;border-color:var(--g5)}
 
+/* INPUT NUMBER (for editable milestone fields) */
+input[type=text]{width:100%;font-size:14px;padding:10px 12px;border:2px solid var(--n3);border-radius:9px;background:var(--w);color:var(--n9);font-family:'Inter',sans-serif}
+input[type=text]:focus{outline:none;border-color:var(--g5)}
+
 /* ALERTS */
-.alert{padding:13px 15px;border-radius:11px;font-size:13.5px;margin-bottom:14px;border-left:4px solid;line-height:1.55;font-weight:500}
+.alert{padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:13px;border-left:4px solid;line-height:1.5;font-weight:500}
 .alert.info{background:var(--b1);color:var(--b6);border-color:#378ADD}
 .alert.warn{background:var(--a1);color:var(--a6);border-color:#EF9F27}
 .alert.ok{background:var(--g1);color:var(--g6);border-color:var(--g5)}
@@ -105,67 +120,79 @@ select:focus{outline:none;border-color:var(--g5)}
 .alert.pu{background:var(--p1);color:var(--p6);border-color:#7F77DD}
 
 /* DIVIDER */
-.dv{height:1px;background:var(--n3);margin:14px 0}
+.dv{height:1px;background:var(--n3);margin:13px 0}
 
 /* SUMMARY ROWS */
-.sr{display:flex;justify-content:space-between;align-items:flex-start;padding:11px 0;border-bottom:1px solid #F0F0F0;gap:10px}
+.sr{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid #F0F0F0;gap:8px}
 .sr:last-child{border-bottom:none}
-.sk{font-size:13.5px;color:var(--n7);flex:1;line-height:1.35}
-.sv{font-size:14px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0}
+.sk{font-size:13px;color:var(--n7);flex:1;line-height:1.35}
+.sv{font-size:13.5px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;max-width:48%;word-break:break-all}
 .sv.gn{color:var(--g6)}.sv.rd{color:var(--r6)}.sv.am{color:var(--a6)}.sv.pu{color:var(--p6)}
 
 /* TABLES */
-.tw{overflow-x:auto;border-radius:11px;border:1px solid var(--n3);margin-bottom:14px;-webkit-overflow-scrolling:touch}
-table{width:100%;border-collapse:collapse;font-size:11.5px;min-width:400px}
-th{background:var(--n1);color:var(--n5);font-weight:600;padding:9px 9px;text-align:right;border-bottom:1px solid var(--n3);white-space:nowrap;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--n3);margin-bottom:13px;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:380px}
+th{background:var(--n1);color:var(--n5);font-weight:600;padding:8px 8px;text-align:right;border-bottom:1px solid var(--n3);white-space:nowrap;font-size:9.5px;text-transform:uppercase;letter-spacing:.04em}
 th:first-child{text-align:left}
-td{padding:7px 9px;text-align:right;border-bottom:1px solid #F5F5F5;font-family:'JetBrains Mono',monospace;white-space:nowrap;font-size:11px}
-td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--n7);font-weight:500;font-size:11px}
+td{padding:7px 8px;text-align:right;border-bottom:1px solid #F5F5F5;font-family:'JetBrains Mono',monospace;white-space:nowrap;font-size:11px}
+td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--n7);font-weight:500;font-size:10.5px}
 tr:last-child td{border-bottom:none}
 tr.pay td{background:var(--g0);color:var(--g6);font-weight:600}
 tr.dbt td{background:#EEF5FB}
 
 /* LOSS TABLE */
 .vt{width:100%;border-collapse:collapse}
-.vt th{background:var(--p6);color:#fff;font-size:10px;font-weight:600;padding:8px 9px;text-align:center;white-space:nowrap}
-.vt td{padding:9px 9px;text-align:center;border-bottom:1px solid var(--n3);font-family:'JetBrains Mono',monospace;font-size:11.5px}
-.vt td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--n7);font-weight:500}
+.vt th{background:var(--p6);color:#fff;font-size:10px;font-weight:600;padding:8px 8px;text-align:center;white-space:nowrap}
+.vt td{padding:8px 8px;text-align:center;border-bottom:1px solid var(--n3);font-family:'JetBrains Mono',monospace;font-size:11px}
+.vt td:first-child{text-align:left;font-family:'Inter',sans-serif;color:var(--n7);font-weight:500;font-size:11px}
 .vt tr.av td{background:var(--g1);color:var(--g6);font-weight:700}
 .vt tr:last-child td{border-bottom:none}
 
 /* REG */
-.ri{display:flex;gap:13px;margin-bottom:15px;align-items:flex-start}
+.ri{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
 .rd{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:4px}
 .rd.g{background:var(--g5)}.rd.a{background:#EF9F27}.rd.r{background:#E24B4A}.rd.p{background:var(--p6)}
 .rt{font-size:14px;font-weight:600;color:var(--n9);margin-bottom:2px}
 .rs{font-size:12.5px;color:var(--n5);line-height:1.5}
 
-/* EVAC */
+/* EVAC FLOW */
 .ev-fl{display:flex;flex-direction:column}
-.ev-nd{padding:11px 15px;font-size:13px;font-weight:600}
+.ev-nd{padding:10px 14px;font-size:13px;font-weight:600}
 .ev-nd:first-child{border-radius:9px 9px 0 0}.ev-nd:last-child{border-radius:0 0 9px 9px}
 .ev-ar{text-align:center;font-size:12px;color:var(--n5);padding:2px 0;background:var(--n1)}
 
-/* MILESTONE */
-.mc{background:var(--w);border:1px solid var(--n3);border-radius:11px;padding:13px 15px;margin-bottom:9px}
-.mc-h{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:3px}
-.mc-n{font-size:13.5px;font-weight:600;color:var(--n9)}
-.mc-a{font-size:12px;color:var(--n5);line-height:1.45}
-.bdg{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0}
+/* MILESTONE EDITABLE */
+.ms-card{background:var(--w);border:1px solid var(--n3);border-radius:11px;padding:14px;margin-bottom:10px}
+.ms-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.ms-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.ms-name{font-size:13.5px;font-weight:600;color:var(--n9);flex:1}
+.ms-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ms-field label{display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--n5);margin-bottom:4px}
+.ms-field input{width:100%;font-size:13px;padding:8px 10px;border:1.5px solid var(--n3);border-radius:7px;background:var(--w);color:var(--n9);font-family:'Inter',sans-serif}
+.ms-field input:focus{outline:none;border-color:var(--g5)}
+
+.bdg{display:inline-block;font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px}
 .bdg.g{background:var(--g1);color:var(--g6)}.bdg.a{background:var(--a1);color:var(--a6)}.bdg.r{background:var(--r1);color:var(--r6)}
 
 /* FAB */
-.fab-w{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:10px 20px;padding-bottom:calc(10px + var(--safe-bot));background:linear-gradient(to top,#F3F4F6 65%,transparent);display:flex;justify-content:center}
-.fab{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:15px 52px;font-size:17px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 18px rgba(15,110,86,.38);transition:all .14s;min-width:200px}
+.fab-w{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:10px 20px;padding-bottom:calc(10px + var(--safe-bot));background:linear-gradient(to top,#F3F4F6 70%,transparent);display:flex;justify-content:center}
+.fab{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:15px 52px;font-size:17px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 18px rgba(15,110,86,.38);transition:all .14s;min-width:180px;letter-spacing:.01em}
 .fab:active{background:var(--g7);transform:scale(.97)}
 
-#install-banner{background:var(--g6);color:#fff;border-radius:12px;padding:13px 15px;margin-bottom:14px;display:none;align-items:center;justify-content:space-between;gap:10px}
-#install-banner p{font-size:13px;font-weight:500}
-#install-btn{background:#fff;color:var(--g6);border:none;border-radius:7px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
+/* INSTALL BANNER */
+#inst-ban{background:var(--g6);color:#fff;border-radius:12px;padding:12px 14px;margin-bottom:13px;display:none;align-items:center;justify-content:space-between;gap:10px}
+#inst-ban p{font-size:13px;font-weight:500}
+#inst-btn{background:#fff;color:var(--g6);border:none;border-radius:7px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
+
+/* COMPUTED ROW */
+.comp-row{background:var(--g0);border:1px solid var(--g1);border-radius:9px;padding:10px 13px;display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+.comp-lbl{font-size:12px;color:var(--g6);font-weight:500}
+.comp-val{font-size:15px;font-weight:700;color:var(--g6);font-family:'JetBrains Mono',monospace}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="hdr">
   <div class="hdr-in">
     <div>
@@ -178,6 +205,7 @@ tr.dbt td{background:#EEF5FB}
   </div>
 </div>
 
+<!-- OVERLAY + DRAWER -->
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
@@ -186,21 +214,22 @@ tr.dbt td{background:#EEF5FB}
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
   <div class="drw-body">
-    <button class="di on" id="di-db"  onclick="go('db')"> <div class="di-ic">&#128202;</div><div><div class="di-lbl">Dashboard</div><div class="di-dsc">Key metrics &amp; results</div></div></button>
-    <button class="di"    id="di-in"  onclick="go('in')"> <div class="di-ic">&#9889;</div><div><div class="di-lbl">Project Inputs</div><div class="di-dsc">Generation, tariff &amp; costs</div></div></button>
-    <button class="di"    id="di-ls"  onclick="go('ls')"> <div class="di-ic">&#128268;</div><div><div class="di-lbl">Transmission Loss</div><div class="di-dsc">TNERC voltage-based deemed loss</div></div></button>
-    <button class="di"    id="di-bt"  onclick="go('bt')"> <div class="di-ic">&#128267;</div><div><div class="di-lbl">Battery &amp; Evacuation</div><div class="di-dsc">BESS sizing &amp; infrastructure</div></div></button>
-    <button class="di"    id="di-fi"  onclick="go('fi')"> <div class="di-ic">&#127974;</div><div><div class="di-lbl">Debt &amp; Equity</div><div class="di-dsc">Capital structure &amp; tax</div></div></button>
+    <button class="di on" id="di-db"  onclick="go('db')"><div class="di-ic">&#128202;</div><div><div class="di-lbl">Dashboard</div><div class="di-dsc">Key metrics &amp; results</div></div></button>
+    <button class="di"    id="di-in"  onclick="go('in')"><div class="di-ic">&#9889;</div><div><div class="di-lbl">Project Inputs</div><div class="di-dsc">Capacity, tariff &amp; costs</div></div></button>
+    <button class="di"    id="di-ls"  onclick="go('ls')"><div class="di-ic">&#128268;</div><div><div class="di-lbl">Grid Losses</div><div class="di-dsc">TNERC voltage-based deemed loss</div></div></button>
+    <button class="di"    id="di-bt"  onclick="go('bt')"><div class="di-ic">&#128267;</div><div><div class="di-lbl">Battery &amp; Evacuation</div><div class="di-dsc">BESS sizing &amp; infrastructure</div></div></button>
+    <button class="di"    id="di-fi"  onclick="go('fi')"><div class="di-ic">&#127974;</div><div><div class="di-lbl">Debt &amp; Equity</div><div class="di-dsc">Capital structure &amp; tax</div></div></button>
     <div class="drw-sep"></div>
-    <button class="di"    id="di-cf"  onclick="go('cf')"> <div class="di-ic">&#128200;</div><div><div class="di-lbl">25-Year Cash Flow</div><div class="di-dsc">FCF, payback &amp; chart</div></div></button>
-    <button class="di"    id="di-rg"  onclick="go('rg')"> <div class="di-ic">&#128203;</div><div><div class="di-lbl">Regulatory</div><div class="di-dsc">Group captive &amp; compliance</div></div></button>
+    <button class="di"    id="di-cf"  onclick="go('cf')"><div class="di-ic">&#128200;</div><div><div class="di-lbl">25-Year Cash Flow</div><div class="di-dsc">FCF, payback &amp; chart</div></div></button>
+    <button class="di"    id="di-rg"  onclick="go('rg')"><div class="di-ic">&#128203;</div><div><div class="di-lbl">Regulatory</div><div class="di-dsc">Group captive &amp; 110 kV evacuation</div></div></button>
   </div>
 </div>
 
+<!-- CANVAS -->
 <div class="cvs">
-<div id="install-banner"><p>Add to home screen for offline access</p><button id="install-btn" onclick="installApp()">Install</button></div>
+<div id="inst-ban"><p>Add to home screen for offline access</p><button id="inst-btn" onclick="installApp()">Install</button></div>
 
-<!-- DASHBOARD -->
+<!-- ═══ DASHBOARD ═══ -->
 <div id="s-db" class="sec on">
   <div class="sec-h"><div class="sec-ic">&#128202;</div><div><div class="sec-ti">Dashboard</div><div class="sec-su">Live project summary</div></div></div>
   <div id="d-alerts"></div>
@@ -208,239 +237,442 @@ tr.dbt td{background:#EEF5FB}
     <div class="chdr gn">Equity Payback</div>
     <div class="mg2">
       <div class="met hero"><div class="ml">Payback Year</div><div class="mv lg" id="r-pb">&#8212;</div><div class="mu">years from commissioning</div></div>
-      <div class="met hero"><div class="ml">25-yr Total FCF</div><div class="mv" id="r-tfcf">&#8212;</div><div class="mu">&#8377; Crores</div></div>
+      <div class="met hero"><div class="ml">25-yr Total FCF</div><div class="mv" id="r-tfcf">&#8212;</div><div class="mu">Crores</div></div>
     </div>
   </div>
   <div class="card">
     <div class="chdr">Project snapshot</div>
     <div class="mg3">
-      <div class="met bl"><div class="ml">Total Capex</div><div class="mv" id="r-cap">&#8212;</div><div class="mu">&#8377; Cr</div></div>
-      <div class="met gn"><div class="ml">Equity</div><div class="mv" id="r-eq">&#8212;</div><div class="mu">&#8377; Cr</div></div>
+      <div class="met bl"><div class="ml">Total Capex</div><div class="mv" id="r-cap">&#8212;</div><div class="mu">Cr</div></div>
+      <div class="met gn"><div class="ml">Equity</div><div class="mv" id="r-eq">&#8212;</div><div class="mu">Cr</div></div>
       <div class="met pu"><div class="ml">Grid Loss</div><div class="mv" id="r-gl">&#8212;</div><div class="mu">%</div></div>
     </div>
     <div class="mg3">
       <div class="met"><div class="ml">Net gen at meter</div><div class="mv" id="r-gen">&#8212;</div><div class="mu">MU Yr-1</div></div>
-      <div class="met gn"><div class="ml">EBITDA</div><div class="mv" id="r-eb">&#8212;</div><div class="mu">&#8377; Cr Yr-1</div></div>
-      <div class="met"><div class="ml">FCF to developer</div><div class="mv" id="r-fcf">&#8212;</div><div class="mu">&#8377; Cr Yr-1</div></div>
+      <div class="met gn"><div class="ml">EBITDA</div><div class="mv" id="r-eb">&#8212;</div><div class="mu">Cr Yr-1</div></div>
+      <div class="met"><div class="ml">FCF developer</div><div class="mv" id="r-fcf">&#8212;</div><div class="mu">Cr Yr-1</div></div>
     </div>
   </div>
   <div class="card">
-    <div class="chdr">Selling price breakdown &#8212; Year 1</div>
+    <div class="chdr">Selling price breakdown &mdash; Year 1</div>
     <div id="price-bd"></div>
   </div>
   <div class="card">
-    <div class="chdr">Net realisation vs OA charge sensitivity</div>
-    <div style="position:relative;height:190px"><canvas id="sChart"></canvas></div>
+    <div class="chdr">Net realisation vs OA charge</div>
+    <div style="position:relative;height:185px"><canvas id="sChart"></canvas></div>
   </div>
 </div>
 
-<!-- PROJECT INPUTS -->
+<!-- ═══ PROJECT INPUTS ═══ -->
 <div id="s-in" class="sec">
-  <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">Project Inputs</div><div class="sec-su">Generation, tariff &amp; costs</div></div></div>
+  <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">Project Inputs</div><div class="sec-su">Capacity, tariff &amp; costs</div></div></div>
+
   <div class="card">
-    <div class="chdr">Generation</div>
-    <div class="fld"><label class="flbl">DC capacity <span>(kWp)</span></label><div class="frow"><input type="number" id="i-dc" value="26000" oninput="calc()"></div></div>
+    <div class="chdr">Plant capacity &mdash; AC side first</div>
+    <div class="fld">
+      <label class="flbl">AC installed capacity <span>(MW AC &mdash; developer decides)</span></label>
+      <div class="pm-row" id="pm-ac">
+        <button class="pm-btn left" onclick="pmStep('ac',-1)">&#8722;</button>
+        <span class="pm-val" id="v-ac">20</span>
+        <button class="pm-btn right" onclick="pmStep('ac',1)">+</button>
+      </div>
+      <div class="fhint">This is the inverter / grid connection capacity the developer wishes to install</div>
+    </div>
     <div class="dv"></div>
-    <div class="fld"><label class="flbl">DC to AC ratio</label><div class="frow"><input type="number" id="i-dac" value="1.30" step="0.05" oninput="calc()"></div></div>
+    <div class="fld">
+      <label class="flbl">DC to AC ratio <span>(overdrive factor)</span></label>
+      <div class="pm-row" id="pm-dac">
+        <button class="pm-btn left" onclick="pmStep('dac',-0.05)">&#8722;</button>
+        <span class="pm-val" id="v-dac">1.30</span>
+        <button class="pm-btn right" onclick="pmStep('dac',0.05)">+</button>
+      </div>
+      <div class="fhint">Typical range 1.20 to 1.40 for ground mount</div>
+    </div>
+    <div class="comp-row">
+      <span class="comp-lbl">DC capacity (auto-calculated)</span>
+      <span class="comp-val" id="v-dc-calc">26 MW DC / 26,000 kWp</span>
+    </div>
     <div class="dv"></div>
-    <div class="fld"><label class="flbl">Plant load factor / CUF <span>(%)</span></label><div class="frow"><input type="range" id="i-plf" min="18" max="26" step="0.1" value="20.42" oninput="upd('plf');calc()"><span class="rv" id="v-plf">20.42%</span></div></div>
-    <div class="fld"><label class="flbl">Plant internal technical losses <span>(%)</span></label><div class="frow"><input type="range" id="i-loss" min="4" max="12" step="0.5" value="7" oninput="upd('loss');calc()"><span class="rv" id="v-loss">7.0%</span></div></div>
-    <div class="fld"><label class="flbl">Morning peak % solar hours <span>(%)</span></label><div class="frow"><input type="range" id="i-peak" min="0" max="30" step="1" value="15" oninput="upd('peak');calc()"><span class="rv" id="v-peak">15%</span></div></div>
-    <div class="fld"><label class="flbl">TNERC peak surcharge <span>(%)</span></label><div class="frow"><input type="range" id="i-surcharge" min="0" max="40" step="5" value="25" oninput="upd('surcharge');calc()"><span class="rv" id="v-surcharge">25%</span></div></div>
-    <div class="fld"><label class="flbl">LID degradation Year 1 <span>(%)</span></label><div class="frow"><input type="range" id="i-deg1" min="1" max="3" step="0.5" value="2" oninput="upd('deg1');calc()"><span class="rv" id="v-deg1">2.0%</span></div></div>
+    <div class="fld">
+      <label class="flbl">Plant load factor / CUF <span>(%)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('plf',-0.1)">&#8722;</button>
+        <span class="pm-val" id="v-plf">20.4</span>
+        <button class="pm-btn right" onclick="pmStep('plf',0.1)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Total technical losses &mdash; generation to customer <span>(%)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('tloss',-0.5)">&#8722;</button>
+        <span class="pm-val" id="v-tloss">7.0</span>
+        <button class="pm-btn right" onclick="pmStep('tloss',0.5)">+</button>
+      </div>
+      <div class="fhint">All losses from generation to customer meter already factored in one figure. Includes DC, inverter, transformer, grid transmission and distribution losses as per TNERC deemed loss schedule.</div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Morning peak % <span>(6 to 10 AM generation)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('peak',-1)">&#8722;</button>
+        <span class="pm-val" id="v-peak">15</span>
+        <button class="pm-btn right" onclick="pmStep('peak',1)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">TNERC peak surcharge <span>(%)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('surcharge',-5)">&#8722;</button>
+        <span class="pm-val" id="v-surcharge">25</span>
+        <button class="pm-btn right" onclick="pmStep('surcharge',5)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">LID degradation Year 1 <span>(%)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('deg1',-0.5)">&#8722;</button>
+        <span class="pm-val" id="v-deg1">2.0</span>
+        <button class="pm-btn right" onclick="pmStep('deg1',0.5)">+</button>
+      </div>
+    </div>
   </div>
+
   <div class="card">
     <div class="chdr">Tariff &amp; buyer</div>
-    <div class="fld"><label class="flbl">Buyer category</label><select id="i-buyer" onchange="updBuyer();calc()"><option value="9.40">HT-III Commercial &#8212; &#8377;9.40 per kWh</option><option value="7.69">HT-I Industry &#8212; &#8377;7.69 per kWh</option><option value="7.10">HT-II LT Industry &#8212; &#8377;7.10 per kWh</option><option value="8.20">HT-IIA General &#8212; &#8377;8.20 per kWh</option><option value="9.64">HT-III Commercial alt &#8212; &#8377;9.64 per kWh</option></select></div>
+    <div class="fld">
+      <label class="flbl">Buyer category</label>
+      <select id="i-buyer" onchange="updBuyer();calc()">
+        <option value="9.40">HT-III Commercial &mdash; Rs 9.40 per kWh</option>
+        <option value="7.69">HT-I Industry &mdash; Rs 7.69 per kWh</option>
+        <option value="7.10">HT-II LT Industry &mdash; Rs 7.10 per kWh</option>
+        <option value="8.20">HT-IIA General &mdash; Rs 8.20 per kWh</option>
+        <option value="9.64">HT-III Commercial alt &mdash; Rs 9.64 per kWh</option>
+      </select>
+    </div>
     <div class="dv"></div>
-    <div class="fld"><label class="flbl">TNEB base tariff Year 1 <span>(&#8377;/kWh)</span></label><div class="frow"><input type="number" id="i-tariff" value="9.40" step="0.01" oninput="calc()"></div></div>
-    <div class="dv"></div>
-    <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff)</span></label><div class="frow"><input type="range" id="i-disc" min="85" max="97" step="0.5" value="90" oninput="upd('disc');calc()"><span class="rv" id="v-disc">90%</span></div></div>
-    <div class="fld"><label class="flbl">OA charge all-in Year 1 <span>(&#8377;/kWh)</span></label><div class="frow"><input type="number" id="i-oa" value="1.33" step="0.01" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">TNEB tariff escalation <span>(%/yr)</span></label><div class="frow"><input type="range" id="i-taresc" min="1" max="7" step="0.5" value="3" oninput="upd('taresc');calc()"><span class="rv" id="v-taresc">3.0%</span></div></div>
-    <div class="fld"><label class="flbl">OA charge escalation <span>(%/yr)</span></label><div class="frow"><input type="range" id="i-oaesc" min="1" max="7" step="0.5" value="3" oninput="upd('oaesc');calc()"><span class="rv" id="v-oaesc">3.0%</span></div></div>
-    <div class="alert info" style="margin-bottom:0">CSS and Additional Surcharge are ZERO for Group Captive CPP under TNERC T.O. 7/2022</div>
+    <div class="fld">
+      <label class="flbl">TNEB base tariff Year 1 <span>(Rs per kWh)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button>
+        <span class="pm-val" id="v-tariff">9.40</span>
+        <button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Discount to buyer <span>(% of weighted tariff)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button>
+        <span class="pm-val" id="v-disc">90</span>
+        <button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">OA charge all-in Year 1 <span>(Rs per kWh)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button>
+        <span class="pm-val" id="v-oa">1.33</span>
+        <button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">TNEB tariff escalation <span>(% per year)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('taresc',-0.5)">&#8722;</button>
+        <span class="pm-val" id="v-taresc">3.0</span>
+        <button class="pm-btn right" onclick="pmStep('taresc',0.5)">+</button>
+      </div>
+    </div>
+    <div class="fld">
+      <label class="flbl">OA charge escalation <span>(% per year)</span></label>
+      <div class="pm-row">
+        <button class="pm-btn left" onclick="pmStep('oaesc',-0.5)">&#8722;</button>
+        <span class="pm-val" id="v-oaesc">3.0</span>
+        <button class="pm-btn right" onclick="pmStep('oaesc',0.5)">+</button>
+      </div>
+    </div>
+    <div class="alert info" style="margin-bottom:0">CSS and Additional Surcharge are ZERO for Group Captive CPP &mdash; TNERC T.O. 7 of 2022</div>
   </div>
+
   <div class="card">
-    <div class="chdr">Project costs <span style="text-transform:none;letter-spacing:0;font-weight:400;font-size:11px">(&#8377; Crores)</span></div>
-    <div class="fld"><label class="flbl">Base EPC &#8212; 20 MW AC <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-epc" value="60" step="1" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">Extra panels &#8212; 6 MW DC <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-expanel" value="7.2" step="0.1" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">Land &#8212; 78 acres <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-land" value="11.7" step="0.1" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">Evacuation &#8212; HT line plus substation <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-evac" value="9" step="0.5" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">SCADA and Miscellaneous <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-misc" value="4.1" step="0.1" oninput="calc()"></div></div>
+    <div class="chdr">Project costs <span style="text-transform:none;letter-spacing:0;font-weight:400">(Rs Crores)</span></div>
+    <div class="fld"><label class="flbl">EPC &mdash; solar plant <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('epc',-1)">&#8722;</button><span class="pm-val" id="v-epc">67.2</span><button class="pm-btn right" onclick="pmStep('epc',1)">+</button></div></div>
+    <div class="fld"><label class="flbl">Land cost <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('land',-0.5)">&#8722;</button><span class="pm-val" id="v-land">11.7</span><button class="pm-btn right" onclick="pmStep('land',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">Evacuation &mdash; 110 kV HT line plus substation <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('evac',-0.5)">&#8722;</button><span class="pm-val" id="v-evac">9.0</span><button class="pm-btn right" onclick="pmStep('evac',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">SCADA and miscellaneous <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('misc',-0.5)">&#8722;</button><span class="pm-val" id="v-misc">4.1</span><button class="pm-btn right" onclick="pmStep('misc',0.5)">+</button></div></div>
     <div class="dv"></div>
-    <div class="met bl"><div class="ml">Solar-only capex</div><div class="mv" id="v-sc">&#8377;92.0 Cr</div></div>
+    <div class="comp-row">
+      <span class="comp-lbl">Solar-only capex (auto)</span>
+      <span class="comp-val" id="v-sc">Rs 92.0 Cr</span>
+    </div>
   </div>
 </div>
 
-<!-- TRANSMISSION LOSS -->
+<!-- ═══ GRID LOSSES ═══ -->
 <div id="s-ls" class="sec">
-  <div class="sec-h"><div class="sec-ic">&#128268;</div><div><div class="sec-ti">Transmission Loss</div><div class="sec-su">TNERC deemed loss &#8212; voltage based</div></div></div>
-  <div class="alert pu">TNERC deducts deemed losses in kind at the SLDC injection point. These are units not delivered to the buyer &#8212; they reduce billable generation and directly cut revenue. Source: TNERC T.O. No.7 of 2022, Table 5-12.</div>
+  <div class="sec-h"><div class="sec-ic">&#128268;</div><div><div class="sec-ti">Grid Losses</div><div class="sec-su">TNERC T.O. No.7 of 2022, Table 5-12</div></div></div>
+  <div class="alert pu">TNERC deducts deemed losses in kind at the SLDC injection point. These are units physically not delivered to the buyer and are already included in the total technical loss % set in Project Inputs. This section shows the regulatory basis for reference and allows override if SLDC provides a certified figure.</div>
   <div class="card">
-    <div class="chdr pu">Voltage selection</div>
-    <div class="fld"><label class="flbl">Plant injection voltage into TNEB grid</label><select id="i-inj" onchange="updLoss()"><option value="33">33 kV &#8212; standard ground mount step-up</option><option value="110">110 kV &#8212; EHT step-up</option><option value="230">230 kV &#8212; direct EHT injection</option></select><div style="font-size:12px;color:var(--n5);margin-top:6px">Confirm from TNEB evacuation DPR or LOA letter</div></div>
+    <div class="chdr pu">Voltage selection &mdash; for TNERC table reference</div>
+    <div class="fld">
+      <label class="flbl">Plant injection voltage into TNEB grid</label>
+      <select id="i-inj" onchange="updLoss()">
+        <option value="110">110 kV &mdash; EHT injection (this project)</option>
+        <option value="33">33 kV &mdash; standard step-up</option>
+        <option value="230">230 kV &mdash; direct EHT</option>
+      </select>
+      <div class="fhint">This project evacuates at 110 kV as confirmed by TNEB evacuation DPR</div>
+    </div>
     <div class="dv"></div>
-    <div class="fld"><label class="flbl">Receiving voltage at buyer HT meter</label><select id="i-recv" onchange="updLoss()"><option value="11">11 kV &#8212; standard HT commercial and industrial</option><option value="33">33 kV &#8212; large HT industrial</option><option value="110">110 kV &#8212; EHT bulk consumer</option><option value="230">230 kV &#8212; very large EHT consumer</option></select><div style="font-size:12px;color:var(--n5);margin-top:6px">Confirm from buyer TNEB sanction letter</div></div>
+    <div class="fld">
+      <label class="flbl">Receiving voltage at buyer HT meter</label>
+      <select id="i-recv" onchange="updLoss()">
+        <option value="11">11 kV &mdash; standard HT commercial and industrial</option>
+        <option value="33">33 kV &mdash; large HT industrial</option>
+        <option value="110">110 kV &mdash; EHT bulk consumer</option>
+      </select>
+      <div class="fhint">Confirm from buyer TNEB sanction letter</div>
+    </div>
   </div>
   <div class="card">
-    <div class="chdr pu">TNERC deemed loss table &#8212; T.O. No.7 of 2022, Table 5-12</div>
+    <div class="chdr pu">TNERC deemed loss table &mdash; T.O. No.7 of 2022</div>
     <div class="tw">
       <table class="vt" id="lt">
         <thead><tr><th>Inject kV</th><th>Receive kV</th><th>Trans %</th><th>Distrib %</th><th>Total %</th><th>Active</th></tr></thead>
         <tbody>
-          <tr data-i="33"  data-r="11"> <td>33</td> <td>11</td> <td>3.91</td><td>1.52</td><td>5.43</td><td></td></tr>
-          <tr data-i="33"  data-r="33"> <td>33</td> <td>33</td> <td>3.91</td><td>0.00</td><td>3.91</td><td></td></tr>
-          <tr data-i="33"  data-r="110"><td>33</td> <td>110</td><td>1.50</td><td>0.00</td><td>1.50</td><td></td></tr>
           <tr data-i="110" data-r="11"> <td>110</td><td>11</td> <td>0.00</td><td>1.52</td><td>1.52</td><td></td></tr>
           <tr data-i="110" data-r="33"> <td>110</td><td>33</td> <td>0.00</td><td>0.50</td><td>0.50</td><td></td></tr>
           <tr data-i="110" data-r="110"><td>110</td><td>110</td><td>0.00</td><td>0.00</td><td>0.00</td><td></td></tr>
+          <tr data-i="33"  data-r="11"> <td>33</td> <td>11</td> <td>3.91</td><td>1.52</td><td>5.43</td><td></td></tr>
+          <tr data-i="33"  data-r="33"> <td>33</td> <td>33</td> <td>3.91</td><td>0.00</td><td>3.91</td><td></td></tr>
+          <tr data-i="33"  data-r="110"><td>33</td> <td>110</td><td>1.50</td><td>0.00</td><td>1.50</td><td></td></tr>
           <tr data-i="230" data-r="11"> <td>230</td><td>11</td> <td>0.00</td><td>1.52</td><td>1.52</td><td></td></tr>
           <tr data-i="230" data-r="33"> <td>230</td><td>33</td> <td>0.00</td><td>0.50</td><td>0.50</td><td></td></tr>
-          <tr data-i="230" data-r="110"><td>230</td><td>110</td><td>0.00</td><td>0.00</td><td>0.00</td><td></td></tr>
         </tbody>
       </table>
     </div>
+    <div class="alert info" style="margin-bottom:0">For this project injecting at 110 kV, the transmission loss is nil. Distribution loss to 11 kV buyer is 1.52%. Total deemed grid loss = 1.52%. This is already included in the total technical loss figure set in Project Inputs.</div>
   </div>
   <div class="card">
-    <div class="chdr pu">Applied loss</div>
-    <div class="mg2"><div class="met pu"><div class="ml">Auto deemed loss</div><div class="mv" id="v-la">5.43%</div></div><div class="met pu"><div class="ml">Total applied</div><div class="mv" id="v-lapp">5.43%</div></div></div>
-    <div class="fld"><label class="flbl">Additional HT line loss &#8212; plant feeder to grid <span>(%)</span></label><div class="frow"><input type="range" id="i-htl" min="0" max="3" step="0.25" value="0.5" oninput="upd('htl');updLoss();calc()"><span class="rv" id="v-htl">0.50%</span></div></div>
-    <div class="fld"><label class="flbl">SLDC override &#8212; certified actual loss <span>(0 = use auto)</span></label><div class="frow"><input type="number" id="i-lov" value="0" step="0.1" min="0" max="15" oninput="updLoss();calc()"></div></div>
+    <div class="chdr">Active loss reference</div>
+    <div class="mg2">
+      <div class="met pu"><div class="ml">TNERC deemed loss (auto)</div><div class="mv" id="v-la">1.52%</div></div>
+      <div class="met pu"><div class="ml">Total technical loss applied</div><div class="mv" id="v-lapp">7.0%</div></div>
+    </div>
+    <div class="fhint" style="text-align:center">Total technical loss (Project Inputs) covers all losses including the TNERC deemed grid loss. Change it in Project Inputs if SLDC provides a different certified figure.</div>
   </div>
-  <div class="card"><div class="chdr">Revenue impact &#8212; Year 1</div><div id="li"></div></div>
 </div>
 
-<!-- BATTERY -->
+<!-- ═══ BATTERY & EVACUATION ═══ -->
 <div id="s-bt" class="sec">
   <div class="sec-h"><div class="sec-ic">&#128267;</div><div><div class="sec-ti">Battery &amp; Evacuation</div><div class="sec-su">BESS sizing &amp; infrastructure</div></div></div>
-  <div class="alert warn">Grid congestion during solar hours is rising across Tamil Nadu. Battery enables evening evacuation and earns peak premium revenue.</div>
+  <div class="alert warn">Grid congestion during solar hours is rising in Tamil Nadu. Battery storage enables evening evacuation and earns peak premium revenue. LFP battery prices have fallen sharply &mdash; current market is Rs 0.65 to 0.85 Cr per MWh in 2025.</div>
   <div class="card">
     <div class="chdr">Battery storage (BESS)</div>
-    <div class="fld"><label class="flbl">Include battery?</label><select id="i-batt" onchange="togBatt();calc()"><option value="0">No &#8212; solar only</option><option value="1">Yes &#8212; add BESS</option></select></div>
+    <div class="fld">
+      <label class="flbl">Include battery?</label>
+      <select id="i-batt" onchange="togBatt();calc()">
+        <option value="0">No &mdash; solar only</option>
+        <option value="1">Yes &mdash; add BESS</option>
+      </select>
+    </div>
     <div id="bp" style="display:none">
       <div class="dv"></div>
-      <div class="fld"><label class="flbl">Battery capacity <span>(MWh)</span></label><div class="frow"><input type="range" id="i-bmwh" min="10" max="120" step="5" value="40" oninput="upd('bmwh');calc()"><span class="rv" id="v-bmwh">40 MWh</span></div></div>
-      <div class="fld"><label class="flbl">Battery cost <span>(&#8377; Cr per MWh)</span></label><div class="frow"><input type="range" id="i-bc" min="0.7" max="2.5" step="0.05" value="1.2" oninput="upd('bc');calc()"><span class="rv" id="v-bc">&#8377;1.20</span></div></div>
-      <div class="fld"><label class="flbl">Round-trip efficiency <span>(%)</span></label><div class="frow"><input type="range" id="i-rte" min="80" max="95" step="1" value="88" oninput="upd('rte');calc()"><span class="rv" id="v-rte">88%</span></div></div>
-      <div class="fld"><label class="flbl">Battery degradation <span>(%/yr)</span></label><div class="frow"><input type="range" id="i-bdeg" min="1" max="4" step="0.5" value="2" oninput="upd('bdeg');calc()"><span class="rv" id="v-bdeg">2.0%</span></div></div>
-      <div class="fld"><label class="flbl">Percentage solar generation stored</label><div class="frow"><input type="range" id="i-bst" min="5" max="30" step="1" value="15" oninput="upd('bst');calc()"><span class="rv" id="v-bst">15%</span></div></div>
-      <div class="fld"><label class="flbl">Evening peak premium <span>(&#8377;/kWh)</span></label><div class="frow"><input type="range" id="i-evp" min="0" max="3.5" step="0.25" value="1.5" oninput="upd('evp');calc()"><span class="rv" id="v-evp">&#8377;1.50</span></div></div>
-      <div class="fld"><label class="flbl">BESS O&amp;M Year 1 <span>(&#8377; Cr/yr)</span></label><div class="frow"><input type="number" id="i-bom" value="0.3" step="0.05" oninput="calc()"></div></div>
+      <div class="fld"><label class="flbl">Battery capacity <span>(MWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('bmwh',-5)">&#8722;</button><span class="pm-val" id="v-bmwh">40</span><button class="pm-btn right" onclick="pmStep('bmwh',5)">+</button></div></div>
+      <div class="fld">
+        <label class="flbl">Battery cost <span>(Rs Cr per MWh)</span></label>
+        <div class="pm-row"><button class="pm-btn left" onclick="pmStep('bc',-0.05)">&#8722;</button><span class="pm-val" id="v-bc">0.75</span><button class="pm-btn right" onclick="pmStep('bc',0.05)">+</button></div>
+        <div class="fhint">LFP market 2025: Rs 0.65 to 0.85 Cr per MWh. Falling ~8 to 10% per year. Lock price at procurement.</div>
+      </div>
+      <div class="fld"><label class="flbl">Round-trip efficiency <span>(%)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('rte',-1)">&#8722;</button><span class="pm-val" id="v-rte">88</span><button class="pm-btn right" onclick="pmStep('rte',1)">+</button></div></div>
+      <div class="fld"><label class="flbl">Battery degradation <span>(% per year)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('bdeg',-0.5)">&#8722;</button><span class="pm-val" id="v-bdeg">2.0</span><button class="pm-btn right" onclick="pmStep('bdeg',0.5)">+</button></div></div>
+      <div class="fld"><label class="flbl">% solar generation stored in battery</label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('bst',-1)">&#8722;</button><span class="pm-val" id="v-bst">15</span><button class="pm-btn right" onclick="pmStep('bst',1)">+</button></div></div>
+      <div class="fld"><label class="flbl">Evening peak premium <span>(Rs per kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('evp',-0.25)">&#8722;</button><span class="pm-val" id="v-evp">1.50</span><button class="pm-btn right" onclick="pmStep('evp',0.25)">+</button></div></div>
+      <div class="fld"><label class="flbl">BESS O&amp;M Year 1 <span>(Rs Cr per year)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('bom',-0.05)">&#8722;</button><span class="pm-val" id="v-bom">0.20</span><button class="pm-btn right" onclick="pmStep('bom',0.05)">+</button></div></div>
       <div class="dv"></div>
-      <div class="met am"><div class="ml">BESS total capex</div><div class="mv" id="v-bcap">&#8377;48.0 Cr</div></div>
-      <div class="alert info" style="margin-top:12px;margin-bottom:0">LFP battery cost &#8377;1.0&#8211;1.5 Cr per MWh in 2024&#8211;25. Falling ~8&#8211;10% per year. Lock price at procurement.</div>
+      <div class="comp-row">
+        <span class="comp-lbl">BESS total capex</span>
+        <span class="comp-val" id="v-bcap">Rs 30.0 Cr</span>
+      </div>
     </div>
   </div>
   <div class="card">
-    <div class="chdr">Evacuation infrastructure</div>
-    <div class="fld"><label class="flbl">HT line length <span>(km)</span></label><div class="frow"><input type="number" id="i-htlen" value="5" step="0.5" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">HT line cost <span>(&#8377; Cr per km)</span></label><div class="frow"><input type="number" id="i-htcost" value="1.0" step="0.1" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">Substation cost <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-ssc" value="4.0" step="0.5" oninput="calc()"></div></div>
-    <div class="fld"><label class="flbl">Metering and protection <span>(&#8377; Cr)</span></label><div class="frow"><input type="number" id="i-mc" value="0.5" step="0.1" oninput="calc()"></div></div>
+    <div class="chdr">110 kV evacuation infrastructure</div>
+    <div class="fld"><label class="flbl">110 kV HT line length <span>(km)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('htlen',-0.5)">&#8722;</button><span class="pm-val" id="v-htlen">5.0</span><button class="pm-btn right" onclick="pmStep('htlen',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">HT line cost <span>(Rs Cr per km)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('htcost',-0.1)">&#8722;</button><span class="pm-val" id="v-htcost">1.0</span><button class="pm-btn right" onclick="pmStep('htcost',0.1)">+</button></div></div>
+    <div class="fld"><label class="flbl">110 kV substation cost <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('ssc',-0.5)">&#8722;</button><span class="pm-val" id="v-ssc">4.0</span><button class="pm-btn right" onclick="pmStep('ssc',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">Metering and protection <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('mc',-0.1)">&#8722;</button><span class="pm-val" id="v-mc">0.5</span><button class="pm-btn right" onclick="pmStep('mc',0.1)">+</button></div></div>
     <div class="dv"></div>
-    <div class="met"><div class="ml">Evacuation capex (computed)</div><div class="mv" id="v-ec">&#8377;9.5 Cr</div></div>
+    <div class="comp-row">
+      <span class="comp-lbl">Evacuation capex (computed)</span>
+      <span class="comp-val" id="v-ec">Rs 9.5 Cr</span>
+    </div>
   </div>
   <div class="card">
     <div class="chdr">Total capex summary</div>
     <div class="mg3">
-      <div class="met bl"><div class="ml">Solar</div><div class="mv" id="v-ss">&#8377;92.0</div><div class="mu">&#8377; Cr</div></div>
-      <div class="met am"><div class="ml">BESS</div><div class="mv" id="v-bs">&#8377;0.0</div><div class="mu">&#8377; Cr</div></div>
-      <div class="met"><div class="ml">Total</div><div class="mv" id="v-ts">&#8377;92.0</div><div class="mu">&#8377; Cr</div></div>
+      <div class="met bl"><div class="ml">Solar</div><div class="mv" id="v-ss">92.0</div><div class="mu">Rs Cr</div></div>
+      <div class="met am"><div class="ml">BESS</div><div class="mv" id="v-bs">0.0</div><div class="mu">Rs Cr</div></div>
+      <div class="met"><div class="ml">Total</div><div class="mv" id="v-ts">92.0</div><div class="mu">Rs Cr</div></div>
     </div>
-    <div class="met"><div class="ml">&#8377; per Wp DC (all-in)</div><div class="mv" id="v-wp">&#8377;35.4</div></div>
+    <div class="comp-row">
+      <span class="comp-lbl">Rs per Wp DC (all-in)</span>
+      <span class="comp-val" id="v-wp">Rs 35.4</span>
+    </div>
   </div>
 </div>
 
-<!-- DEBT & EQUITY -->
+<!-- ═══ DEBT & EQUITY ═══ -->
 <div id="s-fi" class="sec">
   <div class="sec-h"><div class="sec-ic">&#127974;</div><div><div class="sec-ti">Debt &amp; Equity</div><div class="sec-su">Capital structure, O&amp;M &amp; tax</div></div></div>
   <div class="card">
-    <div class="chdr">Capital structure</div>
-    <div class="fld"><label class="flbl">Debt fraction <span>(%)</span></label><div class="frow"><input type="range" id="i-df" min="50" max="80" step="5" value="50" oninput="upd('df');calc()"><span class="rv" id="v-df">50%</span></div></div>
-    <div class="fld"><label class="flbl">Cost of debt <span>(%/yr)</span></label><div class="frow"><input type="range" id="i-ir" min="7" max="13" step="0.25" value="9" oninput="upd('ir');calc()"><span class="rv" id="v-ir">9.00%</span></div></div>
-    <div class="fld"><label class="flbl">Loan tenure <span>(years)</span></label><div class="frow"><input type="range" id="i-tn" min="7" max="15" step="1" value="10" oninput="upd('tn');calc()"><span class="rv" id="v-tn">10 yrs</span></div></div>
+    <div class="chdr">Capital structure &mdash; developer decides</div>
+    <div class="fld">
+      <label class="flbl">Debt fraction <span>(% of total capex &mdash; no minimum)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('df',-5)">&#8722;</button><span class="pm-val" id="v-df">70</span><button class="pm-btn right" onclick="pmStep('df',5)">+</button></div>
+      <div class="fhint">Developer decides the debt equity mix. Enter 0 for full equity, 100 for full debt.</div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Cost of debt <span>(% per year)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('ir',-0.25)">&#8722;</button><span class="pm-val" id="v-ir">9.00</span><button class="pm-btn right" onclick="pmStep('ir',0.25)">+</button></div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Loan tenure <span>(years)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('tn',-1)">&#8722;</button><span class="pm-val" id="v-tn">10</span><button class="pm-btn right" onclick="pmStep('tn',1)">+</button></div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Moratorium period <span>(years &mdash; no principal during this period)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('moro',-1)">&#8722;</button><span class="pm-val" id="v-moro">1</span><button class="pm-btn right" onclick="pmStep('moro',1)">+</button></div>
+      <div class="fhint">Default 1 year. During moratorium only interest is paid. Principal repayment starts from Year 2.</div>
+    </div>
     <div class="dv"></div>
     <div class="mg2">
-      <div class="met bl"><div class="ml">Debt amount</div><div class="mv" id="v-da">&#8377;46.0</div><div class="mu">&#8377; Cr</div></div>
-      <div class="met gn"><div class="ml">Equity amount</div><div class="mv" id="v-ea">&#8377;46.0</div><div class="mu">&#8377; Cr</div></div>
+      <div class="met bl"><div class="ml">Debt amount</div><div class="mv" id="v-da">64.4</div><div class="mu">Rs Cr</div></div>
+      <div class="met gn"><div class="ml">Equity amount</div><div class="mv" id="v-ea">27.6</div><div class="mu">Rs Cr</div></div>
     </div>
   </div>
   <div class="card">
     <div class="chdr">O&amp;M, insurance &amp; tax</div>
-    <div class="fld"><label class="flbl">O&amp;M Year 1 <span>(% of solar capex)</span></label><div class="frow"><input type="range" id="i-om" min="0.6" max="1.5" step="0.1" value="1.0" oninput="upd('om');calc()"><span class="rv" id="v-om">1.0%</span></div></div>
-    <div class="fld"><label class="flbl">O&amp;M escalation <span>(%/yr)</span></label><div class="frow"><input type="range" id="i-ome" min="3" max="8" step="0.5" value="5" oninput="upd('ome');calc()"><span class="rv" id="v-ome">5.0%</span></div></div>
-    <div class="fld"><label class="flbl">Insurance <span>(% of solar capex)</span></label><div class="frow"><input type="range" id="i-ins" min="0.3" max="1.0" step="0.1" value="0.5" oninput="upd('ins');calc()"><span class="rv" id="v-ins">0.5%</span></div></div>
-    <div class="fld"><label class="flbl">Corporate tax rate <span>(%)</span></label><div class="frow"><input type="range" id="i-tax" min="22" max="30" step="1" value="25" oninput="upd('tax');calc()"><span class="rv" id="v-tax">25%</span></div></div>
-    <div class="fld"><label class="flbl">Salvage at Year 25 <span>(% of total capex)</span></label><div class="frow"><input type="range" id="i-sv" min="5" max="15" step="1" value="10" oninput="upd('sv');calc()"><span class="rv" id="v-sv">10%</span></div></div>
+    <div class="fld"><label class="flbl">O&amp;M Year 1 <span>(% of solar capex per year)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('om',-0.1)">&#8722;</button><span class="pm-val" id="v-om">1.0</span><button class="pm-btn right" onclick="pmStep('om',0.1)">+</button></div></div>
+    <div class="fld"><label class="flbl">O&amp;M escalation <span>(% per year)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('ome',-0.5)">&#8722;</button><span class="pm-val" id="v-ome">5.0</span><button class="pm-btn right" onclick="pmStep('ome',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">Insurance <span>(% of solar capex per year)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('ins',-0.1)">&#8722;</button><span class="pm-val" id="v-ins">0.5</span><button class="pm-btn right" onclick="pmStep('ins',0.1)">+</button></div></div>
+    <div class="fld"><label class="flbl">Corporate tax rate <span>(%)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('tax',-1)">&#8722;</button><span class="pm-val" id="v-tax">25</span><button class="pm-btn right" onclick="pmStep('tax',1)">+</button></div></div>
+    <div class="fld"><label class="flbl">Salvage at Year 25 <span>(% of total capex)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('sv',-1)">&#8722;</button><span class="pm-val" id="v-sv">10</span><button class="pm-btn right" onclick="pmStep('sv',1)">+</button></div></div>
   </div>
   <div class="card">
-    <div class="chdr">Debt service schedule <span style="text-transform:none;letter-spacing:0;font-weight:400;font-size:11px">(&#8377; Crores)</span></div>
+    <div class="chdr">Debt service schedule <span style="text-transform:none;letter-spacing:0;font-weight:400">(Rs Crores &mdash; moratorium Year 1 shown)</span></div>
     <div class="tw"><table><thead><tr><th>Year</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Closing</th><th>Total DS</th></tr></thead><tbody id="dtb"></tbody></table></div>
   </div>
 </div>
 
-<!-- CASH FLOW -->
+<!-- ═══ CASH FLOW ═══ -->
 <div id="s-cf" class="sec">
-  <div class="sec-h"><div class="sec-ic">&#128200;</div><div><div class="sec-ti">25-Year Cash Flow</div><div class="sec-su">FCF, payback and cumulative chart</div></div></div>
+  <div class="sec-h"><div class="sec-ic">&#128200;</div><div><div class="sec-ti">25-Year Cash Flow</div><div class="sec-su">FCF, payback &amp; cumulative chart</div></div></div>
   <div id="pb-alert" class="alert ok">&#8212;</div>
-  <div class="card" style="padding:18px 18px 10px">
+  <div class="card" style="padding:16px 16px 10px">
     <div class="chdr">Cumulative cash flow chart</div>
-    <div style="position:relative;height:230px"><canvas id="cfChart"></canvas></div>
+    <div style="position:relative;height:220px"><canvas id="cfChart"></canvas></div>
   </div>
   <div class="card"><div class="chdr">Year 1 income statement</div><div id="y1s"></div></div>
   <div class="card">
-    <div class="chdr">25-year statement <span style="text-transform:none;letter-spacing:0;font-weight:400;font-size:11px">(&#8377; Cr, units at buyer meter)</span></div>
-    <div class="tw"><table><thead><tr><th>Yr</th><th>MU</th><th>SP</th><th>OA</th><th>Net&#8377;</th><th>NetRev</th><th>EBITDA</th><th>Int</th><th>Prin</th><th>Tax</th><th>FCF</th><th>Cum CF</th><th></th></tr></thead><tbody id="cft"></tbody></table></div>
+    <div class="chdr">25-year statement <span style="text-transform:none;letter-spacing:0;font-weight:400">(Rs Cr)</span></div>
+    <div class="tw"><table><thead><tr><th>Yr</th><th>MU</th><th>SP</th><th>OA</th><th>NetR</th><th>NRev</th><th>EBITDA</th><th>Int</th><th>Prin</th><th>Tax</th><th>FCF</th><th>Cum</th><th></th></tr></thead><tbody id="cft"></tbody></table></div>
   </div>
 </div>
 
-<!-- REGULATORY -->
+<!-- ═══ REGULATORY ═══ -->
 <div id="s-rg" class="sec">
-  <div class="sec-h"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">Group captive, OA &amp; compliance</div></div></div>
+  <div class="sec-h"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">Group captive &amp; 110 kV evacuation</div></div></div>
+
   <div class="card">
-    <div class="chdr">Group captive CPP &#8212; Tamil Nadu</div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">CSS &#8212; ZERO (waived)</div><div class="rs">Fully waived for Group Captive CPP under TNERC T.O. 7/2022. Major cost benefit over commercial open access.</div></div></div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">Additional Surcharge &#8212; ZERO</div><div class="rs">Waived for Group Captive CPP. Ensure PSA is signed and registered before commissioning date.</div></div></div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">OA charge all-in &#8212; &#8377;1.33 per kWh</div><div class="rs">Includes wheeling, transmission, SLDC and losses. This is a monetary charge separate from physical deemed loss deduction.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">26% equity &#8212; buyer must hold</div><div class="rs">Each captive consumer must hold minimum 26% equity in the generating company under CERC Captive Rules 2001.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">51% captive consumption</div><div class="rs">Minimum 51% of annual generation must be consumed by captive users. Shortfall in any year risks CSS reinstatement.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">Proportional consumption compliance</div><div class="rs">Each member must consume in proportion to their equity stake. Annual compliance certificate required from the generator.</div></div></div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">TNEB empanelment &#8212; EIL Solar</div><div class="rs">EIL Solar / Kaveri Power Solutions is TNEB-empanelled. Maintain empanelment continuously for OA benefits to continue.</div></div></div>
+    <div class="chdr">Group captive CPP &mdash; Tamil Nadu</div>
+    <div class="ri"><div class="rd g"></div><div><div class="rt">CSS &mdash; ZERO (waived)</div><div class="rs">Fully waived for Group Captive CPP under TNERC T.O. 7 of 2022. This is the primary cost advantage of the Group Captive structure over commercial open access.</div></div></div>
+    <div class="ri"><div class="rd g"></div><div><div class="rt">Additional Surcharge &mdash; ZERO</div><div class="rs">Waived for Group Captive CPP. PSA must be signed and registered before commissioning to preserve this exemption.</div></div></div>
+    <div class="ri"><div class="rd g"></div><div><div class="rt">OA charge all-in &mdash; Rs 1.33 per kWh</div><div class="rs">Includes wheeling, transmission, SLDC charges and deemed losses. Monetary charge &mdash; separate from physical unit deduction at injection point.</div></div></div>
+    <div class="ri"><div class="rd a"></div><div><div class="rt">26% equity &mdash; buyer must hold</div><div class="rs">Each captive consumer must hold minimum 26% equity in the generating company under CERC Captive Rules 2001. Non-compliance immediately reinstates CSS.</div></div></div>
+    <div class="ri"><div class="rd a"></div><div><div class="rt">51% captive consumption requirement</div><div class="rs">Minimum 51% of annual generation must be consumed by captive users. Monitor monthly and adjust buyer nominations proactively to avoid year-end shortfall.</div></div></div>
+    <div class="ri"><div class="rd a"></div><div><div class="rt">Proportional consumption compliance</div><div class="rs">Each member must consume in proportion to equity stake. Annual compliance certificate required from the generator and submitted to TNERC.</div></div></div>
+    <div class="ri"><div class="rd g"></div><div><div class="rt">TNEB empanelment &mdash; EIL Solar</div><div class="rs">EIL Solar / Kaveri Power Solutions is TNEB-empanelled. Maintain this empanelment continuously. Lapse in empanelment disrupts OA approval.</div></div></div>
   </div>
+
   <div class="card">
-    <div class="chdr">Battery, evacuation &amp; land</div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">Grid congestion &#8212; solar hours</div><div class="rs">SLDC may curtail injection during morning peak hours. Battery discharge in evening avoids curtailment and earns peak premium.</div></div></div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">BESS &#8212; same-day OA treatment</div><div class="rs">Power stored and discharged on same day treated as single solar OA transaction. No extra OA charge under current TNERC framework.</div></div></div>
-    <div class="ri"><div class="rd r"></div><div><div class="rt">OA regulation risk</div><div class="rs">TNERC reviews OA charges every 3 years in each MYT order. OA may increase materially. Model uses 3% per year escalation as buffer.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">HT feeder &#8212; TNEB approval</div><div class="rs">TNEB DPR and REC approval needed before substation location is confirmed. Budget 6 to 18 months. Get LOA before signing EPC contract.</div></div></div>
-    <div class="ri"><div class="rd r"></div><div><div class="rt">Land use conversion</div><div class="rs">78 acres likely agricultural. Requires conversion order from District Collector or CMDA. Budget 12 to 18 months in project timeline.</div></div></div>
-    <div class="ri"><div class="rd p"></div><div><div class="rt">Deemed loss &#8212; update each TNERC order</div><div class="rs">Table 5-12 loss percentages are revised in each TNERC Tariff Order approximately every 3 years. Update the Transmission Loss section whenever a new order is issued.</div></div></div>
+    <div class="chdr">110 kV evacuation &mdash; this project</div>
+    <div class="ri"><div class="rd g"></div><div><div class="rt">Evacuation at 110 kV &mdash; advantage</div><div class="rs">This project evacuates at 110 kV EHT. At 110 kV injection, TNERC deemed transmission loss is NIL. Only distribution loss of 1.52% applies to the buyer end. This is significantly better than 33 kV injection which carries 3.91% transmission loss.</div></div></div>
+    <div class="ri"><div class="rd a"></div><div><div class="rt">TNEB DPR and REC approval &mdash; 110 kV feeder</div><div class="rs">110 kV feeder availability and substation bay allocation must be confirmed with TANTRANSCO. This is different from 33 kV and requires higher-level approval. Budget 12 to 18 months. Initiate immediately after site identification.</div></div></div>
+    <div class="ri"><div class="rd a"></div><div><div class="rt">Step-up transformer &mdash; 11 kV to 110 kV</div><div class="rs">Plant generates at 0.69 kV (inverter output), steps up to 11 kV (plant bus), then to 110 kV for grid injection. Both transformers are part of EPC scope. Confirm transformer specifications with TNEB before EPC award.</div></div></div>
+    <div class="ri"><div class="rd g"></div><div><div class="rt">SLDC scheduling and metering</div><div class="rs">Net injection metered at 110 kV delivery point. Day-ahead generation schedule must be filed with SLDC. Battery dispatch filed separately. SLDC meter is the settlement boundary.</div></div></div>
+    <div class="ri"><div class="rd r"></div><div><div class="rt">Grid congestion at 110 kV level</div><div class="rs">110 kV feeders in Tamil Nadu are increasingly congested during 10 AM to 2 PM solar peak. SLDC may curtail injection. Battery storage configured to shift generation to 6 PM to 10 PM peak demand window where curtailment risk is low.</div></div></div>
+    <div class="ri"><div class="rd r"></div><div><div class="rt">OA regulation risk</div><div class="rs">TNERC reviews OA charges every 3 years in each MYT order. OA may increase materially. The model uses 3% per year escalation. Watch TNERC filings and update accordingly.</div></div></div>
+    <div class="ri"><div class="rd r"></div><div><div class="rt">Land use conversion</div><div class="rs">Agricultural land requires District Collector conversion order before construction. Budget 12 to 18 months. Start this process in parallel with all other approvals.</div></div></div>
+    <div class="ri"><div class="rd p"></div><div><div class="rt">Deemed loss &mdash; update each TNERC order</div><div class="rs">Loss percentages in Table 5-12 are revised with each TNERC Tariff Order approximately every 3 years. Update the Grid Losses section whenever a new order is issued.</div></div></div>
   </div>
+
   <div class="card">
-    <div class="chdr">Power evacuation pathway</div>
+    <div class="chdr">Power evacuation pathway &mdash; 110 kV</div>
     <div class="ev-fl">
-      <div class="ev-nd" style="background:var(--g1);color:var(--g6)">Solar plant plus BESS (26 MW DC)</div>
+      <div class="ev-nd" style="background:var(--g1);color:var(--g6)">Solar generation at inverter output (0.69 kV)</div>
       <div class="ev-ar">&#8595;</div>
-      <div class="ev-nd" style="background:var(--b1);color:var(--b6)">11 kV plant bus</div>
+      <div class="ev-nd" style="background:var(--b1);color:var(--b6)">Step-up to 11 kV plant bus</div>
       <div class="ev-ar">&#8595;</div>
-      <div class="ev-nd" style="background:var(--b1);color:var(--b6)">Step-up transformer &#8212; 33 kV injection into TNEB grid</div>
-      <div class="ev-ar">&#8595; TNERC deemed loss deducted here</div>
-      <div class="ev-nd" style="background:var(--a1);color:var(--a6)">TNEB HT feeder and TANTRANSCO grid</div>
+      <div class="ev-nd" style="background:var(--b1);color:var(--b6)">Step-up to 110 kV &mdash; injection into TNEB grid</div>
+      <div class="ev-ar">&#8595; TNERC deemed transmission loss = NIL at 110 kV</div>
+      <div class="ev-nd" style="background:var(--a1);color:var(--a6)">TANTRANSCO 110 kV grid</div>
       <div class="ev-ar">&#8595;</div>
-      <div class="ev-nd" style="background:var(--a1);color:var(--a6)">SLDC injection metering point</div>
-      <div class="ev-ar">&#8595;</div>
+      <div class="ev-nd" style="background:var(--a1);color:var(--a6)">SLDC injection metering point &mdash; settlement boundary</div>
+      <div class="ev-ar">&#8595; Distribution loss 1.52% to 11 kV buyer</div>
       <div class="ev-nd" style="background:#F0F0F0;color:var(--n7)">Buyer HT meter at 11 kV receiving</div>
     </div>
   </div>
+
   <div class="card">
-    <div class="chdr">Project milestones and risk</div>
-    <div class="mc"><div class="mc-h"><span class="mc-n">TNEB evacuation DPR and REC approval</span><span class="bdg a">6&#8211;18 months</span></div><div class="mc-a">File application immediately after site finalisation. Most common cause of delay.</div></div>
-    <div class="mc"><div class="mc-h"><span class="mc-n">Land conversion order</span><span class="bdg r">12&#8211;18 months</span></div><div class="mc-a">Engage District Collector and CMDA early. Start in parallel with all other activities.</div></div>
-    <div class="mc"><div class="mc-h"><span class="mc-n">Group captive PSA signing</span><span class="bdg g">2&#8211;4 months</span></div><div class="mc-a">Draft Power Sale Agreement in parallel with regulatory filings.</div></div>
-    <div class="mc"><div class="mc-h"><span class="mc-n">TNERC OA approval</span><span class="bdg a">3&#8211;6 months</span></div><div class="mc-a">File post PSA. Ensure 26% equity and 51% consumption compliance documentation is ready.</div></div>
-    <div class="mc"><div class="mc-h"><span class="mc-n">EPC procurement and construction</span><span class="bdg a">12&#8211;15 months</span></div><div class="mc-a">Lock EPC contract only after land conversion order and evacuation LOA are both in hand.</div></div>
-    <div class="mc"><div class="mc-h"><span class="mc-n">BESS procurement and integration</span><span class="bdg g">6&#8211;10 months</span></div><div class="mc-a">Procure alongside EPC for best pricing. LFP chemistry preferred for ground mount.</div></div>
+    <div class="chdr">Project milestones &mdash; developer to fill dates and duration</div>
+    <div class="fhint" style="margin-bottom:12px">Enter your target date and actual duration for each milestone. These are for your planning reference only.</div>
+
+    <div class="ms-card">
+      <div class="ms-top"><div class="ms-icon">&#128205;</div><div class="ms-name">TNEB evacuation DPR and 110 kV REC approval</div></div>
+      <div class="ms-grid">
+        <div class="ms-field"><label>Target date</label><input type="text" id="ms1-date" placeholder="e.g. Jul 2025"></div>
+        <div class="ms-field"><label>Duration (months)</label><input type="text" id="ms1-dur" placeholder="e.g. 12"></div>
+      </div>
+    </div>
+
+    <div class="ms-card">
+      <div class="ms-top"><div class="ms-icon">&#128205;</div><div class="ms-name">Land purchase and conversion order</div></div>
+      <div class="ms-grid">
+        <div class="ms-field"><label>Target date</label><input type="text" id="ms2-date" placeholder="e.g. Sep 2025"></div>
+        <div class="ms-field"><label>Duration (months)</label><input type="text" id="ms2-dur" placeholder="e.g. 15"></div>
+      </div>
+    </div>
+
+    <div class="ms-card">
+      <div class="ms-top"><div class="ms-icon">&#128205;</div><div class="ms-name">Group captive PSA signing and TNERC OA approval</div></div>
+      <div class="ms-grid">
+        <div class="ms-field"><label>Target date</label><input type="text" id="ms3-date" placeholder="e.g. Oct 2025"></div>
+        <div class="ms-field"><label>Duration (months)</label><input type="text" id="ms3-dur" placeholder="e.g. 5"></div>
+      </div>
+    </div>
+
+    <div class="ms-card">
+      <div class="ms-top"><div class="ms-icon">&#128205;</div><div class="ms-name">EPC contract award and construction</div></div>
+      <div class="ms-grid">
+        <div class="ms-field"><label>Target date</label><input type="text" id="ms4-date" placeholder="e.g. Jan 2026"></div>
+        <div class="ms-field"><label>Duration (months)</label><input type="text" id="ms4-dur" placeholder="e.g. 14"></div>
+      </div>
+    </div>
+
+    <div class="ms-card">
+      <div class="ms-top"><div class="ms-icon">&#128205;</div><div class="ms-name">BESS procurement and integration</div></div>
+      <div class="ms-grid">
+        <div class="ms-field"><label>Target date</label><input type="text" id="ms5-date" placeholder="e.g. Mar 2026"></div>
+        <div class="ms-field"><label>Duration (months)</label><input type="text" id="ms5-dur" placeholder="e.g. 8"></div>
+      </div>
+    </div>
+
+    <div class="ms-card">
+      <div class="ms-top"><div class="ms-icon">&#128205;</div><div class="ms-name">Commissioning and first injection</div></div>
+      <div class="ms-grid">
+        <div class="ms-field"><label>Target date</label><input type="text" id="ms6-date" placeholder="e.g. Apr 2027"></div>
+        <div class="ms-field"><label>Duration (months)</label><input type="text" id="ms6-dur" placeholder="e.g. 2"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -449,118 +681,161 @@ tr.dbt td{background:#EEF5FB}
 <div class="fab-w"><button class="fab" onclick="calc()">Calculate</button></div>
 
 <script>
+/* PWA */
 let dP=null;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;document.getElementById('install-banner').style.display='flex';});
-window.addEventListener('appinstalled',()=>{document.getElementById('install-banner').style.display='none';});
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;document.getElementById('inst-ban').style.display='flex';});
+window.addEventListener('appinstalled',()=>{document.getElementById('inst-ban').style.display='none';});
 function installApp(){if(dP){dP.prompt();dP.userChoice.then(()=>{dP=null;});}}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
 
+/* DRAWER */
 function openD(){document.getElementById('drw').classList.add('on');document.getElementById('ovl').classList.add('on');document.body.style.overflow='hidden';}
 function closeD(){document.getElementById('drw').classList.remove('on');document.getElementById('ovl').classList.remove('on');document.body.style.overflow='';}
-
 const SECS=['db','in','ls','bt','fi','cf','rg'];
 function go(id){
-  SECS.forEach(s=>{
-    document.getElementById('s-'+s).classList.toggle('on',s===id);
-    document.getElementById('di-'+s).classList.toggle('on',s===id);
-  });
+  SECS.forEach(s=>{document.getElementById('s-'+s).classList.toggle('on',s===id);document.getElementById('di-'+s).classList.toggle('on',s===id);});
   closeD();window.scrollTo({top:0,behavior:'smooth'});
 }
 
-const LT={'33-11':5.43,'33-33':3.91,'33-110':1.50,'33-230':0,'110-11':1.52,'110-33':0.50,'110-110':0,'110-230':0,'230-11':1.52,'230-33':0.50,'230-110':0,'230-230':0};
-let cGL=5.43;
+/* PM STEPPER VALUES */
+const PM={
+  ac:{v:20,min:1,max:200,dec:0},
+  dac:{v:1.30,min:1.0,max:1.6,dec:2},
+  plf:{v:20.4,min:10,max:30,dec:1},
+  tloss:{v:7.0,min:1,max:20,dec:1},
+  peak:{v:15,min:0,max:30,dec:0},
+  surcharge:{v:25,min:0,max:40,dec:0},
+  deg1:{v:2.0,min:0,max:5,dec:1},
+  tariff:{v:9.40,min:4,max:20,dec:2},
+  disc:{v:90,min:70,max:99,dec:1},
+  oa:{v:1.33,min:0.5,max:4,dec:2},
+  taresc:{v:3.0,min:0,max:10,dec:1},
+  oaesc:{v:3.0,min:0,max:10,dec:1},
+  epc:{v:67.2,min:0,max:500,dec:1},
+  land:{v:11.7,min:0,max:100,dec:1},
+  evac:{v:9.0,min:0,max:100,dec:1},
+  misc:{v:4.1,min:0,max:50,dec:1},
+  bmwh:{v:40,min:5,max:200,dec:0},
+  bc:{v:0.75,min:0.3,max:2.0,dec:2},
+  rte:{v:88,min:70,max:98,dec:0},
+  bdeg:{v:2.0,min:0,max:5,dec:1},
+  bst:{v:15,min:5,max:40,dec:0},
+  evp:{v:1.50,min:0,max:4,dec:2},
+  bom:{v:0.20,min:0,max:2,dec:2},
+  htlen:{v:5.0,min:0,max:50,dec:1},
+  htcost:{v:1.0,min:0.2,max:5,dec:1},
+  ssc:{v:4.0,min:0,max:20,dec:1},
+  mc:{v:0.5,min:0,max:5,dec:1},
+  df:{v:70,min:0,max:100,dec:0},
+  ir:{v:9.00,min:5,max:15,dec:2},
+  tn:{v:10,min:3,max:20,dec:0},
+  moro:{v:1,min:0,max:3,dec:0},
+  om:{v:1.0,min:0.3,max:3,dec:1},
+  ome:{v:5.0,min:1,max:10,dec:1},
+  ins:{v:0.5,min:0.1,max:2,dec:1},
+  tax:{v:25,min:15,max:35,dec:0},
+  sv:{v:10,min:0,max:25,dec:0},
+};
+function pmStep(id,step){
+  const p=PM[id];if(!p)return;
+  p.v=Math.round((p.v+step)*1000)/1000;
+  if(p.min!==undefined) p.v=Math.max(p.min,p.v);
+  if(p.max!==undefined) p.v=Math.min(p.max,p.v);
+  document.getElementById('v-'+id).textContent=p.v.toFixed(p.dec);
+  if(id==='ac'||id==='dac') updDC();
+  calc();
+}
+function gv(id){return PM[id]?PM[id].v:0;}
+function updDC(){
+  const ac=gv('ac'),dac=gv('dac');
+  const dc=Math.round(ac*dac*100)/100;
+  const kWp=Math.round(dc*1000);
+  document.getElementById('v-dc-calc').textContent=dc.toFixed(2)+' MW DC / '+kWp.toLocaleString('en-IN')+' kWp';
+  return kWp;
+}
 
+/* TNERC LOSS */
+const LT={'110-11':1.52,'110-33':0.50,'110-110':0,'33-11':5.43,'33-33':3.91,'33-110':1.50,'230-11':1.52,'230-33':0.50};
+let cGL=1.52;
 function updLoss(){
   const inj=document.getElementById('i-inj').value;
   const rcv=document.getElementById('i-recv').value;
-  const auto=LT[inj+'-'+rcv]!==undefined?LT[inj+'-'+rcv]:5.43;
-  const ov=parseFloat(document.getElementById('i-lov').value)||0;
-  const hl=parseFloat(document.getElementById('i-htl').value)||0;
-  const app=ov>0?ov+hl:auto+hl;
-  cGL=app;
+  const auto=LT[inj+'-'+rcv]!==undefined?LT[inj+'-'+rcv]:1.52;
+  cGL=auto;
   document.getElementById('v-la').textContent=auto.toFixed(2)+'%';
-  document.getElementById('v-lapp').textContent=app.toFixed(2)+'%';
+  document.getElementById('v-lapp').textContent=gv('tloss').toFixed(1)+'%';
   document.querySelectorAll('#lt tbody tr').forEach(tr=>{
     const a=tr.dataset.i===inj&&tr.dataset.r===rcv;
     tr.classList.toggle('av',a);
-    tr.cells[5].textContent=a?'&#10003; Active':'';
+    tr.cells[5].textContent=a?'Active':'';
   });
-  calc();
 }
 
-function upd(id){
-  const v=parseFloat(document.getElementById('i-'+id).value);
-  const o=document.getElementById('v-'+id);if(!o)return;
-  const f={plf:v.toFixed(2)+'%',loss:v.toFixed(1)+'%',peak:v+'%',surcharge:v+'%',disc:v+'%',taresc:v.toFixed(1)+'%',oaesc:v.toFixed(1)+'%',df:v+'%',ir:v.toFixed(2)+'%',tn:v+' yrs',om:v.toFixed(1)+'%',ome:v.toFixed(1)+'%',ins:v.toFixed(1)+'%',tax:v+'%',sv:v+'%',deg1:v.toFixed(1)+'%',bmwh:v+' MWh',bc:'&#8377;'+v.toFixed(2),rte:v+'%',bdeg:v.toFixed(1)+'%',bst:v+'%',evp:'&#8377;'+v.toFixed(2),htl:v.toFixed(2)+'%'};
-  o.textContent=f[id]!==undefined?f[id]:v;
-}
-function updBuyer(){document.getElementById('i-tariff').value=parseFloat(document.getElementById('i-buyer').value).toFixed(2);}
+function updBuyer(){PM['tariff'].v=parseFloat(document.getElementById('i-buyer').value);document.getElementById('v-tariff').textContent=PM['tariff'].v.toFixed(2);}
 function togBatt(){document.getElementById('bp').style.display=document.getElementById('i-batt').value==='1'?'block':'none';}
-function g(id){return parseFloat(document.getElementById('i-'+id).value)||0;}
 
 let cfI=null,sI=null;
 
 function calc(){
-  const dc=g('dc'),plf=g('plf')/100,loss=g('loss')/100;
-  const peak=g('peak')/100,sur=g('surcharge')/100,deg1=g('deg1')/100;
-  const tariff=g('tariff'),disc=g('disc')/100,oa=g('oa');
-  const tarE=g('taresc')/100,oaE=g('oaesc')/100;
-  const epc=g('epc'),exp=g('expanel'),land=g('land'),evac=g('evac'),misc=g('misc');
-  const ir=g('ir')/100,df=g('df')/100,tn=g('tn');
-  const omP=g('om')/100,omE=g('ome')/100,insP=g('ins')/100;
-  const tax=g('tax')/100,sv=g('sv')/100;
+  const dc_kWp=updDC();
+  const plf=gv('plf')/100,tloss=gv('tloss')/100;
+  const peak=gv('peak')/100,sur=gv('surcharge')/100,deg1=gv('deg1')/100;
+  const tariff=gv('tariff'),disc=gv('disc')/100,oa=gv('oa');
+  const tarE=gv('taresc')/100,oaE=gv('oaesc')/100;
+  const epc=gv('epc'),land=gv('land'),evac=gv('evac'),misc=gv('misc');
+  const ir=gv('ir')/100,df=gv('df')/100,tn=gv('tn'),moro=gv('moro');
+  const omP=gv('om')/100,omE=gv('ome')/100,insP=gv('ins')/100;
+  const tax=gv('tax')/100,sv=gv('sv')/100;
   const hasBatt=document.getElementById('i-batt').value==='1';
-  const bMWh=hasBatt?g('bmwh'):0,bC=hasBatt?g('bc'):0;
-  const rte=g('rte')/100,bDeg=g('bdeg')/100,bSt=hasBatt?g('bst')/100:0;
-  const evP=hasBatt?g('evp'):0,bOM=hasBatt?g('bom'):0;
-  const htLen=g('htlen'),htC=g('htcost'),ssC=g('ssc'),mC=g('mc');
+  const bMWh=hasBatt?gv('bmwh'):0,bC=hasBatt?gv('bc'):0;
+  const rte=gv('rte')/100,bDeg=gv('bdeg')/100,bSt=hasBatt?gv('bst')/100:0;
+  const evP=hasBatt?gv('evp'):0,bOM=hasBatt?gv('bom'):0;
+  const htLen=gv('htlen'),htC=gv('htcost'),ssC=gv('ssc'),mC=gv('mc');
 
-  const glP=cGL/100;
+  // Total technical loss covers ALL losses from generation to customer
+  // No separate grid loss deduction needed
   const eCap=htLen*htC+ssC+mC;
-  const sCap=epc+exp+land+evac+misc;
+  const sCap=epc+land+evac+misc;
   const bCap=bMWh*bC;
   const tCap=sCap+bCap;
   const dAmt=tCap*df,eAmt=tCap*(1-df);
 
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  s('v-sc','&#8377;'+sCap.toFixed(1)+' Cr');
-  s('v-bcap','&#8377;'+bCap.toFixed(1)+' Cr');
-  s('v-ss','&#8377;'+sCap.toFixed(1));s('v-bs','&#8377;'+bCap.toFixed(1));s('v-ts','&#8377;'+tCap.toFixed(1));
-  s('v-wp','&#8377;'+((tCap*1e7)/dc).toFixed(1));s('v-ec','&#8377;'+eCap.toFixed(1)+' Cr');
-  s('v-da','&#8377;'+dAmt.toFixed(1));s('v-ea','&#8377;'+eAmt.toFixed(1));
+  s('v-sc','Rs '+sCap.toFixed(1)+' Cr');
+  s('v-bcap','Rs '+bCap.toFixed(1)+' Cr');
+  s('v-ss',sCap.toFixed(1));s('v-bs',bCap.toFixed(1));s('v-ts',tCap.toFixed(1));
+  s('v-wp','Rs '+((tCap*1e7)/dc_kWp).toFixed(1));
+  s('v-ec','Rs '+eCap.toFixed(1)+' Cr');
+  s('v-da',dAmt.toFixed(1));s('v-ea',eAmt.toFixed(1));
+  document.getElementById('v-lapp').textContent=gv('tloss').toFixed(1)+'%';
 
-  const gG=dc*plf*8760,nG=gG*(1-loss),nM=nG*(1-glP);
+  // Generation — single total loss applied
+  const grossGen=dc_kWp*plf*8760;
+  const netMeter=grossGen*(1-tloss);   // at buyer meter after ALL losses
   const wt=tariff*(1+peak*sur),sp1=wt*disc,nr1=sp1-oa;
   const om1=sCap*omP,ins1=sCap*insP,op1=om1+ins1+bOM;
-  const gRev=nM*sp1/1e7,oAch=nM*oa/1e7,nRev=gRev-oAch,ebd1=nRev-op1;
+  const gRev=netMeter*sp1/1e7,oAch=netMeter*oa/1e7,nRev=gRev-oAch,ebd1=nRev-op1;
 
-  // Debt schedule — principal from Yr1
-  const aPrin=dAmt/tn;
+  // Debt schedule with moratorium
+  const repayYrs=tn-moro;
+  const aPrin=repayYrs>0?dAmt/repayYrs:0;
   const dSch=[];let ob=dAmt;
-  for(let y=1;y<=tn;y++){const i=ob*ir,p=aPrin,cb=Math.max(0,ob-p);dSch.push({y,ob,i,p,cb});ob=cb;}
-  document.getElementById('dtb').innerHTML=dSch.map(d=>`<tr><td>Yr ${d.y}</td><td>${d.ob.toFixed(2)}</td><td>${d.i.toFixed(2)}</td><td>${d.p.toFixed(2)}</td><td>${d.cb.toFixed(2)}</td><td>${(d.i+d.p).toFixed(2)}</td></tr>`).join('');
-
-  // Loss impact
-  const lMU=(nG-nM)/1e6,lRev=lMU*nr1*1e6/1e7;
-  document.getElementById('li').innerHTML=[
-    ['Net generation at plant gate Yr-1',(nG/1e6).toFixed(2)+' MU',''],
-    ['Grid loss ('+cGL.toFixed(2)+'%)','&#8722; '+lMU.toFixed(2)+' MU','rd'],
-    ['Net generation at buyer meter',(nM/1e6).toFixed(2)+' MU','gn'],
-    ['Revenue lost to grid loss Yr-1','&#8722; &#8377;'+lRev.toFixed(2)+' Cr','rd'],
-    ['25-yr cumulative revenue lost (approx)','&#8722; &#8377;'+(lRev*20).toFixed(1)+' Cr','rd'],
-  ].map(r=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv ${r[2]}">${r[1]}</span></div>`).join('');
+  for(let y=1;y<=tn;y++){
+    const i=ob*ir,p=(y<=moro)?0:aPrin,cb=Math.max(0,ob-p);
+    dSch.push({y,ob,i,p,cb,ds:i+p,m:(y<=moro)});ob=cb;
+  }
+  document.getElementById('dtb').innerHTML=dSch.map(d=>`<tr${d.m?' class="dbt"':''}><td>Yr ${d.y}${d.m?' M':''}</td><td>${d.ob.toFixed(2)}</td><td>${d.i.toFixed(2)}</td><td>${d.p.toFixed(2)}</td><td>${d.cb.toFixed(2)}</td><td>${d.ds.toFixed(2)}</td></tr>`).join('');
 
   // Price breakdown
   document.getElementById('price-bd').innerHTML=[
-    ['TNEB base tariff','&#8377;'+tariff.toFixed(2),''],
-    ['Weighted TNEB ('+Math.round(peak*100)+'% peak)','&#8377;'+wt.toFixed(4),''],
-    ['Selling price ('+Math.round(disc*100)+'% of weighted)','&#8377;'+sp1.toFixed(4),'gn'],
-    ['Less OA charge all-in','&#8722; &#8377;'+oa.toFixed(2),'rd'],
-    ['Net realisation per kWh','&#8377;'+nr1.toFixed(4),'gn'],
-    ['Buyer saving vs direct TNEB tariff','&#8377;'+(wt-sp1).toFixed(4),'am'],
-    ['Plant internal loss',((loss)*100).toFixed(1)+'%',''],
-    ['TNERC deemed grid loss',cGL.toFixed(2)+'%','pu'],
-    ['Units billed at buyer meter',(nM/1e6).toFixed(2)+' MU',''],
+    ['TNEB base tariff','Rs '+tariff.toFixed(2),''],
+    ['Weighted TNEB ('+Math.round(peak*100)+'% peak, '+Math.round(sur*100)+'% surcharge)','Rs '+wt.toFixed(4),''],
+    ['Selling price ('+Math.round(disc*100)+'% of weighted)','Rs '+sp1.toFixed(4),'gn'],
+    ['Less OA charge all-in','- Rs '+oa.toFixed(2),'rd'],
+    ['Net realisation per kWh','Rs '+nr1.toFixed(4),'gn'],
+    ['Buyer saving vs direct TNEB tariff','Rs '+(wt-sp1).toFixed(4),'am'],
+    ['Total technical losses applied',(tloss*100).toFixed(1)+'%',''],
+    ['Units billed at buyer meter (Yr-1)',(netMeter/1e6).toFixed(2)+' MU',''],
   ].map(r=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv ${r[2]}">${r[1]}</span></div>`).join('');
 
   // Sensitivity
@@ -568,22 +843,24 @@ function calc(){
   const sNR=sOA.map(o=>+(sp1-o).toFixed(3));
   if(sI)sI.destroy();
   sI=new Chart(document.getElementById('sChart'),{type:'bar',
-    data:{labels:sOA.map(o=>'&#8377;'+o),datasets:[{label:'Net &#8377;/kWh',data:sNR,backgroundColor:sNR.map(v=>v>=4?'#1D9E75':v>=2?'#EF9F27':'#E24B4A'),borderRadius:5}]},
+    data:{labels:sOA.map(o=>'Rs '+o),datasets:[{label:'Net Rs/kWh',data:sNR,backgroundColor:sNR.map(v=>v>=4?'#1D9E75':v>=2?'#EF9F27':'#E24B4A'),borderRadius:5}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{y:{ticks:{callback:v=>'&#8377;'+v,font:{size:11}},grid:{color:'#F5F5F5'}},x:{ticks:{font:{size:11}},grid:{display:false}}}}});
+      scales:{y:{ticks:{callback:v=>'Rs'+v,font:{size:10}},grid:{color:'#F5F5F5'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}});
 
-  // 25-year model
+  // 25-year cash flow with correct moratorium
   const cfD=[];
   let dF=1,tC=tariff,oC=oa,omC=om1,insC=ins1,bOMC=bOM;
   let wdv=sCap,cum=-eAmt,payY=null;
   for(let y=1;y<=25;y++){
     if(y===1)dF=1-deg1;else if(y<=10)dF*=0.9932;else dF*=0.993;
-    const ngG=nG*dF,ngM=ngG*(1-glP);
+    const ngM=grossGen*dF*(1-tloss);
     const w2=tC*(1+peak*sur),sp=w2*disc;
-    let bEx=0;if(hasBatt){const st=(ngG/1e6)*bSt*1000;bEx=st*rte*Math.pow(1-bDeg,y-1)*evP/1e7;}
+    let bEx=0;if(hasBatt){const st=(grossGen*dF/1e6)*bSt*1000;bEx=st*rte*Math.pow(1-bDeg,y-1)*evP/1e7;}
     const nr2=(ngM*sp/1e7)-(ngM*oC/1e7)+bEx;
     const opx=omC+insC+(hasBatt?bOMC:0),ebd=nr2-opx;
     const dr=dSch.find(d=>d.y===y)||{i:0,p:0};
+
+    // Tax: Yr1 IT dep=0 (moratorium year), Yr2+ WDV 15%
     let itD=0;if(y>1){itD=wdv*0.15;wdv=Math.max(0,wdv-itD);}
     const txbl=Math.max(0,ebd-dr.i-itD),txp=txbl*tax*1.04;
     const sal=(y===25)?tCap*sv:0;
@@ -593,58 +870,58 @@ function calc(){
     tC*=(1+tarE);oC*=(1+oaE);omC*=(1+omE);insC*=1.03;if(hasBatt)bOMC*=1.05;
   }
 
-  const tFCF=cfD.reduce((sum,r)=>sum+parseFloat(r.fcf),0);
-  s('r-pb',payY||'>25');s('r-tfcf',tFCF.toFixed(1));
-  s('r-cap','&#8377;'+tCap.toFixed(1));s('r-eq','&#8377;'+eAmt.toFixed(1));
-  s('r-gl',cGL.toFixed(2)+'%');s('r-gen',(nM/1e6).toFixed(2));
-  s('r-eb','&#8377;'+ebd1.toFixed(2));s('r-fcf','&#8377;'+cfD[0].fcf);
+  const tFCF=cfD.reduce((s,r)=>s+parseFloat(r.fcf),0);
+  s('r-pb',payY?payY.toString():'>25');
+  s('r-tfcf',tFCF.toFixed(1));
+  s('r-cap',tCap.toFixed(1));s('r-eq',eAmt.toFixed(1));
+  s('r-gl',(tloss*100).toFixed(1)+'%');
+  s('r-gen',(netMeter/1e6).toFixed(2));
+  s('r-eb',ebd1.toFixed(2));s('r-fcf',cfD[0].fcf);
 
   const aEl=document.getElementById('d-alerts');aEl.innerHTML='';
   if(!payY)aEl.innerHTML+='<div class="alert bad">Equity not recovered within 25 years. Review capex, tariff or OA assumptions.</div>';
-  else if(payY<=6)aEl.innerHTML+='<div class="alert ok">Excellent &#8212; equity payback in Year '+payY+'. Strong project economics.</div>';
-  else if(payY<=10)aEl.innerHTML+='<div class="alert ok">Good &#8212; equity payback in Year '+payY+'.</div>';
+  else if(payY<=6)aEl.innerHTML+='<div class="alert ok">Excellent - equity payback in Year '+payY+'. Strong project economics.</div>';
+  else if(payY<=10)aEl.innerHTML+='<div class="alert ok">Good - equity payback in Year '+payY+'.</div>';
   else aEl.innerHTML+='<div class="alert warn">Payback beyond Year 12. Review capital structure and OA charges.</div>';
-  if(cGL>4)aEl.innerHTML+='<div class="alert pu">TNERC grid loss '+cGL.toFixed(2)+'% &#8212; &#8377;'+lRev.toFixed(2)+' Cr revenue lost per year. Consider stepping up to higher injection voltage.</div>';
 
   document.getElementById('y1s').innerHTML=[
-    ['Gross generation rated',(gG/1e6).toFixed(2)+' MU',''],
-    ['Less plant internal loss','-'+((gG-nG)/1e6).toFixed(2)+' MU','rd'],
-    ['Net at plant gate',(nG/1e6).toFixed(2)+' MU',''],
-    ['Less TNERC grid loss ('+cGL.toFixed(2)+'%)','-'+lMU.toFixed(2)+' MU','rd'],
-    ['Net billed at buyer meter',(nM/1e6).toFixed(2)+' MU','gn'],
-    ['Gross revenue','&#8377;'+gRev.toFixed(2)+' Cr',''],
-    ['Less OA charges','&#8722; &#8377;'+oAch.toFixed(2)+' Cr','rd'],
-    ['Net revenue','&#8377;'+nRev.toFixed(2)+' Cr',''],
-    ['Less total opex','&#8722; &#8377;'+op1.toFixed(2)+' Cr','rd'],
-    ['EBITDA','&#8377;'+ebd1.toFixed(2)+' Cr','gn'],
+    ['Gross generation (rated)',(grossGen/1e6).toFixed(2)+' MU',''],
+    ['Less total technical losses ('+((tloss)*100).toFixed(1)+'%)','-'+((grossGen-netMeter)/1e6).toFixed(2)+' MU','rd'],
+    ['Net billed at buyer meter',(netMeter/1e6).toFixed(2)+' MU','gn'],
+    ['Gross revenue','Rs '+gRev.toFixed(2)+' Cr',''],
+    ['Less OA charges','- Rs '+oAch.toFixed(2)+' Cr','rd'],
+    ['Net revenue','Rs '+nRev.toFixed(2)+' Cr',''],
+    ['Less total opex','- Rs '+op1.toFixed(2)+' Cr','rd'],
+    ['EBITDA','Rs '+ebd1.toFixed(2)+' Cr','gn'],
     ['EBITDA margin',((ebd1/nRev)*100).toFixed(1)+'%','gn'],
-    ['Interest Yr-1','&#8377;'+cfD[0].int+' Cr',''],
-    ['Principal Yr-1','&#8377;'+cfD[0].prin+' Cr',''],
-    ['FCF to developer Yr-1','&#8377;'+cfD[0].fcf+' Cr','gn'],
+    ['Interest Yr-1','Rs '+cfD[0].int+' Cr',''],
+    ['Principal Yr-1 (moratorium - nil)','Rs '+cfD[0].prin+' Cr',''],
+    ['FCF to developer Yr-1','Rs '+cfD[0].fcf+' Cr','gn'],
   ].map(r=>`<div class="sr"><span class="sk">${r[0]}</span><span class="sv ${r[2]}">${r[1]}</span></div>`).join('');
 
   const paEl=document.getElementById('pb-alert');
   paEl.className='alert '+(payY&&payY<=10?'ok':'warn');
-  paEl.textContent=payY?'Equity payback in Year '+payY+'. Grid loss: '+cGL.toFixed(2)+'%. Total 25-year FCF: &#8377;'+tFCF.toFixed(1)+' Cr.':'Equity not recovered within 25 years. Review financial parameters.';
+  paEl.textContent=payY?'Equity payback in Year '+payY+'. Technical loss applied: '+(tloss*100).toFixed(1)+'%. 25-year FCF: Rs '+tFCF.toFixed(1)+' Cr.':'Equity not recovered within 25 years. Review financial parameters.';
 
   document.getElementById('cft').innerHTML=cfD.map(r=>{
     const cls=r.y===payY?'pay':r.y<=tn?'dbt':'';
     const cc=parseFloat(r.cum)>=0?'color:var(--g6);font-weight:700':'color:var(--r6)';
-    return `<tr class="${cls}"><td>Yr ${r.y}</td><td>${r.ng}</td><td>${r.sp}</td><td>${r.oa}</td><td>${r.nr}</td><td>${r.nRev}</td><td>${r.ebd}</td><td>${r.int}</td><td>${r.prin}</td><td>${r.tax}</td><td>${r.fcf}</td><td style="${cc}">${r.cum}</td><td style="text-align:center">${parseFloat(r.cum)>=0?'&#10003;':'&#183;'}</td></tr>`;
+    return '<tr class="'+cls+'"><td>Yr '+r.y+'</td><td>'+r.ng+'</td><td>'+r.sp+'</td><td>'+r.oa+'</td><td>'+r.nr+'</td><td>'+r.nRev+'</td><td>'+r.ebd+'</td><td>'+r.int+'</td><td>'+r.prin+'</td><td>'+r.tax+'</td><td>'+r.fcf+'</td><td style="'+cc+'">'+r.cum+'</td><td style="text-align:center">'+(parseFloat(r.cum)>=0?'&#10003;':'')+'</td></tr>';
   }).join('');
 
   if(cfI)cfI.destroy();
   cfI=new Chart(document.getElementById('cfChart'),{type:'line',
     data:{labels:cfD.map(r=>'Yr '+r.y),datasets:[
-      {label:'Cumulative CF (&#8377; Cr)',data:cfD.map(r=>parseFloat(r.cum).toFixed(1)),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.35,pointRadius:2,yAxisID:'y'},
-      {label:'Annual FCF (&#8377; Cr)',data:cfD.map(r=>parseFloat(r.fcf).toFixed(1)),borderColor:'#378ADD',backgroundColor:'transparent',tension:0.35,pointRadius:2,borderDash:[5,3],yAxisID:'y'}
+      {label:'Cumulative CF',data:cfD.map(r=>parseFloat(r.cum).toFixed(1)),borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',fill:true,tension:0.35,pointRadius:2,yAxisID:'y'},
+      {label:'Annual FCF',data:cfD.map(r=>parseFloat(r.fcf).toFixed(1)),borderColor:'#378ADD',backgroundColor:'transparent',tension:0.35,pointRadius:2,borderDash:[5,3],yAxisID:'y'}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:13,padding:14}}},
-      scales:{y:{ticks:{callback:v=>'&#8377;'+v,font:{size:10}},grid:{color:'#F5F5F5'}},x:{ticks:{maxTicksLimit:13,maxRotation:0,font:{size:10}},grid:{display:false}}}}});
+      plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:12,padding:12}}},
+      scales:{y:{ticks:{callback:v=>v.toFixed(0),font:{size:10}},grid:{color:'#F5F5F5'}},x:{ticks:{maxTicksLimit:13,maxRotation:0,font:{size:10}},grid:{display:false}}}}});
 }
 
-updLoss();
+// Init
+updDC();updLoss();calc();
 </script>
 </body>
 </html>
