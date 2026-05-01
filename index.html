@@ -147,10 +147,10 @@ input[type=text]:focus{outline:none;border-color:var(--g5)}
 .dv{height:1px;background:var(--n3);margin:12px 0}
 
 /* SUMMARY ROWS — fixed no overflow */
-.sr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F0F0F0;gap:12px}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #F0F0F0;gap:8px;min-width:0}
 .sr:last-child{border-bottom:none}
-.sk{font-size:12.5px;color:var(--n7);flex:1;line-height:1.4;min-width:0}
-.sv{font-size:12px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;white-space:nowrap;padding-left:8px}
+.sk{font-size:12px;color:var(--n7);flex:1;line-height:1.4;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sv{font-size:12px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;white-space:nowrap;min-width:110px;padding-left:6px}
 .sv.gn{color:var(--g6)}.sv.rd{color:var(--r6)}.sv.am{color:var(--a6)}.sv.pu{color:var(--p6)}
 
 /* TABLES */
@@ -251,7 +251,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .met{padding:14px 12px}
   .card{padding:20px;margin-bottom:16px;border-radius:14px}
   .chdr{margin-bottom:14px}
-  .sk{font-size:13.5px}.sv{font-size:13.5px}
+  .sk{font-size:13.5px}.sv{font-size:13px;min-width:130px}
   .pm-val{font-size:18px}.pm-btn{width:44px;height:44px}
   .flbl{font-size:14px}.fhint{font-size:11.5px}
   table{font-size:11.5px;min-width:auto}
@@ -281,7 +281,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .met{padding:14px 12px}
   .card{padding:20px;margin-bottom:16px;border-radius:14px}
   .chdr{margin-bottom:14px}
-  .sk{font-size:13.5px}.sv{font-size:13.5px}
+  .sk{font-size:13.5px}.sv{font-size:13px;min-width:130px}
   .pm-val{font-size:18px}.pm-btn{width:44px;height:44px}
   .flbl{font-size:14px}.fhint{font-size:11.5px}
   table{font-size:11.5px;min-width:auto}
@@ -309,7 +309,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.2 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v6.3 | 01-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -340,6 +340,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="sb-sep"></div>
     <button class="sb-item" id="sb-pr" onclick="go('pr')"><div class="sb-ic">&#128194;</div><div><div class="sb-lbl">Project Report</div><div class="sb-dsc">Full DPR generator</div></div><span class="sb-badge or">New</span></button>
     <div class="sb-sep"></div>
+    <button class="sb-item" id="sb-tn" onclick="go('tn')"><div class="sb-ic">&#9989;</div><div><div class="sb-lbl">TNERC Compliance</div><div class="sb-dsc">Monthly tracking &amp; TNPDCL cert</div></div><span class="sb-badge or">Key</span></button>
     <button class="sb-item" id="sb-rg" onclick="go('rg')"><div class="sb-ic">&#128203;</div><div><div class="sb-lbl">Regulatory</div><div class="sb-dsc">Group captive &amp; 110 kV</div></div></button>
   </div>
   <div class="sb-title" id="sb-title-cust" style="display:none">Customer Sections</div>
@@ -355,7 +356,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.2</div>
+    <div class="drw-t">EIL Solar Ground v6.3</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -471,7 +472,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <!-- CUSTOMERS -->
 <div id="s-cu" class="sec dev-sec">
   <div class="sec-h"><div class="sec-ic">&#128100;</div><div><div class="sec-ti">Customers</div><div class="sec-su">Unlimited captive consumers &mdash; add or remove</div></div></div>
-  <div class="alert info">Each customer must hold minimum 26% equity in the generating company and consume proportionally. Add each captive consumer below with their receiving voltage, equity share and monthly consumption.</div>
+  <div class="alert info">All captive consumers collectively must hold minimum 26% equity in the SPV. Individual customers can hold any % — what matters is the total. Each customer must also consume proportionally to their equity share. Add each consumer below.</div>
   <div id="cust-list"></div>
   <button class="add-cust-btn" onclick="addCustomer()">+ Add Customer</button>
   <div class="card" style="margin-top:13px">
@@ -916,11 +917,86 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 </div>
 
 
+
+<!-- TNERC COMPLIANCE -->
+<div id="s-tn" class="sec dev-sec">
+  <div class="sec-h"><div class="sec-ic">&#9989;</div><div><div class="sec-ti">TNERC Compliance</div><div class="sec-su">Monthly tracking &amp; annual TNPDCL certificate</div></div></div>
+
+  <div class="alert or">
+    <strong>Annual obligation:</strong> At the end of each year submit to TNPDCL that Group Captive CPP status is maintained. Three rules must be met: (1) All customers collectively hold &ge;26% SPV equity. (2) Total captive consumption &ge;51% of net generation. (3) Each customer consumes proportionally to their equity stake (&plusmn;10% tolerance per TNERC). This section tracks all three month by month.
+  </div>
+
+  <!-- SPV Details -->
+  <div class="card">
+    <div class="chdr or">SPV and plant details for annual certificate</div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>SPV / generating company name</label><input type="text" id="tn-spv" placeholder="e.g. XYZ Solar Power Pvt. Ltd."></div>
+      <div class="cust-fld"><label>CIN / registration number</label><input type="text" id="tn-cin" placeholder="e.g. U40100TN2025PTC123456"></div>
+      <div class="cust-fld"><label>Plant location</label><input type="text" id="tn-loc" placeholder="District, Village, Tamil Nadu"></div>
+      <div class="cust-fld"><label>SLDC registration number</label><input type="text" id="tn-sldc" placeholder="e.g. SLDC/OA/2026/001"></div>
+      <div class="cust-fld"><label>Compliance year</label><input type="text" id="tn-year" placeholder="e.g. April 2026 to March 2027"></div>
+      <div class="cust-fld"><label>Date of commissioning (COD)</label><input type="text" id="tn-cod" placeholder="e.g. 15-Apr-2026"></div>
+    </div>
+  </div>
+
+  <!-- Rule 1: Equity -->
+  <div class="card">
+    <div class="chdr gn">Rule 1 — Collective equity &ge;26% (CERC Captive Rules 2001)</div>
+    <div id="tn-eq-check"></div>
+    <div class="alert info" style="margin-bottom:0;font-size:12px">The 26% rule applies to the <strong>total</strong> of all captive customers combined. Individual customers may hold any percentage. The developer/promoter holds the remaining equity. If total customer equity falls below 26%, CSS is reinstated retroactively for the entire year.</div>
+  </div>
+
+  <!-- Rule 2 & 3: Monthly generation and consumption -->
+  <div class="card">
+    <div class="chdr gn">Rule 2 &amp; 3 — Monthly generation and consumption tracking</div>
+    <div class="alert info" style="margin-bottom:12px;font-size:12px">Enter actual monthly generation (MU) from SLDC meter. Customer-wise allotment auto-calculates from equity proportion. Enter each customer's actual consumption. Variance and compliance status shown instantly.</div>
+
+    <!-- Month selector -->
+    <div class="fld">
+      <label class="flbl">Financial year for compliance</label>
+      <select id="tn-fy" onchange="buildTnercGrid()">
+        <option value="2026-27">April 2026 to March 2027</option>
+        <option value="2027-28">April 2027 to March 2028</option>
+        <option value="2028-29">April 2028 to March 2029</option>
+      </select>
+    </div>
+
+    <div id="tn-grid-wrap" style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+      <table id="tn-grid" style="min-width:700px;width:100%;border-collapse:collapse;font-size:11.5px">
+        <thead id="tn-grid-head"></thead>
+        <tbody id="tn-grid-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Running totals -->
+  <div class="card">
+    <div class="chdr gn">Year-to-date compliance summary</div>
+    <div id="tn-ytd"></div>
+  </div>
+
+  <!-- Customer-wise compliance -->
+  <div class="card">
+    <div class="chdr gn">Customer-wise compliance status</div>
+    <div id="tn-cust-comp"></div>
+  </div>
+
+  <!-- Annual certificate -->
+  <div class="card">
+    <div class="chdr or">Annual TNPDCL compliance certificate</div>
+    <div class="alert info" style="margin-bottom:12px;font-size:12px">Click below to download the complete annual compliance certificate in the format required by TNPDCL. Fill in SPV details above before generating.</div>
+    <button onclick="generateTnercCert()" style="background:var(--b6);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;width:100%;text-align:left">
+      &#128203; Generate Annual TNPDCL Compliance Certificate (downloads as .txt)
+    </button>
+    <div id="tn-cert-status" class="alert ok" style="display:none;margin-top:10px;margin-bottom:0"></div>
+  </div>
+</div>
+
 </div><!-- /cvs -->
 <div class="fab-w"><button class="fab" onclick="calc()">Calculate</button></div>
 
 <script>
-const BUILD='v6.2 | Build: 20260501-1148 IST';
+const BUILD='v6.3 | Build: 20260501-1235 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -950,7 +1026,7 @@ function setRole(r){
 }
 
 /* ── NAVIGATION ── */
-const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','rg'];
+const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg'];
 const CUST_SECS=['ci','cs','cc','ca'];
 function go(id){
   const allSecs=[...DEV_SECS,...CUST_SECS];
@@ -984,6 +1060,8 @@ function buildDrawer(){
     {id:'av',ic:'&#128201;',lbl:'Actual vs Projected',dsc:'Live data & variance'},
     {id:'---'},
     {id:'pr',ic:'&#128194;',lbl:'Project Report',dsc:'Full bankable report'},
+    {id:'---'},
+    {id:'tn',ic:'&#9989;',lbl:'TNERC Compliance',dsc:'Monthly tracking & TNPDCL cert'},
     {id:'---'},
     {id:'rg',ic:'&#128203;',lbl:'Regulatory',dsc:'Group captive & 110 kV'},
   ]:[
@@ -1173,8 +1251,10 @@ function calcCompliance(){
     if(!el)return;
     const distLoss=c.recvKv==='11'?1.52:c.recvKv==='33'?0.50:0;
     const msgs=[];
-    if(c.equityPct<26)msgs.push('Equity '+c.equityPct+'% < 26% minimum');
-    if(msgs.length===0){el.className='cust-compliance ok';el.innerHTML='&#10003; Equity '+c.equityPct+'% OK | TNERC grid loss '+distLoss.toFixed(2)+'% ('+c.recvKv+' kV receiving)';}
+    // Individual customer: no minimum equity %, only proportion matters
+    // 26% rule applies to the collective total (checked in consolidated block)
+    if(c.equityPct<=0)msgs.push('Equity % must be > 0');
+    if(msgs.length===0){el.className='cust-compliance ok';el.innerHTML='&#10003; Equity '+c.equityPct+'% held | TNERC grid loss '+distLoss.toFixed(2)+'% ('+c.recvKv+' kV receiving) | Allotment proportional to equity';}
     else{el.className='cust-compliance fail';el.innerHTML='&#9888; '+msgs.join(' | ');}
   });
 
@@ -2145,6 +2225,379 @@ function generateFullReport(){
 
 // Keep generateDocx as alias for backward compat
 function generateDocx(){generateFullReport();}
+
+
+
+
+
+/* ══ TNERC COMPLIANCE MODULE ═══════════════════════════════════════ */
+
+// Monthly compliance data store
+// Structure: tnData[month_index] = { gen: MU, custConsumption: {custId: MU} }
+let tnData = Array.from({length:12}, () => ({ gen: 0, custConsumption: {} }));
+const TN_MONTHS = ['April','May','June','July','August','September','October','November','December','January','February','March'];
+
+function initTnData(){
+  tnData = Array.from({length:12}, (_, i) => {
+    const existing = tnData[i] || {};
+    return { gen: existing.gen || 0, custConsumption: existing.custConsumption || {} };
+  });
+}
+
+function buildTnercEquityCheck(){
+  const el = document.getElementById('tn-eq-check');
+  if(!el) return;
+  const totalCustEq = customers.reduce((s,c) => s + c.equityPct, 0);
+  const devEq = 100 - totalCustEq;
+  const ok = totalCustEq >= 26;
+  let rows = '';
+  customers.forEach(c => {
+    rows += `<div class="sr"><span class="sk">&#128100; ${c.name} — equity in SPV</span><span class="sv">${c.equityPct.toFixed(1)}%</span></div>`;
+  });
+  rows += `<div class="sr"><span class="sk"><strong>Developer / Promoter equity</strong></span><span class="sv">${devEq.toFixed(1)}%</span></div>`;
+  rows += `<div class="sr" style="border-top:2px solid var(--n3);margin-top:4px"><span class="sk"><strong>Total all customers collectively</strong></span><span class="sv ${ok?'gn':'rd'}" style="font-size:15px;font-weight:700">${totalCustEq.toFixed(1)}% ${ok?'&#10003;':'&#9888;'}</span></div>`;
+  rows += `<div class="sr"><span class="sk">26% collective equity rule</span><span class="sv ${ok?'gn':'rd'}">${ok?'COMPLIANT':'NON-COMPLIANT — need '+(26-totalCustEq).toFixed(1)+'% more'}</span></div>`;
+  el.innerHTML = rows;
+}
+
+function buildTnercGrid(){
+  initTnData();
+  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
+  const plf = gv('plf') / 100;
+  const tloss = gv('tloss') / 100;
+  const grossGen = dc_kWp * plf * 8760;
+  const netGenAnn = grossGen * (1 - tloss) / 1e6;
+  const projMonthly = netGenAnn / 12;
+
+  const totalCustEq = customers.reduce((s,c) => s + c.equityPct, 0);
+
+  // Build header
+  const head = document.getElementById('tn-grid-head');
+  if(!head) return;
+  let hdrHtml = `<tr style="background:var(--g6)">
+    <th style="color:#fff;padding:8px 7px;text-align:left;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">Month</th>
+    <th style="color:#fff;padding:8px 7px;text-align:right;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">Net Gen<br>Projected MU</th>
+    <th style="color:#fff;padding:8px 7px;text-align:right;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">Net Gen<br>Actual MU</th>`;
+  customers.forEach(c => {
+    hdrHtml += `<th style="color:#fff;padding:8px 7px;text-align:right;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">${c.name}<br>Allotment MU</th>`;
+    hdrHtml += `<th style="color:#fff;padding:8px 7px;text-align:right;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">${c.name}<br>Actual MU</th>`;
+    hdrHtml += `<th style="color:#fff;padding:8px 7px;text-align:right;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">${c.name}<br>Compliance</th>`;
+  });
+  hdrHtml += `<th style="color:#fff;padding:8px 7px;text-align:right;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">Total Captive<br>Consumption MU</th>
+    <th style="color:#fff;padding:8px 7px;text-align:center;font-size:11px;white-space:nowrap;border:1px solid rgba(255,255,255,.2)">51% Rule</th>
+  </tr>`;
+  head.innerHTML = hdrHtml;
+
+  // Build body
+  const body = document.getElementById('tn-grid-body');
+  if(!body) return;
+  let bodyHtml = '';
+  for(let m = 0; m < 12; m++){
+    const bg = m % 2 === 0 ? '#fff' : '#F9FAFB';
+    const td = tnData[m];
+    const actGen = td.gen || 0;
+    const dispActGen = actGen > 0 ? actGen.toFixed(3) : '';
+
+    let rowHtml = `<tr style="background:${bg}">
+      <td style="padding:6px 7px;font-weight:600;color:var(--n7);font-size:12px;white-space:nowrap;border:1px solid var(--n3)">${TN_MONTHS[m]}</td>
+      <td style="padding:6px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1px solid var(--n3);color:var(--n5)">${projMonthly.toFixed(3)}</td>
+      <td style="padding:4px 5px;border:1px solid var(--n3)">
+        <input type="number" step="0.001" min="0" placeholder="${projMonthly.toFixed(2)}"
+          value="${dispActGen}"
+          oninput="updTnGen(${m},this.value)"
+          style="width:80px;font-size:12px;padding:4px 6px;border:1.5px solid var(--n3);border-radius:5px;background:#fff;font-family:'JetBrains Mono',monospace;text-align:right">
+      </td>`;
+
+    let totalCaptive = 0;
+    customers.forEach(c => {
+      // Allotment = actual gen × (customer equity / total customer equity) if actGen>0
+      // else use projected × proportion
+      const genBase = actGen > 0 ? actGen : projMonthly;
+      const allotment = totalCustEq > 0 ? genBase * (c.equityPct / totalCustEq) * (totalCustEq / 100) : 0;
+      // Actually: allotment = gen × (customer equity% / 100)
+      const allotMU = genBase * (c.equityPct / 100);
+      const actCons = (td.custConsumption[c.id] || 0);
+      const dispAct = actCons > 0 ? actCons.toFixed(3) : '';
+      totalCaptive += actCons;
+
+      // Proportional compliance: actual consumption should be within ±10% of allotment
+      let compIcon = '—';
+      let compColor = 'color:var(--n5)';
+      if(actGen > 0 && actCons > 0){
+        const ratio = actCons / allotMU;
+        if(ratio >= 0.9 && ratio <= 1.1){ compIcon = '&#10003;'; compColor = 'color:var(--g6);font-weight:700'; }
+        else if(ratio < 0.9){ compIcon = '&#9660; Low'; compColor = 'color:var(--r6)'; }
+        else { compIcon = '&#9650; High'; compColor = 'color:var(--a6)'; }
+      }
+
+      rowHtml += `<td style="padding:6px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1px solid var(--n3);color:var(--b6)">${allotMU.toFixed(3)}</td>`;
+      rowHtml += `<td style="padding:4px 5px;border:1px solid var(--n3)">
+        <input type="number" step="0.001" min="0" placeholder="${allotMU.toFixed(2)}"
+          value="${dispAct}"
+          oninput="updTnCons(${m},'${c.id}',this.value)"
+          style="width:80px;font-size:12px;padding:4px 6px;border:1.5px solid var(--n3);border-radius:5px;background:#fff;font-family:'JetBrains Mono',monospace;text-align:right">
+      </td>`;
+      rowHtml += `<td style="padding:6px 7px;text-align:center;font-size:12px;border:1px solid var(--n3);${compColor}">${compIcon}</td>`;
+    });
+
+    // 51% rule for this month
+    const genBase51 = actGen > 0 ? actGen : projMonthly;
+    const pct51 = genBase51 > 0 ? totalCaptive / genBase51 * 100 : 0;
+    const ok51 = actGen > 0 && pct51 >= 51;
+    const icon51 = actGen > 0 ? (ok51 ? '&#10003;' : '&#9888;') : '—';
+    const col51 = actGen > 0 ? (ok51 ? 'color:var(--g6);font-weight:700' : 'color:var(--r6);font-weight:700') : 'color:var(--n5)';
+
+    rowHtml += `<td style="padding:6px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:11.5px;border:1px solid var(--n3)">${totalCaptive > 0 ? totalCaptive.toFixed(3) : '—'}</td>`;
+    rowHtml += `<td style="padding:6px 7px;text-align:center;font-size:12px;border:1px solid var(--n3);${col51}">${icon51}${actGen>0?' '+pct51.toFixed(1)+'%':''}</td>`;
+    rowHtml += '</tr>';
+    bodyHtml += rowHtml;
+  }
+
+  // Totals row
+  const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
+  const totalActCons = {};
+  customers.forEach(c => {
+    totalActCons[c.id] = tnData.reduce((s,d) => s + (d.custConsumption[c.id]||0), 0);
+  });
+  const totalAllCaptive = Object.values(totalActCons).reduce((s,v) => s+v, 0);
+  const pctAnn = totalActGen > 0 ? totalAllCaptive/totalActGen*100 : 0;
+
+  let totHtml = `<tr style="background:var(--g1);font-weight:700">
+    <td style="padding:7px 7px;font-size:12px;border:1px solid var(--n3);color:var(--g6)">YEAR TOTAL</td>
+    <td style="padding:7px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--n3);color:var(--n5)">${(projMonthly*12).toFixed(3)}</td>
+    <td style="padding:7px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--n3);color:var(--g6)">${totalActGen > 0 ? totalActGen.toFixed(3) : '—'}</td>`;
+  customers.forEach(c => {
+    const allotTot = (totalActGen > 0 ? totalActGen : projMonthly*12) * (c.equityPct/100);
+    const consTot = totalActCons[c.id] || 0;
+    const propOk = allotTot > 0 && Math.abs(consTot/allotTot - 1) <= 0.1;
+    totHtml += `<td style="padding:7px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--n3);color:var(--b6)">${allotTot.toFixed(3)}</td>`;
+    totHtml += `<td style="padding:7px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--n3)">${consTot > 0 ? consTot.toFixed(3) : '—'}</td>`;
+    totHtml += `<td style="padding:7px 7px;text-align:center;font-size:12px;border:1px solid var(--n3);${propOk?'color:var(--g6)':'color:var(--r6)'}">${consTot>0?(propOk?'&#10003; OK':'&#9888; Check'):'—'}</td>`;
+  });
+  totHtml += `<td style="padding:7px 7px;text-align:right;font-family:'JetBrains Mono',monospace;font-size:12px;border:1px solid var(--n3)">${totalAllCaptive > 0 ? totalAllCaptive.toFixed(3) : '—'}</td>`;
+  totHtml += `<td style="padding:7px 7px;text-align:center;font-size:12px;border:1px solid var(--n3);${pctAnn>=51?'color:var(--g6)':'color:var(--r6)'}">${totalActGen>0?(pctAnn.toFixed(1)+'% '+(pctAnn>=51?'&#10003;':'&#9888;')):'—'}</td>`;
+  totHtml += '</tr>';
+  bodyHtml += totHtml;
+  body.innerHTML = bodyHtml;
+
+  buildTnercYTD();
+  buildTnercCustComp();
+}
+
+function updTnGen(m, val){
+  tnData[m].gen = parseFloat(val) || 0;
+  buildTnercGrid();
+}
+
+function updTnCons(m, custId, val){
+  if(!tnData[m].custConsumption) tnData[m].custConsumption = {};
+  tnData[m].custConsumption[custId] = parseFloat(val) || 0;
+  buildTnercGrid();
+}
+
+function buildTnercYTD(){
+  const el = document.getElementById('tn-ytd');
+  if(!el) return;
+  const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
+  const monthsEntered = tnData.filter(d => d.gen > 0).length;
+  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
+  const projAnn = dc_kWp * gv('plf')/100 * 8760 * (1 - gv('tloss')/100) / 1e6;
+  const genVar = projAnn > 0 ? (totalActGen / (projAnn * monthsEntered/12) - 1) * 100 : 0;
+  const totalCustEq = customers.reduce((s,c) => s + c.equityPct, 0);
+  const totalActCons = customers.reduce((s,c) => {
+    return s + tnData.reduce((ss,d) => ss + (d.custConsumption[c.id]||0), 0);
+  }, 0);
+  const pct51 = totalActGen > 0 ? totalActCons / totalActGen * 100 : 0;
+  const eq26ok = totalCustEq >= 26;
+  const cons51ok = pct51 >= 51;
+
+  el.innerHTML = [
+    ['Months with actual generation data', monthsEntered + ' of 12', ''],
+    ['Projected annual net generation', projAnn.toFixed(3) + ' MU', ''],
+    ['Actual YTD net generation', totalActGen > 0 ? totalActGen.toFixed(3) + ' MU' : 'No data yet', totalActGen > 0 ? 'gn' : ''],
+    ['YTD generation vs projected', totalActGen > 0 ? (genVar >= 0 ? '+' : '') + genVar.toFixed(1) + '%' : '—', totalActGen > 0 ? (genVar >= -5 ? 'gn' : 'rd') : ''],
+    ['Total captive consumption YTD', totalActCons > 0 ? totalActCons.toFixed(3) + ' MU' : 'No data yet', ''],
+    ['Captive consumption % of actual gen', totalActGen > 0 ? pct51.toFixed(1) + '%' : '—', totalActGen > 0 ? (cons51ok ? 'gn' : 'rd') : ''],
+    ['Rule 1 — Collective equity ≥26%', totalCustEq.toFixed(1) + '% ' + (eq26ok ? '✓' : '⚠'), eq26ok ? 'gn' : 'rd'],
+    ['Rule 2 — 51% consumption (YTD)', totalActGen > 0 ? (cons51ok ? '✓ Compliant' : '⚠ Below 51%') : 'Enter actual data', totalActGen > 0 ? (cons51ok ? 'gn' : 'rd') : ''],
+    ['Rule 3 — Proportional consumption', 'See customer-wise table below', ''],
+    ['Annual TNPDCL submission status', (eq26ok && (totalActGen === 0 || cons51ok)) ? 'On track' : 'Action needed', (eq26ok && (totalActGen === 0 || cons51ok)) ? 'gn' : 'rd'],
+  ].map(r => `<div class="sr"><span class="sk">${r[0]}</span><span class="sv ${r[2]}">${r[1]}</span></div>`).join('');
+}
+
+function buildTnercCustComp(){
+  const el = document.getElementById('tn-cust-comp');
+  if(!el) return;
+  if(customers.length === 0){ el.innerHTML = '<div class="alert info">Add customers in the Customers section first.</div>'; return; }
+
+  const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
+  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
+  const projAnn = dc_kWp * gv('plf')/100 * 8760 * (1 - gv('tloss')/100) / 1e6;
+  const genBase = totalActGen > 0 ? totalActGen : projAnn;
+
+  let html = '';
+  customers.forEach(c => {
+    const annAllotment = genBase * (c.equityPct / 100);
+    const annActual = tnData.reduce((s,d) => s + (d.custConsumption[c.id]||0), 0);
+    const shortfall = Math.max(0, annAllotment * 0.9 - annActual);
+    const ratio = annAllotment > 0 ? annActual / annAllotment : 0;
+    const propOk = totalActGen > 0 && ratio >= 0.9 && ratio <= 1.1;
+    const distLoss = c.recvKv === '11' ? 1.52 : c.recvKv === '33' ? 0.50 : 0;
+
+    html += `<div class="cust-card ${propOk ? 'active-cust' : ''}">
+      <div class="cust-card-hdr">
+        <span class="cust-name">&#128100; ${c.name}</span>
+        <span class="bdg ${propOk ? 'g' : (totalActGen > 0 ? 'r' : 'a')}">${propOk ? '&#10003; Compliant' : (totalActGen > 0 ? '&#9888; Check' : 'Pending data')}</span>
+      </div>
+      ${[
+        ['Equity held in SPV', c.equityPct.toFixed(1) + '%'],
+        ['Receiving voltage', c.recvKv + ' kV (TNERC grid loss ' + distLoss.toFixed(2) + '%)'],
+        ['Annual allotment (equity proportion)', annAllotment.toFixed(3) + ' MU'],
+        ['Minimum required (90% of allotment)', (annAllotment * 0.9).toFixed(3) + ' MU'],
+        ['Maximum allowed (110% of allotment)', (annAllotment * 1.1).toFixed(3) + ' MU'],
+        ['Actual consumption YTD', annActual > 0 ? annActual.toFixed(3) + ' MU' : 'No data entered'],
+        ['Consumption ratio vs allotment', annActual > 0 ? (ratio * 100).toFixed(1) + '% (target 90–110%)' : '—'],
+        ['Shortfall to reach minimum', shortfall > 0 ? shortfall.toFixed(3) + ' MU — schedule additional consumption' : (annActual > 0 ? 'NIL — within range' : '—')],
+      ].map(r => `<div class="sr"><span class="sk">${r[0]}</span><span class="sv">${r[1]}</span></div>`).join('')}
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function generateTnercCert(){
+  const spv = document.getElementById('tn-spv').value || '[SPV Name]';
+  const cin = document.getElementById('tn-cin').value || '[CIN]';
+  const loc = document.getElementById('tn-loc').value || '[Location]';
+  const sldc = document.getElementById('tn-sldc').value || '[SLDC Ref]';
+  const fy = document.getElementById('tn-year').value || '[Financial Year]';
+  const cod = document.getElementById('tn-cod').value || '[COD Date]';
+
+  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
+  const projAnn = (dc_kWp * gv('plf')/100 * 8760 * (1 - gv('tloss')/100) / 1e6).toFixed(3);
+  const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
+  const totalCustEq = customers.reduce((s,c) => s + c.equityPct, 0);
+  const devEq = 100 - totalCustEq;
+
+  const totalActCons = {};
+  customers.forEach(c => { totalActCons[c.id] = tnData.reduce((s,d) => s + (d.custConsumption[c.id]||0), 0); });
+  const totalAllCaptive = Object.values(totalActCons).reduce((s,v) => s+v, 0);
+  const pct51 = totalActGen > 0 ? totalAllCaptive / totalActGen * 100 : 0;
+  const eq26ok = totalCustEq >= 26;
+  const cons51ok = pct51 >= 51;
+
+  const lines = [];
+  const L = s => lines.push(s);
+  const N = () => lines.push('');
+  const D = () => lines.push('─'.repeat(70));
+
+  L('ANNUAL GROUP CAPTIVE COMPLIANCE CERTIFICATE');
+  L('Under CERC Captive Rules 2001 and TNERC T.O. No. 7 of 2022');
+  D(); N();
+  L('To,');
+  L('The Chief Engineer (OA)');
+  L('Tamil Nadu Power Distribution Corporation Limited (TNPDCL)');
+  L('144, Anna Salai, Chennai — 600 002'); N();
+  L('Sub: Annual compliance certificate for Group Captive CPP status — ' + fy); N();
+  L('Sir / Madam,'); N();
+  L('We hereby certify that the following Group Captive Generating Plant has maintained all conditions prescribed under CERC Captive Rules 2001 and TNERC T.O. No. 7 of 2022 for the financial year ' + fy + ':');
+  N(); D(); N();
+  L('PART I — GENERATING PLANT DETAILS');
+  D();
+  L('SPV / Generating Company Name    : ' + spv);
+  L('CIN / Registration Number        : ' + cin);
+  L('Plant Location                   : ' + loc);
+  L('SLDC Registration                : ' + sldc);
+  L('Date of Commissioning (COD)      : ' + cod);
+  L('Installed Capacity               : ' + gv('ac') + ' MW AC / ' + (gv('ac')*gv('dac')).toFixed(2) + ' MW DC');
+  L('DC Capacity                      : ' + dc_kWp.toLocaleString('en-IN') + ' kWp');
+  L('Evacuation Voltage               : 110 kV (TNERC transmission loss = NIL)');
+  L('Project type                     : Ground-Mounted Solar, Group Captive CPP'); N();
+  L('PART II — ANNUAL GENERATION DATA');
+  D();
+  L('Projected annual net generation          : ' + projAnn + ' MU');
+  L('Actual annual net generation (metered)   : ' + (totalActGen > 0 ? totalActGen.toFixed(3) : '[To be filled from SLDC meter]') + ' MU');
+  N();
+  L('Month-wise actual generation (MU):');
+  TN_MONTHS.forEach((m, i) => {
+    const g = tnData[i].gen || 0;
+    L('  ' + m.padEnd(12) + ': ' + (g > 0 ? g.toFixed(3) + ' MU' : '[Actual meter reading required]'));
+  });
+  N(); D(); N();
+  L('PART III — EQUITY STRUCTURE OF SPV (Rule 1: Collective ≥26%)');
+  D();
+  L('Shareholder                      Equity %     Category');
+  L('─'.repeat(55));
+  customers.forEach(c => {
+    L(c.name.padEnd(32) + c.equityPct.toFixed(1).padStart(8) + '%    Captive Consumer');
+  });
+  L('Developer / Promoter'.padEnd(32) + devEq.toFixed(1).padStart(8) + '%    Developer');
+  L('─'.repeat(55));
+  L('Total captive consumers (collective)'.padEnd(32) + totalCustEq.toFixed(1).padStart(8) + '%');
+  L('Total'.padEnd(32) + '100.0'.padStart(8) + '%');
+  N();
+  L('Rule 1 compliance — Collective equity ≥26% : ' + totalCustEq.toFixed(1) + '% — ' + (eq26ok ? 'COMPLIANT ✓' : 'NON-COMPLIANT ✗'));
+  N(); D(); N();
+  L('PART IV — CAPTIVE CONSUMPTION DATA (Rule 2: ≥51% and Rule 3: Proportional)');
+  D();
+  L('Customer'.padEnd(25) + 'Equity%'.padStart(8) + 'Allotment MU'.padStart(14) + 'Actual MU'.padStart(12) + 'Ratio%'.padStart(9) + 'Status'.padStart(12));
+  L('─'.repeat(80));
+  customers.forEach(c => {
+    const allot = totalActGen > 0 ? totalActGen * c.equityPct / 100 : parseFloat(projAnn) * c.equityPct / 100;
+    const actual = totalActCons[c.id] || 0;
+    const ratio = allot > 0 ? actual / allot * 100 : 0;
+    const propOk = actual > 0 && ratio >= 90 && ratio <= 110;
+    L(c.name.substring(0,24).padEnd(25) + c.equityPct.toFixed(1).padStart(8) + allot.toFixed(3).padStart(14) + (actual > 0 ? actual.toFixed(3) : '[Required]').padStart(12) + (actual > 0 ? ratio.toFixed(1) + '%' : '—').padStart(9) + (actual > 0 ? (propOk ? 'Compliant' : 'Review') : 'Pending').padStart(12));
+  });
+  L('─'.repeat(80));
+  L('Total captive'.padEnd(25) + totalCustEq.toFixed(1).padStart(8) + (totalActGen > 0 ? (totalActGen*totalCustEq/100) : '—').toString().substring(0,8).padStart(14) + (totalAllCaptive > 0 ? totalAllCaptive.toFixed(3) : '[Required]').padStart(12) + (totalActGen > 0 ? pct51.toFixed(1) + '%' : '—').padStart(9) + (totalActGen > 0 ? (cons51ok ? 'Compliant' : 'Review') : 'Pending').padStart(12));
+  N();
+  L('Rule 2 compliance — 51% captive consumption   : ' + (totalActGen > 0 ? pct51.toFixed(1) + '% — ' + (cons51ok ? 'COMPLIANT ✓' : 'NON-COMPLIANT ✗') : 'Actual data required'));
+  L('Rule 3 compliance — Proportional consumption  : Per customer table above (tolerance ±10%)');
+  N(); D(); N();
+  L('PART V — CERTIFICATION');
+  D();
+  L('We hereby declare that:');
+  L('1. All captive consumers collectively hold ' + totalCustEq.toFixed(1) + '% equity in ' + spv + ', which is ' + (eq26ok ? 'above' : 'below') + ' the minimum 26% required.');
+  L('2. The generating plant has supplied power to captive consumers in proportion to their respective equity holdings, within ±10% tolerance.');
+  L('3. CSS and Additional Surcharge exemption has been claimed correctly under TNERC T.O. No. 7 of 2022.');
+  L('4. All SLDC scheduling requirements have been complied with during ' + fy + '.'); N();
+  L('Overall Group Captive CPP compliance status for ' + fy + ':');
+  L('  Rule 1 (Equity ≥26%):           ' + (eq26ok ? 'COMPLIANT ✓' : 'NON-COMPLIANT ✗'));
+  L('  Rule 2 (51% consumption):        ' + (totalActGen > 0 ? (cons51ok ? 'COMPLIANT ✓' : 'NON-COMPLIANT ✗') : 'Data required'));
+  L('  Rule 3 (Proportional):           Per customer table above');
+  N(); D(); N();
+  L('Authorised Signatory — Generating Company (' + spv + ')');
+  N();
+  L('Name    : ___________________________________');
+  L('Designation: ________________________________');
+  L('Date    : ___________________________________');
+  L('Seal    : ___________________________________'); N();
+  L('Authorised Signatory — Each Captive Consumer');
+  N();
+  customers.forEach(c => {
+    L('Name (' + c.name + '): ___________________________  Date: __________  Seal: _______');
+  });
+  N(); D();
+  L('This certificate is generated by EIL Solar Ground v6.3 App — ' + new Date().toLocaleDateString('en-IN'));
+  L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
+
+  const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = spv.replace(/[^a-zA-Z0-9]/g,'_') + '_TNERC_Compliance_' + fy.replace(/\s/g,'_') + '.txt';
+  a.click();
+
+  const st = document.getElementById('tn-cert-status');
+  if(st){ st.style.display = 'block'; st.textContent = 'Certificate downloaded. Open in Word, add company letterhead and authorised signatures before submission to TNPDCL.'; }
+  setTimeout(() => { if(st) st.style.display = 'none'; }, 8000);
+}
+
+// Call buildTnercEquityCheck and buildTnercGrid whenever customers change
+const _origRenderCustomers = typeof renderCustomers === 'function' ? renderCustomers : null;
+function refreshTnerc(){
+  buildTnercEquityCheck();
+  if(document.getElementById('tn-grid-body')) buildTnercGrid();
+}
 
 
 </script>
