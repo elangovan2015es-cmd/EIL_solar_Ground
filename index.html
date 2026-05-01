@@ -310,7 +310,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.5 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v6.6 | 01-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -357,7 +357,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.5</div>
+    <div class="drw-t">EIL Solar Ground v6.6</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -404,8 +404,12 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div id="compliance-dash"></div>
   </div>
   <div class="card">
-    <div class="chdr">Net realisation vs OA charge</div>
-    <div style="position:relative;height:180px"><canvas id="sChart"></canvas></div>
+    <div class="chdr gn">What you earn per kWh — Year 1</div>
+    <div id="realisation-explain"></div>
+    <div class="dv"></div>
+    <div class="chdr" style="margin-top:4px">How selling price changes if OA charge changes</div>
+    <div style="position:relative;height:160px"><canvas id="sChart"></canvas></div>
+    <div class="fhint" style="text-align:center;margin-top:6px">Each bar = your net earning per kWh at that OA charge level. Current OA charge highlighted. Green = good margin, amber = tight, red = poor.</div>
   </div>
 </div>
 
@@ -525,19 +529,16 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="tw">
       <table class="vt" id="lt">
         <thead><tr><th>Inject kV</th><th>Receive kV</th><th>Trans %</th><th>Distrib %</th><th>Total %</th><th>Active</th></tr></thead>
-        <tbody>
-          <tr data-i="110" data-r="11"><td>110</td><td>11</td><td>0.00</td><td>1.52</td><td>1.52</td><td></td></tr>
-          <tr data-i="110" data-r="33"><td>110</td><td>33</td><td>0.00</td><td>0.50</td><td>0.50</td><td></td></tr>
-          <tr data-i="110" data-r="110"><td>110</td><td>110</td><td>0.00</td><td>0.00</td><td>0.00</td><td></td></tr>
-          <tr data-i="33" data-r="11"><td>33</td><td>11</td><td>3.91</td><td>1.52</td><td>5.43</td><td></td></tr>
-          <tr data-i="33" data-r="33"><td>33</td><td>33</td><td>3.91</td><td>0.00</td><td>3.91</td><td></td></tr>
-          <tr data-i="33" data-r="110"><td>33</td><td>110</td><td>1.50</td><td>0.00</td><td>1.50</td><td></td></tr>
-          <tr data-i="230" data-r="11"><td>230</td><td>11</td><td>0.00</td><td>1.52</td><td>1.52</td><td></td></tr>
-          <tr data-i="230" data-r="33"><td>230</td><td>33</td><td>0.00</td><td>0.50</td><td>0.50</td><td></td></tr>
+        <tbody id="lt-body">
+          <!-- Rendered by JS — all cells editable -->
         </tbody>
       </table>
     </div>
-    <div class="alert info" style="margin-bottom:0;font-size:12px">For this project at 110 kV injection: transmission loss = NIL. Distribution loss depends on buyer receiving voltage (1.52% to 11 kV, 0.50% to 33 kV). The TNERC grid loss is one component inside the total technical loss shown above.</div>
+    <div class="alert info" style="margin-bottom:10px;font-size:12px">For this project at 110 kV injection: transmission loss = NIL. Distribution loss to 11 kV buyer = 1.52%. <strong>All values in the table are editable</strong> — click any Trans% or Distrib% value to update it when TNERC issues a new Tariff Order. Total% auto-recalculates.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="resetTnercTable()" style="background:var(--n5);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8635; Reset to T.O.7/2022 defaults</button>
+      <button onclick="saveTnercTable()" style="background:var(--g6);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save to browser</button>
+    </div>
   </div>
 </div>
 
@@ -846,7 +847,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>Group Captive CPP &mdash; Key parameters</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
     <div class="cust-grid">
       <div class="cust-fld"><label>TNERC Tariff Order reference</label><input type="text" id="rg-to-ref" value="T.O. No. 7 of 2022"></div>
-      <div class="cust-fld"><label>OA charge all-in (Rs/kWh)</label><input type="text" id="rg-oa" value="1.33"></div>
+      <div class="cust-fld"><label>OA charge all-in (Rs/kWh)</label><input type="text" id="rg-oa" value="1.33" oninput="syncRegToModel('oa',this.value)"></div>
       <div class="cust-fld"><label>CSS status</label><input type="text" id="rg-css" value="ZERO — Waived for Group Captive CPP"></div>
       <div class="cust-fld"><label>Additional Surcharge</label><input type="text" id="rg-as" value="ZERO — Waived for Group Captive CPP"></div>
       <div class="cust-fld"><label>Minimum collective equity (%)</label><input type="text" id="rg-eq" value="26% collective of all captive customers"></div>
@@ -863,11 +864,11 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>TANGEDCO tariff &mdash; current rates</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
     <div class="cust-grid">
       <div class="cust-fld"><label>Effective date</label><input type="text" id="rg-tdate" value="01-07-2023"></div>
-      <div class="cust-fld"><label>HT-III Commercial (Rs/kWh)</label><input type="text" id="rg-t1" value="9.76"></div>
+      <div class="cust-fld"><label>HT-III Commercial (Rs/kWh)</label><input type="text" id="rg-t1" value="9.76" oninput="syncRegToModel('tariff',this.value)"></div>
       <div class="cust-fld"><label>HT-I Industry (Rs/kWh)</label><input type="text" id="rg-t2" value="7.74"></div>
       <div class="cust-fld"><label>HT-IIA General (Rs/kWh)</label><input type="text" id="rg-t3" value="8.20"></div>
       <div class="cust-fld"><label>HT-II LT Industry (Rs/kWh)</label><input type="text" id="rg-t4" value="7.10"></div>
-      <div class="cust-fld"><label>Peak hour surcharge (%)</label><input type="text" id="rg-peak" value="25%"></div>
+      <div class="cust-fld"><label>Peak hour surcharge (%)</label><input type="text" id="rg-peak" value="25%" oninput="syncRegToModel('surcharge',parseFloat(this.value))"></div>
       <div class="cust-fld"><label>Wheeling charge (Rs/kWh)</label><input type="text" id="rg-wh" value="1.00"></div>
       <div class="cust-fld"><label>Scheduling charge (Rs/day)</label><input type="text" id="rg-sch" value="172"></div>
       <div class="cust-fld"><label>Cross Subsidy HT-III (Rs/kWh)</label><input type="text" id="rg-xs" value="2.41 (waived for Group Captive CPP)"></div>
@@ -2561,7 +2562,7 @@ function generateTnercCert(){
     L('Name (' + c.name + '): ___________________________  Date: __________  Seal: _______');
   });
   N(); D();
-  L('This certificate is generated by EIL Solar Ground v6.5 App — ' + new Date().toLocaleDateString('en-IN'));
+  L('This certificate is generated by EIL Solar Ground v6.6 App — ' + new Date().toLocaleDateString('en-IN'));
   L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
 
   const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
@@ -3646,6 +3647,270 @@ function exportDailyToXLSX(){
 function fetchActualGen(){
   // Route to generic API handler
   fetchGenericAPI();
+}
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════
+   v6.6 ADDITIONS
+   1. TNERC loss table — editable, save/load, reset
+   2. Regulatory → model sync (rg changes propagate to financials)
+   3. Dashboard realisation explanation card
+   4. TNERC table render on init
+══════════════════════════════════════════════════════════════════ */
+
+/* ── TNERC LOSS TABLE DATA (editable, saved in browser) ─────────── */
+const TNERC_DEFAULT = [
+  {inj:'110',recv:'11', trans:0.00, distrib:1.52},
+  {inj:'110',recv:'33', trans:0.00, distrib:0.50},
+  {inj:'110',recv:'110',trans:0.00, distrib:0.00},
+  {inj:'33', recv:'11', trans:3.91, distrib:1.52},
+  {inj:'33', recv:'33', trans:3.91, distrib:0.00},
+  {inj:'33', recv:'110',trans:1.50, distrib:0.00},
+  {inj:'230',recv:'11', trans:0.00, distrib:1.52},
+  {inj:'230',recv:'33', trans:0.00, distrib:0.50},
+];
+
+let tnercTableData = JSON.parse(JSON.stringify(TNERC_DEFAULT)); // deep copy
+
+function renderTnercTable(){
+  const tbody = document.getElementById('lt-body');
+  if(!tbody) return;
+  const injEl = document.getElementById('i-inj');
+  const recvEl = document.getElementById('i-recv');
+  const curInj = injEl ? injEl.value : '110';
+  const curRecv = recvEl ? recvEl.value : '11';
+
+  tbody.innerHTML = tnercTableData.map((row, i) => {
+    const isActive = row.inj===curInj && row.recv===curRecv;
+    const total = (row.trans + row.distrib).toFixed(2);
+    const bg = isActive ? 'background:var(--g1)' : '';
+    const fw = isActive ? 'font-weight:700;color:var(--g6)' : '';
+
+    const transInput = `<input type="number" value="${row.trans.toFixed(2)}" step="0.01" min="0" max="10"
+      oninput="updTnercCell(${i},'trans',this.value)"
+      style="width:64px;font-size:12px;padding:4px 6px;border:1.5px solid var(--n3);border-radius:5px;
+      text-align:right;font-family:'JetBrains Mono',monospace;background:${isActive?'#fff':'var(--n1)'}">`;
+
+    const distribInput = `<input type="number" value="${row.distrib.toFixed(2)}" step="0.01" min="0" max="10"
+      oninput="updTnercCell(${i},'distrib',this.value)"
+      style="width:64px;font-size:12px;padding:4px 6px;border:1.5px solid var(--n3);border-radius:5px;
+      text-align:right;font-family:'JetBrains Mono',monospace;background:${isActive?'#fff':'var(--n1)'}">`;
+
+    return `<tr data-i="${row.inj}" data-r="${row.recv}" style="${bg}">
+      <td style="padding:7px 8px;${fw}">${row.inj}</td>
+      <td style="padding:7px 8px;text-align:center;${fw}">${row.recv}</td>
+      <td style="padding:4px 6px;text-align:center">${transInput}</td>
+      <td style="padding:4px 6px;text-align:center">${distribInput}</td>
+      <td style="padding:7px 8px;text-align:center;font-family:'JetBrains Mono',monospace;${fw}" id="tt-total-${i}">${total}</td>
+      <td style="padding:7px 8px;text-align:center;font-size:13px">${isActive?'&#10003; Active':''}</td>
+    </tr>`;
+  }).join('');
+
+  // Sync LT object used by updLoss()
+  syncLTfromTable();
+}
+
+function updTnercCell(rowIdx, field, val){
+  const v = parseFloat(val) || 0;
+  tnercTableData[rowIdx][field] = v;
+  const total = (tnercTableData[rowIdx].trans + tnercTableData[rowIdx].distrib).toFixed(2);
+  const totalEl = document.getElementById('tt-total-'+rowIdx);
+  if(totalEl) totalEl.textContent = total;
+  syncLTfromTable();
+  updLoss();
+  calc();
+}
+
+function syncLTfromTable(){
+  // Rebuild the LT lookup object used by updLoss()
+  tnercTableData.forEach(row => {
+    const key = row.inj+'-'+row.recv;
+    // Update the global LT object
+    if(typeof LT !== 'undefined') LT[key] = parseFloat((row.trans+row.distrib).toFixed(2));
+  });
+}
+
+function resetTnercTable(){
+  tnercTableData = JSON.parse(JSON.stringify(TNERC_DEFAULT));
+  renderTnercTable();
+  updLoss();
+  calc();
+  try{localStorage.removeItem('eil_tnerc_table');}catch(e){}
+}
+
+function saveTnercTable(){
+  try{
+    localStorage.setItem('eil_tnerc_table', JSON.stringify(tnercTableData));
+    // Visual feedback
+    const btns = document.querySelectorAll('button');
+    btns.forEach(b=>{if(b.textContent.includes('Save to browser'))b.textContent='✓ Saved!';});
+    setTimeout(()=>{btns.forEach(b=>{if(b.textContent==='✓ Saved!')b.textContent='💾 Save to browser';});},2000);
+  }catch(e){alert('Could not save: '+e.message);}
+}
+
+function loadTnercTable(){
+  try{
+    const raw = localStorage.getItem('eil_tnerc_table');
+    if(raw) tnercTableData = JSON.parse(raw);
+  }catch(e){}
+  renderTnercTable();
+}
+
+/* ── OVERRIDE updLoss to use editable table data ────────────────── */
+// Patch updLoss to use tnercTableData instead of hardcoded LT object
+const _origUpdLoss = updLoss;
+function updLoss(){
+  // Rebuild LT from editable table before calling original updLoss
+  syncLTfromTable();
+  const inj = document.getElementById('i-inj') ? document.getElementById('i-inj').value : '110';
+  const rcv = document.getElementById('i-recv') ? document.getElementById('i-recv').value : '11';
+  const row = tnercTableData.find(r=>r.inj===inj&&r.recv===rcv);
+  const auto = row ? parseFloat((row.trans+row.distrib).toFixed(2)) : 1.52;
+  const ov = parseFloat(document.getElementById('i-lov') ? document.getElementById('i-lov').value : 0)||0;
+  const hl = parseFloat(document.getElementById('i-htl') ? document.getElementById('i-htl').value : 0.5)||0;
+  const app = ov>0?ov+hl:auto+hl;
+
+  const laEl = document.getElementById('v-la');
+  const lappEl = document.getElementById('v-lapp');
+  if(laEl) laEl.textContent = auto.toFixed(2)+'%';
+  if(lappEl) lappEl.textContent = app.toFixed(2)+'%';
+
+  // Re-render table to show active row
+  renderTnercTable();
+
+  // Sync tloss components
+  if(typeof PM!=='undefined'){
+    PM['tloss_trans'].v = row ? row.trans : 0;
+    PM['tloss_dist'].v = row ? row.distrib : 1.52;
+    const tEl=document.getElementById('v-tloss_trans');
+    const dEl=document.getElementById('v-tloss_dist');
+    if(tEl) tEl.textContent=(row?row.trans:0).toFixed(1);
+    if(dEl) dEl.textContent=(row?row.distrib:1.52).toFixed(1);
+    if(typeof syncTloss==='function') syncTloss();
+  }
+}
+
+/* ── REGULATORY → MODEL SYNC ─────────────────────────────────────── */
+function syncRegToModel(field, rawVal){
+  const val = parseFloat(rawVal);
+  if(isNaN(val)) return;
+
+  if(field==='oa'){
+    // Update OA charge stepper
+    if(typeof PM!=='undefined' && PM['oa']){
+      PM['oa'].v = val;
+      const el = document.getElementById('v-oa');
+      if(el) el.textContent = val.toFixed(2);
+    }
+    // Also update default OA in customer cards
+    customers.forEach(c=>{ if(c.oa===1.33||c.oa===PM['oa']?.v) c.oa=val; });
+  }
+
+  if(field==='tariff'){
+    // Update tariff stepper with HT-III Commercial rate from regulatory page
+    if(typeof PM!=='undefined' && PM['tariff']){
+      PM['tariff'].v = val;
+      const el = document.getElementById('v-tariff');
+      if(el) el.textContent = val.toFixed(2);
+      // Also update first option in buyer select
+      const sel = document.getElementById('i-buyer');
+      if(sel && sel.options[0]) sel.options[0].value = val;
+    }
+  }
+
+  if(field==='surcharge'){
+    // Update surcharge stepper
+    const pct = val > 1 ? val : val*100; // handle both 25 and 0.25
+    if(typeof PM!=='undefined' && PM['surcharge']){
+      PM['surcharge'].v = pct > 1 ? pct : pct*100;
+      const el = document.getElementById('v-surcharge');
+      if(el) el.textContent = PM['surcharge'].v.toFixed(0);
+    }
+  }
+
+  // Recalculate after any regulatory change
+  if(typeof calc==='function') calc();
+  if(typeof buildTnercEquityCheck==='function') buildTnercEquityCheck();
+}
+
+/* Also wire the distribution loss field in regulatory to tloss_dist */
+function syncRegLossToModel(){
+  const dlossEl = document.getElementById('rg-dloss');
+  if(!dlossEl) return;
+  const val = parseFloat(dlossEl.value);
+  if(!isNaN(val) && typeof PM!=='undefined' && PM['tloss_dist']){
+    PM['tloss_dist'].v = val;
+    const el = document.getElementById('v-tloss_dist');
+    if(el) el.textContent = val.toFixed(1);
+    if(typeof syncTloss==='function') syncTloss();
+    if(typeof calc==='function') calc();
+  }
+}
+
+// Hook rg-dloss field
+document.addEventListener('DOMContentLoaded', ()=>{
+  const dlossEl = document.getElementById('rg-dloss');
+  if(dlossEl) dlossEl.addEventListener('input', syncRegLossToModel);
+});
+
+/* ── DASHBOARD REALISATION EXPLANATION ──────────────────────────── */
+function buildRealisationCard(){
+  const el = document.getElementById('realisation-explain');
+  if(!el) return;
+
+  const tariff = typeof PM!=='undefined' ? PM['tariff'].v : 9.76;
+  const disc = typeof PM!=='undefined' ? PM['disc'].v/100 : 0.90;
+  const peak = typeof PM!=='undefined' ? PM['peak'].v/100 : 0.15;
+  const sur = typeof PM!=='undefined' ? PM['surcharge'].v/100 : 0.25;
+  const oa = typeof PM!=='undefined' ? PM['oa'].v : 1.33;
+  const wt = tariff*(1+peak*sur);
+  const sp = wt*disc;
+  const nr = sp-oa;
+  const buyerSave = tariff-sp-oa;
+
+  el.innerHTML = `
+    <div class="sr" style="border-color:var(--n3)">
+      <span class="sk">&#128308; What TNEB charges your customer directly (weighted with peak surcharge)</span>
+      <span class="sv rd">Rs ${wt.toFixed(4)}/kWh</span>
+    </div>
+    <div class="sr" style="border-color:var(--n3)">
+      <span class="sk">&#128994; What you sell solar power to your customer at (${Math.round(disc*100)}% of TNEB weighted)</span>
+      <span class="sv gn">Rs ${sp.toFixed(4)}/kWh</span>
+    </div>
+    <div class="sr" style="border-color:var(--n3)">
+      <span class="sk">&#128997; OA charge you pay TNEB for using their grid to wheel your power (wheeling + transmission + SLDC)</span>
+      <span class="sv rd">&minus;&nbsp;Rs ${oa.toFixed(2)}/kWh</span>
+    </div>
+    <div class="sr" style="border-color:var(--g5);background:var(--g0);padding:12px 0;border-radius:8px">
+      <span class="sk" style="font-weight:700;color:var(--g6);padding-left:8px">&#9989; Net realisation — what you actually receive per kWh (selling price minus OA charge)</span>
+      <span class="sv gn" style="font-size:15px;padding-right:8px">Rs ${nr.toFixed(4)}/kWh</span>
+    </div>
+    <div class="sr" style="border-color:var(--n3)">
+      <span class="sk">&#128177; Your customer saves vs direct TNEB bill (TNEB weighted minus your selling price minus OA charge)</span>
+      <span class="sv am">Rs ${buyerSave.toFixed(4)}/kWh saved</span>
+    </div>
+    <div style="font-size:11.5px;color:var(--n5);margin-top:8px;padding:8px 10px;background:var(--n1);border-radius:7px;line-height:1.6">
+      <strong>In plain words:</strong> You earn Rs&nbsp;${nr.toFixed(2)} for every unit of solar power delivered. The chart below shows how your earnings change if TNEB revises the OA charge upwards in future years.
+    </div>`;
+}
+
+/* ── PATCH calc() TO UPDATE REALISATION CARD ─────────────────────── */
+const _origCalc = calc;
+function calc(){
+  _origCalc();
+  buildRealisationCard();
+  // Update TNERC active row after recalc
+  renderTnercTable();
+}
+
+/* ── INITIALISATION ──────────────────────────────────────────────── */
+// Called after main init
+function initV66(){
+  loadTnercTable();
+  buildRealisationCard();
 }
 
 
