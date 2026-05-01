@@ -14,6 +14,7 @@
 <link rel="icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 :root{
   --g7:#085041;--g6:#0F6E56;--g5:#1D9E75;--g1:#E1F5EE;--g0:#F0FAF6;
@@ -309,7 +310,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.3 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v6.4 | 01-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -356,7 +357,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.3</div>
+    <div class="drw-t">EIL Solar Ground v6.4</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -612,6 +613,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   </div>
   <div class="card">
     <div class="chdr">Debt service schedule (Rs Crores)</div>
+    <button onclick="exportDebtToXLSX()" style="background:var(--g6);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:10px">&#128202; Export 25-Year Debt Report to Excel</button>
     <div class="tw"><table><thead><tr><th>Year</th><th>Opening</th><th>Interest</th><th>Principal</th><th>Closing</th><th>DSCR</th></tr></thead><tbody id="dtb"></tbody></table></div>
   </div>
 </div>
@@ -627,6 +629,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   <div class="card"><div class="chdr">Year 1 income statement</div><div id="y1s"></div></div>
   <div class="card">
     <div class="chdr">25-year summary (Rs Crores)</div>
+    <button onclick="exportCFtoXLSX()" style="background:var(--g6);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-bottom:10px">&#128202; Export 25-Year Cash Flow to Excel</button>
     <div class="tw"><table><thead><tr><th>Yr</th><th>MU</th><th>SP Rs</th><th>OA Rs</th><th>NR Rs</th><th>NRev</th><th>EBITDA</th><th>Int</th><th>Prin</th><th>Tax</th><th>FCF</th><th>Cum CF</th><th></th></tr></thead><tbody id="cft"></tbody></table></div>
   </div>
 </div>
@@ -654,6 +657,26 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     </div>
   </div>
   <div class="card">
+    <div class="chdr or">Fetch actual generation &amp; export</div>
+    <div class="fld">
+      <label class="flbl">Data source URL <span>(SLDC portal / inverter monitoring REST API)</span></label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <input type="text" id="avp-url" placeholder="https://api.yoursystem.com/generation?plant=xyz&amp;year=2026" style="flex:1;min-width:180px;font-size:12.5px;padding:9px 11px;border:2px solid var(--n3);border-radius:8px">
+        <button onclick="fetchActualGen()" style="background:var(--b6);color:#fff;border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0">&#8595; Fetch</button>
+      </div>
+      <div class="fhint" style="margin-top:6px">Expected JSON: <code style="background:var(--n1);padding:2px 5px;border-radius:3px;font-size:11px">{"generation":[{"month":"April","mu":3.82},...]}</code> | CSV: columns month,mu | If CORS blocks the URL, paste JSON below instead.</div>
+    </div>
+    <div class="fld">
+      <label class="flbl">Paste JSON data manually <span>(use if URL fetch is blocked)</span></label>
+      <textarea id="avp-paste" rows="3" placeholder='{"generation":[{"month":"April","mu":3.82},{"month":"May","mu":4.10}]}' style="width:100%;font-size:12px;padding:8px 11px;border:2px solid var(--n3);border-radius:8px;font-family:monospace;resize:vertical"></textarea>
+      <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
+        <button onclick="parseAvpJson()" style="background:var(--g5);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#10003; Load JSON Data</button>
+        <button onclick="exportAvpToXLSX()" style="background:var(--g6);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128202; Export Actual vs Projected to Excel</button>
+      </div>
+      <div id="avp-fetch-status" style="display:none;margin-top:8px;font-size:12.5px;padding:8px 12px;border-radius:7px;background:var(--g1);color:var(--g6);font-weight:500"></div>
+    </div>
+  </div>
+  <div class="card">
     <div class="chdr or">Monthly actual data entry</div>
     <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:6px;padding:6px 0;border-bottom:1px solid var(--n3);margin-bottom:4px">
       <div style="font-size:10px;font-weight:600;color:var(--n5);text-transform:uppercase">Month</div>
@@ -675,250 +698,68 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- REGULATORY -->
 <div id="s-rg" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">Group captive &amp; 110 kV evacuation</div></div></div>
+  <div class="sec-h"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">All fields editable &mdash; update when TNERC issues new orders</div></div></div>
+  <div class="alert info">Every field is editable. Update whenever TNERC issues a new Tariff Order or OA charge is revised. Click Save to store in your browser for next session.</div>
   <div class="card">
-    <div class="chdr">Group captive CPP &mdash; Tamil Nadu</div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">CSS &mdash; ZERO (waived)</div><div class="rs">Fully waived for Group Captive CPP under TNERC T.O. 7 of 2022. Primary cost advantage over commercial OA.</div></div></div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">Additional Surcharge &mdash; ZERO</div><div class="rs">Waived. PSA must be signed and registered before commissioning to preserve this exemption.</div></div></div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">OA charge all-in Rs 1.33/kWh</div><div class="rs">Includes wheeling, transmission, SLDC and deemed losses. Monetary charge separate from physical unit deduction.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">26% equity &mdash; each buyer must hold</div><div class="rs">Minimum 26% equity in generating company per buyer (CERC Captive Rules 2001). Non-compliance reinstates CSS immediately.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">51% captive consumption</div><div class="rs">Minimum 51% of annual generation must be consumed by captive users. Monitor monthly. Shortfall in any year risks CSS reinstatement.</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">Proportional consumption</div><div class="rs">Each member consumes in proportion to equity stake. Annual compliance certificate required.</div></div></div>
-  </div>
-  <div class="card">
-    <div class="chdr">110 kV evacuation &mdash; this project</div>
-    <div class="ri"><div class="rd g"></div><div><div class="rt">Transmission loss = NIL at 110 kV</div><div class="rs">110 kV injection: TNERC deemed transmission loss is ZERO. Only distribution loss (1.52% to 11 kV buyer) applies. Significantly better than 33 kV injection (3.91% transmission loss).</div></div></div>
-    <div class="ri"><div class="rd a"></div><div><div class="rt">TANTRANSCO 110 kV bay allocation</div><div class="rs">110 kV feeder availability confirmed with TANTRANSCO before DPR submission. Budget 12 to 18 months for full approval.</div></div></div>
-    <div class="ri"><div class="rd r"></div><div><div class="rt">Grid congestion 10 AM to 2 PM</div><div class="rs">110 kV feeders in TN increasingly congested during solar peak. SLDC may curtail. Battery shifts generation to 6 to 10 PM low-congestion window.</div></div></div>
-    <div class="ri"><div class="rd r"></div><div><div class="rt">OA regulation risk &mdash; every 3 years</div><div class="rs">TNERC reviews OA charges each MYT order (~every 3 years). OA may increase. Model uses 3%/yr escalation as buffer. Watch TNERC filings.</div></div></div>
-  </div>
-  <div class="card">
-    <div class="chdr">Evacuation pathway &mdash; 110 kV</div>
-    <div class="ev-fl">
-      <div class="ev-nd" style="background:var(--g1);color:var(--g6)">Solar generation (0.69 kV inverter output)</div>
-      <div class="ev-ar">&#8595;</div>
-      <div class="ev-nd" style="background:var(--b1);color:var(--b6)">Step-up to 11 kV plant bus</div>
-      <div class="ev-ar">&#8595;</div>
-      <div class="ev-nd" style="background:var(--b1);color:var(--b6)">Step-up to 110 kV &mdash; injection into TNEB grid</div>
-      <div class="ev-ar">&#8595; Transmission loss = NIL at 110 kV</div>
-      <div class="ev-nd" style="background:var(--a1);color:var(--a6)">TANTRANSCO 110 kV grid</div>
-      <div class="ev-ar">&#8595;</div>
-      <div class="ev-nd" style="background:var(--a1);color:var(--a6)">SLDC injection metering &mdash; settlement boundary</div>
-      <div class="ev-ar">&#8595; Distribution loss 1.52% (to 11 kV buyer)</div>
-      <div class="ev-nd" style="background:#F0F0F0;color:var(--n7)">Buyer HT meter (11 kV receiving)</div>
+    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>Group Captive CPP &mdash; Key parameters</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>TNERC Tariff Order reference</label><input type="text" id="rg-to-ref" value="T.O. No. 7 of 2022"></div>
+      <div class="cust-fld"><label>OA charge all-in (Rs/kWh)</label><input type="text" id="rg-oa" value="1.33"></div>
+      <div class="cust-fld"><label>CSS status</label><input type="text" id="rg-css" value="ZERO — Waived for Group Captive CPP"></div>
+      <div class="cust-fld"><label>Additional Surcharge</label><input type="text" id="rg-as" value="ZERO — Waived for Group Captive CPP"></div>
+      <div class="cust-fld"><label>Minimum collective equity (%)</label><input type="text" id="rg-eq" value="26% collective of all captive customers"></div>
+      <div class="cust-fld"><label>Minimum captive consumption (%)</label><input type="text" id="rg-cc" value="51% of annual net generation"></div>
+      <div class="cust-fld"><label>Proportional tolerance</label><input type="text" id="rg-tol" value="±10% of allotment per customer"></div>
+      <div class="cust-fld"><label>Next OA review expected</label><input type="text" id="rg-next" value="2025 (every ~3 years per MYT order)"></div>
+      <div class="cust-fld"><label>TNEB empanelment</label><input type="text" id="rg-emp" value="EIL Solar / Kaveri Power Solutions — TNEB empanelled"></div>
+      <div class="cust-fld"><label>Annual certificate authority</label><input type="text" id="rg-auth" value="TNPDCL — CE (OA), 144 Anna Salai, Chennai 600002"></div>
+      <div class="cust-fld"><label>Transmission loss at 110 kV inject</label><input type="text" id="rg-tloss" value="NIL — T.O. 7/2022 Table 5-12"></div>
+      <div class="cust-fld"><label>Distribution loss to 11 kV buyer</label><input type="text" id="rg-dloss" value="1.52% — T.O. 7/2022 Table 5-12"></div>
     </div>
   </div>
   <div class="card">
-    <div class="chdr">Project milestones &mdash; developer fills</div>
-    <div class="mc-card"><div class="mc-top"><div class="mc-ic">&#128205;</div><div class="mc-nm">TNEB evacuation DPR &amp; 110 kV REC approval</div></div><div class="mc-grid"><div class="mc-fld"><label>Target date</label><input type="text" placeholder="e.g. Jul 2025"></div><div class="mc-fld"><label>Duration (months)</label><input type="text" placeholder="12"></div></div></div>
-    <div class="mc-card"><div class="mc-top"><div class="mc-ic">&#128205;</div><div class="mc-nm">Land purchase &amp; conversion order</div></div><div class="mc-grid"><div class="mc-fld"><label>Target date</label><input type="text" placeholder="e.g. Sep 2025"></div><div class="mc-fld"><label>Duration (months)</label><input type="text" placeholder="15"></div></div></div>
-    <div class="mc-card"><div class="mc-top"><div class="mc-ic">&#128205;</div><div class="mc-nm">Group captive PSA signing &amp; TNERC OA approval</div></div><div class="mc-grid"><div class="mc-fld"><label>Target date</label><input type="text" placeholder="e.g. Oct 2025"></div><div class="mc-fld"><label>Duration (months)</label><input type="text" placeholder="5"></div></div></div>
-    <div class="mc-card"><div class="mc-top"><div class="mc-ic">&#128205;</div><div class="mc-nm">Financial closure &amp; EPC award</div></div><div class="mc-grid"><div class="mc-fld"><label>Target date</label><input type="text" placeholder="e.g. Jan 2026"></div><div class="mc-fld"><label>Duration (months)</label><input type="text" placeholder="3"></div></div></div>
-    <div class="mc-card"><div class="mc-top"><div class="mc-ic">&#128205;</div><div class="mc-nm">EPC construction &amp; BESS integration</div></div><div class="mc-grid"><div class="mc-fld"><label>Target date</label><input type="text" placeholder="e.g. Apr 2026"></div><div class="mc-fld"><label>Duration (months)</label><input type="text" placeholder="14"></div></div></div>
-    <div class="mc-card"><div class="mc-top"><div class="mc-ic">&#128205;</div><div class="mc-nm">Commissioning &amp; COD (first injection)</div></div><div class="mc-grid"><div class="mc-fld"><label>Target date</label><input type="text" placeholder="e.g. Jun 2027"></div><div class="mc-fld"><label>Duration (months)</label><input type="text" placeholder="2"></div></div></div>
+    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>TANGEDCO tariff &mdash; current rates</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>Effective date</label><input type="text" id="rg-tdate" value="01-07-2023"></div>
+      <div class="cust-fld"><label>HT-III Commercial (Rs/kWh)</label><input type="text" id="rg-t1" value="9.76"></div>
+      <div class="cust-fld"><label>HT-I Industry (Rs/kWh)</label><input type="text" id="rg-t2" value="7.74"></div>
+      <div class="cust-fld"><label>HT-IIA General (Rs/kWh)</label><input type="text" id="rg-t3" value="8.20"></div>
+      <div class="cust-fld"><label>HT-II LT Industry (Rs/kWh)</label><input type="text" id="rg-t4" value="7.10"></div>
+      <div class="cust-fld"><label>Peak hour surcharge (%)</label><input type="text" id="rg-peak" value="25%"></div>
+      <div class="cust-fld"><label>Wheeling charge (Rs/kWh)</label><input type="text" id="rg-wh" value="1.00"></div>
+      <div class="cust-fld"><label>Scheduling charge (Rs/day)</label><input type="text" id="rg-sch" value="172"></div>
+      <div class="cust-fld"><label>Cross Subsidy HT-III (Rs/kWh)</label><input type="text" id="rg-xs" value="2.41 (waived for Group Captive CPP)"></div>
+      <div class="cust-fld"><label>State transmission charge (Rs/MWh)</label><input type="text" id="rg-stc" value="223.57"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>110 kV evacuation parameters</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>Evacuation voltage</label><input type="text" id="rg-ev" value="110 kV EHT injection"></div>
+      <div class="cust-fld"><label>TNEB bay allocation status</label><input type="text" id="rg-bay" value="Pending application to TANTRANSCO"></div>
+      <div class="cust-fld"><label>HT line approval authority</label><input type="text" id="rg-hta" value="TANTRANSCO — SE (Projects)"></div>
+      <div class="cust-fld"><label>CEIG approval required</label><input type="text" id="rg-ceig" value="Yes — Chief Electrical Inspector, Govt of TN"></div>
+      <div class="cust-fld"><label>SLDC registration authority</label><input type="text" id="rg-sldc" value="Tamil Nadu SLDC, Saidapet, Chennai"></div>
+      <div class="cust-fld"><label>Grid congestion risk window</label><input type="text" id="rg-cong" value="10 AM to 2 PM solar peak hours"></div>
+      <div class="cust-fld"><label>Battery TNERC treatment</label><input type="text" id="rg-bess" value="Same-day charge/discharge = single OA transaction"></div>
+      <div class="cust-fld"><label>Last TNERC loss table update</label><input type="text" id="rg-lossdate" value="2022 — T.O. No. 7. Update when new order issued."></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>Project milestones &mdash; developer fills</span><button onclick="addMilestone()" style="background:var(--g5);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">+ Add</button></div>
+    <div id="ms-list"></div>
+  </div>
+  <div class="card">
+    <div class="chdr">Regulatory notes &mdash; freeform</div>
+    <textarea id="rg-notes" rows="5" style="width:100%;font-size:13px;padding:10px 12px;border:2px solid var(--n3);border-radius:8px;font-family:'Inter',sans-serif;resize:vertical;line-height:1.6" placeholder="Add project-specific regulatory notes, TNERC correspondence references, upcoming hearings...">OA charge Rs 1.33/kWh effective 01-04-2022 per TNERC MYT Order. Next review expected 2025.
+110 kV evacuation DPR to be filed with TANTRANSCO. Bay allocation pending.
+TNERC Group Captive OA approval to be filed post PSA signing.
+Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
+    <button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:8px;padding:10px 18px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:10px">&#128190; Save All to Browser</button>
+    <div id="rg-save-status" style="display:none;margin-top:8px;font-size:12.5px;padding:8px 12px;border-radius:7px;background:var(--g1);color:var(--g6);font-weight:600"></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════════
-     CUSTOMER SECTIONS
-════════════════════════════════════════════ -->
-
-<!-- CUSTOMER: MY INVESTMENT -->
-<div id="s-ci" class="sec cust-sec">
-  <div class="sec-h"><div class="sec-ic">&#128181;</div><div><div class="sec-ti">My Investment</div><div class="sec-su">Equity in generating company &amp; returns</div></div></div>
-  <div class="card">
-    <div class="chdr">Select your profile</div>
-    <div class="fld"><label class="flbl">Your name / company</label>
-      <select id="c-cust-sel" onchange="calcCustomer()"><option value="">-- Select customer --</option></select>
-    </div>
-  </div>
-  <div id="ci-content">
-    <div class="alert info">Select your customer profile above to see your investment analysis.</div>
-  </div>
-</div>
-
-<!-- CUSTOMER: MY SAVINGS -->
-<div id="s-cs" class="sec cust-sec">
-  <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">My Savings</div><div class="sec-su">Savings vs direct TNEB billing</div></div></div>
-  <div id="cs-content"><div class="alert info">Select your profile in My Investment first.</div></div>
-</div>
-
-<!-- CUSTOMER: COMPLIANCE -->
-<div id="s-cc" class="sec cust-sec">
-  <div class="sec-h"><div class="sec-ic">&#10004;</div><div><div class="sec-ti">Compliance Status</div><div class="sec-su">26% equity &amp; 51% consumption checks</div></div></div>
-  <div id="cc-content"><div class="alert info">Select your profile in My Investment first.</div></div>
-</div>
-
-<!-- CUSTOMER: ACTUAL vs PROJECTED -->
-<div id="s-ca" class="sec cust-sec">
-  <div class="sec-h"><div class="sec-ic">&#128201;</div><div><div class="sec-ti">My Actual vs Projected</div><div class="sec-su">Your monthly usage &amp; variance</div></div></div>
-  <div class="alert or">Enter your actual monthly consumption from TNEB bill to compare against projected allocation from the solar plant.</div>
-  <div class="card">
-    <div class="chdr or">Monthly consumption data</div>
-    <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:6px;padding:6px 0;border-bottom:1px solid var(--n3);margin-bottom:4px">
-      <div style="font-size:10px;font-weight:600;color:var(--n5);text-transform:uppercase">Month</div>
-      <div style="font-size:10px;font-weight:600;color:var(--n5);text-transform:uppercase;text-align:right">Projected (MU)</div>
-      <div style="font-size:10px;font-weight:600;color:var(--n5);text-transform:uppercase;text-align:right">Actual (MU)</div>
-      <div style="font-size:10px;font-weight:600;color:var(--n5);text-transform:uppercase;text-align:right">Compliance</div>
-    </div>
-    <div id="ca-rows"></div>
-  </div>
-  <div class="card"><div class="chdr">Year-to-date compliance</div><div id="ca-summary"></div></div>
-</div>
-
-
-<!-- PROJECT REPORT -->
-<div id="s-pr" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128194;</div><div><div class="sec-ti">Project Report</div><div class="sec-su">Answer questions below — DPR auto-generates per Krishnan TOC</div></div></div>
-  <div class="alert info">Fill the questions in each section. Tick optional sections to include or exclude. Click Generate to download the complete Detailed Project Report as a text file — open in Word or Google Docs to format and print. Tariff escalation is capped strictly at Year 5. No rosy projections beyond that.</div>
-
-  <div class="card">
-    <div class="chdr gn">1. Executive Summary inputs (mandatory)</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Company name</label><input type="text" id="q-company" placeholder="Full registered name e.g. XYZ Industries Ltd."></div>
-      <div class="cust-fld"><label>Year of incorporation</label><input type="text" id="q-incorp" placeholder="e.g. 1998"></div>
-      <div class="cust-fld"><label>Promoter / CMD name</label><input type="text" id="q-promoter" placeholder="Full name"></div>
-      <div class="cust-fld"><label>Industry / sector</label><input type="text" id="q-industry" placeholder="e.g. Textiles, Steel, IT, Cement"></div>
-      <div class="cust-fld"><label>Annual turnover (Rs Cr)</label><input type="text" id="q-turnover" placeholder="e.g. 250"></div>
-      <div class="cust-fld"><label>Investment requirement (Rs Cr)</label><input type="text" id="q-invest" placeholder="Auto from model if blank"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr gn">2. Introduction &amp; company background</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Registered address</label><input type="text" id="q-addr" placeholder="Door No, Street, City, PIN"></div>
-      <div class="cust-fld"><label>Background &amp; rationale for project</label><input type="text" id="q-rationale" placeholder="e.g. Reduce power cost, meet RPO, green credentials"></div>
-      <div class="cust-fld"><label>Current business activities</label><input type="text" id="q-activities" placeholder="e.g. Manufacture of cotton yarn, 3 units in TN"></div>
-      <div class="cust-fld"><label>Market position &amp; customer base</label><input type="text" id="q-mktpos" placeholder="e.g. Top 5 yarn exporter in TN, 40 export customers"></div>
-      <div class="cust-fld"><label>No. of employees</label><input type="text" id="q-employees" placeholder="e.g. 850"></div>
-      <div class="cust-fld"><label>Existing TNEB connection (contract demand kVA)</label><input type="text" id="q-tneb" placeholder="e.g. 2000 kVA HT-III"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr gn">3. Market analysis inputs</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Main products / services</label><input type="text" id="q-products" placeholder="e.g. Cotton yarn counts 20s to 60s"></div>
-      <div class="cust-fld"><label>Key customers / export markets</label><input type="text" id="q-customers" placeholder="e.g. EU, South Korea, domestic mills"></div>
-      <div class="cust-fld"><label>Key competitors in your sector</label><input type="text" id="q-competitors" placeholder="e.g. ABC Mills, XYZ Textiles"></div>
-      <div class="cust-fld"><label>How does cheaper power improve competitiveness?</label><input type="text" id="q-competitive" placeholder="e.g. Power is 28% of cost. Solar reduces it to 18%."></div>
-      <div class="cust-fld"><label>Current annual power bill (Rs Cr)</label><input type="text" id="q-powerbill" placeholder="e.g. 22"></div>
-      <div class="cust-fld"><label>Current annual consumption (MU)</label><input type="text" id="q-consumption" placeholder="e.g. 12.5"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr gn">4. Technical analysis &amp; project details</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Project site location</label><input type="text" id="q-site" placeholder="District, Taluk, Village, State"></div>
-      <div class="cust-fld"><label>Land area (acres)</label><input type="text" id="q-land" placeholder="e.g. 80"></div>
-      <div class="cust-fld"><label>Land ownership status</label><input type="text" id="q-landstatus" placeholder="Owned / To be acquired / Lease from govt"></div>
-      <div class="cust-fld"><label>Distance from nearest 110 kV substation (km)</label><input type="text" id="q-dist" placeholder="e.g. 4.5"></div>
-      <div class="cust-fld"><label>Proposed EPC contractor</label><input type="text" id="q-epcname" placeholder="e.g. EIL Solar Pvt. Ltd. / To be tendered"></div>
-      <div class="cust-fld"><label>Procurement strategy</label><input type="text" id="q-procure" placeholder="e.g. Open tender, ALMM-listed panels only"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr gn">5. Financial analysis inputs</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Preferred lender / bank</label><input type="text" id="q-bank" placeholder="e.g. State Bank of India, IREDA"></div>
-      <div class="cust-fld"><label>Equity source</label><input type="text" id="q-eqsrc" placeholder="e.g. Internal accruals / Promoter contribution"></div>
-      <div class="cust-fld"><label>Existing term loans (Rs Cr)</label><input type="text" id="q-loans" placeholder="e.g. 0 / 45 Cr with SBI"></div>
-      <div class="cust-fld"><label>Banking relationship &amp; credit history</label><input type="text" id="q-credit" placeholder="e.g. 20 years with SBI, clean NPA record"></div>
-      <div class="cust-fld"><label>Current TNEB tariff category &amp; rate</label><input type="text" id="q-category" placeholder="e.g. HT-III Commercial Rs 9.76/kWh"></div>
-      <div class="cust-fld"><label>Expected saving per year (Rs Cr) — auto if blank</label><input type="text" id="q-saving" placeholder="Auto from model"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr gn">6. Project implementation</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Target commissioning date (COD)</label><input type="text" id="q-cod" placeholder="e.g. March 2027"></div>
-      <div class="cust-fld"><label>Key regulatory approvals status</label><input type="text" id="q-approvals" placeholder="e.g. DPR filed, land under acquisition"></div>
-      <div class="cust-fld"><label>Quality control measures planned</label><input type="text" id="q-quality" placeholder="e.g. Third-party inspection, MNRE guidelines"></div>
-      <div class="cust-fld"><label>Key risks identified by developer</label><input type="text" id="q-risks" placeholder="e.g. Land conversion delay, OA charge revision"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr gn">7. Socio-economic impact</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Direct jobs during construction</label><input type="text" id="q-jobs-const" placeholder="e.g. 120 persons for 12 months"></div>
-      <div class="cust-fld"><label>Permanent jobs (O&amp;M)</label><input type="text" id="q-jobs-perm" placeholder="e.g. 8 technical staff"></div>
-      <div class="cust-fld"><label>Local economy benefit</label><input type="text" id="q-local" placeholder="e.g. Rs 2 Cr land lease per year to locals"></div>
-      <div class="cust-fld"><label>CSR / environmental initiatives</label><input type="text" id="q-csr" placeholder="e.g. Rainwater harvesting on plant site"></div>
-      <div class="cust-fld"><label>CO2 reduction (tonnes/yr) — auto if blank</label><input type="text" id="q-co2" placeholder="Auto: ~900 tonnes per MW per year"></div>
-      <div class="cust-fld"><label>Social benefits to surrounding community</label><input type="text" id="q-social" placeholder="e.g. Streetlights, road, water supply for 2 villages"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr">Optional sections — tick to include in report</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13.5px;color:var(--n7)">
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-swot" checked style="width:16px;height:16px"> SWOT Analysis</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-market" checked style="width:16px;height:16px"> Market Analysis — India Solar Industry</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-tech" checked style="width:16px;height:16px"> Technical Advancements in Solar</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-bess" checked style="width:16px;height:16px"> Battery Storage (BESS) section</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-hist" style="width:16px;height:16px"> Solar History &amp; Global Development</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-ratio" checked style="width:16px;height:16px"> Financial Ratios (DSCR, IRR, payback)</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-risk" checked style="width:16px;height:16px"> Risk Assessment &amp; Mitigation</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-socio" checked style="width:16px;height:16px"> Socio-Economic Impact</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-reg" checked style="width:16px;height:16px"> Regulatory Framework — TNERC Group Captive</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-future" style="width:16px;height:16px"> Future of Solar (10-year outlook)</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-tnerc" checked style="width:16px;height:16px"> TNERC Tariff Table (Annexure)</label>
-      <label style="display:flex;align-items:center;gap:9px;cursor:pointer"><input type="checkbox" id="opt-loss" checked style="width:16px;height:16px"> TNERC Loss Table (Annexure)</label>
-    </div>
-    <div style="margin-top:16px">
-      <label class="flbl">Add your own section 1 (optional)</label>
-      <div class="cust-grid" style="margin-top:6px">
-        <div class="cust-fld"><label>Section title</label><input type="text" id="opt-c1-title" placeholder="e.g. Green Hydrogen Potential"></div>
-        <div class="cust-fld"><label>Content / key points</label><input type="text" id="opt-c1-text" placeholder="Brief description of what to include"></div>
-      </div>
-    </div>
-    <div style="margin-top:10px">
-      <label class="flbl">Add your own section 2 (optional)</label>
-      <div class="cust-grid" style="margin-top:6px">
-        <div class="cust-fld"><label>Section title</label><input type="text" id="opt-c2-title" placeholder="e.g. EV Charging Infrastructure"></div>
-        <div class="cust-fld"><label>Content / key points</label><input type="text" id="opt-c2-text" placeholder="Brief description"></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr">Report header details</div>
-    <div class="cust-grid">
-      <div class="cust-fld"><label>Report date</label><input type="text" id="q-rpdate" placeholder="e.g. May 2026"></div>
-      <div class="cust-fld"><label>Prepared by</label><input type="text" id="q-prepby" placeholder="e.g. EIL Solar Pvt. Ltd."></div>
-      <div class="cust-fld"><label>Reference number</label><input type="text" id="q-refno" placeholder="e.g. EIL/DPR/2026/001"></div>
-      <div class="cust-fld"><label>Confidentiality notice</label><input type="text" id="q-conf" placeholder="Strictly Confidential — For bank use only"></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="chdr or">Generate &amp; export</div>
-    <div style="display:flex;flex-direction:column;gap:10px">
-      <button onclick="generateFullReport()" style="background:var(--b6);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
-        &#128196; Generate Complete DPR — downloads as .txt (open in Word / Google Docs to format)
-      </button>
-      <button onclick="exportAllToCSV()" style="background:var(--g6);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
-        &#128202; Export All Financial Tables — Excel / Google Sheets (CSV)
-      </button>
-      <button onclick="exportPLToCSV()" style="background:var(--g5);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
-        &#128202; Export Projected P&amp;L and Balance Sheet only (CSV)
-      </button>
-    </div>
-    <div class="alert info" style="margin-top:12px;margin-bottom:0;font-size:12px">
-      The .txt report follows the Krishnan TOC exactly: 1.Executive Summary 2.Introduction 3.Market Analysis 4.Technical Analysis 5.Financial Analysis 6.Project Implementation 7.Socio-Economic Impact 8.Conclusion. Paste into Word, apply Heading 1/2 styles, insert CSV tables. Tariff capped at Year 5 — no escalation beyond that.
-    </div>
-  </div>
-  <div id="pr-status" class="alert info" style="display:none">&#8987; Generating...</div>
-</div>
-
-
-
-<!-- TNERC COMPLIANCE -->
 <div id="s-tn" class="sec dev-sec">
   <div class="sec-h"><div class="sec-ic">&#9989;</div><div><div class="sec-ti">TNERC Compliance</div><div class="sec-su">Monthly tracking &amp; annual TNPDCL certificate</div></div></div>
 
@@ -985,8 +826,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   <div class="card">
     <div class="chdr or">Annual TNPDCL compliance certificate</div>
     <div class="alert info" style="margin-bottom:12px;font-size:12px">Click below to download the complete annual compliance certificate in the format required by TNPDCL. Fill in SPV details above before generating.</div>
-    <button onclick="generateTnercCert()" style="background:var(--b6);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;width:100%;text-align:left">
-      &#128203; Generate Annual TNPDCL Compliance Certificate (downloads as .txt)
+    <button onclick="exportTnercToXLSX()" style="background:var(--b6);color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;width:100%;text-align:left">
+      &#128202; Export TNERC Compliance Certificate to Excel (.xlsx) &mdash; for TNPDCL submission
     </button>
     <div id="tn-cert-status" class="alert ok" style="display:none;margin-top:10px;margin-bottom:0"></div>
   </div>
@@ -2578,7 +2419,7 @@ function generateTnercCert(){
     L('Name (' + c.name + '): ___________________________  Date: __________  Seal: _______');
   });
   N(); D();
-  L('This certificate is generated by EIL Solar Ground v6.3 App — ' + new Date().toLocaleDateString('en-IN'));
+  L('This certificate is generated by EIL Solar Ground v6.4 App — ' + new Date().toLocaleDateString('en-IN'));
   L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
 
   const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
@@ -2597,6 +2438,598 @@ const _origRenderCustomers = typeof renderCustomers === 'function' ? renderCusto
 function refreshTnerc(){
   buildTnercEquityCheck();
   if(document.getElementById('tn-grid-body')) buildTnercGrid();
+}
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════
+   EXCEL EXPORT FUNCTIONS — SheetJS (XLSX)
+   All exports produce proper .xlsx files openable in Excel & Google Sheets
+══════════════════════════════════════════════════════════════════ */
+
+function xlsxDownload(wb, filename) {
+  XLSX.writeFile(wb, filename);
+}
+
+function styleHdr(ws, range, color) {
+  // No styling in basic XLSX — SheetJS community edition
+  // Data is clean and column widths are set
+}
+
+function setColWidths(ws, widths) {
+  ws['!cols'] = widths.map(w => ({ wch: w }));
+}
+
+/* ── HELPER: build sheet from array of arrays ── */
+function buildSheet(headers, rows) {
+  const data = [headers, ...rows];
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  return ws;
+}
+
+/* ── 1. EXPORT 25-YEAR CASH FLOW ────────────────────────────────── */
+function exportCFtoXLSX() {
+  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
+  const plf = gv('plf')/100, tloss = gv('tloss')/100;
+  const tariff = gv('tariff'), disc = gv('disc')/100;
+  const peak = gv('peak')/100, sur = gv('surcharge')/100;
+  const oa = gv('oa'), tarE = gv('taresc')/100, oaE = gv('oaesc')/100;
+  const sCap = gv('epc')+gv('land')+gv('evac')+gv('misc');
+  const tCap = sCap + (document.getElementById('i-batt').value==='1' ? gv('bmwh')*gv('bc') : 0);
+  const df = gv('df')/100, ir = gv('ir')/100, tn = gv('tn'), moro = gv('moro');
+  const taxR = gv('tax')/100, sv = gv('sv')/100, deg1 = gv('deg1')/100;
+  const dAmt = tCap*df, eAmt = tCap*(1-df);
+  const grossGen = dc_kWp*plf*8760;
+  const ap = dAmt/Math.max(1,tn-moro);
+
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: Summary parameters
+  const paramRows = [
+    ['EIL Solar Ground Based Power Generation — 25-Year Financial Model'],
+    ['Generated', new Date().toLocaleDateString('en-IN')],
+    [],
+    ['Parameter', 'Value', 'Unit'],
+    ['AC Capacity', gv('ac'), 'MW AC'],
+    ['DC Capacity', (gv('ac')*gv('dac')).toFixed(2), 'MW DC'],
+    ['DC kWp', dc_kWp, 'kWp'],
+    ['Plant Load Factor (CUF)', gv('plf'), '%'],
+    ['Total Technical Loss', gv('tloss'), '%'],
+    ['TNEB Tariff Year 1', tariff, 'Rs/kWh'],
+    ['Selling Price Year 1', (tariff*(1+peak*sur)*disc).toFixed(4), 'Rs/kWh'],
+    ['OA Charge Year 1', oa, 'Rs/kWh'],
+    ['Tariff Escalation (capped Yr5)', gv('taresc'), '%/yr'],
+    ['Solar Capex', sCap.toFixed(2), 'Rs Cr'],
+    ['Total Capex', tCap.toFixed(2), 'Rs Cr'],
+    ['Equity', eAmt.toFixed(2), 'Rs Cr'],
+    ['Debt', dAmt.toFixed(2), 'Rs Cr'],
+    ['Interest Rate', gv('ir'), '%/yr'],
+    ['Loan Tenure', tn, 'Years'],
+    ['Moratorium', moro, 'Year(s)'],
+  ];
+  const wsParam = XLSX.utils.aoa_to_sheet(paramRows);
+  wsParam['!cols'] = [{wch:35},{wch:18},{wch:12}];
+  XLSX.utils.book_append_sheet(wb, wsParam, 'Parameters');
+
+  // Sheet 2: 25-Year Cash Flow
+  const cfHeaders = ['Year','Net Gen (MU)','Selling Price (Rs/kWh)','OA Charge (Rs/kWh)',
+    'Net Realisation (Rs/kWh)','Gross Revenue (Rs Cr)','OA Charges (Rs Cr)',
+    'Net Revenue (Rs Cr)','O&M (Rs Cr)','Insurance (Rs Cr)','EBITDA (Rs Cr)',
+    'Interest (Rs Cr)','Principal (Rs Cr)','IT Dep (Rs Cr)','Taxable (Rs Cr)',
+    'Tax (Rs Cr)','FCF (Rs Cr)','Cumulative CF (Rs Cr)','Payback Status'];
+
+  const cfRows = [];
+  let ob=dAmt, dF=1, tC=tariff, oC=oa;
+  let omC=sCap*gv('om')/100, insC=sCap*gv('ins')/100;
+  let wdv=sCap, cum=-eAmt, payY=null;
+
+  for(let y=1; y<=25; y++) {
+    if(y===1) dF=1-deg1; else if(y<=10) dF*=0.9932; else dF*=0.993;
+    const ng = dc_kWp*plf*8760*dF*(1-tloss);
+    const wt = tC*(1+peak*sur), sp = wt*disc;
+    const gR = ng*sp/1e7, ocC = ng*oC/1e7, nR = gR-ocC, opx = omC+insC;
+    const ebd = nR-opx;
+    const interest = ob*ir, prin = (y<=moro?0:(y<=tn?ap:0));
+    ob = Math.max(0,ob-prin);
+    let itd = 0; if(y>1){itd=wdv*0.15; wdv=Math.max(0,wdv-itd);}
+    const txbl = Math.max(0,ebd-interest-itd), txp = txbl*taxR*1.04;
+    const sal = y===25?tCap*sv:0, fcf = ebd-interest-prin-txp+sal;
+    cum += fcf;
+    if(cum>=0&&!payY) payY=y;
+
+    cfRows.push([y, +(ng/1e6).toFixed(3), +sp.toFixed(4), +oC.toFixed(4),
+      +(sp-oC).toFixed(4), +gR.toFixed(2), +ocC.toFixed(2), +nR.toFixed(2),
+      +omC.toFixed(2), +insC.toFixed(2), +ebd.toFixed(2),
+      +interest.toFixed(2), +prin.toFixed(2), +itd.toFixed(2),
+      +txbl.toFixed(2), +txp.toFixed(2), +fcf.toFixed(2), +cum.toFixed(2),
+      cum>=0?'Recovered':'Pending']);
+
+    if(y<5){tC*=(1+tarE); oC*=(1+oaE);}
+    omC*=(1+gv('ome')/100); insC*=1.03;
+  }
+
+  const wsCF = buildSheet(cfHeaders, cfRows);
+  wsCF['!cols'] = [5,12,16,16,18,16,16,16,10,12,12,12,12,12,12,10,12,16,12].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsCF, '25-Year Cash Flow');
+
+  // Sheet 3: P&L (10 years)
+  const plHeaders = ['Year','Net Revenue (Rs Cr)','O&M (Rs Cr)','Insurance (Rs Cr)',
+    'EBITDA (Rs Cr)','EBITDA %','Book Dep (Rs Cr)','EBIT (Rs Cr)',
+    'Interest (Rs Cr)','PBT (Rs Cr)','Tax (Rs Cr)','PAT (Rs Cr)','Retained Earnings (Rs Cr)'];
+
+  ob=dAmt; dF=1; tC=tariff; oC=oa;
+  omC=sCap*gv('om')/100; insC=sCap*gv('ins')/100;
+  let bookWdv=sCap, retE=0;
+  const plRows=[];
+  for(let y=1; y<=10; y++) {
+    if(y===1) dF=1-deg1; else dF*=0.9932;
+    const ng=dc_kWp*plf*8760*dF*(1-tloss);
+    const sp=tC*(1+peak*sur)*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
+    const bkD=bookWdv*0.15; bookWdv=Math.max(0,bookWdv-bkD);
+    const interest=ob*ir, prin=(y<=moro?0:(y<=tn?ap:0));
+    ob=Math.max(0,ob-prin);
+    const ebit=ebd-bkD, pbt=ebit-interest;
+    let itd=0; let wdvT=sCap*(1-gv('wdv')/100*Math.max(0,y-1));
+    if(y>1){itd=wdvT*0.15;}
+    const txbl=Math.max(0,ebd-interest-itd), txp=txbl*taxR*1.04, pat=pbt-txp;
+    retE+=pat;
+    plRows.push([y,+nR.toFixed(2),+omC.toFixed(2),+insC.toFixed(2),+ebd.toFixed(2),
+      +(ebd/nR*100).toFixed(1),+bkD.toFixed(2),+ebit.toFixed(2),+interest.toFixed(2),
+      +pbt.toFixed(2),+txp.toFixed(2),+pat.toFixed(2),+retE.toFixed(2)]);
+    if(y<5){tC*=(1+tarE);oC*=(1+oaE);}
+    omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+  const wsPL = buildSheet(plHeaders, plRows);
+  wsPL['!cols'] = [5,15,10,12,12,10,12,12,12,10,10,10,16].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsPL, 'Projected P&L (10yr)');
+
+  // Sheet 4: Balance Sheet (10 years)
+  const bsHeaders = ['Year','Share Capital (Rs Cr)','Reserves & Surplus (Rs Cr)',
+    'Long-term Debt (Rs Cr)','Total Liabilities (Rs Cr)',
+    'Net Fixed Assets (Rs Cr)','Current Assets (Rs Cr)','Total Assets (Rs Cr)'];
+  ob=dAmt; bookWdv=sCap; retE=0; dF=1; tC=tariff; oC=oa;
+  omC=sCap*gv('om')/100; insC=sCap*gv('ins')/100;
+  const bsRows=[];
+  for(let y=1; y<=10; y++) {
+    if(y===1) dF=1-deg1; else dF*=0.9932;
+    const ng=dc_kWp*plf*8760*dF*(1-tloss);
+    const sp=tC*(1+peak*sur)*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
+    const bkD=bookWdv*0.15; bookWdv=Math.max(0,bookWdv-bkD);
+    const interest=ob*ir, prin=(y<=moro?0:(y<=tn?ap:0));
+    ob=Math.max(0,ob-prin);
+    let itd=0; if(y>1){const wdvT=sCap*Math.pow(1-0.15,y-1); itd=wdvT*0.15;}
+    const txbl=Math.max(0,ebd-interest-itd), txp=txbl*taxR*1.04, pat=(ebd-bkD-interest)-txp;
+    retE+=pat;
+    const nfa=bookWdv, ca=Math.max(1.5,retE*0.25+2), tl=eAmt+Math.max(0,retE)+ob;
+    bsRows.push([y,+eAmt.toFixed(2),+retE.toFixed(2),+ob.toFixed(2),+tl.toFixed(2),
+      +nfa.toFixed(2),+ca.toFixed(2),+(nfa+ca).toFixed(2)]);
+    if(y<5){tC*=(1+tarE);oC*=(1+oaE);}
+    omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+  const wsBS = buildSheet(bsHeaders, bsRows);
+  wsBS['!cols'] = [5,15,18,16,16,16,14,14].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, wsBS, 'Balance Sheet (10yr)');
+
+  const co = (document.getElementById('q-company')||{value:''}).value||'EIL_Solar';
+  xlsxDownload(wb, co.replace(/[^a-zA-Z0-9]/g,'_')+'_25yr_CashFlow.xlsx');
+}
+
+/* ── 2. EXPORT 25-YEAR DEBT REPORT ──────────────────────────────── */
+function exportDebtToXLSX() {
+  const sCap = gv('epc')+gv('land')+gv('evac')+gv('misc');
+  const tCap = sCap;
+  const dAmt = tCap*gv('df')/100, eAmt = tCap*(1-gv('df')/100);
+  const ir = gv('ir')/100, tn = gv('tn'), moro = gv('moro');
+  const plf = gv('plf')/100, tloss = gv('tloss')/100;
+  const tariff = gv('tariff'), disc = gv('disc')/100;
+  const peak = gv('peak')/100, sur = gv('surcharge')/100, oa = gv('oa');
+  const taxR = gv('tax')/100, deg1 = gv('deg1')/100;
+  const dc_kWp = Math.round(gv('ac')*gv('dac')*1000);
+  const ap = dAmt/Math.max(1,tn-moro);
+
+  const wb = XLSX.utils.book_new();
+
+  const headers = ['Year','Type','Opening Balance (Rs Cr)','Interest (Rs Cr)',
+    'Principal (Rs Cr)','Total Debt Service (Rs Cr)','Closing Balance (Rs Cr)',
+    'EBITDA (Rs Cr)','DSCR','Status'];
+
+  const rows = [];
+  let ob = dAmt;
+  let omC=sCap*gv('om')/100, insC=sCap*gv('ins')/100;
+  let tC=tariff, oC=oa, dF=1;
+
+  for(let y=1; y<=25; y++) {
+    if(y===1) dF=1-deg1; else if(y<=10) dF*=0.9932; else dF*=0.993;
+    const ng=dc_kWp*plf*8760*dF*(1-tloss);
+    const sp=tC*(1+peak*sur)*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
+    const interest=ob*ir, prin=(y<=moro?0:(y<=tn?ap:0));
+    const ds=interest+prin, dscr=ds>0?ebd/ds:0;
+    const cb=Math.max(0,ob-prin);
+    rows.push([y, y<=moro?'Moratorium':(y<=tn?'Repayment':'Post-loan'),
+      +ob.toFixed(2), +interest.toFixed(2), +prin.toFixed(2),
+      +ds.toFixed(2), +cb.toFixed(2), +ebd.toFixed(2), +dscr.toFixed(2),
+      y<=moro?'Interest only':(y<=tn?'Repaying':'Loan cleared')]);
+    ob=cb;
+    if(y<5){tC*=(1+gv('taresc')/100);oC*=(1+gv('oaesc')/100);}
+    omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+
+  const ws = buildSheet(headers, rows);
+  ws['!cols'] = [6,12,18,15,15,18,16,12,8,12].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws, '25-Year Debt Schedule');
+
+  // Summary sheet
+  const sumRows = [
+    ['Debt Report Summary'],
+    [],
+    ['Total project capex (Rs Cr)', tCap.toFixed(2)],
+    ['Equity (Rs Cr)', eAmt.toFixed(2)],
+    ['Debt (Rs Cr)', dAmt.toFixed(2)],
+    ['Interest rate (%/yr)', gv('ir')],
+    ['Loan tenure (years)', tn],
+    ['Moratorium (years)', moro],
+    ['Repayment period (years)', tn-moro],
+    ['Annual principal repayment (Rs Cr)', ap.toFixed(2)],
+    ['Total interest paid (Rs Cr)', rows.reduce((s,r)=>s+r[3],0).toFixed(2)],
+    ['Total principal repaid (Rs Cr)', rows.reduce((s,r)=>s+r[4],0).toFixed(2)],
+    ['Total debt service over loan period (Rs Cr)', rows.filter(r=>r[1]!=='Post-loan').reduce((s,r)=>s+r[5],0).toFixed(2)],
+  ];
+  const wsSum = XLSX.utils.aoa_to_sheet(sumRows);
+  wsSum['!cols'] = [{wch:35},{wch:15}];
+  XLSX.utils.book_append_sheet(wb, wsSum, 'Summary');
+
+  const co = (document.getElementById('q-company')||{value:''}).value||'EIL_Solar';
+  xlsxDownload(wb, co.replace(/[^a-zA-Z0-9]/g,'_')+'_25yr_DebtReport.xlsx');
+}
+
+/* ── 3. EXPORT ACTUAL VS PROJECTED ──────────────────────────────── */
+function exportAvpToXLSX() {
+  const dc_kWp = Math.round(gv('ac')*gv('dac')*1000);
+  const netGenAnn = dc_kWp*gv('plf')/100*8760*(1-gv('tloss')/100)/1e6;
+  const projM = netGenAnn/12;
+  const tariff = gv('tariff'), disc = gv('disc')/100;
+  const peak = gv('peak')/100, sur = gv('surcharge')/100, oa = gv('oa');
+  const sp1 = tariff*(1+peak*sur)*disc;
+  const nr1 = sp1-oa;
+
+  const wb = XLSX.utils.book_new();
+  const headers = ['Month','Projected Gen (MU)','Actual Gen (MU)',
+    'Variance MU','Variance %','Projected Revenue (Rs Cr)','Actual Revenue (Rs Cr)',
+    'Performance Status'];
+
+  const rows = [];
+  const months=['April','May','June','July','August','September','October','November','December','January','February','March'];
+
+  months.forEach((m,i) => {
+    const actG = avpData[i]?avpData[i].actGen||0:0;
+    const projG = projM;
+    const varMU = actG>0?actG-projG:null;
+    const varPct = actG>0?(actG/projG-1)*100:null;
+    const projRev = projG*nr1/100*10; // Rs Cr approximation
+    const actRev = actG>0?actG*nr1/100*10:null;
+    const status = actG>0?(varPct>=-3?'On Track':varPct>=-10?'Slightly Below':'Underperforming'):'No Data';
+    rows.push([m, +projG.toFixed(3), actG>0?+actG.toFixed(3):null,
+      varMU!==null?+varMU.toFixed(3):null,
+      varPct!==null?+varPct.toFixed(1):null,
+      +projRev.toFixed(2), actRev!==null?+actRev.toFixed(2):null, status]);
+  });
+
+  // Totals
+  const totAct = rows.reduce((s,r)=>s+(r[2]||0),0);
+  const totProj = projM*12;
+  rows.push(['YEAR TOTAL', +totProj.toFixed(3), totAct>0?+totAct.toFixed(3):null,
+    totAct>0?+(totAct-totProj).toFixed(3):null,
+    totAct>0?+((totAct/totProj-1)*100).toFixed(1):null,
+    null, null, totAct>0?(totAct>=totProj*0.95?'On Track':'Review'):'Pending']);
+
+  const ws = buildSheet(headers, rows);
+  ws['!cols'] = [12,16,14,12,12,18,16,14].map(w=>({wch:w}));
+  XLSX.utils.book_append_sheet(wb, ws, 'Actual vs Projected');
+
+  // YTD summary
+  const entered = rows.slice(0,12).filter(r=>r[2]!==null);
+  const sumRows=[
+    ['Actual vs Projected — Year-to-Date Summary'],
+    [],
+    ['Months with actual data', entered.length+' of 12'],
+    ['Projected annual net generation (MU)', totProj.toFixed(3)],
+    ['Actual YTD net generation (MU)', totAct>0?totAct.toFixed(3):'No data'],
+    ['YTD variance (MU)', totAct>0?(totAct-totProj*entered.length/12).toFixed(3):'—'],
+    ['YTD performance', totAct>0?(totAct>=totProj*entered.length/12*0.95?'On Track':'Below Target'):'No data'],
+    ['AC capacity (MW)', gv('ac')],
+    ['CUF/PLF (%)', gv('plf')],
+    ['Total technical loss (%)', gv('tloss')],
+  ];
+  const wsSum = XLSX.utils.aoa_to_sheet(sumRows);
+  wsSum['!cols'] = [{wch:35},{wch:18}];
+  XLSX.utils.book_append_sheet(wb, wsSum, 'YTD Summary');
+
+  const co = (document.getElementById('q-company')||{value:''}).value||'EIL_Solar';
+  xlsxDownload(wb, co.replace(/[^a-zA-Z0-9]/g,'_')+'_ActualVsProjected.xlsx');
+}
+
+/* ── 4. EXPORT TNERC COMPLIANCE TO EXCEL ─────────────────────────── */
+function exportTnercToXLSX() {
+  const spv = (document.getElementById('tn-spv')||{value:''}).value||'[SPV Name]';
+  const cin = (document.getElementById('tn-cin')||{value:''}).value||'[CIN]';
+  const loc = (document.getElementById('tn-loc')||{value:''}).value||'[Location]';
+  const sldc = (document.getElementById('tn-sldc')||{value:''}).value||'[SLDC Ref]';
+  const fy = (document.getElementById('tn-year')||{value:''}).value||'[Financial Year]';
+  const cod = (document.getElementById('tn-cod')||{value:''}).value||'[COD Date]';
+
+  const dc_kWp = Math.round(gv('ac')*gv('dac')*1000);
+  const projAnn = (dc_kWp*gv('plf')/100*8760*(1-gv('tloss')/100)/1e6).toFixed(3);
+  const totalCustEq = customers.reduce((s,c)=>s+c.equityPct,0);
+  const devEq = 100-totalCustEq;
+  const totalActGen = tnData.reduce((s,d)=>s+(d.gen||0),0);
+  const totalActCons={};
+  customers.forEach(c=>{totalActCons[c.id]=tnData.reduce((s,d)=>s+(d.custConsumption[c.id]||0),0);});
+  const totalAllCaptive=Object.values(totalActCons).reduce((s,v)=>s+v,0);
+  const pct51=totalActGen>0?totalAllCaptive/totalActGen*100:0;
+  const eq26ok=totalCustEq>=26, cons51ok=pct51>=51;
+
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: Cover
+  const coverRows=[
+    ['ANNUAL GROUP CAPTIVE COMPLIANCE CERTIFICATE'],
+    ['Under CERC Captive Rules 2001 and TNERC T.O. No. 7 of 2022'],
+    [],
+    ['SPV / Generating Company', spv],
+    ['CIN / Registration Number', cin],
+    ['Plant Location', loc],
+    ['SLDC Registration', sldc],
+    ['Financial Year', fy],
+    ['Date of Commissioning', cod],
+    ['Installed Capacity (MW AC)', gv('ac')],
+    ['DC Capacity (kWp)', dc_kWp.toLocaleString('en-IN')],
+    ['Evacuation Voltage', '110 kV EHT'],
+    ['Projected Annual Net Generation (MU)', +projAnn],
+    ['Actual Annual Net Generation (MU)', totalActGen>0?+totalActGen.toFixed(3):'[From SLDC meter]'],
+    [],
+    ['Rule 1 — Collective equity ≥26%', totalCustEq.toFixed(1)+'%', eq26ok?'COMPLIANT':'NON-COMPLIANT'],
+    ['Rule 2 — 51% captive consumption', totalActGen>0?pct51.toFixed(1)+'%':'Actual data required', totalActGen>0?(cons51ok?'COMPLIANT':'NON-COMPLIANT'):'PENDING'],
+    ['Rule 3 — Proportional consumption', 'See Sheet 3','Per customer details'],
+    [],
+    ['Overall Status', (eq26ok&&(totalActGen===0||cons51ok))?'ON TRACK':'ACTION REQUIRED'],
+  ];
+  const wsCover = XLSX.utils.aoa_to_sheet(coverRows);
+  wsCover['!cols'] = [{wch:35},{wch:30},{wch:18}];
+  XLSX.utils.book_append_sheet(wb, wsCover, 'Certificate Summary');
+
+  // Sheet 2: Monthly Generation
+  const TN_MONTHS=['April','May','June','July','August','September','October','November','December','January','February','March'];
+  const projM = parseFloat(projAnn)/12;
+  const genHeaders=['Month','Projected Net Gen (MU)','Actual Net Gen (MU)','Variance (MU)','Variance (%)','Status'];
+  const genRows=TN_MONTHS.map((m,i)=>{
+    const ag=tnData[i]?tnData[i].gen||0:0;
+    const v=ag>0?ag-projM:null;
+    const vp=ag>0?(ag/projM-1)*100:null;
+    return [m, +projM.toFixed(3), ag>0?+ag.toFixed(3):null, v!==null?+v.toFixed(3):null, vp!==null?+vp.toFixed(1):null, ag>0?(Math.abs(vp)<=5?'Normal':(vp<-5?'Below Target':'Above Target')):'No data'];
+  });
+  genRows.push(['YEAR TOTAL',+projAnn,totalActGen>0?+totalActGen.toFixed(3):null,
+    totalActGen>0?+(totalActGen-parseFloat(projAnn)).toFixed(3):null,
+    totalActGen>0?+((totalActGen/parseFloat(projAnn)-1)*100).toFixed(1):null,
+    totalActGen>0?(Math.abs((totalActGen/parseFloat(projAnn)-1)*100)<=5?'Normal':'Review'):'Pending']);
+  const wsGen = buildSheet(genHeaders, genRows);
+  wsGen['!cols'] = [{wch:12},{wch:20},{wch:18},{wch:14},{wch:14},{wch:14}];
+  XLSX.utils.book_append_sheet(wb, wsGen, 'Monthly Generation');
+
+  // Sheet 3: Equity Structure
+  const eqHeaders=['Shareholder','Category','Equity %','Shares (approx)','Status'];
+  const eqRows=customers.map(c=>[c.name,'Captive Consumer',+c.equityPct.toFixed(1),'Per SPV agreement',c.equityPct>=0?'Active':'']);
+  eqRows.push(['Developer / Promoter','Developer',+devEq.toFixed(1),'Per SPV agreement','']);
+  eqRows.push(['TOTAL','','+'+(totalCustEq+devEq).toFixed(1),'','Rule 1: Captive '+totalCustEq.toFixed(1)+'% '+(eq26ok?'≥26% ✓':'<26% ✗')]);
+  const wsEq = buildSheet(eqHeaders, eqRows);
+  wsEq['!cols'] = [{wch:25},{wch:18},{wch:12},{wch:20},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsEq, 'Equity Structure');
+
+  // Sheet 4: Consumption Compliance
+  const genBase=totalActGen>0?totalActGen:parseFloat(projAnn);
+  const consHeaders=['Customer','Equity %','Receiving kV','Annual Allotment (MU)',
+    'Min Required -10% (MU)','Max Allowed +10% (MU)',
+    'Actual Consumption (MU)','Consumption Ratio %','Rule 3 Status'];
+  const consRows=customers.map(c=>{
+    const allot=genBase*(c.equityPct/100);
+    const actual=totalActCons[c.id]||0;
+    const ratio=allot>0?actual/allot*100:0;
+    const distLoss=c.recvKv==='11'?1.52:c.recvKv==='33'?0.50:0;
+    const ok=actual>0&&ratio>=90&&ratio<=110;
+    return [c.name,+c.equityPct,+c.recvKv,+allot.toFixed(3),+(allot*0.9).toFixed(3),
+      +(allot*1.1).toFixed(3),actual>0?+actual.toFixed(3):'[Required]',
+      actual>0?+ratio.toFixed(1):'—',actual>0?(ok?'COMPLIANT ✓':'NON-COMPLIANT ✗'):'PENDING'];
+  });
+  // Totals
+  const totalAllot=genBase*(totalCustEq/100);
+  consRows.push(['ALL CUSTOMERS TOTAL','','',(+totalAllot.toFixed(3)),'',(+((totalAllot)*1.1).toFixed(3)),
+    totalAllCaptive>0?+totalAllCaptive.toFixed(3):'[Required]',
+    totalAllCaptive>0?+pct51.toFixed(1):'—',
+    totalActGen>0?(cons51ok?'RULE 2 COMPLIANT ✓':'RULE 2 NON-COMPLIANT ✗'):'PENDING']);
+  const wsCons = buildSheet(consHeaders, consRows);
+  wsCons['!cols'] = [{wch:20},{wch:10},{wch:12},{wch:18},{wch:20},{wch:20},{wch:22},{wch:18},{wch:20}];
+  XLSX.utils.book_append_sheet(wb, wsCons, 'Consumption Compliance');
+
+  // Sheet 5: Month-wise per-customer compliance
+  const custHeaders=['Month','Net Gen (MU)',...customers.flatMap(c=>[c.name+' Allotment MU',c.name+' Actual MU',c.name+' Status']),'Total Captive MU','51% Rule'];
+  const custRows=TN_MONTHS.map((m,i)=>{
+    const ag=tnData[i]?tnData[i].gen||0:0;
+    const row=[m,ag>0?+ag.toFixed(3):null];
+    customers.forEach(c=>{
+      const allot=(ag>0?ag:projM)*(c.equityPct/100);
+      const actual=(tnData[i]&&tnData[i].custConsumption)?tnData[i].custConsumption[c.id]||0:0;
+      const ratio=allot>0?actual/allot:0;
+      const ok=ag>0&&actual>0&&ratio>=0.9&&ratio<=1.1;
+      row.push(+allot.toFixed(3), actual>0?+actual.toFixed(3):null, ag>0&&actual>0?(ok?'OK':'Check'):'—');
+    });
+    const totCap=customers.reduce((s,c)=>s+((tnData[i]&&tnData[i].custConsumption)?tnData[i].custConsumption[c.id]||0:0),0);
+    const pct=ag>0?totCap/ag*100:0;
+    row.push(totCap>0?+totCap.toFixed(3):null, ag>0?(+pct.toFixed(1)+(pct>=51?' ✓':' ✗')):'—');
+    return row;
+  });
+  const wsMonthly = buildSheet(custHeaders, custRows);
+  const monthColWidths=[{wch:12},{wch:12},...customers.flatMap(()=>[{wch:18},{wch:16},{wch:10}]),{wch:16},{wch:12}];
+  wsMonthly['!cols']=monthColWidths;
+  XLSX.utils.book_append_sheet(wb, wsMonthly, 'Monthly Customer Compliance');
+
+  const st=document.getElementById('tn-cert-status');
+  if(st){st.style.display='block';st.textContent='Excel compliance report downloaded. Open in Excel or Google Sheets, print Sheet 1 as the compliance certificate for TNPDCL submission.';}
+  setTimeout(()=>{if(st)st.style.display='none';},8000);
+
+  xlsxDownload(wb, spv.replace(/[^a-zA-Z0-9]/g,'_')+'_TNERC_Compliance_'+fy.replace(/[\s\/]/g,'_')+'.xlsx');
+}
+
+/* ── 5. FETCH ACTUAL GENERATION FROM URL ────────────────────────── */
+async function fetchActualGen() {
+  const url = (document.getElementById('avp-url')||{value:''}).value.trim();
+  const statusEl = document.getElementById('avp-fetch-status');
+  if(!url){if(statusEl){statusEl.style.display='block';statusEl.style.background='var(--r1)';statusEl.style.color='var(--r6)';statusEl.textContent='Please enter a URL first.';} return;}
+  if(statusEl){statusEl.style.display='block';statusEl.style.background='var(--b1)';statusEl.style.color='var(--b6)';statusEl.textContent='Fetching data from '+url+' ...';}
+  try {
+    const res = await fetch(url, {mode:'cors',headers:{'Accept':'application/json,text/csv,*/*'}});
+    if(!res.ok) throw new Error('HTTP '+res.status+' '+res.statusText);
+    const ct = res.headers.get('content-type')||'';
+    const text = await res.text();
+    let parsed=false;
+    if(ct.includes('json')||text.trim().startsWith('{')) {
+      parsed = applyAvpData(JSON.parse(text));
+    } else if(ct.includes('csv')||text.includes(',')) {
+      parsed = applyAvpCSV(text);
+    }
+    if(parsed&&statusEl){statusEl.style.background='var(--g1)';statusEl.style.color='var(--g6)';statusEl.textContent='Data fetched and loaded successfully. '+parsed+' months updated.';}
+    else if(statusEl){statusEl.style.background='var(--a1)';statusEl.style.color='var(--a6)';statusEl.textContent='Data received but format not recognised. Try the JSON paste method below.';}
+  } catch(e) {
+    if(statusEl){statusEl.style.background='var(--r1)';statusEl.style.color='var(--r6)';statusEl.textContent='Fetch failed: '+e.message+'. This is usually a CORS restriction — paste the JSON data below instead.';}
+  }
+}
+
+function applyAvpData(json) {
+  const months=['april','may','june','july','august','september','october','november','december','january','february','march'];
+  let count=0;
+  const list=json.generation||json.data||json.months||json;
+  if(!Array.isArray(list)) return 0;
+  list.forEach(item=>{
+    const m=(item.month||item.Month||item.name||'').toLowerCase().trim();
+    const mu=parseFloat(item.mu||item.MU||item.generation||item.value||0);
+    const idx=months.indexOf(m);
+    if(idx>=0&&mu>0){
+      if(!avpData[idx]) avpData[idx]={projGen:0,actGen:0,projBill:0,actBill:0};
+      avpData[idx].actGen=mu;
+      const el=document.getElementById('avp-ag-'+idx);
+      if(el) el.value=mu.toFixed(3);
+      count++;
+    }
+  });
+  if(count>0) calcAvpSummary();
+  return count;
+}
+
+function applyAvpCSV(text) {
+  const months=['april','may','june','july','august','september','october','november','december','january','february','march'];
+  const lines=text.split('\n').filter(l=>l.trim());
+  let count=0;
+  lines.forEach(line=>{
+    const parts=line.split(',');
+    if(parts.length<2) return;
+    const m=parts[0].trim().toLowerCase().replace(/"/g,'');
+    const mu=parseFloat(parts[1]);
+    const idx=months.indexOf(m);
+    if(idx>=0&&mu>0){
+      if(!avpData[idx]) avpData[idx]={projGen:0,actGen:0,projBill:0,actBill:0};
+      avpData[idx].actGen=mu;
+      const el=document.getElementById('avp-ag-'+idx);
+      if(el) el.value=mu.toFixed(3);
+      count++;
+    }
+  });
+  if(count>0) calcAvpSummary();
+  return count;
+}
+
+function parseAvpJson() {
+  const el=document.getElementById('avp-paste');
+  const statusEl=document.getElementById('avp-fetch-status');
+  if(!el||!el.value.trim()){if(statusEl){statusEl.style.display='block';statusEl.style.background='var(--r1)';statusEl.style.color='var(--r6)';statusEl.textContent='Paste JSON data in the box first.';}return;}
+  try {
+    const json=JSON.parse(el.value.trim());
+    const count=applyAvpData(json);
+    if(statusEl){statusEl.style.display='block';statusEl.style.background='var(--g1)';statusEl.style.color='var(--g6)';statusEl.textContent=count+' months loaded from JSON data.';}
+  } catch(e) {
+    if(statusEl){statusEl.style.display='block';statusEl.style.background='var(--r1)';statusEl.style.color='var(--r6)';statusEl.textContent='JSON parse error: '+e.message;}
+  }
+}
+
+/* ── 6. REGULATORY SAVE / LOAD / MILESTONES ─────────────────────── */
+let milestones=[
+  {name:'TNEB evacuation DPR & 110 kV REC approval',target:'',duration:'12',actual:'',notes:'CRITICAL — file immediately after site identification'},
+  {name:'Land purchase & conversion order',target:'',duration:'15',actual:'',notes:'Longest lead time — run parallel with TNEB approvals'},
+  {name:'Group captive PSA signing & TNERC OA approval',target:'',duration:'5',actual:'',notes:'File post PSA. Include equity and consumption compliance docs.'},
+  {name:'Financial closure — loan sanction & equity',target:'',duration:'3',actual:'',notes:'Lock interest rate at closure'},
+  {name:'EPC contract award & construction',target:'',duration:'14',actual:'',notes:'Award only after land order + evacuation LOA in hand'},
+  {name:'Commissioning & COD (first injection)',target:'',duration:'2',actual:'',notes:'CEIG inspection, TNEB sync test, SLDC registration'},
+];
+
+function addMilestone(){
+  milestones.push({name:'New milestone',target:'',duration:'',actual:'',notes:''});
+  renderMilestones();
+}
+function removeMilestone(i){
+  milestones.splice(i,1);
+  renderMilestones();
+}
+function updMs(i,field,val){milestones[i][field]=val;}
+
+function renderMilestones(){
+  const el=document.getElementById('ms-list');if(!el)return;
+  el.innerHTML=milestones.map((ms,i)=>`
+    <div style="background:var(--w);border:1px solid var(--n3);border-radius:10px;padding:12px 14px;margin-bottom:9px">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:8px">
+        <span style="font-size:16px;flex-shrink:0">&#128205;</span>
+        <input type="text" value="${ms.name}" oninput="updMs(${i},'name',this.value)"
+          style="flex:1;font-size:13.5px;font-weight:600;border:none;border-bottom:1.5px solid var(--n3);padding:2px 0;font-family:'Inter',sans-serif;background:transparent;color:var(--n9)">
+        <button onclick="removeMilestone(${i})" style="background:var(--r1);color:var(--r6);border:1px solid #F1A8A8;border-radius:5px;padding:3px 8px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;font-family:'Inter',sans-serif">Remove</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div><label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--n5);margin-bottom:3px">Target date</label>
+          <input type="text" value="${ms.target}" oninput="updMs(${i},'target',this.value)" placeholder="e.g. Jul 2025" style="width:100%;font-size:13px;padding:7px 9px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif"></div>
+        <div><label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--n5);margin-bottom:3px">Duration (months)</label>
+          <input type="text" value="${ms.duration}" oninput="updMs(${i},'duration',this.value)" placeholder="e.g. 12" style="width:100%;font-size:13px;padding:7px 9px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif"></div>
+        <div><label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--n5);margin-bottom:3px">Actual / revised date</label>
+          <input type="text" value="${ms.actual}" oninput="updMs(${i},'actual',this.value)" placeholder="Update as project progresses" style="width:100%;font-size:13px;padding:7px 9px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif"></div>
+        <div><label style="display:block;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--n5);margin-bottom:3px">Notes & action</label>
+          <input type="text" value="${ms.notes}" oninput="updMs(${i},'notes',this.value)" placeholder="Action required" style="width:100%;font-size:13px;padding:7px 9px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif"></div>
+      </div>
+    </div>`).join('');
+}
+
+function saveRegData(){
+  const fields=['rg-to-ref','rg-oa','rg-css','rg-as','rg-eq','rg-cc','rg-tol','rg-next',
+    'rg-emp','rg-auth','rg-tloss','rg-dloss','rg-tdate','rg-t1','rg-t2','rg-t3','rg-t4',
+    'rg-peak','rg-wh','rg-sch','rg-xs','rg-stc','rg-ev','rg-bay','rg-hta','rg-ceig',
+    'rg-sldc','rg-cong','rg-bess','rg-lossdate','rg-notes'];
+  const data={};
+  fields.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.value;});
+  data['milestones']=milestones;
+  try{localStorage.setItem('eil_regulatory',JSON.stringify(data));}catch(e){}
+  const st=document.getElementById('rg-save-status');
+  if(st){st.style.display='block';st.textContent='All regulatory data saved to browser. Will be restored next time you open the app.';}
+  setTimeout(()=>{if(st)st.style.display='none';},4000);
+}
+
+function loadRegData(){
+  try{
+    const raw=localStorage.getItem('eil_regulatory');
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    Object.entries(data).forEach(([id,val])=>{
+      if(id==='milestones'){milestones=val;renderMilestones();return;}
+      const el=document.getElementById(id);if(el)el.value=val;
+    });
+  }catch(e){}
 }
 
 
