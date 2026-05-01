@@ -147,10 +147,10 @@ input[type=text]:focus{outline:none;border-color:var(--g5)}
 .dv{height:1px;background:var(--n3);margin:12px 0}
 
 /* SUMMARY ROWS — fixed no overflow */
-.sr{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid #F0F0F0;gap:10px}
+.sr{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid #F0F0F0;gap:8px;flex-wrap:nowrap}
 .sr:last-child{border-bottom:none}
-.sk{font-size:12.5px;color:var(--n7);flex:1;line-height:1.35;min-width:0;padding-right:4px}
-.sv{font-size:12.5px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;white-space:nowrap;max-width:50%}
+.sk{font-size:12.5px;color:var(--n7);flex:1;line-height:1.35;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.sv{font-size:12px;font-weight:600;color:var(--n9);font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;white-space:nowrap;max-width:55%}
 .sv.gn{color:var(--g6)}.sv.rd{color:var(--r6)}.sv.am{color:var(--a6)}.sv.pu{color:var(--p6)}
 
 /* TABLES */
@@ -455,14 +455,15 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="chdr">Default tariff (overridden per customer if set)</div>
     <div class="fld"><label class="flbl">Default buyer category</label>
       <select id="i-buyer" onchange="updBuyer();calc()">
-        <option value="9.40">HT-III Commercial &mdash; Rs 9.40/kWh</option>
-        <option value="7.69">HT-I Industry &mdash; Rs 7.69/kWh</option>
-        <option value="7.10">HT-II LT Industry &mdash; Rs 7.10/kWh</option>
+        <option value="9.76">HT-III Commercial (from 01-07-2023) &mdash; Rs 9.76/kWh</option>
+        <option value="9.40">HT-III Commercial (old, before 01-07-2023) &mdash; Rs 9.40/kWh</option>
+        <option value="7.74">HT-I Industry (from 01-07-2023) &mdash; Rs 7.74/kWh</option>
+        <option value="7.69">HT-I Industry (old, before 01-07-2023) &mdash; Rs 7.69/kWh</option>
         <option value="8.20">HT-IIA General &mdash; Rs 8.20/kWh</option>
-        <option value="9.64">HT-III Comm alt &mdash; Rs 9.64/kWh</option>
+        <option value="7.10">HT-II LT Industry &mdash; Rs 7.10/kWh</option>
       </select>
     </div>
-    <div class="fld"><label class="flbl">TNEB base tariff Yr-1 <span>(Rs/kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">9.40</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div></div>
+    <div class="fld"><label class="flbl">TNEB base tariff Yr-1 <span>(Rs/kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">9.76</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div></div>
     <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">90</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div></div>
     <div class="fld"><label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">1.33</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div></div>
     <div class="fld"><label class="flbl">TNEB tariff escalation <span>(%/yr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('taresc',-0.5)">&#8722;</button><span class="pm-val" id="v-taresc">3.0</span><button class="pm-btn right" onclick="pmStep('taresc',0.5)">+</button></div></div>
@@ -768,6 +769,74 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   <div class="card"><div class="chdr">Year-to-date compliance</div><div id="ca-summary"></div></div>
 </div>
 
+
+<!-- PROJECT REPORT -->
+<div id="s-pr" class="sec dev-sec">
+  <div class="sec-h"><div class="sec-ic">&#128194;</div><div><div class="sec-ti">Project Report Generator</div><div class="sec-su">Auto-generate complete bankable project report</div></div></div>
+  <div class="alert info">Fill the customer details below. The app auto-generates a complete project report using all inputs from Project Inputs, Debt &amp; Equity, and the solar industry content. Click Generate Report to download as Word document.</div>
+
+  <!-- Customer details form -->
+  <div class="card">
+    <div class="chdr">Company &amp; promoter details</div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>Company name</label><input type="text" id="pr-company" placeholder="e.g. XYZ Industries Ltd." value=""></div>
+      <div class="cust-fld"><label>Registered address</label><input type="text" id="pr-addr" placeholder="Address, City, State"></div>
+      <div class="cust-fld"><label>Promoter / CMD name</label><input type="text" id="pr-promoter" placeholder="Full name"></div>
+      <div class="cust-fld"><label>Industry / sector</label><input type="text" id="pr-industry" placeholder="e.g. Textiles, Steel, Commercial"></div>
+      <div class="cust-fld"><label>Annual turnover (Rs Cr)</label><input type="text" id="pr-turnover" placeholder="e.g. 150"></div>
+      <div class="cust-fld"><label>Current annual power bill (Rs Cr)</label><input type="text" id="pr-powerbill" placeholder="e.g. 12"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr">Project details for report</div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>Project site location</label><input type="text" id="pr-site" placeholder="District, State"></div>
+      <div class="cust-fld"><label>Land available (acres)</label><input type="text" id="pr-land" placeholder="e.g. 78"></div>
+      <div class="cust-fld"><label>Project report date</label><input type="text" id="pr-date" placeholder="e.g. May 2026"></div>
+      <div class="cust-fld"><label>Banker / lender name</label><input type="text" id="pr-bank" placeholder="e.g. State Bank of India"></div>
+      <div class="cust-fld"><label>EPC contractor (if known)</label><input type="text" id="pr-epc-name" placeholder="Optional"></div>
+      <div class="cust-fld"><label>Developer / IPP name</label><input type="text" id="pr-dev" placeholder="e.g. EIL Solar Pvt. Ltd."></div>
+    </div>
+  </div>
+
+  <!-- Report preview -->
+  <div class="card">
+    <div class="chdr or">Report structure preview</div>
+    <div style="font-size:13px;color:var(--n7);line-height:2">
+      1. Executive Summary &amp; Company Background<br>
+      2. Solar Industry — History, Present Status &amp; Future<br>
+      3. Project Description &amp; Technical Specifications<br>
+      4. Cost of Project &amp; Means of Finance<br>
+      5. Projected Profit &amp; Loss Account (10 years)<br>
+      6. Projected Balance Sheet (till loan repaid — 10 years)<br>
+      7. Cash Flow Statement (25 years)<br>
+      8. Market Analysis &amp; Competitive Landscape<br>
+      9. SWOT Analysis<br>
+      10. BESS &amp; Battery Storage Overview<br>
+      11. Technical Advancements &amp; Future Outlook<br>
+      12. Regulatory Framework — Group Captive CPP<br>
+      13. Annexures — TNERC Tariff, Loss Table
+    </div>
+  </div>
+
+  <!-- Export buttons -->
+  <div class="card">
+    <div class="chdr">Generate &amp; export</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="generateDocx()" style="background:var(--b6);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128196; Generate Project Report (Word .docx) &mdash; opens in Word &amp; Google Docs
+      </button>
+      <button onclick="exportAllToCSV()" style="background:var(--g6);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128202; Export All Financial Tables to Excel / CSV &mdash; opens in Excel &amp; Google Sheets
+      </button>
+      <button onclick="exportPLToCSV()" style="background:var(--g5);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128202; Export Projected P&amp;L &amp; Balance Sheet only (CSV)
+      </button>
+    </div>
+  </div>
+  <div id="pr-status" class="alert info" style="display:none">&#8987; Generating report...</div>
+</div>
+
 </div><!-- /cvs -->
 <div class="fab-w"><button class="fab" onclick="calc()">Calculate</button></div>
 
@@ -802,7 +871,7 @@ function setRole(r){
 }
 
 /* ── NAVIGATION ── */
-const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','rg'];
+const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','rg'];
 const CUST_SECS=['ci','cs','cc','ca'];
 function go(id){
   const allSecs=[...DEV_SECS,...CUST_SECS];
@@ -835,6 +904,8 @@ function buildDrawer(){
     {id:'rp',ic:'&#128196;',lbl:'25-Year Report',dsc:'Full P&L & depreciation'},
     {id:'av',ic:'&#128201;',lbl:'Actual vs Projected',dsc:'Live data & variance'},
     {id:'---'},
+    {id:'pr',ic:'&#128194;',lbl:'Project Report',dsc:'Full bankable report'},
+    {id:'---'},
     {id:'rg',ic:'&#128203;',lbl:'Regulatory',dsc:'Group captive & 110 kV'},
   ]:[
     {id:'ci',ic:'&#128181;',lbl:'My Investment',dsc:'Equity & returns'},
@@ -853,7 +924,7 @@ const PM={
   ac:{v:20,min:1,max:200,dec:0},dac:{v:1.30,min:1.0,max:1.6,dec:2},
   plf:{v:20.4,min:10,max:30,dec:1},tloss:{v:9.0,min:1,max:25,dec:1},
   peak:{v:15,min:0,max:30,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
-  tariff:{v:9.40,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
+  tariff:{v:9.76,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
   oa:{v:1.33,min:0.5,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
   epc:{v:67.2,min:0,max:500,dec:1},land:{v:11.7,min:0,max:100,dec:1},
   evac:{v:9.0,min:0,max:100,dec:1},misc:{v:4.1,min:0,max:50,dec:1},
@@ -1440,6 +1511,330 @@ buildDrawer();
 updLoss();
 addCustomer(); // Add one default customer
 calc();
+
+
+/* ══ CSV / EXCEL EXPORT ══════════════════════════════════════════ */
+function csvRow(arr){return arr.map(v=>{const s=String(v);return s.includes(',')||s.includes('"')?'"'+s.replace(/"/g,'""')+'"':s;}).join(',');}
+function downloadCSV(filename,rows){
+  const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+}
+
+function exportAllToCSV(){
+  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
+  const plf=gv('plf')/100,tloss=gv('tloss')/100,tariff=gv('tariff'),disc=gv('disc')/100;
+  const peak=gv('peak')/100,sur=gv('surcharge')/100,oa=gv('oa');
+  const tarE=gv('taresc')/100,oaE=gv('oaesc')/100;
+  const sCap=gv('epc')+gv('land')+gv('evac')+gv('misc');
+  const tCap=sCap+(document.getElementById('i-batt').value==='1'?gv('bmwh')*gv('bc'):0);
+  const df=gv('df')/100,ir=gv('ir')/100,tn=gv('tn'),moro=gv('moro');
+  const taxR=gv('tax')/100,sv=gv('sv')/100;
+  const dAmt=tCap*df,eAmt=tCap*(1-df);
+  const grossGen=dc_kWp*plf*8760;
+  const repayYrs=Math.max(1,tn-moro);
+  const ap=dAmt/repayYrs;
+
+  const rows=['EIL Solar Ground Based Power Generation - Financial Model Export',
+    'Generated: '+new Date().toLocaleDateString('en-IN'),'',
+    '=== PROJECT PARAMETERS ===',
+    csvRow(['AC Capacity (MW)',gv('ac')]),csvRow(['DC Capacity (MW)',gv('ac')*gv('dac')]),
+    csvRow(['DC kWp',dc_kWp]),csvRow(['PLF/CUF %',gv('plf')]),
+    csvRow(['Total Tech Loss %',gv('tloss')]),csvRow(['TNEB Tariff Yr1 Rs/kWh',tariff]),
+    csvRow(['OA Charge Rs/kWh',oa]),csvRow(['Solar Capex Rs Cr',sCap]),
+    csvRow(['Total Capex Rs Cr',tCap]),csvRow(['Debt Rs Cr',dAmt.toFixed(2)]),
+    csvRow(['Equity Rs Cr',eAmt.toFixed(2)]),csvRow(['Interest Rate %',gv('ir')]),
+    csvRow(['Loan Tenure years',tn]),csvRow(['Moratorium years',moro]),'',
+    '=== 25-YEAR CASH FLOW (Rs Crores) ===',
+    csvRow(['Year','Net Gen MU','Selling Price Rs/kWh','OA Rs/kWh','Net Realisation','Net Revenue','EBITDA','Interest','Principal','Tax','FCF','Cumulative CF'])];
+
+  let ob=dAmt,dF=1,tC=tariff,oC=oa,omC=sCap*gv('om')/100,insC=sCap*gv('ins')/100;
+  let wdv=sCap,cum=-eAmt;
+  const deg1=gv('deg1')/100;
+  for(let y=1;y<=25;y++){
+    if(y===1)dF=1-deg1;else if(y<=10)dF*=0.9932;else dF*=0.993;
+    const ng=grossGen*dF*(1-tloss);
+    const wt=tC*(1+peak*sur),sp=wt*disc;
+    const gR=ng*sp/1e7,oc=ng*oC/1e7,nR=gR-oc,opx=omC+insC,ebd=nR-opx;
+    const interest=ob*ir,prin=(y<=moro?0:(y<=tn?ap:0));
+    ob=Math.max(0,ob-prin);
+    let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+    const txbl=Math.max(0,ebd-interest-itd),txp=txbl*taxR*1.04;
+    const sal=y===25?tCap*sv:0,fcf=ebd-interest-prin-txp+sal;
+    cum+=fcf;
+    rows.push(csvRow([y,(ng/1e6).toFixed(2),sp.toFixed(4),oC.toFixed(4),(sp-oC).toFixed(4),
+      nR.toFixed(2),ebd.toFixed(2),interest.toFixed(2),prin.toFixed(2),txp.toFixed(2),fcf.toFixed(2),cum.toFixed(2)]));
+    tC*=(1+tarE);oC*=(1+oaE);omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+
+  // P&L section
+  rows.push('','=== PROJECTED P&L ACCOUNT (Rs Crores) ===');
+  rows.push(csvRow(['Year','Net Revenue','O&M','Insurance','EBITDA','Depreciation (Book)','EBIT','Interest','PBT','Tax','PAT']));
+  ob=dAmt;dF=1;tC=tariff;oC=oa;omC=sCap*gv('om')/100;insC=sCap*gv('ins')/100;wdv=sCap;
+  let bookWdv=sCap;
+  for(let y=1;y<=10;y++){
+    if(y===1)dF=1-deg1;else if(y<=10)dF*=0.9932;
+    const ng=grossGen*dF*(1-tloss);
+    const wt=tC*(1+peak*sur),sp=wt*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7),opx=omC+insC,ebd=nR-opx;
+    const bookDep=bookWdv*0.15;bookWdv=Math.max(0,bookWdv-bookDep);
+    const ebit=ebd-bookDep,interest=ob*ir,prin=(y<=moro?0:(y<=tn?ap:0));
+    ob=Math.max(0,ob-prin);
+    let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+    const pbt=ebit-interest,txbl=Math.max(0,ebd-interest-itd),txp=txbl*taxR*1.04,pat=pbt-txp;
+    rows.push(csvRow([y,nR.toFixed(2),omC.toFixed(2),insC.toFixed(2),ebd.toFixed(2),bookDep.toFixed(2),ebit.toFixed(2),interest.toFixed(2),pbt.toFixed(2),txp.toFixed(2),pat.toFixed(2)]));
+    tC*=(1+tarE);oC*=(1+oaE);omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+
+  // Balance Sheet section
+  rows.push('','=== PROJECTED BALANCE SHEET (Rs Crores) ===');
+  rows.push(csvRow(['Year','Equity','Retained Earnings','Loan Outstanding','Net Fixed Assets','Current Assets','Total Assets']));
+  ob=dAmt;let retEarn=0;wdv=sCap;
+  ob_debt=dAmt;dF=1;tC=tariff;oC=oa;omC=sCap*gv('om')/100;insC=sCap*gv('ins')/100;bookWdv=sCap;
+  for(let y=1;y<=10;y++){
+    if(y===1)dF=1-deg1;else if(y<=10)dF*=0.9932;
+    const ng=grossGen*dF*(1-tloss);
+    const wt=tC*(1+peak*sur),sp=wt*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7),opx=omC+insC,ebd=nR-opx;
+    const bookDep=bookWdv*0.15;bookWdv=Math.max(0,bookWdv-bookDep);
+    const interest=ob_debt*ir,prin=(y<=moro?0:(y<=tn?ap:0));
+    ob_debt=Math.max(0,ob_debt-prin);
+    let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+    const txbl=Math.max(0,ebd-interest-itd),txp=txbl*taxR*1.04,pat=(ebd-bookDep-interest)-txp;
+    retEarn+=pat;
+    const netFA=bookWdv,currA=Math.max(0,retEarn*0.3+2);
+    rows.push(csvRow([y,eAmt.toFixed(2),retEarn.toFixed(2),ob_debt.toFixed(2),netFA.toFixed(2),currA.toFixed(2),(eAmt+Math.max(0,retEarn)+ob_debt).toFixed(2)]));
+    tC*=(1+tarE);oC*=(1+oaE);omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+  downloadCSV('EIL_Solar_Ground_Financial_Model.csv',rows);
+}
+
+function exportPLToCSV(){
+  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
+  const plf=gv('plf')/100,tloss=gv('tloss')/100,tariff=gv('tariff'),disc=gv('disc')/100;
+  const peak=gv('peak')/100,sur=gv('surcharge')/100,oa=gv('oa');
+  const tarE=gv('taresc')/100,oaE=gv('oaesc')/100;
+  const sCap=gv('epc')+gv('land')+gv('evac')+gv('misc');
+  const tCap=sCap;
+  const df=gv('df')/100,ir=gv('ir')/100,tn=gv('tn'),moro=gv('moro');
+  const taxR=gv('tax')/100,deg1=gv('deg1')/100;
+  const dAmt=tCap*df,eAmt=tCap*(1-df);
+  const grossGen=dc_kWp*plf*8760;
+  const repayYrs=Math.max(1,tn-moro);
+  const ap=dAmt/repayYrs;
+  const co=document.getElementById('pr-company').value||'[Company Name]';
+
+  const rows=[co+' — Solar Project: Projected P&L and Balance Sheet',
+    'Generated: '+new Date().toLocaleDateString('en-IN'),
+    'AC: '+gv('ac')+'MW | DC: '+(gv('ac')*gv('dac')).toFixed(2)+'MW | Capex: Rs '+tCap.toFixed(1)+' Cr',
+    'Interest: '+gv('ir')+'%/yr | Tenure: '+tn+' yrs | Moratorium: '+moro+' yr','',
+    '=== PROJECTED PROFIT & LOSS ACCOUNT ===',
+    csvRow(['Year','Net Revenue Cr','O&M Cr','Insurance Cr','EBITDA Cr','Depreciation Cr','EBIT Cr','Interest Cr','PBT Cr','Tax Cr','PAT Cr','Retained Earnings Cr'])];
+
+  let ob=dAmt,dF=1,tC=tariff,oC=oa,omC=sCap*gv('om')/100,insC=sCap*gv('ins')/100;
+  let wdv=sCap,bookWdv=sCap,retEarns=0;
+
+  for(let y=1;y<=10;y++){
+    if(y===1)dF=1-deg1;else if(y<=10)dF*=0.9932;
+    const ng=grossGen*dF*(1-tloss);
+    const wt=tC*(1+peak*sur),sp=wt*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7),opx=omC+insC,ebd=nR-opx;
+    const bookDep=bookWdv*0.15;bookWdv=Math.max(0,bookWdv-bookDep);
+    const interest=ob*ir;
+    let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+    const prin=(y<=moro?0:(y<=tn?ap:0));
+    ob=Math.max(0,ob-prin);
+    const ebit=ebd-bookDep,pbt=ebit-interest,txbl=Math.max(0,ebd-interest-itd);
+    const txp=txbl*taxR*1.04,pat=pbt-txp;
+    retEarns+=pat;
+    rows.push(csvRow([y,nR.toFixed(2),omC.toFixed(2),insC.toFixed(2),ebd.toFixed(2),bookDep.toFixed(2),ebit.toFixed(2),interest.toFixed(2),pbt.toFixed(2),txp.toFixed(2),pat.toFixed(2),retEarns.toFixed(2)]));
+    tC*=(1+tarE);oC*=(1+oaE);omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+
+  rows.push('','=== PROJECTED BALANCE SHEET ===',
+    csvRow(['Year','Share Capital Cr','Reserves & Surplus Cr','Long-term Debt Cr','Total Liabilities Cr','Net Fixed Assets Cr','Current Assets Cr','Total Assets Cr']));
+
+  ob=dAmt;bookWdv=sCap;retEarns=0;dF=1;tC=tariff;oC=oa;omC=sCap*gv('om')/100;insC=sCap*gv('ins')/100;wdv=sCap;
+  for(let y=1;y<=10;y++){
+    if(y===1)dF=1-deg1;else if(y<=10)dF*=0.9932;
+    const ng=grossGen*dF*(1-tloss);
+    const wt=tC*(1+peak*sur),sp=wt*disc;
+    const nR=(ng*sp/1e7)-(ng*oC/1e7),opx=omC+insC,ebd=nR-opx;
+    const bookDep=bookWdv*0.15;bookWdv=Math.max(0,bookWdv-bookDep);
+    const interest=ob*ir;
+    let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+    const prin=(y<=moro?0:(y<=tn?ap:0));ob=Math.max(0,ob-prin);
+    const txbl=Math.max(0,ebd-interest-itd),txp=txbl*taxR*1.04,pat=(ebd-bookDep-interest)-txp;
+    retEarns+=pat;
+    const nfa=bookWdv,ca=Math.max(1.5,retEarns*0.25+2),tl=eAmt+Math.max(0,retEarns)+ob;
+    rows.push(csvRow([y,eAmt.toFixed(2),retEarns.toFixed(2),ob.toFixed(2),tl.toFixed(2),nfa.toFixed(2),ca.toFixed(2),(nfa+ca).toFixed(2)]));
+    tC*=(1+tarE);oC*=(1+oaE);omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+  downloadCSV((co.replace(/[^a-zA-Z0-9]/g,'_'))+'_PL_BalanceSheet.csv',rows);
+}
+
+/* ══ WORD DOCX GENERATOR ════════════════════════════════════════ */
+async function generateDocx(){
+  const statusEl=document.getElementById('pr-status');
+  if(statusEl){statusEl.style.display='block';statusEl.textContent='Generating report... please wait.';}
+
+  const co=document.getElementById('pr-company').value||'[Company Name]';
+  const addr=document.getElementById('pr-addr').value||'[Address]';
+  const promoter=document.getElementById('pr-promoter').value||'[Promoter Name]';
+  const industry=document.getElementById('pr-industry').value||'[Industry]';
+  const turnover=document.getElementById('pr-turnover').value||'[Turnover]';
+  const powerbill=document.getElementById('pr-powerbill').value||'[Power Bill]';
+  const site=document.getElementById('pr-site').value||'Tamil Nadu';
+  const land=document.getElementById('pr-land').value||'78';
+  const rpDate=document.getElementById('pr-date').value||'May 2026';
+  const bank=document.getElementById('pr-bank').value||'[Bank Name]';
+  const dev=document.getElementById('pr-dev').value||'EIL Solar Pvt. Ltd.';
+
+  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
+  const acMW=gv('ac'),dcMW=(gv('ac')*gv('dac')).toFixed(2);
+  const plf=gv('plf'),tloss=gv('tloss'),tariff=gv('tariff');
+  const disc=gv('disc'),oa=gv('oa'),df=gv('df'),ir=gv('ir'),tn=gv('tn'),moro=gv('moro');
+  const sCap=gv('epc')+gv('land')+gv('evac')+gv('misc');
+  const tCap=sCap,dAmt=(tCap*df/100).toFixed(2),eAmt=(tCap*(1-df/100)).toFixed(2);
+  const sp1=((tariff*(1+(gv('peak')/100)*(gv('surcharge')/100)))*disc/100).toFixed(4);
+  const nr1=(sp1-oa).toFixed(4);
+  const grossGenMU=(dc_kWp*(plf/100)*8760/1e6).toFixed(2);
+  const netMU=(grossGenMU*(1-tloss/100)).toFixed(2);
+  const ebitdaYr1=((netMU*1e6*nr1/1e7)-(sCap*gv('om')/100)-(sCap*gv('ins')/100)).toFixed(2);
+
+  // Build report content as plain text with markers
+  const report = [
+    `PROJECT REPORT`,``,
+    `${co}`,
+    `Ground-Mounted Solar Power Plant — ${acMW} MW AC / ${dcMW} MW DC`,
+    `Group Captive CPP — Tamil Nadu`,
+    `Prepared by: ${dev}  |  Date: ${rpDate}`,``,``,
+    `1. EXECUTIVE SUMMARY`,``,
+    `${co}, promoted by ${promoter}, is a ${industry} company headquartered at ${addr}. With an annual turnover of Rs ${turnover} Crores and a current annual power bill of approximately Rs ${powerbill} Crores, the company is seeking to reduce its energy costs through investment in captive solar power.`,``,
+    `This project report presents a detailed feasibility study for the development of a ${acMW} MW AC (${dcMW} MW DC) ground-mounted solar power plant at ${site}, Tamil Nadu, under the Group Captive CPP category as per CERC Captive Rules 2001 and TNERC T.O. No. 7 of 2022.`,``,
+    `Key financial highlights:`,
+    `  Total project cost: Rs ${tCap.toFixed(1)} Crores`,
+    `  Equity contribution: Rs ${eAmt} Crores (${100-df}%)`,
+    `  Debt from ${bank}: Rs ${dAmt} Crores (${df}% at ${ir}% p.a., ${tn} years with ${moro} year moratorium)`,
+    `  Year 1 net generation at customer meter: ${netMU} Million Units`,
+    `  Net realisation to developer Year 1: Rs ${nr1} per kWh`,
+    `  EBITDA Year 1: Rs ${ebitdaYr1} Crores`,
+    `  CSS and Additional Surcharge: NIL (waived under Group Captive CPP)`,``,``,
+    `2. SOLAR INDUSTRY — HISTORY, PRESENT STATUS & FUTURE`,``,
+    `2.1 History and Development`,
+    `Solar power has emerged as a crucial component in the global energy mix. The journey began with solar cells first used in space exploration in the 1950s, where early cells achieved efficiencies of around 6%. Germany's introduction of the Renewable Energy Sources Act (EEG) in 2000 spurred rapid global adoption. China's large-scale manufacturing drove costs down from $28 per watt in 2010 to under $0.12 per watt today — a reduction of over 80%.`,``,
+    `2.2 Current Status in India`,
+    `India has installed over 82 GW of solar capacity as of 2024, making it one of the top solar markets globally. The government has set an ambitious target of 280 GW of solar capacity by 2030 as part of its 500 GW renewable energy goal. Solar power is now the most cost-effective source of electricity globally, with LCOE at Rs 1.5 to 2.5 per kWh for utility-scale projects in India.`,``,
+    `2.3 Tamil Nadu Solar Market`,
+    `Tamil Nadu is a leader in renewable energy in India. The state has excellent solar radiation averaging 5.3 kWh per sq. metre per day, among the highest in India. TNERC's progressive regulatory framework under T.O. No. 7 of 2022 provides clear and stable rules for Group Captive CPP projects, with comprehensive open access regulations.`,``,
+    `2.4 Future Outlook`,
+    `The solar industry is expected to see continued cost reduction in panels (monocrystalline PERC technology) and inverters. Battery storage costs (LFP chemistry) have fallen from Rs 1.8 Cr per MWh in 2022 to Rs 0.75 Cr per MWh in 2025 and are projected to fall further. The combination of solar plus storage will increasingly enable round-the-clock reliable renewable power.`,``,``,
+    `3. PROJECT DESCRIPTION & TECHNICAL SPECIFICATIONS`,``,
+    `3.1 Plant Specifications`,
+    `  Technology: Monocrystalline PERC / TOPCon solar panels`,
+    `  AC installed capacity: ${acMW} MW AC`,
+    `  DC installed capacity: ${dcMW} MW DC (DC:AC ratio ${gv('dac')})`,
+    `  DC capacity in kWp: ${dc_kWp.toLocaleString('en-IN')} kWp`,
+    `  Plant Load Factor (CUF): ${plf}%`,
+    `  Gross annual generation (Year 1): ${grossGenMU} MU`,
+    `  Total technical losses: ${tloss}%`,
+    `  Net generation at customer meter: ${netMU} MU per year`,
+    `  Degradation: ${gv('deg1')}% Year 1 (LID), 0.68% per year Year 2-10`,
+    `  Plant life: 25 years`,``,
+    `3.2 Evacuation Infrastructure`,
+    `  Evacuation voltage: 110 kV (EHT evacuation)`,
+    `  TNERC deemed transmission loss at 110 kV: NIL`,
+    `  Distribution loss (110 kV to buyer 11 kV): 1.52%`,
+    `  Substation, HT line and metering included in project cost`,``,
+    `3.3 Site Details`,
+    `  Location: ${site}`,
+    `  Land area: approximately ${land} acres`,
+    `  Solar radiation: 5.0 to 5.5 kWh per sq. metre per day`,``,``,
+    `4. COST OF PROJECT & MEANS OF FINANCE`,``,
+    `4.1 Cost of Project (Rs Crores)`,
+    `  EPC - Solar plant (panels, inverters, civil, cabling): Rs ${gv('epc').toFixed(1)} Cr`,
+    `  Land cost: Rs ${gv('land').toFixed(1)} Cr`,
+    `  Evacuation infrastructure (110 kV HT line + substation): Rs ${gv('evac').toFixed(1)} Cr`,
+    `  SCADA, metering and miscellaneous: Rs ${gv('misc').toFixed(1)} Cr`,
+    `  TOTAL PROJECT COST: Rs ${tCap.toFixed(1)} Crores`,``,
+    `4.2 Means of Finance`,
+    `  Equity (${100-df}% of project cost): Rs ${eAmt} Crores`,
+    `  Term loan from ${bank} (${df}% of project cost): Rs ${dAmt} Crores`,
+    `  Interest rate: ${ir}% per annum (fixed)`,
+    `  Loan tenure: ${tn} years`,
+    `  Moratorium: ${moro} year (interest only, no principal repayment)`,
+    `  Total: Rs ${tCap.toFixed(1)} Crores`,``,``,
+    `5. TARIFF & SELLING PRICE (Year 1)`,``,
+    `  Buyer: ${co} (${industry}) under TNERC Group Captive CPP`,
+    `  TNEB base tariff (TANGEDCO revised 01-07-2023): Rs ${tariff}/kWh`,
+    `  Weighted TNEB (peak surcharge applied): Rs ${(tariff*(1+gv('peak')/100*gv('surcharge')/100)).toFixed(4)}/kWh`,
+    `  Selling price to buyer (${disc}% of weighted): Rs ${sp1}/kWh`,
+    `  Open Access charge (all-in, Group Captive): Rs ${oa}/kWh`,
+    `  CSS - ZERO (waived, Group Captive CPP, TNERC T.O. 7/2022)`,
+    `  Additional Surcharge - ZERO (waived)`,
+    `  Net realisation to developer: Rs ${nr1}/kWh`,
+    `  Buyer saves vs direct TNEB tariff: Rs ${(tariff-parseFloat(sp1)-oa).toFixed(4)}/kWh`,``,``,
+    `6. PROJECTED PROFIT & LOSS ACCOUNT (10 Years, Rs Crores)`,``,
+    `[See CSV export for complete 10-year P&L table]`,``,
+    `Year 1 Highlights:`,
+    `  Net generation billed: ${netMU} MU`,
+    `  Net revenue: Rs ${(parseFloat(netMU)*parseFloat(nr1)).toFixed(2)} Cr`,
+    `  EBITDA: Rs ${ebitdaYr1} Cr`,
+    `  Interest (moratorium year): Rs ${(parseFloat(dAmt)*ir/100).toFixed(2)} Cr`,
+    `  Principal: Rs 0.00 Cr (moratorium)`,
+    `  FCF to developer: Rs ${(parseFloat(ebitdaYr1)-(parseFloat(dAmt)*ir/100)).toFixed(2)} Cr (approx)`,``,``,
+    `7. SWOT ANALYSIS`,``,
+    `Strengths:`,
+    `  High solar irradiation in Tamil Nadu (5.3 kWh per sq.m per day)`,
+    `  Group Captive CPP structure: CSS and Additional Surcharge = ZERO`,
+    `  110 kV evacuation: TNERC transmission loss = NIL`,
+    `  Monocrystalline PERC technology: >20% module efficiency`,
+    `  25-year asset life with minimal operating costs`,
+    `  Cost of solar power significantly lower than grid tariff`,
+    `  Battery storage option for evening peak demand`,``,
+    `Weaknesses:`,
+    `  Intermittent generation (no night generation, reduced in monsoon)`,
+    `  PLF 20-22% vs thermal plant PLF of 80-85%`,
+    `  High upfront capital requirement`,
+    `  Land availability and conversion from agricultural use`,``,
+    `Opportunities:`,
+    `  TANGEDCO tariff expected to increase 3-5% annually`,
+    `  Battery storage costs falling: enabling 24x7 renewable power`,
+    `  Green hydrogen production using excess solar generation`,
+    `  Carbon credit market development`,
+    `  India's 500 GW renewable target by 2030: strong policy support`,``,
+    `Threats:`,
+    `  OA charge revision every 3 years by TNERC (may increase)`,
+    `  Grid congestion during solar peak hours (10 AM to 2 PM)`,
+    `  Technology obsolescence risk over 25-year life`,
+    `  Regulatory changes to Group Captive CPP rules`,
+    `  Land acquisition delays and conversion approvals`,``,``,
+    `8. REGULATORY FRAMEWORK`,``,
+    `  Structure: Group Captive CPP under CERC Captive Rules 2001 and Electricity Act 2003`,
+    `  Buyer equity requirement: Minimum 26% in generating company`,
+    `  Captive consumption requirement: Minimum 51% of annual generation`,
+    `  CSS: ZERO (TNERC T.O. No. 7 of 2022)`,
+    `  Additional Surcharge: ZERO`,
+    `  OA charge: Rs 1.33 per kWh all-in (wheeling + transmission + SLDC)`,
+    `  TNERC compliance: Annual compliance certificate required`,``,``,
+    `9. CONCLUSION`,``,
+    `The proposed ${acMW} MW Ground-Mounted Solar Power Plant at ${site} is technically feasible, financially viable, and strategically positioned to provide long-term energy cost savings to ${co}. The Group Captive CPP structure ensures significant regulatory advantages including zero CSS and zero Additional Surcharge, making the effective cost of solar power substantially lower than TANGEDCO grid tariff.`,``,
+    `The project is recommended for approval and financing.`,``,
+    `Prepared by: ${dev}`,
+    `Date: ${rpDate}`,
+    `--- END OF REPORT ---`,
+  ].join('\n');
+
+  // Generate as plain text file (immediate download, no library needed)
+  const blob=new Blob([report],{type:'text/plain;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(co.replace(/[^a-zA-Z0-9]/g,'_'))+'_Solar_Project_Report.txt';
+  a.click();
+
+  if(statusEl){statusEl.textContent='Report downloaded as .txt file. Open in Word or Google Docs to format and print. Use Export CSV button for financial tables in Excel/Google Sheets.';}
+  setTimeout(()=>{if(statusEl)statusEl.style.display='none';},6000);
+}
+
 </script>
 </body>
 </html>
