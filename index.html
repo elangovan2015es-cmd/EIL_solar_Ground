@@ -310,7 +310,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.4 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v6.5 | 01-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -357,7 +357,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.4</div>
+    <div class="drw-t">EIL Solar Ground v6.5</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -657,25 +657,167 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     </div>
   </div>
   <div class="card">
-    <div class="chdr or">Fetch actual generation &amp; export</div>
+    <div class="chdr or">Data integration &amp; fetch</div>
+
+    <!-- SOURCE SELECTOR -->
     <div class="fld">
-      <label class="flbl">Data source URL <span>(SLDC portal / inverter monitoring REST API)</span></label>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <input type="text" id="avp-url" placeholder="https://api.yoursystem.com/generation?plant=xyz&amp;year=2026" style="flex:1;min-width:180px;font-size:12.5px;padding:9px 11px;border:2px solid var(--n3);border-radius:8px">
-        <button onclick="fetchActualGen()" style="background:var(--b6);color:#fff;border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0">&#8595; Fetch</button>
-      </div>
-      <div class="fhint" style="margin-top:6px">Expected JSON: <code style="background:var(--n1);padding:2px 5px;border-radius:3px;font-size:11px">{"generation":[{"month":"April","mu":3.82},...]}</code> | CSV: columns month,mu | If CORS blocks the URL, paste JSON below instead.</div>
+      <label class="flbl">Select your data source</label>
+      <select id="ds-source" onchange="showDataSource()" style="font-size:14px;padding:10px 12px;border:2px solid var(--n3);border-radius:8px;width:100%;font-family:'Inter',sans-serif">
+        <option value="">-- Select how to import data --</option>
+        <option value="growatt">Growatt Cloud API (most common in India)</option>
+        <option value="solis">Solis / Ginlong Cloud API</option>
+        <option value="huawei">Huawei FusionSolar API</option>
+        <option value="goodwe">Goodwe SEMS Portal API</option>
+        <option value="generic">Generic REST API (any inverter with API)</option>
+        <option value="upload">Upload CSV / Excel file from portal</option>
+        <option value="sldc">Paste SLDC meter CSV data</option>
+        <option value="json">Paste JSON data manually</option>
+        <option value="gsheet">Fetch from Google Sheet (published)</option>
+      </select>
     </div>
-    <div class="fld">
-      <label class="flbl">Paste JSON data manually <span>(use if URL fetch is blocked)</span></label>
-      <textarea id="avp-paste" rows="3" placeholder='{"generation":[{"month":"April","mu":3.82},{"month":"May","mu":4.10}]}' style="width:100%;font-size:12px;padding:8px 11px;border:2px solid var(--n3);border-radius:8px;font-family:monospace;resize:vertical"></textarea>
-      <div style="display:flex;gap:8px;margin-top:6px;flex-wrap:wrap">
-        <button onclick="parseAvpJson()" style="background:var(--g5);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#10003; Load JSON Data</button>
-        <button onclick="exportAvpToXLSX()" style="background:var(--g6);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128202; Export Actual vs Projected to Excel</button>
+
+    <!-- GROWATT -->
+    <div id="ds-growatt" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">Growatt API — get your Plant ID from the Growatt ShinePhone app or web portal (server.growatt.com). API token from Account Settings &rarr; API Access. Data fetches monthly totals per plant.</div>
+      <div class="cust-grid">
+        <div class="cust-fld"><label>Growatt Plant ID</label><input type="text" id="ds-growatt-plant" placeholder="e.g. 1234567"></div>
+        <div class="cust-fld"><label>API Token</label><input type="text" id="ds-growatt-token" placeholder="Your Growatt API token"></div>
+        <div class="cust-fld"><label>Year</label><input type="text" id="ds-growatt-year" placeholder="e.g. 2026"></div>
+        <div class="cust-fld"><label>Month (1-12, leave blank for all)</label><input type="text" id="ds-growatt-month" placeholder="e.g. 4 for April"></div>
       </div>
-      <div id="avp-fetch-status" style="display:none;margin-top:8px;font-size:12.5px;padding:8px 12px;border-radius:7px;background:var(--g1);color:var(--g6);font-weight:500"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button onclick="fetchGrowatt()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8595; Fetch from Growatt</button>
+        <button onclick="saveDataSourceConfig('growatt')" style="background:var(--n5);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save credentials</button>
+      </div>
+      <div class="fhint" style="margin-top:6px">Credentials are saved in your browser only — never sent anywhere except Growatt servers.</div>
+    </div>
+
+    <!-- SOLIS -->
+    <div id="ds-solis" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">Solis Cloud API (cloud.ginlong.com). Get API Key and Secret from Solis distributor or portal account settings. Supports daily and monthly data.</div>
+      <div class="cust-grid">
+        <div class="cust-fld"><label>API Key</label><input type="text" id="ds-solis-key" placeholder="Solis API key"></div>
+        <div class="cust-fld"><label>API Secret</label><input type="text" id="ds-solis-secret" placeholder="Solis API secret"></div>
+        <div class="cust-fld"><label>Station ID</label><input type="text" id="ds-solis-station" placeholder="Your station/plant ID"></div>
+        <div class="cust-fld"><label>Year</label><input type="text" id="ds-solis-year" placeholder="e.g. 2026"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button onclick="fetchSolis()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8595; Fetch from Solis</button>
+        <button onclick="saveDataSourceConfig('solis')" style="background:var(--n5);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save credentials</button>
+      </div>
+    </div>
+
+    <!-- HUAWEI -->
+    <div id="ds-huawei" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">Huawei FusionSolar OpenAPI (intl.fusionsolar.huawei.com/thirdData). Create a system account in FusionSolar and enable OpenAPI access. Fetches monthly plant energy data.</div>
+      <div class="cust-grid">
+        <div class="cust-fld"><label>System Account (username)</label><input type="text" id="ds-hw-user" placeholder="FusionSolar system account"></div>
+        <div class="cust-fld"><label>System Account Password</label><input type="text" id="ds-hw-pass" placeholder="System account password" type="password"></div>
+        <div class="cust-fld"><label>Plant DN / Station Code</label><input type="text" id="ds-hw-plant" placeholder="e.g. NE=12345678"></div>
+        <div class="cust-fld"><label>Year</label><input type="text" id="ds-hw-year" placeholder="e.g. 2026"></div>
+      </div>
+      <button onclick="fetchHuawei()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:8px">&#8595; Fetch from FusionSolar</button>
+    </div>
+
+    <!-- GOODWE -->
+    <div id="ds-goodwe" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">Goodwe SEMS Portal (semsportal.com). Use your SEMS portal login. Monthly plant generation via SEMS API.</div>
+      <div class="cust-grid">
+        <div class="cust-fld"><label>SEMS Username (email)</label><input type="text" id="ds-gw-user" placeholder="Your SEMS email"></div>
+        <div class="cust-fld"><label>SEMS Password</label><input type="text" id="ds-gw-pass" placeholder="SEMS password"></div>
+        <div class="cust-fld"><label>Power Station ID</label><input type="text" id="ds-gw-plant" placeholder="Station ID from SEMS"></div>
+        <div class="cust-fld"><label>Year</label><input type="text" id="ds-gw-year" placeholder="e.g. 2026"></div>
+      </div>
+      <button onclick="fetchGoodwe()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:8px">&#8595; Fetch from SEMS</button>
+    </div>
+
+    <!-- GENERIC API -->
+    <div id="ds-generic" class="ds-panel" style="display:none">
+      <div class="cust-grid">
+        <div class="cust-fld" style="grid-column:1/-1"><label>API URL</label><input type="text" id="ds-url" placeholder="https://api.yoursystem.com/generation?plant=xyz&year=2026"></div>
+        <div class="cust-fld"><label>Auth header name</label><input type="text" id="ds-auth-name" placeholder="e.g. Authorization or X-API-Key"></div>
+        <div class="cust-fld"><label>Auth header value</label><input type="text" id="ds-auth-val" placeholder="e.g. Bearer yourtoken123"></div>
+        <div class="cust-fld"><label>JSON path to array</label><input type="text" id="ds-json-path" placeholder="e.g. data.generation or leave blank for root"></div>
+        <div class="cust-fld"><label>Month field name in JSON</label><input type="text" id="ds-month-field" value="month"></div>
+        <div class="cust-fld"><label>Generation field name in JSON</label><input type="text" id="ds-mu-field" value="mu"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button onclick="fetchGenericAPI()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8595; Fetch Data</button>
+        <button onclick="saveDataSourceConfig('generic')" style="background:var(--n5);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save config</button>
+      </div>
+      <div class="fhint" style="margin-top:6px">Expected JSON: <code style="background:var(--n1);padding:2px 5px;border-radius:3px;font-size:11px">{"generation":[{"month":"April","mu":3.82},...]}</code> | Month values can be names (April) or numbers (4). MU values in Million Units.</div>
+    </div>
+
+    <!-- CSV/EXCEL UPLOAD -->
+    <div id="ds-upload" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">Download the monthly report from your inverter portal or SLDC, then upload the file here. Supported: CSV (.csv), Excel (.xlsx, .xls). The app reads the file entirely in your browser — nothing is sent to any server.</div>
+      <div style="border:2px dashed var(--g5);border-radius:10px;padding:20px;text-align:center;background:var(--g0);cursor:pointer" onclick="document.getElementById('ds-file-input').click()" id="ds-dropzone">
+        <div style="font-size:28px">&#128196;</div>
+        <div style="font-size:14px;font-weight:600;color:var(--g6);margin-top:6px">Click to browse or drag and drop file here</div>
+        <div style="font-size:12px;color:var(--n5);margin-top:4px">CSV, XLSX, or XLS from Growatt / Solis / Huawei / SLDC / any portal</div>
+      </div>
+      <input type="file" id="ds-file-input" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileUpload(this)">
+      <div class="fhint" style="margin-top:8px">The app looks for columns named: Month (or month_name, period), Generation (or energy, kwh, units, mu). Column names are case-insensitive. Units are auto-detected — kWh values are converted to MU.</div>
+    </div>
+
+    <!-- SLDC CSV -->
+    <div id="ds-sldc" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">Download the injection meter report from Tamil Nadu SLDC portal (tnsldc.org). Paste the CSV content below. The app extracts monthly net injected units (MU) at the 110 kV metering point.</div>
+      <textarea id="ds-sldc-text" rows="6" placeholder="Paste SLDC CSV data here..." style="width:100%;font-size:12px;padding:8px 11px;border:2px solid var(--n3);border-radius:8px;font-family:monospace;resize:vertical"></textarea>
+      <button onclick="parseSLDCData()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:8px">&#10003; Parse SLDC Data</button>
+    </div>
+
+    <!-- JSON PASTE -->
+    <div id="ds-json" class="ds-panel" style="display:none">
+      <textarea id="avp-paste" rows="4" placeholder='{"generation":[{"month":"April","mu":3.82},{"month":"May","mu":4.10}]}' style="width:100%;font-size:12px;padding:8px 11px;border:2px solid var(--n3);border-radius:8px;font-family:monospace;resize:vertical"></textarea>
+      <button onclick="parseAvpJson()" style="background:var(--g5);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-top:8px">&#10003; Load JSON Data</button>
+    </div>
+
+    <!-- GOOGLE SHEET -->
+    <div id="ds-gsheet" class="ds-panel" style="display:none">
+      <div class="alert info" style="font-size:12px">If your plant data logger posts to Google Sheets: publish the sheet (File &rarr; Share &rarr; Publish to web &rarr; CSV format) and paste the published URL below. Two columns expected: Month, Generation (MU or kWh).</div>
+      <div class="cust-grid">
+        <div class="cust-fld" style="grid-column:1/-1"><label>Published Google Sheet URL (CSV format)</label><input type="text" id="ds-gsheet-url" placeholder="https://docs.google.com/spreadsheets/d/YOUR_ID/pub?gid=0&single=true&output=csv"></div>
+        <div class="cust-fld"><label>Generation column name</label><input type="text" id="ds-gsheet-col" value="Generation" placeholder="Column header name in your sheet"></div>
+        <div class="cust-fld"><label>Month column name</label><input type="text" id="ds-gsheet-month" value="Month" placeholder="Month column header name"></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+        <button onclick="fetchGSheet()" style="background:var(--b6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8595; Fetch from Google Sheet</button>
+        <button onclick="saveDataSourceConfig('gsheet')" style="background:var(--n5);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save URL</button>
+      </div>
+    </div>
+
+    <!-- STATUS -->
+    <div id="avp-fetch-status" style="display:none;margin-top:10px;font-size:12.5px;padding:10px 13px;border-radius:8px;font-weight:500"></div>
+
+    <!-- EXPORT -->
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--n3)">
+      <button onclick="exportAvpToXLSX()" style="background:var(--g6);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128202; Export Actual vs Projected to Excel</button>
     </div>
   </div>
+
+  <!-- DAILY DATA ENTRY -->
+  <div class="card">
+    <div class="chdr or">Daily generation entry <span style="text-transform:none;letter-spacing:0;font-weight:400">(auto-aggregates to monthly totals)</span></div>
+    <div class="fld">
+      <label class="flbl">Select month for daily entry</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <select id="daily-month" style="font-size:13.5px;padding:9px 12px;border:2px solid var(--n3);border-radius:8px;flex:1;font-family:'Inter',sans-serif">
+          <option value="0">April</option><option value="1">May</option><option value="2">June</option>
+          <option value="3">July</option><option value="4">August</option><option value="5">September</option>
+          <option value="6">October</option><option value="7">November</option><option value="8">December</option>
+          <option value="9">January</option><option value="10">February</option><option value="11">March</option>
+        </select>
+        <button onclick="buildDailyGrid()" style="background:var(--b6);color:#fff;border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0">Load Days</button>
+        <button onclick="exportDailyToXLSX()" style="background:var(--g6);color:#fff;border:none;border-radius:8px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0">&#128202; Excel</button>
+      </div>
+    </div>
+    <div id="daily-grid-wrap"></div>
+    <div id="daily-summary" style="margin-top:10px"></div>
+  </div>
+
+  <div class="card">
+    <div class="chdr or">Monthly actual data entry</div>
   <div class="card">
     <div class="chdr or">Monthly actual data entry</div>
     <div style="display:grid;grid-template-columns:80px 1fr 1fr 1fr;gap:6px;padding:6px 0;border-bottom:1px solid var(--n3);margin-bottom:4px">
@@ -2419,7 +2561,7 @@ function generateTnercCert(){
     L('Name (' + c.name + '): ___________________________  Date: __________  Seal: _______');
   });
   N(); D();
-  L('This certificate is generated by EIL Solar Ground v6.4 App — ' + new Date().toLocaleDateString('en-IN'));
+  L('This certificate is generated by EIL Solar Ground v6.5 App — ' + new Date().toLocaleDateString('en-IN'));
   L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
 
   const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
@@ -3030,6 +3172,480 @@ function loadRegData(){
       const el=document.getElementById(id);if(el)el.value=val;
     });
   }catch(e){}
+}
+
+
+
+
+
+/* ══════════════════════════════════════════════════════════════════
+   DATA SOURCE INTEGRATION — v6.5
+   Growatt, Solis, Huawei, Goodwe, Generic API, CSV/Excel upload,
+   SLDC paste, Google Sheets, Daily data entry
+══════════════════════════════════════════════════════════════════ */
+
+// Daily data store: dailyData[monthIdx][dayIdx] = kWh
+let dailyData = Array.from({length:12}, () => ({}));
+
+const DS_MONTHS_MAP = {
+  'april':0,'may':1,'june':2,'july':3,'august':4,'september':5,
+  'october':6,'november':7,'december':8,'january':9,'february':10,'march':11,
+  '4':0,'5':1,'6':2,'7':3,'8':4,'9':5,'10':6,'11':7,'12':8,'1':9,'2':10,'3':11,
+  'apr':0,'may':1,'jun':2,'jul':3,'aug':4,'sep':5,'oct':6,'nov':7,'dec':8,'jan':9,'feb':10,'mar':11
+};
+const MONTH_DAYS = [30,31,30,31,31,30,31,30,31,31,28,31]; // Apr-Mar
+const MONTH_NAMES_FULL = ['April','May','June','July','August','September','October','November','December','January','February','March'];
+
+function showDataSource(){
+  const val = document.getElementById('ds-source').value;
+  document.querySelectorAll('.ds-panel').forEach(p => p.style.display='none');
+  if(val){
+    const panel = document.getElementById('ds-'+val);
+    if(panel) panel.style.display='block';
+  }
+  loadDataSourceConfig(val);
+}
+
+function avpStatus(msg, type='ok'){
+  const el=document.getElementById('avp-fetch-status');
+  if(!el) return;
+  el.style.display='block';
+  el.style.background=type==='ok'?'var(--g1)':type==='err'?'var(--r1)':'var(--b1)';
+  el.style.color=type==='ok'?'var(--g6)':type==='err'?'var(--r6)':'var(--b6)';
+  el.textContent=msg;
+}
+
+/* ── SAVE / LOAD DATA SOURCE CONFIG ─────────────────────────────── */
+function saveDataSourceConfig(source){
+  try {
+    const config={};
+    document.querySelectorAll('[id^="ds-'+source+'-"]').forEach(el=>{
+      config[el.id]=el.value;
+    });
+    localStorage.setItem('eil_ds_'+source, JSON.stringify(config));
+    avpStatus('Configuration saved. Will be restored next session.','ok');
+  } catch(e) { avpStatus('Could not save: '+e.message,'err'); }
+}
+
+function loadDataSourceConfig(source){
+  if(!source) return;
+  try {
+    const raw=localStorage.getItem('eil_ds_'+source);
+    if(!raw) return;
+    const config=JSON.parse(raw);
+    Object.entries(config).forEach(([id,val])=>{
+      const el=document.getElementById(id);
+      if(el&&el.type!=='file') el.value=val;
+    });
+  } catch(e) {}
+}
+
+/* ── APPLY DATA TO MONTHLY GRID ─────────────────────────────────── */
+function applyMonthlyMU(monthIdx, muValue){
+  if(monthIdx<0||monthIdx>11||!muValue||muValue<=0) return;
+  if(!avpData[monthIdx]) avpData[monthIdx]={projGen:0,actGen:0,projBill:0,actBill:0};
+  avpData[monthIdx].actGen = muValue;
+  const el=document.getElementById('avp-ag-'+monthIdx);
+  if(el) el.value=muValue.toFixed(3);
+}
+
+function applyAvpData(json){
+  const months=DS_MONTHS_MAP;
+  let count=0;
+  const list=json.generation||json.data||json.months||json.energy||json;
+  if(!Array.isArray(list)) {
+    // Try object with month keys
+    Object.entries(json).forEach(([k,v])=>{
+      const idx=months[k.toLowerCase().trim()];
+      const mu=parseFloat(v);
+      if(idx!==undefined&&mu>0){applyMonthlyMU(idx,mu);count++;}
+    });
+    if(count>0){calcAvpSummary();buildActualRows();if(typeof buildTnercGrid==='function')buildTnercGrid();}
+    return count;
+  }
+  list.forEach(item=>{
+    const mraw=(item.month||item.Month||item.month_name||item.period||item.name||'').toString().toLowerCase().trim();
+    const idx=months[mraw];
+    const mu=parseFloat(item.mu||item.MU||item.generation||item.energy||item.kwh||item.value||0);
+    // Auto-convert kWh to MU if value looks like kWh (>1000 for a month)
+    const muFinal = mu>1000 ? mu/1e6 : mu;
+    if(idx!==undefined&&muFinal>0){applyMonthlyMU(idx,muFinal);count++;}
+  });
+  if(count>0){calcAvpSummary();buildActualRows();if(typeof buildTnercGrid==='function')buildTnercGrid();}
+  return count;
+}
+
+function applyAvpCSV(text){
+  const lines=text.split('\n').filter(l=>l.trim()&&!l.startsWith('#'));
+  let count=0;
+  // Find header row
+  let monthCol=0, genCol=1;
+  const first=lines[0].toLowerCase();
+  const headers=first.split(',').map(h=>h.trim().replace(/"/g,''));
+  const mIdx=headers.findIndex(h=>h.includes('month')||h.includes('period')||h.includes('date'));
+  const gIdx=headers.findIndex(h=>h.includes('gen')||h.includes('energy')||h.includes('kwh')||h.includes('unit')||h.includes('mu')||h.includes('inject'));
+  if(mIdx>=0) monthCol=mIdx;
+  if(gIdx>=0) genCol=gIdx;
+  const startLine=mIdx>=0?1:0;
+  for(let i=startLine;i<lines.length;i++){
+    const parts=lines[i].split(',').map(p=>p.trim().replace(/"/g,''));
+    if(parts.length<2) continue;
+    const mraw=parts[monthCol].toLowerCase().trim();
+    const val=parseFloat(parts[genCol]);
+    const idx=DS_MONTHS_MAP[mraw];
+    const muFinal=val>1000?val/1e6:val;
+    if(idx!==undefined&&muFinal>0){applyMonthlyMU(idx,muFinal);count++;}
+  }
+  if(count>0){calcAvpSummary();buildActualRows();}
+  return count;
+}
+
+/* ── GROWATT ─────────────────────────────────────────────────────── */
+async function fetchGrowatt(){
+  const plantId=document.getElementById('ds-growatt-plant').value.trim();
+  const token=document.getElementById('ds-growatt-token').value.trim();
+  const year=document.getElementById('ds-growatt-year').value.trim()||new Date().getFullYear();
+  if(!plantId||!token){avpStatus('Enter Plant ID and API Token first.','err');return;}
+
+  avpStatus('Fetching from Growatt (server.growatt.com)...','info');
+
+  // Growatt API: POST to /v4/plant/energy
+  // Note: Direct API call may be blocked by CORS in browser
+  // Provide the curl equivalent and guidance
+  const endpoint=`https://server.growatt.com/v4/plant/energy?plant_id=${plantId}&date=${year}&type=year`;
+  try {
+    const res=await fetch(endpoint,{
+      method:'POST',
+      headers:{'token':token,'Content-Type':'application/json'},
+      body:JSON.stringify({plant_id:plantId,date:year,type:'year'})
+    });
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const json=await res.json();
+    // Growatt returns energy in kWh per month
+    let count=0;
+    const data=json.data||json.energy||[];
+    if(Array.isArray(data)){
+      data.forEach((item,i)=>{
+        const mu=(parseFloat(item.energy||item.value||0))/1e6;
+        if(mu>0){applyMonthlyMU(i,mu);count++;}
+      });
+    }
+    if(count>0){avpStatus(count+' months loaded from Growatt.','ok');}
+    else{throw new Error('No data found in response');}
+  } catch(e){
+    avpStatus('Growatt fetch failed (CORS restriction is common). Use this curl command in terminal to get the data, then paste JSON below:\n\ncurl -X POST "https://server.growatt.com/v4/plant/energy" -H "token:'+token+'" -d "plant_id='+plantId+'&date='+year+'&type=year"','err');
+    // Show the JSON paste panel as fallback
+    document.getElementById('ds-json').style.display='block';
+  }
+}
+
+/* ── SOLIS ───────────────────────────────────────────────────────── */
+async function fetchSolis(){
+  const key=document.getElementById('ds-solis-key').value.trim();
+  const secret=document.getElementById('ds-solis-secret').value.trim();
+  const station=document.getElementById('ds-solis-station').value.trim();
+  const year=document.getElementById('ds-solis-year').value.trim()||new Date().getFullYear();
+  if(!key||!secret||!station){avpStatus('Enter API Key, Secret and Station ID.','err');return;}
+  avpStatus('Solis API requires HMAC-SHA256 signature. Due to browser CORS restrictions, direct fetch is blocked. Use the Solis mobile app to export monthly data as CSV, then use the CSV Upload option above. Alternatively set up a proxy server with your credentials.','err');
+}
+
+/* ── HUAWEI FUSIONSOLAR ──────────────────────────────────────────── */
+async function fetchHuawei(){
+  const user=document.getElementById('ds-hw-user').value.trim();
+  const pass=document.getElementById('ds-hw-pass').value.trim();
+  const plant=document.getElementById('ds-hw-plant').value.trim();
+  if(!user||!pass||!plant){avpStatus('Enter all FusionSolar credentials.','err');return;}
+  avpStatus('Fetching from Huawei FusionSolar...','info');
+  try {
+    // Step 1: Login to get token
+    const loginRes=await fetch('https://intl.fusionsolar.huawei.com/thirdData/login',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userName:user,systemCode:pass})
+    });
+    if(!loginRes.ok) throw new Error('Login failed: HTTP '+loginRes.status);
+    const loginData=await loginRes.json();
+    const token=loginData.data?.accessToken||loginData.accessToken;
+    if(!token) throw new Error('No token returned from FusionSolar login');
+    // Step 2: Fetch plant monthly energy
+    const year=document.getElementById('ds-hw-year').value||new Date().getFullYear();
+    const energyRes=await fetch('https://intl.fusionsolar.huawei.com/thirdData/getKpiStationMonth',{
+      method:'POST',headers:{'Content-Type':'application/json','xsrf-token':token},
+      body:JSON.stringify({stationCodes:plant,collectTime:year+'0101000000'})
+    });
+    const energyData=await energyRes.json();
+    const items=energyData.data||[];
+    let count=0;
+    items.forEach(item=>{
+      const dateStr=item.collectTime||'';
+      const month=parseInt(dateStr.substring(4,6))-1; // 0-indexed calendar month
+      // Convert calendar month to financial year (Apr=0)
+      const fyIdx=month>=3?month-3:month+9;
+      const mu=(parseFloat(item.dataItemMap?.product_power||0))/1e6;
+      if(fyIdx>=0&&fyIdx<12&&mu>0){applyMonthlyMU(fyIdx,mu);count++;}
+    });
+    if(count>0){calcAvpSummary();buildActualRows();avpStatus(count+' months loaded from FusionSolar.','ok');}
+    else throw new Error('No data returned. Check station code and year.');
+  } catch(e){
+    avpStatus('FusionSolar error: '+e.message+'. CORS may be blocking. Try: download CSV from FusionSolar app → use CSV Upload option.','err');
+    document.getElementById('ds-upload').style.display='block';
+  }
+}
+
+/* ── GOODWE SEMS ─────────────────────────────────────────────────── */
+async function fetchGoodwe(){
+  avpStatus('Goodwe SEMS API requires account login via their portal. Download monthly report from semsportal.com as CSV and use the CSV Upload option above.','err');
+  document.getElementById('ds-upload').style.display='block';
+}
+
+/* ── GENERIC API ─────────────────────────────────────────────────── */
+async function fetchGenericAPI(){
+  const url=document.getElementById('ds-url').value.trim();
+  const authName=document.getElementById('ds-auth-name').value.trim();
+  const authVal=document.getElementById('ds-auth-val').value.trim();
+  const jsonPath=document.getElementById('ds-json-path').value.trim();
+  const monthField=document.getElementById('ds-month-field').value.trim()||'month';
+  const muField=document.getElementById('ds-mu-field').value.trim()||'mu';
+  if(!url){avpStatus('Enter the API URL first.','err');return;}
+  avpStatus('Fetching from '+url+'...','info');
+  try {
+    const headers={'Accept':'application/json'};
+    if(authName&&authVal) headers[authName]=authVal;
+    const res=await fetch(url,{headers,mode:'cors'});
+    if(!res.ok) throw new Error('HTTP '+res.status+' '+res.statusText);
+    const text=await res.text();
+    let json=JSON.parse(text);
+    // Navigate JSON path
+    if(jsonPath){
+      jsonPath.split('.').forEach(key=>{if(json&&key) json=json[key];});
+    }
+    // Remap field names to standard format
+    const normalized={generation:[]};
+    if(Array.isArray(json)){
+      normalized.generation=json.map(item=>({
+        month:item[monthField]||item.month,
+        mu:item[muField]||item.mu||item.energy||item.kwh
+      }));
+    }
+    const count=applyAvpData(normalized);
+    if(count>0) avpStatus(count+' months loaded from API.','ok');
+    else avpStatus('Data received but no months matched. Check field names.','err');
+  } catch(e){
+    avpStatus('Fetch failed: '+e.message+'. CORS may be blocking — paste data manually below.','err');
+    document.getElementById('ds-json').style.display='block';
+  }
+}
+
+/* ── CSV / EXCEL FILE UPLOAD ─────────────────────────────────────── */
+function handleFileUpload(input){
+  const file=input.files[0];
+  if(!file){return;}
+  avpStatus('Reading '+file.name+'...','info');
+  const ext=file.name.split('.').pop().toLowerCase();
+
+  if(ext==='csv'){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const count=applyAvpCSV(e.target.result);
+      if(count>0) avpStatus(count+' months loaded from '+file.name,'ok');
+      else avpStatus('No data found. Check column names — need Month and Generation (or Energy/kWh/MU) columns.','err');
+    };
+    reader.readAsText(file);
+  } else if(ext==='xlsx'||ext==='xls'){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      try {
+        const wb=XLSX.read(e.target.result,{type:'binary'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        const csv=XLSX.utils.sheet_to_csv(ws);
+        const count=applyAvpCSV(csv);
+        if(count>0) avpStatus(count+' months loaded from '+file.name,'ok');
+        else avpStatus('Excel read OK but no month/generation columns found. Column names needed: Month (or Period), Generation (or Energy/kWh/MU).','err');
+      } catch(er){avpStatus('Excel read error: '+er.message,'err');}
+    };
+    reader.readAsBinaryString(file);
+  } else {
+    avpStatus('Unsupported file type. Use CSV, XLSX, or XLS.','err');
+  }
+
+  // Drag and drop visual feedback
+  document.getElementById('ds-dropzone').style.background='var(--g0)';
+  document.getElementById('ds-dropzone').style.borderColor='var(--g5)';
+}
+
+// Drag and drop support
+document.addEventListener('DOMContentLoaded',()=>{
+  const dz=document.getElementById('ds-dropzone');
+  if(!dz) return;
+  dz.addEventListener('dragover',e=>{e.preventDefault();dz.style.background='var(--g1)';});
+  dz.addEventListener('dragleave',()=>{dz.style.background='var(--g0)';});
+  dz.addEventListener('drop',e=>{
+    e.preventDefault();
+    const fi=document.getElementById('ds-file-input');
+    fi.files=e.dataTransfer.files;
+    handleFileUpload(fi);
+  });
+});
+
+/* ── SLDC CSV PARSER ─────────────────────────────────────────────── */
+function parseSLDCData(){
+  const text=document.getElementById('ds-sldc-text').value.trim();
+  if(!text){avpStatus('Paste SLDC data first.','err');return;}
+  // SLDC format typically: Date, Injected Units (kWh), ...
+  // Try to aggregate daily to monthly
+  const lines=text.split('\n').filter(l=>l.trim());
+  const monthlyKWh={};
+  let count=0;
+  lines.forEach(line=>{
+    const parts=line.split(',').map(p=>p.trim().replace(/"/g,''));
+    if(parts.length<2) return;
+    // Try to parse date from first column
+    const dateStr=parts[0];
+    const kwh=parseFloat(parts[1])||parseFloat(parts[2])||0;
+    if(!kwh||kwh<=0) return;
+    // Parse date: DD/MM/YYYY or DD-MM-YYYY or YYYY-MM-DD
+    let month=-1;
+    const d1=dateStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+    const d2=dateStr.match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/);
+    if(d1) month=parseInt(d1[2])-1; // calendar month 0-indexed
+    else if(d2) month=parseInt(d2[2])-1;
+    // Also try month name
+    const mname=dateStr.toLowerCase();
+    Object.entries(DS_MONTHS_MAP).forEach(([k,v])=>{if(mname.includes(k)&&k.length>2) month=v+3>11?v+3-12:v+3;});
+    if(month>=0){
+      // Convert calendar month to FY (Apr=0)
+      const fyIdx=month>=3?month-3:month+9;
+      monthlyKWh[fyIdx]=(monthlyKWh[fyIdx]||0)+kwh;
+      count++;
+    }
+  });
+  let loaded=0;
+  Object.entries(monthlyKWh).forEach(([idx,kwh])=>{
+    const mu=kwh/1e6;
+    if(mu>0){applyMonthlyMU(parseInt(idx),mu);loaded++;}
+  });
+  if(loaded>0){calcAvpSummary();buildActualRows();avpStatus(count+' rows parsed, '+loaded+' months aggregated from SLDC data (values converted from kWh to MU).','ok');}
+  else avpStatus('Could not parse dates from SLDC data. Expected format: DD/MM/YYYY or YYYY-MM-DD in first column, kWh in second column.','err');
+}
+
+/* ── GOOGLE SHEET FETCH ──────────────────────────────────────────── */
+async function fetchGSheet(){
+  const url=document.getElementById('ds-gsheet-url').value.trim();
+  const genCol=document.getElementById('ds-gsheet-col').value.trim().toLowerCase()||'generation';
+  const monthCol=document.getElementById('ds-gsheet-month').value.trim().toLowerCase()||'month';
+  if(!url){avpStatus('Enter the published Google Sheet URL.','err');return;}
+  avpStatus('Fetching from Google Sheet...','info');
+  try {
+    const res=await fetch(url);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text=await res.text();
+    const count=applyAvpCSV(text);
+    if(count>0) avpStatus(count+' months loaded from Google Sheet.','ok');
+    else avpStatus('Sheet fetched but no data matched. Check column names: need "'+monthCol+'" and "'+genCol+'" columns in your sheet.','err');
+  } catch(e){
+    avpStatus('Google Sheet fetch failed: '+e.message+'. Make sure the sheet is published (File → Share → Publish to web → CSV).','err');
+  }
+}
+
+/* ── JSON PASTE ──────────────────────────────────────────────────── */
+function parseAvpJson(){
+  const el=document.getElementById('avp-paste');
+  if(!el||!el.value.trim()){avpStatus('Paste JSON data first.','err');return;}
+  try {
+    const json=JSON.parse(el.value.trim());
+    const count=applyAvpData(json);
+    avpStatus(count>0?count+' months loaded from JSON.':'JSON parsed OK but no months matched — check format.', count>0?'ok':'err');
+  } catch(e){avpStatus('JSON error: '+e.message,'err');}
+}
+
+/* ── DAILY DATA ENTRY ────────────────────────────────────────────── */
+function buildDailyGrid(){
+  const mIdx=parseInt(document.getElementById('daily-month').value);
+  const days=MONTH_DAYS[mIdx];
+  const monthName=MONTH_NAMES_FULL[mIdx];
+  const wrap=document.getElementById('daily-grid-wrap');
+  if(!wrap) return;
+  if(!dailyData[mIdx]) dailyData[mIdx]={};
+
+  let html=`<div style="font-size:12px;color:var(--n5);margin-bottom:8px">Enter actual generation in kWh per day for ${monthName}. Monthly total auto-calculates and updates the Actual vs Projected section.</div>`;
+  html+=`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px;margin-bottom:10px">`;
+  for(let d=1;d<=days;d++){
+    const val=dailyData[mIdx][d]||'';
+    html+=`<div style="display:flex;flex-direction:column;gap:2px">
+      <label style="font-size:10px;font-weight:600;color:var(--n5);text-transform:uppercase">Day ${d}</label>
+      <input type="number" step="0.01" min="0" value="${val}" placeholder="kWh"
+        oninput="updDailyData(${mIdx},${d},this.value)"
+        style="width:100%;font-size:13px;padding:6px 8px;border:1.5px solid var(--n3);border-radius:6px;text-align:right;font-family:'JetBrains Mono',monospace">
+    </div>`;
+  }
+  html+=`</div>`;
+  html+=`<div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button onclick="calcDailyTotal(${mIdx})" style="background:var(--g5);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8721; Calculate Monthly Total</button>
+    <button onclick="clearDailyMonth(${mIdx})" style="background:var(--r1);color:var(--r6);border:1px solid #F1A8A8;border-radius:7px;padding:8px 14px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">Clear Month</button>
+  </div>`;
+
+  wrap.innerHTML=html;
+  calcDailyTotal(mIdx);
+}
+
+function updDailyData(mIdx, day, val){
+  if(!dailyData[mIdx]) dailyData[mIdx]={};
+  dailyData[mIdx][day]=parseFloat(val)||0;
+  calcDailyTotal(mIdx);
+}
+
+function calcDailyTotal(mIdx){
+  if(!dailyData[mIdx]) return;
+  const totalKWh=Object.values(dailyData[mIdx]).reduce((s,v)=>s+(v||0),0);
+  const totalMU=totalKWh/1e6;
+  const summary=document.getElementById('daily-summary');
+  if(summary){
+    summary.innerHTML=`
+      <div class="comp-row">
+        <span class="comp-lbl">Monthly total — ${MONTH_NAMES_FULL[mIdx]}</span>
+        <span class="comp-val">${totalKWh.toLocaleString('en-IN',{maximumFractionDigits:0})} kWh = ${totalMU.toFixed(4)} MU</span>
+      </div>`;
+  }
+  if(totalMU>0){
+    applyMonthlyMU(mIdx, totalMU);
+    calcAvpSummary();
+  }
+}
+
+function clearDailyMonth(mIdx){
+  dailyData[mIdx]={};
+  buildDailyGrid();
+  document.getElementById('daily-summary').innerHTML='';
+}
+
+/* ── DAILY EXPORT TO EXCEL ───────────────────────────────────────── */
+function exportDailyToXLSX(){
+  if(typeof XLSX==='undefined'){avpStatus('Excel library not loaded yet. Please wait a moment and try again.','err');return;}
+  const wb=XLSX.utils.book_new();
+  MONTH_NAMES_FULL.forEach((m,mIdx)=>{
+    if(!dailyData[mIdx]||Object.keys(dailyData[mIdx]).length===0) return;
+    const days=MONTH_DAYS[mIdx];
+    const rows=[['Day','Generation (kWh)','Generation (MU)','Cumulative kWh','Cumulative MU']];
+    let cum=0;
+    for(let d=1;d<=days;d++){
+      const kwh=dailyData[mIdx][d]||0;
+      cum+=kwh;
+      rows.push([d, kwh>0?+kwh.toFixed(2):null, kwh>0?+(kwh/1e6).toFixed(6):null, +cum.toFixed(2), +(cum/1e6).toFixed(6)]);
+    }
+    const total=Object.values(dailyData[mIdx]).reduce((s,v)=>s+(v||0),0);
+    rows.push(['TOTAL',+total.toFixed(2),+(total/1e6).toFixed(4),'','']);
+    const ws=XLSX.utils.aoa_to_sheet(rows);
+    ws['!cols']=[{wch:6},{wch:18},{wch:16},{wch:18},{wch:16}];
+    XLSX.utils.book_append_sheet(wb, ws, m.substring(0,10));
+  });
+  if(wb.SheetNames.length===0){avpStatus('No daily data entered yet.','err');return;}
+  const co=(document.getElementById('q-company')||{value:''}).value||'EIL_Solar';
+  XLSX.writeFile(wb, co.replace(/[^a-zA-Z0-9]/g,'_')+'_DailyGeneration.xlsx');
+}
+
+/* ── FETCH ACTUAL GEN (legacy compatibility) ──────────────────────  */
+function fetchActualGen(){
+  // Route to generic API handler
+  fetchGenericAPI();
 }
 
 
