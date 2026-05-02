@@ -310,7 +310,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.5 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v6.6 | 01-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -357,7 +357,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.5</div>
+    <div class="drw-t">EIL Solar Ground v6.6</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -472,10 +472,59 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div id="tariff-explain" style="margin-top:10px;padding:11px 13px;background:var(--n1);border-radius:9px;font-size:12px;line-height:1.8;border:1px solid var(--n3)"></div>
     </div>
     <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">90</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div></div>
-    <div class="fld"><label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">1.33</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div></div>
+    <div class="fld">
+      <label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh — Group Captive CPP solar, 30% concession applied)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">0.95</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div>
+      <div style="margin-top:10px;padding:11px 13px;background:var(--b1);border-radius:9px;font-size:12px;line-height:1.9;border:1px solid #A8C8F0">
+        <strong style="color:var(--b6)">OA charge breakdown — FY 2025-26 (TNERC T.O.7/2022 revised)</strong><br>
+        <table style="width:100%;font-size:11.5px;margin-top:6px;border-collapse:collapse">
+          <tr style="background:var(--n1)">
+            <th style="text-align:left;padding:5px 7px;border:1px solid var(--n3)">Component</th>
+            <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">Full rate</th>
+            <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">Solar 30% concession</th>
+            <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">You pay</th>
+          </tr>
+          <tr>
+            <td style="padding:5px 7px;border:1px solid var(--n3)">Wheeling charge (HT, FY26)</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace">Rs 1.04</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace">&#8722; Rs 0.312</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;color:var(--g6)">Rs 0.728</td>
+          </tr>
+          <tr style="background:var(--n1)">
+            <td style="padding:5px 7px;border:1px solid var(--n3)">Transmission charge (TANTRANSCO, FY26 +4%)</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace">Rs 0.29</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace">&#8722; Rs 0.087</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;color:var(--g6)">Rs 0.203</td>
+          </tr>
+          <tr>
+            <td style="padding:5px 7px;border:1px solid var(--n3)">SLDC scheduling &amp; system operation</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace">Rs 0.04</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace">&#8722; Rs 0.012</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;color:var(--g6)">Rs 0.028</td>
+          </tr>
+          <tr style="background:var(--g1)">
+            <td style="padding:5px 7px;border:1px solid var(--n3);font-weight:700">Total OA charge (solar captive)</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700">Rs 1.37</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700;color:var(--r6)">&#8722; Rs 0.411</td>
+            <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700;color:var(--g6)">Rs 0.959</td>
+          </tr>
+        </table>
+        <div style="margin-top:8px;font-size:11.5px;color:var(--b6)">
+          &#9432; <strong>30% solar concession confirmed</strong> — TNERC Intra-State OA Regulations: solar pays 70% of each of transmission, wheeling and SLDC charges.<br>
+          &#9432; <strong>CSS = ZERO</strong> and <strong>Additional Surcharge = Rs 0.10/kWh</strong> (reduced 81.5% for FY26 per TNERC GEOA 2025).<br>
+          &#9432; Default set to <strong>Rs 0.95/kWh</strong> (rounded). Change to Rs 1.33 if your TNERC advocate confirms that T.O.7/2022 Rs 1.33 already included the 30% solar concession.<br>
+          &#9432; Source: TNERC T.O.7/2022 Table 5-11, TNERC GEOA Regulations 2025 (effective 01-10-2025), Mercom Q3 2025 report.
+        </div>
+      </div>
+    </div>
     <div class="fld"><label class="flbl">TNEB tariff escalation <span>(%/yr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('taresc',-0.5)">&#8722;</button><span class="pm-val" id="v-taresc">3.0</span><button class="pm-btn right" onclick="pmStep('taresc',0.5)">+</button></div></div>
     <div class="fld"><label class="flbl">OA charge escalation <span>(%/yr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('oaesc',-0.5)">&#8722;</button><span class="pm-val" id="v-oaesc">3.0</span><button class="pm-btn right" onclick="pmStep('oaesc',0.5)">+</button></div></div>
-    <div class="alert info" style="margin-bottom:0">CSS and Additional Surcharge = ZERO for Group Captive CPP. <strong>Current order: TNERC T.O. No.6 of 2025, effective 01-07-2025.</strong></div>
+    <div class="alert info" style="margin-bottom:12px">&#10003; CSS = ZERO (full exemption, Group Captive CPP) &nbsp;|&nbsp; OA = Rs 0.95/kWh (30% solar concession applied) &nbsp;|&nbsp; Source: TNERC T.O.7/2022 + GEOA 2025</div>
+    <div class="fld">
+      <label class="flbl">Additional Surcharge <span>(Rs/kWh — track separately from OA charge)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('addl_sur',-0.01)">&#8722;</button><span class="pm-val" id="v-addl_sur">0.10</span><button class="pm-btn right" onclick="pmStep('addl_sur',0.01)">+</button></div>
+      <div class="fhint">Reduced to Rs 0.10/kWh for FY 2025-26 (down from Rs 0.54/kWh — an 81.5% reduction per TNERC GEOA Regulations 2025, effective 01-10-2025). For Group Captive CPP, additional surcharge is technically ZERO — verify with your TNERC advocate. Shown separately for transparency.</div>
+    </div>
   </div>
 </div>
 
@@ -713,9 +762,9 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>Group Captive CPP &mdash; Key parameters</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
     <div class="cust-grid">
       <div class="cust-fld"><label>TNERC Tariff Order reference</label><input type="text" id="rg-to-ref" value="T.O. No. 7 of 2022"></div>
-      <div class="cust-fld"><label>OA charge all-in (Rs/kWh)</label><input type="text" id="rg-oa" value="1.33"></div>
-      <div class="cust-fld"><label>CSS status</label><input type="text" id="rg-css" value="ZERO — Waived for Group Captive CPP"></div>
-      <div class="cust-fld"><label>Additional Surcharge</label><input type="text" id="rg-as" value="ZERO — Waived for Group Captive CPP"></div>
+      <div class="cust-fld"><label>OA charge all-in (Rs/kWh) — solar captive with 30% concession</label><input type="text" id="rg-oa" value="0.95"></div>
+      <div class="cust-fld"><label>CSS status</label><input type="text" id="rg-css" value="ZERO — Waived Group Captive CPP (full exemption)"></div>
+      <div class="cust-fld"><label>Additional Surcharge</label><input type="text" id="rg-as" value="Rs 0.10/kWh (FY26, reduced 81.5% per GEOA 2025 — was Rs 0.54)"></div>
       <div class="cust-fld"><label>Minimum collective equity (%)</label><input type="text" id="rg-eq" value="26% collective of all captive customers"></div>
       <div class="cust-fld"><label>Minimum captive consumption (%)</label><input type="text" id="rg-cc" value="51% of annual net generation"></div>
       <div class="cust-fld"><label>Proportional tolerance</label><input type="text" id="rg-tol" value="±10% of allotment per customer"></div>
@@ -932,7 +981,7 @@ const PM={
   plf:{v:20.4,min:10,max:30,dec:1},tloss:{v:9.0,min:1,max:25,dec:1},
   peak:{v:33,min:0,max:50,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
   tariff:{v:9.40,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
-  oa:{v:1.33,min:0.5,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
+  oa:{v:0.95,min:0.3,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
   epc:{v:67.2,min:0,max:500,dec:1},land:{v:11.7,min:0,max:100,dec:1},
   evac:{v:9.0,min:0,max:100,dec:1},misc:{v:4.1,min:0,max:50,dec:1},
   bmwh:{v:40,min:5,max:200,dec:0},bc:{v:0.75,min:0.3,max:2.0,dec:2},
@@ -946,6 +995,7 @@ const PM={
   ins:{v:0.5,min:0.1,max:2,dec:1},tax:{v:25,min:15,max:35,dec:0},sv:{v:10,min:0,max:25,dec:0},
   tloss_trans:{v:0.0,min:0,max:5,dec:1},tloss_dist:{v:1.5,min:0,max:8,dec:1},
   tloss_int:{v:6.0,min:0,max:20,dec:1},
+  addl_sur:{v:0.10,min:0,max:2,dec:2},
 };
 function pmStep(id,step){
   const p=PM[id];if(!p)return;
@@ -1080,7 +1130,7 @@ function addCustomer(){
   customers.push({
     id,name:'Customer '+custIdCounter,
     recvKv:'11',equityPct:26,monthlyMU:3.5,
-    tariffCat:'9.40',oa:1.33,
+    tariffCat:'9.40',oa:0.95,
   });
   renderCustomers();
   calc();
@@ -2511,7 +2561,7 @@ function generateTnercCert(){
     L('Name (' + c.name + '): ___________________________  Date: __________  Seal: _______');
   });
   N(); D();
-  L('This certificate is generated by EIL Solar Ground v6.5 App — ' + new Date().toLocaleDateString('en-IN'));
+  L('This certificate is generated by EIL Solar Ground v6.6 App — ' + new Date().toLocaleDateString('en-IN'));
   L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
 
   const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
