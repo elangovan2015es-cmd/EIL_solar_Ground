@@ -310,7 +310,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.4 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v6.5 | 01-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -357,7 +357,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.4</div>
+    <div class="drw-t">EIL Solar Ground v6.5</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -431,10 +431,10 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('tloss',-0.5)">&#8722;</button><span class="pm-val" id="v-tloss">9.0</span><button class="pm-btn right" onclick="pmStep('tloss',0.5)">+</button></div>
       <div class="fhint">&#9888; Recommended minimum 9%: DC cable 1.5% + inverter 2% + transformer 0.5% + soiling/mismatch 2% + TNERC grid 1.52% (110kV&#x2192;11kV) + margin = ~9%. Change in Grid Losses tab for detailed breakdown.</div>
     </div>
-    <div class="fld"><label class="flbl">Morning peak % <span>(6 to 10 AM solar generation)</span></label>
-      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('peak',-1)">&#8722;</button><span class="pm-val" id="v-peak">15</span><button class="pm-btn right" onclick="pmStep('peak',1)">+</button></div>
+    <div class="fld"><label class="flbl">Morning peak % <span>(6AM–10AM solar in peak window = 4/12 solar hrs = 33.3%)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('peak',-1)">&#8722;</button><span class="pm-val" id="v-peak">33</span><button class="pm-btn right" onclick="pmStep('peak',1)">+</button></div>
     </div>
-    <div class="fld"><label class="flbl">TNERC peak surcharge <span>(%)</span></label>
+    <div class="fld"><label class="flbl">TNERC peak surcharge <span>(% above normal — T.O.6/2025 confirmed: +25%)</span></label>
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('surcharge',-5)">&#8722;</button><span class="pm-val" id="v-surcharge">25</span><button class="pm-btn right" onclick="pmStep('surcharge',5)">+</button></div>
     </div>
     <div class="fld"><label class="flbl">LID degradation Year 1 <span>(%)</span></label>
@@ -453,20 +453,29 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="chdr">Default tariff (overridden per customer if set)</div>
     <div class="fld"><label class="flbl">Default buyer category</label>
       <select id="i-buyer" onchange="updBuyer();calc()">
-        <option value="9.76">HT-III Commercial (from 01-07-2023) &mdash; Rs 9.76/kWh</option>
-        <option value="9.40">HT-III Commercial (old, before 01-07-2023) &mdash; Rs 9.40/kWh</option>
-        <option value="7.74">HT-I Industry (from 01-07-2023) &mdash; Rs 7.74/kWh</option>
-        <option value="7.69">HT-I Industry (old, before 01-07-2023) &mdash; Rs 7.69/kWh</option>
-        <option value="8.20">HT-IIA General &mdash; Rs 8.20/kWh</option>
-        <option value="7.10">HT-II LT Industry &mdash; Rs 7.10/kWh</option>
+        <optgroup label="T.O. No.6 of 2025 — effective 01-07-2025 (CURRENT)">
+          <option value="9.40">HT-III Misc/Commercial — Rs 9.40/kWh (FLAT, no ToD)</option>
+          <option value="7.50">HT-I Industries &amp; IT — Rs 7.50/kWh normal (solar wt: Rs 8.125)</option>
+          <option value="7.75">HT-IIA Govt Institutions — Rs 7.75/kWh normal (solar wt: Rs 8.396)</option>
+          <option value="8.25">HT-IIB Pvt Edu &amp; Hospitals — Rs 8.25/kWh normal (solar wt: Rs 8.938)</option>
+          <option value="13.25">HT-IV Construction/Temp — Rs 13.25/kWh normal (solar wt: Rs 14.354)</option>
+        </optgroup>
+        <optgroup label="T.O. No.7 of 2022 — effective 01-07-2023 (previous)">
+          <option value="9.76">HT-III Commercial (2023) — Rs 9.76/kWh</option>
+          <option value="7.74">HT-I Industry (2023) — Rs 7.74/kWh</option>
+        </optgroup>
       </select>
     </div>
-    <div class="fld"><label class="flbl">TNEB base tariff Yr-1 <span>(Rs/kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">9.76</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div></div>
+    <div class="fld">
+      <label class="flbl">TNEB base tariff Yr-1 <span>(Rs/kWh — auto-fills from category; for ToD categories this is the normal-hour rate)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">9.40</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div>
+      <div id="tariff-explain" style="margin-top:10px;padding:11px 13px;background:var(--n1);border-radius:9px;font-size:12px;line-height:1.8;border:1px solid var(--n3)"></div>
+    </div>
     <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">90</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div></div>
     <div class="fld"><label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">1.33</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div></div>
     <div class="fld"><label class="flbl">TNEB tariff escalation <span>(%/yr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('taresc',-0.5)">&#8722;</button><span class="pm-val" id="v-taresc">3.0</span><button class="pm-btn right" onclick="pmStep('taresc',0.5)">+</button></div></div>
     <div class="fld"><label class="flbl">OA charge escalation <span>(%/yr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('oaesc',-0.5)">&#8722;</button><span class="pm-val" id="v-oaesc">3.0</span><button class="pm-btn right" onclick="pmStep('oaesc',0.5)">+</button></div></div>
-    <div class="alert info" style="margin-bottom:0">CSS and Additional Surcharge = ZERO for Group Captive CPP (TNERC T.O. 7/2022)</div>
+    <div class="alert info" style="margin-bottom:0">CSS and Additional Surcharge = ZERO for Group Captive CPP. <strong>Current order: TNERC T.O. No.6 of 2025, effective 01-07-2025.</strong></div>
   </div>
 </div>
 
@@ -921,8 +930,8 @@ function buildDrawer(){
 const PM={
   ac:{v:20,min:1,max:200,dec:0},dac:{v:1.30,min:1.0,max:1.6,dec:2},
   plf:{v:20.4,min:10,max:30,dec:1},tloss:{v:9.0,min:1,max:25,dec:1},
-  peak:{v:15,min:0,max:30,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
-  tariff:{v:9.76,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
+  peak:{v:33,min:0,max:50,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
+  tariff:{v:9.40,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
   oa:{v:1.33,min:0.5,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
   epc:{v:67.2,min:0,max:500,dec:1},land:{v:11.7,min:0,max:100,dec:1},
   evac:{v:9.0,min:0,max:100,dec:1},misc:{v:4.1,min:0,max:50,dec:1},
@@ -948,6 +957,7 @@ function pmStep(id,step){
   // sync tloss if components change
   if(['tloss_trans','tloss_dist','tloss_int'].includes(id)) syncTloss();
   if(id==='ac'||id==='dac')updDC();
+  if(id==='tariff'){const sel=document.getElementById('i-buyer');if(sel)buildTariffExplain(PM['tariff'].v,sel.options[sel.selectedIndex].text);}
   calc();
 }
 function syncTloss(){
@@ -965,7 +975,81 @@ function updDC(){
   if(el)el.textContent=dc.toFixed(2)+' MW DC / '+kWp.toLocaleString('en-IN')+' kWp';
   return kWp;
 }
-function updBuyer(){PM['tariff'].v=parseFloat(document.getElementById('i-buyer').value);const el=document.getElementById('v-tariff');if(el)el.textContent=PM['tariff'].v.toFixed(2);}
+function updBuyer(){
+  const sel=document.getElementById('i-buyer');
+  if(!sel) return;
+  const base=parseFloat(sel.value);
+  PM['tariff'].v=base;
+  const el=document.getElementById('v-tariff');
+  if(el) el.textContent=base.toFixed(2);
+  buildTariffExplain(base, sel.options[sel.selectedIndex].text);
+}
+
+/* TNERC T.O. No.6 of 2025 confirmed structure:
+   Peak   : 6AM-10AM + 6PM-10PM = 8 hrs → +25% (×1.25)
+   Normal : 5AM-6AM + 10AM-6PM  = 9 hrs → base (×1.00)
+   Night  : 10PM-5AM            = 7 hrs → −5%  (×0.95)
+   Solar window: 6AM-6PM = 12 hrs
+     6AM-10AM = 4 hrs PEAK (33.3%), 10AM-6PM = 8 hrs NORMAL (66.7%) */
+const TOD_2025 = {
+  peak_hrs:6, peak_am_start:6, peak_am_end:10, peak_pm_start:18, peak_pm_end:22,
+  night_hrs:7, night_start:22, night_end:5,
+  normal_hrs:9,
+  peak_mult:1.25, night_mult:0.95, norm_mult:1.00,
+  solar_peak_hrs:4, solar_normal_hrs:8, solar_total_hrs:12,
+  wt_factor:(8*1.25+9*1.0+7*0.95)/24
+};
+// HT-III is FLAT — no ToD
+const FLAT_CATS = [9.40, 9.76, 9.64];
+
+function getSolarWT(base){
+  if(FLAT_CATS.includes(base)) return base;
+  const p=base*TOD_2025.peak_mult;
+  const n=base;
+  return +((TOD_2025.solar_peak_hrs*p + TOD_2025.solar_normal_hrs*n)/TOD_2025.solar_total_hrs).toFixed(4);
+}
+
+function buildTariffExplain(base, labelRaw){
+  const el=document.getElementById('tariff-explain');
+  if(!el) return;
+  const isFlat=FLAT_CATS.includes(base);
+  const p=+(base*1.25).toFixed(4);
+  const ni=+(base*0.95).toFixed(4);
+  const cw=+(base*TOD_2025.wt_factor).toFixed(4);
+  const sw=getSolarWT(base);
+  const sp=+(sw*PM['disc'].v/100).toFixed(4);
+  const nr=+(sp-PM['oa'].v).toFixed(4);
+  const label=labelRaw.split('—')[0].trim().split('(')[0].trim();
+
+  if(isFlat){
+    el.innerHTML=
+      `<strong>${label} — FLAT RATE (no Time of Day differentiation)</strong><br>`+
+      `&#9899; All hours (12 AM–12 PM–12 AM): <strong>Rs ${base.toFixed(2)}/kWh</strong> — same rate all 24 hours<br>`+
+      `<span style="color:var(--n5)">No peak surcharge. No night discount. TNERC has kept HT-III as a flat tariff.</span><br>`+
+      `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
+      `&#128200; <strong>Solar weighted = Rs ${sw.toFixed(4)}/kWh</strong> (flat, same as base)<br>`+
+      `&#128994; Selling price (${PM['disc'].v}% of weighted) = <strong>Rs ${sp}/kWh</strong><br>`+
+      `&#128997; Less OA charge = Rs ${PM['oa'].v.toFixed(2)}/kWh<br>`+
+      `<strong style="color:var(--g6)">&#9989; Net realisation = Rs ${nr}/kWh</strong><br>`+
+      `<span style="color:var(--n5);font-size:11px">Source: TNERC T.O. No.6 of 2025, effective 01-07-2025</span>`;
+  } else {
+    el.innerHTML=
+      `<strong>${label} — Time of Day (ToD) tariff (T.O. No.6 of 2025)</strong><br>`+
+      `&#128308; <strong>Peak</strong> (6–10 AM &amp; 6–10 PM = 8 hrs): Rs ${p}/kWh (+25% above normal)<br>`+
+      `&#9899; <strong>Normal</strong> (5–6 AM + 10 AM–6 PM = 9 hrs): Rs ${base.toFixed(2)}/kWh (base rate)<br>`+
+      `&#128994; <strong>Night</strong> (10 PM–5 AM = 7 hrs): Rs ${ni}/kWh (−5% discount)<br>`+
+      `<span style="color:var(--n5)">Consumer weighted avg = (8×${p} + 9×${base} + 7×${ni}) / 24 = Rs ${cw}/kWh</span><br>`+
+      `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
+      `<strong>For solar developer (Group Captive CPP):</strong><br>`+
+      `&#9728; Morning peak earns premium: 6–10 AM = 4 hrs out of 12 solar hrs = <strong>33.3%</strong><br>`+
+      `&#9900; Evening peak 6–10 PM = zero solar generation = earns nothing<br>`+
+      `&#128200; Solar weighted = (4h×${p} + 8h×${base}) / 12 = <strong>Rs ${sw}/kWh</strong><br>`+
+      `&#128994; Selling price (${PM['disc'].v}% × Rs ${sw}) = <strong>Rs ${sp}/kWh</strong><br>`+
+      `&#128997; Less OA charge = Rs ${PM['oa'].v.toFixed(2)}/kWh<br>`+
+      `<strong style="color:var(--g6)">&#9989; Net realisation = Rs ${nr}/kWh</strong><br>`+
+      `<span style="color:var(--n5);font-size:11px">Source: TNERC T.O. No.6 of 2025, effective 01-07-2025</span>`;
+  }
+}
 function togBatt(){document.getElementById('bp').style.display=document.getElementById('i-batt').value==='1'?'block':'none';}
 
 /* ── TNERC LOSS TABLE ── */
@@ -1046,10 +1130,17 @@ function renderCustomers(){
         </div>
         <div class="cust-fld"><label>TNEB tariff category</label>
           <select id="cf-${c.id}-tariff" onchange="updCust('${c.id}','tariffCat',this.value);calc()">
-            <option value="9.40"${c.tariffCat==='9.40'?' selected':''}>HT-III Comm Rs 9.40</option>
-            <option value="7.69"${c.tariffCat==='7.69'?' selected':''}>HT-I Industry Rs 7.69</option>
-            <option value="8.20"${c.tariffCat==='8.20'?' selected':''}>HT-IIA General Rs 8.20</option>
-            <option value="7.10"${c.tariffCat==='7.10'?' selected':''}>HT-II LT Rs 7.10</option>
+            <optgroup label="2025 (current)">
+            <option value="9.40"${c.tariffCat==='9.40'?' selected':''}>HT-III Misc/Comm Rs 9.40 flat</option>
+            <option value="7.50"${c.tariffCat==='7.50'?' selected':''}>HT-I Industries Rs 7.50 (solar wt 8.125)</option>
+            <option value="7.75"${c.tariffCat==='7.75'?' selected':''}>HT-IIA Govt Rs 7.75 (solar wt 8.396)</option>
+            <option value="8.25"${c.tariffCat==='8.25'?' selected':''}>HT-IIB Pvt Edu/Hosp Rs 8.25 (solar wt 8.938)</option>
+            <option value="13.25"${c.tariffCat==='13.25'?' selected':''}>HT-IV Construction Rs 13.25 (solar wt 14.354)</option>
+            </optgroup>
+            <optgroup label="2023 (previous)">
+            <option value="9.76"${c.tariffCat==='9.76'?' selected':''}>HT-III Comm Rs 9.76 (2023)</option>
+            <option value="7.74"${c.tariffCat==='7.74'?' selected':''}>HT-I Industry Rs 7.74 (2023)</option>
+            </optgroup>
           </select>
         </div>
         <div class="cust-fld"><label>OA charge (Rs/kWh)</label>
@@ -1513,6 +1604,7 @@ buildDrawer();
 updLoss();
 addCustomer(); // Add one default customer
 calc();
+setTimeout(()=>{buildTariffExplain(PM['tariff'].v,'HT-III Misc/Commercial');},200);
 
 
 /* ══ CSV / EXCEL EXPORT ══════════════════════════════════════════ */
@@ -2419,7 +2511,7 @@ function generateTnercCert(){
     L('Name (' + c.name + '): ___________________________  Date: __________  Seal: _______');
   });
   N(); D();
-  L('This certificate is generated by EIL Solar Ground v6.4 App — ' + new Date().toLocaleDateString('en-IN'));
+  L('This certificate is generated by EIL Solar Ground v6.5 App — ' + new Date().toLocaleDateString('en-IN'));
   L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
 
   const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
