@@ -454,7 +454,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="fld"><label class="flbl">Default buyer category</label>
       <select id="i-buyer" onchange="updBuyer();calc()">
         <optgroup label="T.O. No.6 of 2025 — effective 01-07-2025 (CURRENT)">
-          <option value="9.40">HT-III Misc/Commercial — Rs 9.40/kWh (FLAT, no ToD)</option>
+          <option value="9.40">HT-III Misc/Commercial — Rs 9.40/kWh normal (solar wt: Rs 10.183)</option>
           <option value="7.50">HT-I Industries &amp; IT — Rs 7.50/kWh normal (solar wt: Rs 8.125)</option>
           <option value="7.75">HT-IIA Govt Institutions — Rs 7.75/kWh normal (solar wt: Rs 8.396)</option>
           <option value="8.25">HT-IIB Pvt Edu &amp; Hospitals — Rs 8.25/kWh normal (solar wt: Rs 8.938)</option>
@@ -999,8 +999,8 @@ const TOD_2025 = {
   solar_peak_hrs:4, solar_normal_hrs:8, solar_total_hrs:12,
   wt_factor:(8*1.25+9*1.0+7*0.95)/24
 };
-// HT-III is FLAT — no ToD
-const FLAT_CATS = [9.40, 9.76, 9.64];
+// All HT categories have ToD per T.O.6/2025
+const FLAT_CATS = []; // none are flat
 
 function getSolarWT(base){
   if(FLAT_CATS.includes(base)) return base;
@@ -1025,7 +1025,7 @@ function buildTariffExplain(base, labelRaw){
     el.innerHTML=
       `<strong>${label} — FLAT RATE (no Time of Day differentiation)</strong><br>`+
       `&#9899; All hours (12 AM–12 PM–12 AM): <strong>Rs ${base.toFixed(2)}/kWh</strong> — same rate all 24 hours<br>`+
-      `<span style="color:var(--n5)">No peak surcharge. No night discount. TNERC has kept HT-III as a flat tariff.</span><br>`+
+      `<span style="color:var(--n5)">No peak surcharge. No night discount. ToD applies to HT-III as well per T.O.6/2025: peak +25%, night −5%.</span><br>`+
       `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
       `&#128200; <strong>Solar weighted = Rs ${sw.toFixed(4)}/kWh</strong> (flat, same as base)<br>`+
       `&#128994; Selling price (${PM['disc'].v}% of weighted) = <strong>Rs ${sp}/kWh</strong><br>`+
@@ -1131,7 +1131,7 @@ function renderCustomers(){
         <div class="cust-fld"><label>TNEB tariff category</label>
           <select id="cf-${c.id}-tariff" onchange="updCust('${c.id}','tariffCat',this.value);calc()">
             <optgroup label="2025 (current)">
-            <option value="9.40"${c.tariffCat==='9.40'?' selected':''}>HT-III Misc/Comm Rs 9.40 flat</option>
+            <option value="9.40"${c.tariffCat==='9.40'?' selected':''}>HT-III Misc/Comm Rs 9.40 (solar wt 10.183)</option>
             <option value="7.50"${c.tariffCat==='7.50'?' selected':''}>HT-I Industries Rs 7.50 (solar wt 8.125)</option>
             <option value="7.75"${c.tariffCat==='7.75'?' selected':''}>HT-IIA Govt Rs 7.75 (solar wt 8.396)</option>
             <option value="8.25"${c.tariffCat==='8.25'?' selected':''}>HT-IIB Pvt Edu/Hosp Rs 8.25 (solar wt 8.938)</option>
