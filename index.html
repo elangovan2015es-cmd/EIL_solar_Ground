@@ -891,11 +891,141 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════════════════════════
+     PROJECT REPORT — s-pr  (was missing — now added in v6.7)
+     ══════════════════════════════════════════════════════════════════ -->
+<div id="s-pr" class="sec dev-sec">
+  <div class="sec-h"><div class="sec-ic">&#128194;</div><div><div class="sec-ti">Project Report</div><div class="sec-su">Full bankable DPR — fill questionnaire &rarr; generate &rarr; share</div></div></div>
+
+  <div class="alert or" style="font-size:13px">
+    <strong>How to use:</strong> Fill the questionnaire below (one-time, saved in browser). Click <em>Generate Full Report (.txt)</em> to download a Word-ready DPR. Use <em>Export P&amp;L to CSV</em> for an Excel-ready financial table. Share buttons let you email or WhatsApp the report directly.
+  </div>
+
+  <!-- ── QUESTIONNAIRE ── -->
+  <div class="card">
+    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center">
+      <span>&#9997; Company &amp; Project Questionnaire</span>
+      <button onclick="savePrData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button>
+    </div>
+    <div class="cust-grid">
+      <div class="cust-fld"><label>Company / SPV name</label><input type="text" id="q-company" placeholder="e.g. ABC Solar Power Pvt. Ltd."></div>
+      <div class="cust-fld"><label>Year of incorporation</label><input type="text" id="q-incorp" placeholder="e.g. 2018"></div>
+      <div class="cust-fld"><label>Promoter name(s)</label><input type="text" id="q-promoter" placeholder="Name of promoter / director"></div>
+      <div class="cust-fld"><label>Industry / sector</label><input type="text" id="q-industry" placeholder="e.g. Textiles, Chemicals, IT Park"></div>
+      <div class="cust-fld"><label>Annual turnover (Rs Crores)</label><input type="text" id="q-turnover" placeholder="e.g. 250"></div>
+      <div class="cust-fld"><label>Registered address</label><input type="text" id="q-addr" placeholder="Full address, Tamil Nadu"></div>
+      <div class="cust-fld"><label>Business activities</label><input type="text" id="q-activities" placeholder="Brief description of operations"></div>
+      <div class="cust-fld"><label>Products / services</label><input type="text" id="q-products" placeholder="Main products or services"></div>
+      <div class="cust-fld"><label>Market position</label><input type="text" id="q-mktpos" placeholder="e.g. One of top 5 in Tamil Nadu"></div>
+      <div class="cust-fld"><label>Number of employees</label><input type="text" id="q-employees" placeholder="e.g. 500"></div>
+      <div class="cust-fld"><label>Existing TNEB connection</label><input type="text" id="q-tneb" placeholder="e.g. HT-III 1.5 MVA at Chennai"></div>
+      <div class="cust-fld"><label>Tariff category (TANGEDCO)</label><input type="text" id="q-category" placeholder="e.g. HT-III Commercial"></div>
+      <div class="cust-fld"><label>Annual power bill (Rs Crores)</label><input type="text" id="q-powerbill" placeholder="e.g. 12"></div>
+      <div class="cust-fld"><label>Annual consumption (MU)</label><input type="text" id="q-consumption" placeholder="e.g. 12"></div>
+      <div class="cust-fld"><label>Customer base</label><input type="text" id="q-customers" placeholder="e.g. 200+ industrial clients"></div>
+      <div class="cust-fld"><label>Competitors</label><input type="text" id="q-competitors" placeholder="e.g. XYZ Ltd., ABC Corp"></div>
+      <div class="cust-fld"><label>Competitive advantage from solar</label><input type="text" id="q-competitive" placeholder="e.g. Rs 3/kWh lower power cost"></div>
+      <div class="cust-fld"><label>Site location</label><input type="text" id="q-site" placeholder="District/Village, Tamil Nadu"></div>
+      <div class="cust-fld"><label>Land area (acres)</label><input type="text" id="q-land" placeholder="e.g. 120 acres"></div>
+      <div class="cust-fld"><label>Land status</label><input type="text" id="q-landstatus" placeholder="e.g. Owned / Leased / Under negotiation"></div>
+      <div class="cust-fld"><label>Distance to 110 kV substation (km)</label><input type="text" id="q-dist" placeholder="e.g. 3 km"></div>
+      <div class="cust-fld"><label>EPC contractor name</label><input type="text" id="q-epcname" value="EIL Solar Pvt. Ltd."></div>
+      <div class="cust-fld"><label>Procurement strategy</label><input type="text" id="q-procure" value="Open competitive tender, ALMM-listed modules only"></div>
+      <div class="cust-fld"><label>Financing bank</label><input type="text" id="q-bank" placeholder="e.g. State Bank of India"></div>
+      <div class="cust-fld"><label>Equity source</label><input type="text" id="q-eqsrc" value="Internal accruals and promoter contribution"></div>
+      <div class="cust-fld"><label>Existing loans / liabilities</label><input type="text" id="q-loans" value="Nil"></div>
+      <div class="cust-fld"><label>Credit history / CIBIL</label><input type="text" id="q-credit" placeholder="e.g. Satisfactory — no defaults"></div>
+      <div class="cust-fld"><label>Expected COD date</label><input type="text" id="q-cod" placeholder="e.g. April 2027"></div>
+      <div class="cust-fld"><label>Approvals status</label><input type="text" id="q-approvals" value="DPR under preparation"></div>
+      <div class="cust-fld"><label>CO₂ offset (tonnes/yr) — leave blank to auto-calculate</label><input type="text" id="q-co2" placeholder="Auto (900 t/MW/yr)"></div>
+      <div class="cust-fld"><label>Jobs during construction</label><input type="text" id="q-jobs-const" value="Approximately 100 persons during construction"></div>
+      <div class="cust-fld"><label>Permanent O&amp;M jobs</label><input type="text" id="q-jobs-perm" value="8 permanent technical and maintenance staff"></div>
+      <div class="cust-fld"><label>Local economy benefit</label><input type="text" id="q-local" placeholder="e.g. Land lease income for farmers"></div>
+      <div class="cust-fld"><label>CSR activities planned</label><input type="text" id="q-csr" placeholder="e.g. Solar lights for 3 villages"></div>
+      <div class="cust-fld"><label>Social benefits</label><input type="text" id="q-social" placeholder="e.g. Power for local school"></div>
+      <div class="cust-fld"><label>Rationale for project</label><input type="text" id="q-rationale" value="To reduce power cost and achieve energy security through captive solar generation."></div>
+      <div class="cust-fld"><label>Report date</label><input type="text" id="q-rpdate" placeholder="e.g. May 2026"></div>
+      <div class="cust-fld"><label>Prepared by</label><input type="text" id="q-prepby" value="EIL Solar Pvt. Ltd."></div>
+      <div class="cust-fld"><label>DPR reference number</label><input type="text" id="q-refno" value="EIL/DPR/2026/001"></div>
+      <div class="cust-fld"><label>Confidentiality note</label><input type="text" id="q-conf" value="Strictly Confidential — For bank use only"></div>
+    </div>
+    <div id="pr-save-status" style="display:none;margin-top:8px;font-size:12.5px;padding:8px 12px;border-radius:7px;background:var(--g1);color:var(--g6);font-weight:600"></div>
+  </div>
+
+  <!-- ── OPTIONAL SECTIONS ── -->
+  <div class="card">
+    <div class="chdr">&#9745; Optional report chapters</div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;padding:4px 0">
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="opt-market" checked style="width:16px;height:16px"> Market Analysis (Ch 3)</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="opt-bess" checked style="width:16px;height:16px"> BESS / Battery chapter</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="opt-swot" checked style="width:16px;height:16px"> SWOT Analysis</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="opt-reg" checked style="width:16px;height:16px"> Regulatory Framework chapter</label>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px;cursor:pointer"><input type="checkbox" id="opt-socio" checked style="width:16px;height:16px"> Socio-Economic Impact (Ch 7)</label>
+    </div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--n3)">
+      <div class="chdr" style="margin-bottom:10px;font-size:12px">Optional custom chapters (add your own)</div>
+      <div class="cust-grid">
+        <div class="cust-fld"><label>Custom chapter 1 — title</label><input type="text" id="opt-c1-title" placeholder="e.g. Technology Comparison"></div>
+        <div class="cust-fld"><label>Custom chapter 1 — content</label><input type="text" id="opt-c1-text" placeholder="Content of custom chapter 1"></div>
+        <div class="cust-fld"><label>Custom chapter 2 — title</label><input type="text" id="opt-c2-title" placeholder="e.g. Annexure — Technical Specs"></div>
+        <div class="cust-fld"><label>Custom chapter 2 — content</label><input type="text" id="opt-c2-text" placeholder="Content of custom chapter 2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── REGULATORY CHAPTER PREVIEW (live from Regulatory section) ── -->
+  <div class="card">
+    <div class="chdr or">&#128203; Chapter — Regulatory Framework (auto-populated from Regulatory section)</div>
+    <div class="alert info" style="font-size:12.5px;margin-bottom:10px">
+      The values below are <strong>pulled live from the Regulatory section</strong>. To update any value, go to the <strong>Regulatory</strong> page and save. Changes are reflected here instantly. This chapter will be included in the generated report when the "Regulatory Framework chapter" checkbox above is ticked.
+    </div>
+    <div id="pr-reg-preview" style="font-size:13px;line-height:1.9;font-family:'Courier New',monospace;background:#F8FAFC;border:1px solid var(--n3);border-radius:8px;padding:14px 16px;white-space:pre-wrap"></div>
+    <button onclick="refreshRegPreview()" style="margin-top:10px;background:var(--n2);color:var(--n8);border:none;border-radius:7px;padding:8px 16px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#8635; Refresh Preview</button>
+  </div>
+
+  <!-- ── GENERATE BUTTONS ── -->
+  <div class="card">
+    <div class="chdr gn">&#128196; Generate &amp; Export</div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="generateFullReport()" style="background:var(--g6);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128196; Generate Full DPR (.txt — open in Word/Google Docs)
+      </button>
+      <button onclick="exportPLToCSV()" style="background:var(--b6);color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128202; Export 10-Year P&amp;L + Balance Sheet to CSV (Excel-ready)
+      </button>
+      <button onclick="exportRegToCSV()" style="background:#7C3AED;color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128203; Export Regulatory Data to CSV (for Excel / filing)
+      </button>
+    </div>
+    <div id="pr-status" style="display:none;margin-top:10px;font-size:12.5px;padding:10px 14px;border-radius:8px;background:var(--g1);color:var(--g6);font-weight:600"></div>
+  </div>
+
+  <!-- ── SHARE OPTIONS ── -->
+  <div class="card">
+    <div class="chdr" style="background:linear-gradient(135deg,#0F4C81,#1565C0);color:#fff">&#128236; Share / Forward Report</div>
+    <div class="alert info" style="font-size:12.5px;margin-bottom:12px">
+      Use the buttons below to share the project report. <strong>Step 1:</strong> Generate the report using the button above (file downloads to your device). <strong>Step 2:</strong> Use Email or WhatsApp to attach and send.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <button onclick="shareViaEmail()" style="background:#D32F2F;color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:13.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128140; Email — opens mail client with pre-filled subject &amp; body (attach the downloaded .txt file)
+      </button>
+      <button onclick="shareViaWhatsApp()" style="background:#25D366;color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:13.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128242; WhatsApp — sends key financial summary as message (attach file manually)
+      </button>
+      <button onclick="copyReportSummary()" style="background:#0F4C81;color:#fff;border:none;border-radius:10px;padding:13px 20px;font-size:13.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128203; Copy Project Summary to Clipboard (paste into any message / document)
+      </button>
+    </div>
+    <div id="pr-share-status" style="display:none;margin-top:10px;font-size:12.5px;padding:10px 14px;border-radius:8px;background:var(--b1);color:var(--b6);font-weight:600"></div>
+  </div>
+</div>
+
 </div><!-- /cvs -->
 <div class="fab-w"><button class="fab" onclick="calc()">Calculate</button></div>
 
 <script>
-const BUILD='v6.3 | Build: 20260501-1235 IST';
+const BUILD='v6.7 | Build: 20260507-1900 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1655,13 +1785,21 @@ updLoss();
 addCustomer(); // Add one default customer
 calc();
 setTimeout(()=>{buildTariffExplain(PM['tariff'].v,'HT-III Misc/Commercial');},200);
+setTimeout(()=>{loadRegData();loadPrData();refreshRegPreview();},300);
 
 
 /* ══ CSV / EXCEL EXPORT ══════════════════════════════════════════ */
 function csvRow(arr){return arr.map(v=>{const s=String(v);return s.includes(',')||s.includes('"')?'"'+s.replace(/"/g,'""')+'"':s;}).join(',');}
+function triggerDownload(filename,blob){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=filename;a.style.display='none';
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
+}
 function downloadCSV(filename,rows){
   const blob=new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8;'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
+  triggerDownload(filename,blob);
 }
 
 function exportAllToCSV(){
@@ -1768,7 +1906,7 @@ function exportPLToCSV(){
   const grossGen=dc_kWp*plf*8760;
   const repayYrs=Math.max(1,tn-moro);
   const ap=dAmt/repayYrs;
-  const co=document.getElementById('pr-company').value||'[Company Name]';
+  const co=(document.getElementById('q-company')||{value:''}).value||'[Company Name]';
 
   const rows=[co+' — Solar Project: Projected P&L and Balance Sheet',
     'Generated: '+new Date().toLocaleDateString('en-IN'),
@@ -2159,17 +2297,89 @@ function generateFullReport(){
     L('─'.repeat(70)); N();
   }
 
-  // ── REGULATORY
+  // ── REGULATORY FRAMEWORK CHAPTER (comprehensive — live from Regulatory section)
   if(gc('opt-reg')){
-    L('REGULATORY FRAMEWORK'); L('─'.repeat(40)); N();
-    L('Structure:            Group Captive CPP under CERC Captive Rules 2001 and Electricity Act 2003');
-    L('Equity requirement:  Minimum 26% equity in generating company per captive consumer');
-    L('Consumption rule:    Minimum 51% of annual generation consumed by captive users');
-    L('CSS:                  ZERO — waived for Group Captive CPP (TNERC T.O. No. 7 of 2022)');
-    L('Additional Surcharge: ZERO — waived');
-    L('OA charge all-in:    Rs 1.33 per kWh (wheeling + transmission + SLDC, inclusive)');
-    L('TNERC grid loss:     1.52% distribution loss for 110 kV inject to 11 kV buyer');
-    L('Compliance cert:     Annual certificate required from generator, filed with TNERC'); N();
+    const rg=(id,fb)=>{const el=document.getElementById(id);return (el&&el.value.trim())?el.value.trim():fb;};
+    L('CHAPTER — REGULATORY FRAMEWORK'); L('═'.repeat(70)); N();
+    L('This chapter captures all applicable TNERC / TANGEDCO / CERC regulatory parameters'); 
+    L('for the Group Captive CPP project. All values are sourced from official tariff orders.'); N();
+
+    L('A.  LEGAL AND STRUCTURAL FRAMEWORK'); L('─'.repeat(50)); N();
+    L('Applicable Law:        Electricity Act, 2003 — Section 9 (captive generation)');
+    L('                       CERC Captive Rules, 2001 — Group Captive CPP definition');
+    L('                       Tamil Nadu Electricity Regulatory Commission (TNERC)');
+    L('Tariff Order ref:      '+rg('rg-to-ref','T.O. No. 7 of 2022'));
+    L('Equity requirement:    '+rg('rg-eq','Minimum 26% collective equity by all captive customers'));
+    L('Consumption rule:      '+rg('rg-cc','Minimum 51% of annual net generation consumed by captive users'));
+    L('Proportional tolerance:'+rg('rg-tol','±10% of allotment per customer per year'));
+    L('Annual compliance cert:'+rg('rg-auth','TNPDCL — CE (OA), 144 Anna Salai, Chennai 600002'));
+    L('TNEB empanelment:      '+rg('rg-emp','EIL Solar / Kaveri Power Solutions — TNEB empanelled')); N();
+
+    L('B.  TANGEDCO TARIFF RATES (Effective: '+rg('rg-tdate','01-07-2023')+')'); L('─'.repeat(50)); N();
+    L('  Category                               Tariff (Rs/kWh)  Notes');
+    L('  ─────────────────────────────────────  ───────────────  ─────────────────────────');
+    L('  HT-III Commercial                      '+rg('rg-t1','9.76').padEnd(16)+'Project buyer reference tariff');
+    L('  HT-I Industry                          '+rg('rg-t2','7.74').padEnd(16)+'Large industrial consumers');
+    L('  HT-IIA General                         '+rg('rg-t3','8.20').padEnd(16)+'General HT consumers');
+    L('  HT-II LT Industry                      '+rg('rg-t4','7.10').padEnd(16)+'LT industry consumers');
+    L('  Peak hour surcharge                    '+rg('rg-peak','25%').padEnd(16)+'Applied 6–10 AM and 6–10 PM (T.O. No.6/2025)'); N();
+    L('  Note: The applicable tariff for this project is based on the buyer\'s TANGEDCO category.');
+    L('  Rising tariff trend (every MYT order) strengthens project viability year over year.'); N();
+
+    L('C.  OPEN ACCESS AND CHARGES (Group Captive CPP — Solar Concession)'); L('─'.repeat(50)); N();
+    L('  Charge Component                        Rate              Source / Remark');
+    L('  ─────────────────────────────────────  ────────────────  ───────────────────────────────');
+    L('  Wheeling charge                         '+rg('rg-wh','Rs 1.00/kWh').padEnd(17)+' TNERC T.O. 7/2022');
+    L('  State Transmission charge               '+rg('rg-stc','Rs 223.57/MWh').padEnd(17)+' TANTRANSCO / TNERC');
+    L('  Scheduling charge (SLDC)                '+rg('rg-sch','Rs 172/day').padEnd(17)+' SLDC Tamil Nadu');
+    L('  Cross Subsidy Surcharge (CSS)           '+rg('rg-css','ZERO — waived').padEnd(17)+' Group Captive exempt — T.O. 7/2022');
+    L('  Additional Surcharge                    '+rg('rg-as','Rs 0.10/kWh (FY26)').padEnd(17)+' Reduced per GEOA 2025');
+    L('  OA charge all-in (30% solar concession)'+rg('rg-oa','Rs 0.95/kWh').padEnd(17)+' Effective rate after concession'); N();
+    L('  The 30% Open Access concession for renewable energy generators is mandated by TNERC'); 
+    L('  under its Renewable Energy Open Access framework. This significantly reduces the');
+    L('  effective OA charge compared to conventional Open Access projects.'); N();
+    L('  Next OA revision expected: '+rg('rg-next','2025 — every ~3 years per TNERC MYT order')); N();
+
+    L('D.  TNERC TECHNICAL LOSSES (EDITABLE — UPDATE WITH EACH NEW TARIFF ORDER)'); L('─'.repeat(50)); N();
+    L('  Loss Category                           Applicable Loss   Reference');
+    L('  ─────────────────────────────────────  ────────────────  ─────────────────────────────');
+    L('  Transmission loss at 110 kV injection   '+rg('rg-tloss','NIL').padEnd(17)+' T.O. 7/2022 Table 5-12');
+    L('  Distribution loss (110 kV → 11 kV)     '+rg('rg-dloss','1.52%').padEnd(17)+' T.O. 7/2022 Table 5-12');
+    L('  Internal DC/AC/transformer loss         '+gv('tloss_int').toFixed(1)+'%'.padEnd(16)+' Project-specific (editable in inputs)');
+    L('  Total technical loss (model)            '+gv('tloss').toFixed(1)+'%'.padEnd(16)+' DC + inverter + transformer + TNERC grid');
+    L('  Last TNERC loss table update:           '+rg('rg-lossdate','2022 — T.O. No. 7. Update when new order issued.')); N();
+    L('  IMPORTANT: TNERC revises loss tables in each Multi-Year Tariff (MYT) order.');
+    L('  All loss figures above are editable in the Regulatory section of this app.');
+    L('  Any change in the Regulatory section automatically updates the project financial model.'); N();
+
+    L('E.  EVACUATION AND GRID PARAMETERS'); L('─'.repeat(50)); N();
+    L('  Evacuation voltage:        '+rg('rg-ev','110 kV EHT injection'));
+    L('  TNEB bay allocation:       '+rg('rg-bay','Pending application to TANTRANSCO'));
+    L('  HT line approval authority:'+rg('rg-hta','TANTRANSCO — SE (Projects)'));
+    L('  CEIG approval required:    '+rg('rg-ceig','Yes — Chief Electrical Inspector, Govt of TN'));
+    L('  SLDC registration:         '+rg('rg-sldc','Tamil Nadu SLDC, Saidapet, Chennai'));
+    L('  Grid congestion risk:      '+rg('rg-cong','10 AM to 2 PM solar peak hours'));
+    L('  Battery TNERC treatment:   '+rg('rg-bess','Same-day charge/discharge = single OA transaction')); N();
+
+    L('F.  RENEWABLE ENERGY CERTIFICATES (REC) — ADDITIONAL INCOME NOTE'); L('─'.repeat(50)); N();
+    L('  RECs are tradeable certificates issued by Central Electricity Regulatory Commission');
+    L('  (CERC) under the REC Mechanism (CERC REC Regulations 2010, amended 2022).');
+    L('  Each REC represents 1 MWh of renewable energy generation above captive consumption.'); N();
+    L('  Applicability to this project:');
+    L('  — If annual captive consumption < net generation, the surplus energy may be eligible');
+    L('    for REC issuance through the National Load Despatch Centre (NLDC) registry.');
+    L('  — REC floor price: Rs 1,000 per REC (solar), forbearance price: Rs 3,000 per REC');
+    L('    (as per CERC Order, March 2022). Prices are set by CERC and vary by exchange auction.');
+    L('  — REC trading takes place on Indian Energy Exchange (IEX) and Power Exchange India (PXIL).');
+    L('  — This project has NOT quantified REC income in the base-case financial projections,');
+    L('    as REC eligibility is subject to: (a) surplus generation beyond 51% captive threshold,');
+    L('    (b) TNERC / CERC certification, and (c) market price fluctuations at time of trading.'); N();
+    L('  REC income should be treated as an UPSIDE to the project — a potential additional revenue');
+    L('  stream that can be assessed annually post-commissioning based on actual generation surplus.'); N();
+
+    L('G.  REGULATORY NOTES'); L('─'.repeat(50)); N();
+    const rgNotes=(document.getElementById('rg-notes')||{value:''}).value.trim();
+    L(rgNotes||'No additional regulatory notes entered. Update in Regulatory section.'); N();
     L('─'.repeat(70)); N();
   }
 
@@ -2197,13 +2407,11 @@ function generateFullReport(){
 
   const txt = lines.join('\n');
   const blob = new Blob([txt], {type: 'text/plain;charset=utf-8;'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = (co.replace(/[^a-zA-Z0-9]/g,'_')) + '_Solar_DPR_' + rpdate.replace(/\s/g,'_') + '.txt';
-  a.click();
+  const fname = (co.replace(/[^a-zA-Z0-9]/g,'_')||'Solar_DPR') + '_Solar_DPR_' + (rpdate.replace(/\s/g,'_')||'May2026') + '.txt';
+  triggerDownload(fname, blob);
 
-  if(statusEl){statusEl.textContent = 'Report downloaded. Open in Word → Select All → Format headings → Insert CSV tables from financial export.';}
-  setTimeout(()=>{if(statusEl)statusEl.style.display='none';}, 8000);
+  if(statusEl){statusEl.textContent = '✓ Report downloaded: '+fname+'. Open in Word or Google Docs to format.';}
+  setTimeout(()=>{if(statusEl)statusEl.style.display='none';}, 10000);
 }
 
 // Keep generateDocx as alias for backward compat
@@ -2565,10 +2773,7 @@ function generateTnercCert(){
   L('--- END OF ANNUAL COMPLIANCE CERTIFICATE ---');
 
   const blob = new Blob([lines.join('\n')], {type: 'text/plain;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = spv.replace(/[^a-zA-Z0-9]/g,'_') + '_TNERC_Compliance_' + fy.replace(/\s/g,'_') + '.txt';
-  a.click();
+  triggerDownload(spv.replace(/[^a-zA-Z0-9]/g,'_') + '_TNERC_Compliance_' + fy.replace(/\s/g,'_') + '.txt', blob);
 
   const st = document.getElementById('tn-cert-status');
   if(st){ st.style.display = 'block'; st.textContent = 'Certificate downloaded. Open in Word, add company letterhead and authorised signatures before submission to TNPDCL.'; }
@@ -3146,6 +3351,168 @@ function renderMilestones(){
           <input type="text" value="${ms.notes}" oninput="updMs(${i},'notes',this.value)" placeholder="Action required" style="width:100%;font-size:13px;padding:7px 9px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif"></div>
       </div>
     </div>`).join('');
+}
+
+/* ══ PROJECT REPORT SAVE / LOAD ═══════════════════════════════════ */
+function savePrData(){
+  const fields=['q-company','q-incorp','q-promoter','q-industry','q-turnover','q-addr',
+    'q-activities','q-products','q-mktpos','q-employees','q-tneb','q-category',
+    'q-powerbill','q-consumption','q-customers','q-competitors','q-competitive',
+    'q-site','q-land','q-landstatus','q-dist','q-epcname','q-procure','q-bank',
+    'q-eqsrc','q-loans','q-credit','q-cod','q-approvals','q-co2','q-jobs-const',
+    'q-jobs-perm','q-local','q-csr','q-social','q-rationale','q-rpdate','q-prepby',
+    'q-refno','q-conf','opt-c1-title','opt-c1-text','opt-c2-title','opt-c2-text'];
+  const data={};
+  fields.forEach(id=>{const el=document.getElementById(id);if(el)data[id]=el.type==='checkbox'?el.checked:el.value;});
+  ['opt-market','opt-bess','opt-swot','opt-reg','opt-socio'].forEach(id=>{
+    const el=document.getElementById(id);if(el)data[id]=el.checked;
+  });
+  try{localStorage.setItem('eil_pr_data',JSON.stringify(data));}catch(e){}
+  const st=document.getElementById('pr-save-status');
+  if(st){st.style.display='block';st.textContent='Questionnaire saved to browser. Restored automatically next session.';}
+  setTimeout(()=>{if(st)st.style.display='none';},3500);
+}
+function loadPrData(){
+  try{
+    const raw=localStorage.getItem('eil_pr_data');if(!raw)return;
+    const data=JSON.parse(raw);
+    Object.entries(data).forEach(([id,val])=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      if(el.type==='checkbox')el.checked=val;else el.value=val;
+    });
+  }catch(e){}
+}
+
+/* ══ REGULATORY PREVIEW (live from rg- fields) ══════════════════ */
+function refreshRegPreview(){
+  const rg=(id,fb)=>{const el=document.getElementById(id);return (el&&el.value.trim())?el.value.trim():fb;};
+  const lines=[
+    'TANGEDCO TARIFF RATES (Eff. '+rg('rg-tdate','01-07-2023')+')',
+    '─────────────────────────────────────────────',
+    'HT-III Commercial         : Rs '+rg('rg-t1','9.76')+'/kWh',
+    'HT-I Industry             : Rs '+rg('rg-t2','7.74')+'/kWh',
+    'HT-IIA General            : Rs '+rg('rg-t3','8.20')+'/kWh',
+    'HT-II LT Industry         : Rs '+rg('rg-t4','7.10')+'/kWh',
+    'Peak hour surcharge        : '+rg('rg-peak','25%'),
+    '',
+    'OPEN ACCESS CHARGES (Group Captive — 30% solar concession)',
+    '─────────────────────────────────────────────',
+    'Wheeling charge            : '+rg('rg-wh','Rs 1.00/kWh'),
+    'State Transmission         : '+rg('rg-stc','Rs 223.57/MWh'),
+    'SLDC Scheduling            : '+rg('rg-sch','Rs 172/day'),
+    'CSS                        : '+rg('rg-css','ZERO — waived'),
+    'Additional Surcharge       : '+rg('rg-as','Rs 0.10/kWh (FY26)'),
+    'OA all-in (solar concession): '+rg('rg-oa','Rs 0.95/kWh'),
+    'Next OA review             : '+rg('rg-next','~2025'),
+    '',
+    'TNERC TECHNICAL LOSSES (Editable)',
+    '─────────────────────────────────────────────',
+    'Transmission loss (110 kV) : '+rg('rg-tloss','NIL — T.O. 7/2022 Table 5-12'),
+    'Distribution loss (→11 kV) : '+rg('rg-dloss','1.52% — T.O. 7/2022 Table 5-12'),
+    'Internal plant loss        : '+gv('tloss_int').toFixed(1)+'% (set in Project Inputs)',
+    'Total model loss           : '+gv('tloss').toFixed(1)+'%',
+    'Last loss table update     : '+rg('rg-lossdate','2022 — update when new order issued'),
+    '',
+    'REC — Renewable Energy Certificates',
+    '─────────────────────────────────────────────',
+    'REC mechanism              : CERC REC Regulations 2010 (amended 2022)',
+    'REC value (solar floor/forbearance): Rs 1,000 / Rs 3,000 per REC (1 MWh)',
+    'Trading venues             : IEX and PXIL',
+    'Quantified in model        : NO — treated as upside income post-commissioning',
+  ];
+  const el=document.getElementById('pr-reg-preview');
+  if(el)el.textContent=lines.join('\n');
+}
+
+/* ══ EXPORT REGULATORY DATA TO CSV ══════════════════════════════ */
+function exportRegToCSV(){
+  const rg=(id,fb)=>{const el=document.getElementById(id);return (el&&el.value.trim())?el.value.trim():fb;};
+  const rows=[
+    ['Parameter','Value','Source / Remark'],
+    ['TNERC Tariff Order',''+rg('rg-to-ref','T.O. No. 7 of 2022'),'TNERC'],
+    ['Effective date',''+rg('rg-tdate','01-07-2023'),'TANGEDCO'],
+    ['HT-III Commercial (Rs/kWh)',''+rg('rg-t1','9.76'),'TANGEDCO T.O.'],
+    ['HT-I Industry (Rs/kWh)',''+rg('rg-t2','7.74'),'TANGEDCO T.O.'],
+    ['HT-IIA General (Rs/kWh)',''+rg('rg-t3','8.20'),'TANGEDCO T.O.'],
+    ['HT-II LT Industry (Rs/kWh)',''+rg('rg-t4','7.10'),'TANGEDCO T.O.'],
+    ['Peak hour surcharge',''+rg('rg-peak','25%'),'TNERC T.O. No.6/2025'],
+    ['Wheeling charge',''+rg('rg-wh','Rs 1.00/kWh'),'TNERC'],
+    ['State Transmission (Rs/MWh)',''+rg('rg-stc','223.57'),'TANTRANSCO'],
+    ['SLDC Scheduling (Rs/day)',''+rg('rg-sch','172'),'SLDC TN'],
+    ['CSS',''+rg('rg-css','ZERO — waived'),'TNERC T.O. 7/2022'],
+    ['Additional Surcharge',''+rg('rg-as','Rs 0.10/kWh FY26'),'TNERC GEOA 2025'],
+    ['OA all-in (30% concession)',''+rg('rg-oa','Rs 0.95/kWh'),'TNERC'],
+    ['Transmission loss 110 kV',''+rg('rg-tloss','NIL'),'T.O. 7/2022 Table 5-12'],
+    ['Distribution loss 11 kV',''+rg('rg-dloss','1.52%'),'T.O. 7/2022 Table 5-12'],
+    ['Internal plant loss',''+gv('tloss_int').toFixed(1)+'%','Project model'],
+    ['Total model loss',''+gv('tloss').toFixed(1)+'%','Project model'],
+    ['Min equity (captive)',''+rg('rg-eq','26% collective'),'CERC Captive Rules 2001'],
+    ['Min captive consumption',''+rg('rg-cc','51% of annual generation'),'CERC Captive Rules 2001'],
+    ['Proportional tolerance',''+rg('rg-tol','±10%'),'TNERC'],
+    ['REC mechanism','CERC REC Regulations 2010 (amended 2022)','CERC'],
+    ['REC floor price (solar)','Rs 1000 per REC (1 MWh)','CERC March 2022'],
+    ['REC forbearance price (solar)','Rs 3000 per REC','CERC March 2022'],
+    ['REC in financial model','NOT quantified — treated as upside','Project decision'],
+    ['Next OA review',''+rg('rg-next','~2025'),'TNERC MYT cycle'],
+    ['Compliance authority',''+rg('rg-auth','TNPDCL CE (OA)'),'TNERC'],
+  ];
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const co=(document.getElementById('q-company')||{value:''}).value.replace(/[^a-zA-Z0-9]/g,'_')||'EIL_Solar';
+  triggerDownload(co+'_Regulatory_Data.csv', blob);
+  const st=document.getElementById('pr-status');
+  if(st){st.style.display='block';st.textContent='Regulatory CSV downloaded. Open in Excel — all charges and losses in one sheet.';}
+  setTimeout(()=>{if(st)st.style.display='none';},5000);
+}
+
+/* ══ SHARE FUNCTIONS ═════════════════════════════════════════════ */
+function getPrSummary(){
+  const co=(document.getElementById('q-company')||{value:''}).value||'[Company]';
+  const acMW=gv('ac'), dcMW=(gv('ac')*gv('dac')).toFixed(2);
+  const tCap=(gv('epc')+gv('land')+gv('evac')+gv('misc')).toFixed(1);
+  const oa=gv('oa'), tariff=gv('tariff'), disc=gv('disc'), peak=gv('peak')/100, sur=gv('surcharge')/100;
+  const wt=tariff*(1+peak*sur), sp1=(wt*disc/100).toFixed(2);
+  const netMU=((Math.round(gv('ac')*gv('dac')*1000)*gv('plf')/100*8760*(1-gv('tloss')/100))/1e6).toFixed(2);
+  const site=(document.getElementById('q-site')||{value:''}).value||'Tamil Nadu';
+  const rpdate=(document.getElementById('q-rpdate')||{value:''}).value||'May 2026';
+  return `EIL Solar — Project Summary (${rpdate})
+Company: ${co}
+Capacity: ${acMW} MW AC / ${dcMW} MW DC
+Site: ${site}
+Total Capex: Rs ${tCap} Crores
+Net Generation: ${netMU} MU/year
+Selling Price: Rs ${sp1}/kWh | OA: Rs ${oa}/kWh
+CSS & Additional Surcharge: ZERO (Group Captive CPP)
+TNERC T.O. ref: ${(document.getElementById('rg-to-ref')||{value:'T.O. No.7/2022'}).value}
+App: EIL Solar Ground PWA v6.7`;
+}
+function shareViaEmail(){
+  const co=(document.getElementById('q-company')||{value:''}).value||'Company';
+  const subj=encodeURIComponent('Detailed Project Report — '+co+' Solar CPP');
+  const body=encodeURIComponent(getPrSummary()+'\n\n[Attach the downloaded .txt report file]');
+  window.location.href='mailto:?subject='+subj+'&body='+body;
+}
+function shareViaWhatsApp(){
+  const txt=encodeURIComponent(getPrSummary());
+  window.open('https://wa.me/?text='+txt,'_blank');
+}
+function copyReportSummary(){
+  const txt=getPrSummary();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(txt).then(()=>{
+      const st=document.getElementById('pr-share-status');
+      if(st){st.style.display='block';st.textContent='Project summary copied to clipboard! Paste into any message or document.';}
+      setTimeout(()=>{if(st)st.style.display='none';},4000);
+    }).catch(()=>fallbackCopy(txt));
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);
+  const st=document.getElementById('pr-share-status');
+  if(st){st.style.display='block';st.textContent='Copied!';}
+  setTimeout(()=>{if(st)st.style.display='none';},3000);
 }
 
 function saveRegData(){
