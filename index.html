@@ -414,8 +414,9 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">Project Inputs</div><div class="sec-su">Capacity, tariff &amp; costs</div></div></div>
   <div class="card">
     <div class="chdr">Plant capacity &mdash; AC side first</div>
-    <div class="fld"><label class="flbl">AC installed capacity <span>(MW AC &mdash; developer decides)</span></label>
-      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('ac',-1)">&#8722;</button><span class="pm-val" id="v-ac">20</span><button class="pm-btn right" onclick="pmStep('ac',1)">+</button></div>
+    <div class="fld"><label class="flbl">AC installed capacity <span>(MW AC &mdash; editable; default 20 MW)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('ac',-1);apportionCost()">&#8722;</button><span class="pm-val" id="v-ac">20</span><button class="pm-btn right" onclick="pmStep('ac',1);apportionCost()">+</button></div>
+      <div class="fhint">Change AC capacity here — Total Project Cost, land, evacuation, all segment costs and the full financial model update automatically.</div>
     </div>
     <div class="dv"></div>
     <div class="fld"><label class="flbl">DC to AC ratio <span>(overdrive factor)</span></label>
@@ -442,12 +443,118 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     </div>
   </div>
   <div class="card">
-    <div class="chdr">Project costs <span style="text-transform:none;letter-spacing:0;font-weight:400">(Rs Crores)</span></div>
-    <div class="fld"><label class="flbl">EPC &mdash; solar plant <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('epc',-1)">&#8722;</button><span class="pm-val" id="v-epc">67.2</span><button class="pm-btn right" onclick="pmStep('epc',1)">+</button></div></div>
-    <div class="fld"><label class="flbl">Land cost <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('land',-0.5)">&#8722;</button><span class="pm-val" id="v-land">11.7</span><button class="pm-btn right" onclick="pmStep('land',0.5)">+</button></div></div>
-    <div class="fld"><label class="flbl">Evacuation &mdash; 110 kV HT line + substation <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('evac',-0.5)">&#8722;</button><span class="pm-val" id="v-evac">9.0</span><button class="pm-btn right" onclick="pmStep('evac',0.5)">+</button></div></div>
-    <div class="fld"><label class="flbl">SCADA and miscellaneous <span>(Rs Cr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('misc',-0.5)">&#8722;</button><span class="pm-val" id="v-misc">4.1</span><button class="pm-btn right" onclick="pmStep('misc',0.5)">+</button></div></div>
-    <div class="comp-row"><span class="comp-lbl">Solar capex (auto)</span><span class="comp-val" id="v-sc">Rs 92.0 Cr</span></div>
+    <div class="chdr">Project costs — 2 inputs only &rarr; all segments auto-apportioned by prudential norms</div>
+
+    <!-- ── INPUT 1: MW AC (mirrors Plant Capacity card above) ── -->
+    <div class="fld" style="background:var(--n1);border:1.5px solid var(--n4);border-radius:10px;padding:12px 14px;margin-bottom:8px">
+      <label class="flbl" style="font-weight:700">Capacity <span style="font-weight:400;color:var(--n6)">(MW AC — edit in Plant Capacity card above &#8593;)</span></label>
+      <div class="comp-row" style="margin-top:4px">
+        <span class="comp-lbl">AC capacity</span>
+        <span class="comp-val" style="font-size:16px;font-weight:800"><span id="v-ac-cost">20</span> MW AC</span>
+      </div>
+      <div class="comp-row">
+        <span class="comp-lbl">DC capacity (AC &times; DC:AC ratio)</span>
+        <span class="comp-val" id="v-dc-calc2">26.00 MW DC / 26,000 kWp</span>
+      </div>
+      <div class="fhint">Evacuaton voltage auto-adjusts: ≤5 MW→11 kV &nbsp;|&nbsp; 5–33 MW→33 kV &nbsp;|&nbsp; &gt;33 MW→110 kV EHT</div>
+    </div>
+
+    <!-- ── INPUT 2: COST PER MW ── -->
+    <div class="fld" style="background:var(--b1);border:2px solid var(--b6);border-radius:10px;padding:13px 15px;margin-bottom:8px">
+      <label class="flbl" style="color:var(--b6);font-weight:700">&#9654; Cost per MW AC <span style="font-weight:400;color:var(--n6)">(Rs Lakhs per MW AC — all-in total project cost rate)</span></label>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('epcMW',-5);apportionCost()">&#8722;</button><span class="pm-val" id="v-epcMW">500</span><button class="pm-btn right" onclick="pmStep('epcMW',5);apportionCost()">+</button></div>
+      <div class="fhint" style="margin-top:5px">All-in project rate (solar + electricals + evacuation + land + civil + SCADA + prelim). 2025 market for 20 MW at 33 kV: Rs 450–560 L/MW AC. Default Rs 500 L/MW.</div>
+    </div>
+
+    <!-- ── TOTAL PROJECT COST (auto) ── -->
+    <div style="background:var(--g1);border:2px solid var(--g6);border-radius:12px;padding:13px 15px;margin-bottom:10px">
+      <div style="font-size:12px;font-weight:700;color:var(--g6);margin-bottom:8px">&#9654; TOTAL PROJECT COST = <span id="v-ac-tpc">20</span> MW &times; Rs/MW (excl. BESS)</div>
+      <div class="comp-row"><span class="comp-lbl" style="font-weight:700">Total Project Cost</span><span class="comp-val" id="v-tpc" style="color:var(--g6);font-size:18px;font-weight:800">Rs 100.00 Cr</span></div>
+      <div class="comp-row" style="margin-top:3px"><span class="comp-lbl">Rs per kWp DC (total all-in)</span><span class="comp-val" id="v-wp">Rs 38,462 /kWp</span></div>
+    </div>
+    <span id="v-epc-disp" style="display:none"></span>
+    <span id="v-sc" style="display:none"></span>
+
+    <!-- ── PRUDENTIAL APPORTIONMENT ── -->
+    <div class="chdr" style="font-size:12px;margin-bottom:8px">&#128203; Prudential apportionment — auto-calculated from TPC</div>
+    <div class="alert info" style="font-size:11.5px;margin-bottom:10px;padding:9px 12px">
+      All segments below are computed automatically using industry-standard prudential percentages. <strong>Land is formula-based: 3 acres/MW &times; Rs 18 Lakhs/acre &times; 20 MW.</strong> Evacuation % adjusts automatically by project capacity per TNERC voltage norms. Percentages are editable if you have a firmer split.
+    </div>
+
+    <div class="tw">
+      <table class="vt" style="font-size:12.5px">
+        <thead>
+          <tr><th>Segment</th><th style="text-align:right">% of TPC</th><th style="text-align:right">Rs Crores</th><th>Prudential basis</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:var(--b1)">
+            <td><strong>Solar EPC</strong><div style="font-size:10.5px;color:var(--n5);font-weight:400">Modules + inverters + mounting + DC cabling</div></td>
+            <td style="text-align:right"><span id="pct-solar">55.0</span>%</td>
+            <td style="text-align:right;font-weight:700" id="ct-epc">55.00</td>
+            <td>MW DC &times; Rs/MW</td>
+          </tr>
+          <tr>
+            <td>Electrical &amp; AC-side<div style="font-size:10.5px;color:var(--n5)">Inverter stations, HT panels, metering, LT board</div></td>
+            <td style="text-align:right"><span id="pct-elec">10.0</span>%</td>
+            <td style="text-align:right" id="ct-elec">10.00</td>
+            <td>10% of TPC (prudential)</td>
+          </tr>
+          <tr style="background:var(--n1)">
+            <td id="ct-evac-lbl">Evacuation (33 kV)<div style="font-size:10.5px;color:var(--n5)" id="evac-sub">33 kV substation + HT line + TANTRANSCO bay</div></td>
+            <td style="text-align:right"><span id="pct-evac">10.0</span>%</td>
+            <td style="text-align:right" id="ct-evac">10.00</td>
+            <td id="evac-basis">10% of TPC (33 kV norm)</td>
+          </tr>
+          <tr>
+            <td>Land<div style="font-size:10.5px;color:var(--n5)" id="land-sub">3 ac/MW &times; Rs 18 L/ac &times; 20 MW = 60 ac</div></td>
+            <td style="text-align:right"><span id="pct-land">—</span></td>
+            <td style="text-align:right" id="ct-land">10.80</td>
+            <td>Formula: 3 ac/MW &times; Rs 18 L/ac</td>
+          </tr>
+          <tr style="background:var(--n1)">
+            <td>Civil &amp; infrastructure<div style="font-size:10.5px;color:var(--n5)">Fencing, roads, O&amp;M room, water, drainage</div></td>
+            <td style="text-align:right"><span id="pct-civil">5.0</span>%</td>
+            <td style="text-align:right" id="ct-civil">5.00</td>
+            <td>5% of TPC (prudential)</td>
+          </tr>
+          <tr>
+            <td>SCADA / monitoring / DAS<div style="font-size:10.5px;color:var(--n5)">Data acquisition, remote monitoring, comm</div></td>
+            <td style="text-align:right"><span id="pct-scada">2.0</span>%</td>
+            <td style="text-align:right" id="ct-scada">2.00</td>
+            <td>2% of TPC (prudential)</td>
+          </tr>
+          <tr style="background:var(--n1)">
+            <td>Preliminary &amp; contingency<div style="font-size:10.5px;color:var(--n5)">Pre-dev, statutory fees, DPR, contingency</div></td>
+            <td style="text-align:right"><span id="pct-prelim">3.0</span>%</td>
+            <td style="text-align:right" id="ct-prelim">3.00</td>
+            <td>3% of TPC (prudential)</td>
+          </tr>
+          <tr style="background:var(--g1);font-weight:700">
+            <td>TOTAL (excl. BESS)</td>
+            <td style="text-align:right">100%</td>
+            <td style="text-align:right" id="ct-total">100.00</td>
+            <td>20 MW AC base</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── EVACUATION VOLTAGE NORMS ── -->
+    <div style="background:#FFF8E1;border:1px solid #F59E0B;border-radius:9px;padding:10px 13px;margin-top:10px;font-size:11.5px">
+      <strong style="color:#92400E">&#9889; Evacuation voltage (TNERC / CEA norms)</strong>
+      <div id="evac-norm-note" style="margin-top:5px;font-weight:600;color:#92400E"></div>
+      <div style="margin-top:5px;color:#78350F">
+        Up to 5 MW → <strong>11 kV</strong> (TANGEDCO) &nbsp;|&nbsp;
+        5–33 MW → <strong>33 kV</strong> (TANTRANSCO) &nbsp;|&nbsp;
+        Above 33 MW → <strong>110 kV EHT</strong> (TANTRANSCO)
+      </div>
+    </div>
+
+    <!-- ── LAND DETAIL ── -->
+    <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:9px;padding:10px 13px;margin-top:8px;font-size:11.5px">
+      <strong style="color:#166534">&#127807; Land calculation</strong>
+      <div id="land-detail" style="margin-top:5px;color:#166534;line-height:1.8"></div>
+    </div>
   </div>
   <div class="card">
     <div class="chdr">Default tariff (overridden per customer if set)</div>
@@ -646,8 +753,17 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <strong>Why does reducing debt extend payback?</strong> Payback is measured against equity invested. Less debt means more equity upfront. Even though FCF improves slightly (less interest), you have far more equity to recover &mdash; so payback extends. This is correct financial behaviour, not a model error. Lower debt = lower risk but longer payback.</div>
   <div class="card">
     <div class="chdr">Capital structure &mdash; developer decides</div>
-    <div class="fld"><label class="flbl">Debt fraction <span>(% of total capex &mdash; no minimum, developer decides)</span></label>
+    <div class="fld"><label class="flbl">Debt fraction <span>(% of total capex — prudential norm: 70% debt / 30% equity)</span></label>
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('df',-5)">&#8722;</button><span class="pm-val" id="v-df">70</span><button class="pm-btn right" onclick="pmStep('df',5)">+</button></div>
+      <div class="fhint">Default 70:30 (debt:equity) — prudential banking norm for solar projects in India. Editable. Change here updates all financial outputs instantly.</div>
+    </div>
+    <div class="comp-row" style="background:var(--b1);border-radius:8px;padding:8px 12px;margin-bottom:4px">
+      <span class="comp-lbl">Debt : Equity ratio</span>
+      <span class="comp-val" id="v-de-ratio" style="font-weight:700;color:var(--b6)">70 : 30</span>
+    </div>
+    <div class="comp-row" style="margin-bottom:8px">
+      <span class="comp-lbl">Equity fraction (auto = 100 − Debt%)</span>
+      <span class="comp-val" id="v-eq-pct">30%</span>
     </div>
     <div class="fld"><label class="flbl">Cost of debt <span>(%/yr)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('ir',-0.25)">&#8722;</button><span class="pm-val" id="v-ir">9.00</span><button class="pm-btn right" onclick="pmStep('ir',0.25)">+</button></div></div>
     <div class="fld"><label class="flbl">Loan tenure <span>(years)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('tn',-1)">&#8722;</button><span class="pm-val" id="v-tn">10</span><button class="pm-btn right" onclick="pmStep('tn',1)">+</button></div></div>
@@ -1025,7 +1141,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 <div class="fab-w"><button class="fab" onclick="calc()">Calculate</button></div>
 
 <script>
-const BUILD='v6.7 | Build: 20260507-1900 IST';
+const BUILD='v7.1 | Build: 20260507-2200 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1112,8 +1228,13 @@ const PM={
   peak:{v:33,min:0,max:50,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
   tariff:{v:9.40,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
   oa:{v:0.95,min:0.3,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
-  epc:{v:67.2,min:0,max:500,dec:1},land:{v:11.7,min:0,max:100,dec:1},
-  evac:{v:9.0,min:0,max:100,dec:1},misc:{v:4.1,min:0,max:50,dec:1},
+  epcMW:{v:500,min:200,max:800,dec:0},   // Rs Lakhs per MW AC — all-in TPC rate
+  // derived by apportionCost() — do not edit directly:
+  epc:{v:70.0,min:0,max:500,dec:2},land:{v:10.80,min:0,max:100,dec:2},
+  evac:{v:10.0,min:0,max:60,dec:2},misc:{v:10.0,min:0,max:50,dec:2},
+  tpc:{v:100.0,min:0,max:500,dec:2},
+  // legacy inputs no longer shown but kept for backward compat:
+  landL:{v:18,min:1,max:500,dec:0},miscP:{v:3.0,min:0,max:10,dec:1},
   bmwh:{v:40,min:5,max:200,dec:0},bc:{v:0.75,min:0.3,max:2.0,dec:2},
   rte:{v:88,min:70,max:98,dec:0},bdeg:{v:2.0,min:0,max:5,dec:1},
   bst:{v:15,min:5,max:40,dec:0},evp:{v:1.50,min:0,max:4,dec:2},bom:{v:0.20,min:0,max:2,dec:2},
@@ -1138,6 +1259,101 @@ function pmStep(id,step){
   if(['tloss_trans','tloss_dist','tloss_int'].includes(id)) syncTloss();
   if(id==='ac'||id==='dac')updDC();
   if(id==='tariff'){const sel=document.getElementById('i-buyer');if(sel)buildTariffExplain(PM['tariff'].v,sel.options[sel.selectedIndex].text);}
+  calc();
+}
+
+/* ══ COST APPORTIONMENT — MW × Rate → TPC → prudential segments ═══ */
+function apportionCost(){
+  const acMW  = gv('ac');                          // 20 MW AC (fixed)
+  const dcMW  = acMW * gv('dac');
+  const dc_kWp= Math.round(dcMW * 1000);
+
+  // ── TPC = MW AC × Rs Lakhs/MW AC ──
+  const rateL = gv('epcMW');                       // Rs Lakhs per MW AC
+  const tpc   = Math.round(acMW * rateL) / 100;   // Lakhs → Crores
+
+  // ── Land: 3 acres/MW × Rs 18 L/acre × MW AC ──
+  const acresPerMW = 3, costPerAcre = 18;          // acres/MW, Rs Lakhs/acre
+  const totalAcres = acMW * acresPerMW;            // 60 acres
+  const landCr = Math.round(totalAcres * costPerAcre) / 100; // Rs Crores
+
+  // ── Evacuation % by TNERC voltage norm ──
+  const evacPct = acMW <= 5 ? 3 : acMW <= 33 ? 10 : 15;   // % of TPC
+  const evacCr  = Math.round(tpc * evacPct) / 100;
+
+  // ── Fixed prudential %s of TPC ──
+  const elecPct  = 10;  // electrical & AC-side
+  const civilPct =  5;  // civil & infra
+  const scadaPct =  2;  // SCADA / monitoring
+  const prelimPct=  3;  // preliminary & contingency
+  const elecCr   = Math.round(tpc * elecPct)  / 100;
+  const civilCr  = Math.round(tpc * civilPct) / 100;
+  const scadaCr  = Math.round(tpc * scadaPct) / 100;
+  const prelimCr = Math.round(tpc * prelimPct)/ 100;
+
+  // ── Solar EPC = TPC − everything else ──
+  const othersCr = landCr + evacCr + elecCr + civilCr + scadaCr + prelimCr;
+  const epcCr    = Math.round((tpc - othersCr) * 100) / 100;
+  const epcPct   = tpc > 0 ? (epcCr / tpc * 100) : 0;
+
+  // ── Push into PM so calc() reads them ──
+  PM['tpc'].v  = tpc;
+  PM['epc'].v  = epcCr;
+  PM['land'].v = landCr;
+  PM['evac'].v = evacCr;
+  PM['misc'].v = Math.round((civilCr + scadaCr + prelimCr) * 100) / 100;
+
+  // ── Evacuation voltage advisory ──
+  const evacVolt = acMW <= 5 ? '11 kV' : acMW <= 33 ? '33 kV' : '110 kV';
+  const noteEl = document.getElementById('evac-norm-note');
+  if(noteEl){
+    noteEl.textContent = acMW <= 5
+      ? `▶ ${acMW} MW AC → 11 kV HT feeder (TANGEDCO). ${evacPct}% of TPC = Rs ${evacCr.toFixed(2)} Cr.`
+      : acMW <= 33
+      ? `▶ ${acMW} MW AC → 33 kV sub-transmission (TANTRANSCO). ${evacPct}% of TPC = Rs ${evacCr.toFixed(2)} Cr.`
+      : `▶ ${acMW} MW AC → 110 kV EHT mandatory (TANTRANSCO). ${evacPct}% of TPC = Rs ${evacCr.toFixed(2)} Cr.`;
+  }
+  const ctEvacLbl = document.getElementById('ct-evac-lbl');
+  if(ctEvacLbl) ctEvacLbl.textContent = `Evacuation (${evacVolt})`;
+  const evacSub = document.getElementById('evac-sub');
+  if(evacSub) evacSub.textContent = acMW <= 5
+    ? '11 kV HT feeder extension + metering panel'
+    : acMW <= 33
+    ? '33 kV substation + HT line + TANTRANSCO bay'
+    : '110 kV EHT substation + EHT line + TANTRANSCO bay';
+  const evacBasis = document.getElementById('evac-basis');
+  if(evacBasis) evacBasis.textContent = `${evacPct}% of TPC (${evacVolt} norm)`;
+
+  // ── Land detail ──
+  const landDet = document.getElementById('land-detail');
+  if(landDet) landDet.textContent =
+    `${acMW} MW × ${acresPerMW} acres/MW = ${totalAcres} acres | Rs ${costPerAcre} Lakhs/acre | Land cost = Rs ${landCr.toFixed(2)} Cr`;
+  const landSub = document.getElementById('land-sub');
+  if(landSub) landSub.textContent =
+    `${acresPerMW} ac/MW × Rs ${costPerAcre} L/ac × ${acMW} MW = ${totalAcres} acres`;
+
+  // ── Update all display spans ──
+  const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  s('v-epcMW', rateL.toFixed(0));
+  s('v-ac-cost', acMW.toFixed(0));
+  s('v-ac-tpc', acMW.toFixed(0));
+  s('v-dc-calc2', dcMW.toFixed(2)+' MW DC / '+dc_kWp.toLocaleString('en-IN')+' kWp');
+  s('v-tpc', 'Rs '+tpc.toFixed(2)+' Cr');
+  s('v-wp', dc_kWp > 0 ? 'Rs '+(tpc*1e7/dc_kWp).toFixed(0)+' /kWp' : '—');
+  s('v-epc-disp', 'Rs '+epcCr.toFixed(2)+' Cr');
+  s('v-sc','Rs '+tpc.toFixed(1)+' Cr');   // legacy id used in calc()
+
+  // Table rows
+  s('pct-solar', epcPct.toFixed(1));    s('ct-epc',    epcCr.toFixed(2));
+  s('pct-elec',  elecPct.toFixed(1));   s('ct-elec',   elecCr.toFixed(2));
+  s('pct-evac',  evacPct.toFixed(1));   s('ct-evac',   evacCr.toFixed(2));
+  s('pct-land',  tpc>0?(landCr/tpc*100).toFixed(1)+'%':'—');
+  s('ct-land',   landCr.toFixed(2));
+  s('pct-civil', civilPct.toFixed(1));  s('ct-civil',  civilCr.toFixed(2));
+  s('pct-scada', scadaPct.toFixed(1));  s('ct-scada',  scadaCr.toFixed(2));
+  s('pct-prelim',prelimPct.toFixed(1)); s('ct-prelim', prelimCr.toFixed(2));
+  s('ct-total',  tpc.toFixed(2));
+
   calc();
 }
 function syncTloss(){
@@ -1577,6 +1793,10 @@ function calc(){
   s('v-wp','Rs '+((tCap*1e7)/dc_kWp).toFixed(1));
   s('v-ec','Rs '+eCap.toFixed(1)+' Cr');
   s('v-da',dAmt.toFixed(1));s('v-ea',eAmt.toFixed(1));
+  // D:E ratio display
+  const dfInt=Math.round(gv('df')),eqInt=100-dfInt;
+  s('v-de-ratio', dfInt+' : '+eqInt);
+  s('v-eq-pct', eqInt+'%');
 
   // Generation
   const grossGen=dc_kWp*plf*8760;
@@ -1782,6 +2002,7 @@ function buildReport(cfD,dSch,sCap,tCap,sv,taxR,tloss,peak,sur,disc,tarE,oaE,omE
 /* ── INIT ── */
 buildDrawer();
 updLoss();
+apportionCost();   // set derived EPC/land/misc from TPC on first load
 addCustomer(); // Add one default customer
 calc();
 setTimeout(()=>{buildTariffExplain(PM['tariff'].v,'HT-III Misc/Commercial');},200);
