@@ -404,7 +404,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v8.1 | 08-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v8.2 | 08-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -455,7 +455,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v8.1</div>
+    <div class="drw-t">EIL Solar Ground v8.2</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -1328,7 +1328,8 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <div class="ai-chat-hdr-s" id="ai-mode-label">Group Captive CPP Expert</div>
       </div>
       <div class="ai-online" title="Online"></div>
-      <button onclick="aiReset()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-left:8px;flex-shrink:0">↺ Reset</button>
+      <button onclick="aiClearChat()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-left:6px;flex-shrink:0">🗑 Clear</button>
+      <button onclick="aiReset()" style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;margin-left:4px;flex-shrink:0">↺</button>
     </div>
 
     <!-- Category filter -->
@@ -1403,7 +1404,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
 
 <script>
-const BUILD='v8.1 | Build: 20260508-2330 IST';
+const BUILD='v8.2 | Build: 20260509-0030 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -4330,9 +4331,13 @@ let AI_QA = [
   { cat:'financial', q:'What is my equity investment and payback period?',
     a:'Total project cost is Rs 92 Crores. At 30% equity, total equity is Rs 27.6 Crores. Your share = Rs 27.6 Cr × your equity %. Payback on equity depends on your share of net revenue after OA charges, O&M, interest and tax. Typically with HT-III tariff, EBITDA in Year 1 is Rs 31–35 Crores for the full project, and equity payback is around Year 5–7 for the full project. Your individual payback tracks proportional to your equity share.' },
   { cat:'financial', q:'How is the selling price calculated each year?',
-    a:'Year 1 selling price = Rs 9.165/kWh. Each subsequent year: TNEB tariff escalates at 3%/yr, and the solar selling price follows at the same 3%/yr. Formula: Weighted TNEB = base tariff × (1 + 33.3% peak × 25% surcharge). Selling price = weighted TNEB × 90% discount. By Year 5: Rs 9.165 × (1.03)⁴ = Rs 10.31/kWh. By Year 10: Rs 11.96/kWh. Escalation protects returns over 25 years.' },
+    a:'Year 1 selling price = Rs 6.901/kWh (HT-I industrial, 85% of weighted Rs 8.125). Each year: TNEB tariff escalates at 3%/yr, weighted tariff follows, and selling price = 85% of that year weighted. By Year 5: Rs 6.901 x (1.03)^4 = Rs 7.76/kWh. By Year 10: Rs 8.99/kWh. The morning peak 33.3% premium is built into the weighted tariff every year.' },
+  { cat:'financial', q:'How does morning peak hour generation benefit the developer?',
+    a:'**Morning peak 6AM-10AM = 33.3% of all solar generation earned at +25% premium:**\n\n| Item | Value |\n|---|---|\n| Base tariff (HT-I) | Rs 7.50/kWh |\n| Morning peak rate (+25%) | Rs 9.375/kWh |\n| Normal hours rate | Rs 7.50/kWh |\n| Solar weighted (4/12 peak) | **Rs 8.125/kWh** |\n| Peak uplift vs flat billing | **+Rs 0.625/kWh** |\n| Extra revenue Year 1 | **~Rs 2.70 Crores** |\n\nThis is **already factored** into all financial model calculations. Evening peak (6PM-10PM) earns nothing as solar generation is zero by then.' },
+  { cat:'technical', q:'Is morning peak hour revenue factored in the project financials?',
+    a:'**Yes - fully factored.** The weighted tariff formula confirms it:\n\nSolar weighted = (4 hrs x Rs 9.375 peak + 8 hrs x Rs 7.50 normal) / 12 hrs = **Rs 8.125/kWh**\n\nDeveloper earns Rs 0.625/kWh more than flat rate - worth ~Rs 2.70 Crores/year extra.\n\nAt 85% discount: selling price = Rs 8.125 x 85% = **Rs 6.906/kWh** to the customer.\n\nAll 25 years of the financial model use this weighted price with 3%/yr escalation.' },
   { cat:'financial', q:'What is DSCR and is this project bankable?',
-    a:'DSCR (Debt Service Coverage Ratio) = EBITDA ÷ (Interest + Principal). Lenders require a minimum DSCR of 1.2x–1.3x for solar project finance. In Year 1 (moratorium — interest only), DSCR = EBITDA / Interest = Rs 31.8 Cr / Rs 5.8 Cr ≈ 5.5x — comfortably above the threshold. From Year 2 when principal starts, DSCR is ~2.1x. The project is bankable with 70% debt at 9% interest over 10 years.' },
+    a:'DSCR (Debt Service Coverage Ratio) = EBITDA / (Interest + Principal). Lenders require a minimum DSCR of 1.2x-1.3x for solar project finance. In Year 1 (moratorium - interest only), DSCR = EBITDA / Interest comfortably above the threshold. From Year 2 when principal starts, DSCR is ~2.1x. The project is bankable with 70% debt at 9% interest over 10 years.' },
   { cat:'financial', q:'What is the total 25-year return for the project?',
     a:'Based on the current model (HT-III tariff, Rs 0.95/kWh OA, 3% escalation, Rs 92 Cr capex): Total 25-year FCF to developer is approximately Rs 280–320 Crores. Return multiple on equity is approximately 9–11x your equity investment. Net realisation starts at Rs 8.21/kWh in Year 1 and grows to Rs 18+/kWh by Year 25 as TNEB tariff escalates while OA and O&M costs grow more slowly. Exact figures update live — check the 25-Year Cash Flow section for current model output.' },
   { cat:'financial', q:'What is the impact of the OA charge change from Rs 1.33 to Rs 0.95?',
@@ -4382,11 +4387,17 @@ function aiShowChat(modeLabel){
   aiAddBubble('bot', welcome);
 }
 
-function aiReset(){
-  const chat = document.getElementById('ai-msgs');
-  chat.innerHTML = '';
+function aiClearChat(){
+  const msgs = document.getElementById('ai-msgs');
+  if(msgs) msgs.innerHTML = '';
   aiChatHistory = [];
-  aiAddBubble('bot', 'Chat cleared. How can I help you? 🌞');
+  const inp = document.getElementById('ai-inp');
+  if(inp){ inp.value = ''; inp.style.height = 'auto'; }
+  aiAddBubble('bot', 'Cleared ✓\n\nAsk me anything about your solar project — selling price, savings, compliance, land, peak hour revenue or anything else.');
+}
+
+function aiReset(){
+  aiClearChat();
 }
 
 /* ── CATEGORY FILTER ──────────────────────────────────────────── */
@@ -4659,6 +4670,13 @@ TARIFF & PRICING (Year 1 — TNERC T.O. No.6 of 2025):
 - PRIMARY CUSTOMER TYPE: ${discLabel}
 - Buyer category: ${isCommercial ? 'HT-III Misc/Commercial' : 'HT-I Industries & IT'}
 - TNEB base tariff: Rs ${tariff}/kWh
+- **PEAK HOUR PREMIUM — CONFIRMED FACTORED IN FINANCIALS:**
+  Morning peak 6AM–10AM = 4 hrs out of 12 solar generation hrs = ${(peak*100).toFixed(1)}% of all generation
+  Peak rate = base × 1.25 = Rs ${+(tariff*1.25).toFixed(4)}/kWh (25% above normal)
+  Solar weighted = (4 × Rs ${+(tariff*1.25).toFixed(4)} + 8 × Rs ${tariff}) / 12 = Rs ${wt}/kWh
+  Peak uplift vs flat rate = Rs ${+(wt-tariff).toFixed(4)}/kWh (${(((wt/tariff)-1)*100).toFixed(1)}% more revenue)
+  Revenue from peak premium Yr1 = Rs ${+(netKWh*peak*(tariff*0.25)/1e7).toFixed(2)} Crores extra vs flat billing
+  Evening peak 6PM–10PM = ZERO solar generation — no evening premium earned
 - Morning peak %: ${(peak*100).toFixed(1)}% of solar generation (6AM–10AM = 4/12 hrs)
 - Peak surcharge: ${(sur*100).toFixed(0)}% above base
 - Weighted TNEB (solar developer): Rs ${wt}/kWh
