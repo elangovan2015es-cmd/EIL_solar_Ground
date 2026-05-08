@@ -85,7 +85,7 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 /* SECTIONS */
 .sec{display:none}.sec.on{display:block}
 .dev-sec{display:none}.dev-sec.on{display:block}
-.cust-sec{display:none}.cust-sec.on{display:block}
+.cust-sec{display:none}
 
 /* SECTION HEADING */
 .sec-h{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:2.5px solid var(--g5)}
@@ -233,7 +233,61 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .fab{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:14px 48px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.38);transition:all .14s;min-width:170px;letter-spacing:.01em}
 .fab:active{background:var(--g7);transform:scale(.97)}
 
-/* INSTALL BANNER */
+/* AI ASSISTANT */
+.ai-page{display:flex;flex-direction:column;height:calc(100vh - var(--hh) - var(--rh));padding-top:calc(var(--hh) + var(--rh));position:fixed;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:0;}
+.ai-page.visible{pointer-events:all;opacity:1;}
+@media(min-width:900px){.ai-page{left:var(--sb);}}
+.ai-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:28px 20px;text-align:center;background:#F3F4F6;}
+.ai-lock-icon{font-size:52px;margin-bottom:14px}
+.ai-lock-t{font-size:20px;font-weight:800;color:var(--n9);margin-bottom:8px}
+.ai-lock-s{font-size:14px;color:var(--n5);line-height:1.6;max-width:320px;margin-bottom:20px}
+.ai-unlock-btn{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:14px 36px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.35);margin-bottom:10px}
+.ai-unlock-btn:active{background:var(--g7)}
+.ai-price-badge{font-size:12px;color:var(--n5);padding:6px 14px;border:1px solid var(--n3);border-radius:20px;background:#fff}
+.ai-chat-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;background:#F3F4F6;}
+.ai-chat-hdr{background:var(--g6);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.ai-chat-hdr-ic{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ai-chat-hdr-t{color:#fff;font-size:14px;font-weight:700}
+.ai-chat-hdr-s{color:rgba(255,255,255,.65);font-size:11px}
+.ai-online{width:8px;height:8px;background:#4ADE80;border-radius:50%;flex-shrink:0;animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+.ai-msgs{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:10px;-webkit-overflow-scrolling:touch;}
+.ai-bubble{max-width:82%;padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.6;word-break:break-word;}
+.ai-bubble.bot{background:#fff;color:var(--n9);border-radius:4px 14px 14px 14px;box-shadow:0 1px 4px rgba(0,0,0,.07);align-self:flex-start;}
+.ai-bubble.usr{background:var(--g6);color:#fff;border-radius:14px 14px 4px 14px;align-self:flex-end;}
+.ai-bubble.typing{background:#fff;align-self:flex-start;border-radius:4px 14px 14px 14px;padding:14px;}
+.typing-dots{display:flex;gap:5px;align-items:center}
+.typing-dots span{width:8px;height:8px;border-radius:50%;background:var(--n5);animation:bounce-dot 1.2s infinite;}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce-dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.ai-qs{flex-shrink:0;padding:10px 12px;background:#fff;border-top:1px solid var(--n3);}
+.ai-qs-t{font-size:10px;font-weight:700;color:var(--n5);text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px}
+.ai-qs-scroll{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.ai-qs-scroll::-webkit-scrollbar{display:none}
+.ai-q-chip{flex-shrink:0;background:var(--g0);border:1.5px solid var(--g1);color:var(--g6);border-radius:20px;padding:7px 13px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;transition:all .12s}
+.ai-q-chip:active{background:var(--g1)}
+.ai-inp-row{display:flex;gap:8px;padding:10px 12px;background:#fff;border-top:1px solid var(--n3);flex-shrink:0;align-items:flex-end;}
+.ai-inp{flex:1;font-size:13.5px;padding:10px 13px;border:2px solid var(--n3);border-radius:22px;font-family:'Inter',sans-serif;resize:none;max-height:90px;line-height:1.5;outline:none;color:var(--n9);}
+.ai-inp:focus{border-color:var(--g5)}
+.ai-send{width:42px;height:42px;background:var(--g6);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .12s}
+.ai-send:disabled{background:var(--n3);cursor:not-allowed}
+.ai-send svg{width:18px;height:18px;fill:#fff}
+.ai-cats{display:flex;gap:7px;flex-wrap:wrap;padding:8px 12px;background:#fff;border-top:1px solid var(--n3);flex-shrink:0;}
+.ai-cat-btn{background:var(--n1);border:1.5px solid var(--n3);border-radius:16px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--n7);transition:all .12s}
+.ai-cat-btn.on{background:var(--g1);border-color:var(--g5);color:var(--g6)}
+.ai-dev-panel{background:#fff;border-top:3px solid var(--o6);padding:14px 16px;flex-shrink:0;max-height:220px;overflow-y:auto;}
+.ai-dev-panel-t{font-size:11px;font-weight:700;color:var(--o6);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.ai-q-mgmt{display:flex;flex-direction:column;gap:6px;}
+.ai-q-item{display:flex;align-items:center;gap:8px;background:var(--n1);border-radius:8px;padding:8px 10px;border:1px solid var(--n3);}
+.ai-q-item span{flex:1;font-size:12px;color:var(--n7)}
+.ai-q-cat{font-size:10px;font-weight:600;padding:2px 7px;border-radius:10px;background:var(--g1);color:var(--g6);flex-shrink:0}
+.ai-q-del{background:var(--r1);color:var(--r6);border:none;border-radius:5px;padding:3px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
+.ai-add-q-form{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;}
+.ai-add-q-form input,.ai-add-q-form select{font-size:12.5px;padding:7px 10px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif;background:#fff}
+.ai-add-q-form input{flex:1;min-width:160px}
+.ai-add-q-btn{background:var(--g6);color:#fff;border:none;border-radius:7px;padding:7px 14px;font-size:12.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer}
+
 #inst-ban{background:var(--g6);color:#fff;border-radius:11px;padding:11px 13px;margin-bottom:12px;display:none;align-items:center;justify-content:space-between;gap:10px}
 #inst-ban p{font-size:12.5px;font-weight:500}
 #inst-btn{background:#fff;color:var(--g6);border:none;border-radius:6px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
@@ -310,7 +364,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v6.6 | 01-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v7.2 | 08-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -343,6 +397,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="sb-sep"></div>
     <button class="sb-item" id="sb-tn" onclick="go('tn')"><div class="sb-ic">&#9989;</div><div><div class="sb-lbl">TNERC Compliance</div><div class="sb-dsc">Monthly tracking &amp; TNPDCL cert</div></div><span class="sb-badge or">Key</span></button>
     <button class="sb-item" id="sb-rg" onclick="go('rg')"><div class="sb-ic">&#128203;</div><div><div class="sb-lbl">Regulatory</div><div class="sb-dsc">Group captive &amp; 110 kV</div></div></button>
+    <div class="sb-sep"></div>
+    <button class="sb-item" id="sb-ai-dev" onclick="go('ai')"><div class="sb-ic">&#129302;</div><div><div class="sb-lbl">AI Assistant</div><div class="sb-dsc">Q&amp;A for customers</div></div><span class="sb-badge pu">AI</span></button>
   </div>
   <div class="sb-title" id="sb-title-cust" style="display:none">Customer Sections</div>
   <div id="sb-cust-items" style="display:none">
@@ -350,6 +406,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <button class="sb-item" id="sb-cs" onclick="go('cs')"><div class="sb-ic">&#9889;</div><div><div class="sb-lbl">My Savings</div><div class="sb-dsc">vs direct TNEB billing</div></div></button>
     <button class="sb-item" id="sb-cc" onclick="go('cc')"><div class="sb-ic">&#10004;</div><div><div class="sb-lbl">Compliance Status</div><div class="sb-dsc">26% equity, 51% consumption</div></div></button>
     <button class="sb-item" id="sb-ca" onclick="go('ca')"><div class="sb-ic">&#128201;</div><div><div class="sb-lbl">Actual vs Projected</div><div class="sb-dsc">Your actual usage data</div></div></button>
+    <div class="sb-sep"></div>
+    <button class="sb-item" id="sb-ai" onclick="go('ai')"><div class="sb-ic">&#129302;</div><div><div class="sb-lbl">AI Assistant</div><div class="sb-dsc">Ask about your solar project</div></div><span class="sb-badge pu">AI</span></button>
   </div>
 </nav>
 
@@ -357,7 +415,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v6.6</div>
+    <div class="drw-t">EIL Solar Ground v7.2</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -584,7 +642,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">0.95</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div>
       <div style="margin-top:10px;padding:11px 13px;background:var(--b1);border-radius:9px;font-size:12px;line-height:1.9;border:1px solid #A8C8F0">
         <strong style="color:var(--b6)">OA charge breakdown — FY 2025-26 (TNERC T.O.7/2022 revised)</strong><br>
-        <table style="width:100%;font-size:11.5px;margin-top:6px;border-collapse:collapse">
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px;border-radius:6px">
+        <table style="width:100%;min-width:360px;font-size:11.5px;border-collapse:collapse">
           <tr style="background:var(--n1)">
             <th style="text-align:left;padding:5px 7px;border:1px solid var(--n3)">Component</th>
             <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">Full rate</th>
@@ -616,7 +675,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
             <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700;color:var(--g6)">Rs 0.959</td>
           </tr>
         </table>
-        <div style="margin-top:8px;font-size:11.5px;color:var(--b6)">
+        </div><!-- /overflow wrapper -->
           &#9432; <strong>30% solar concession confirmed</strong> — TNERC Intra-State OA Regulations: solar pays 70% of each of transmission, wheeling and SLDC charges.<br>
           &#9432; <strong>CSS = ZERO</strong> and <strong>Additional Surcharge = Rs 0.10/kWh</strong> (reduced 81.5% for FY26 per TNERC GEOA 2025).<br>
           &#9432; Default set to <strong>Rs 0.95/kWh</strong> (rounded). Change to Rs 1.33 if your TNERC advocate confirms that T.O.7/2022 Rs 1.33 already included the 30% solar concession.<br>
@@ -1112,6 +1171,9 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
       <button onclick="exportRegToCSV()" style="background:#7C3AED;color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
         &#128203; Export Regulatory Data to CSV (for Excel / filing)
       </button>
+      <button onclick="generatePPT()" style="background:#C05621;color:#fff;border:none;border-radius:10px;padding:14px 20px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;text-align:left">
+        &#128190; Export Project Summary to PowerPoint (.html slides — open in browser / print to PPT)
+      </button>
     </div>
     <div id="pr-status" style="display:none;margin-top:10px;font-size:12.5px;padding:10px 14px;border-radius:8px;background:var(--g1);color:var(--g6);font-weight:600"></div>
   </div>
@@ -1138,10 +1200,141 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 </div>
 
 </div><!-- /cvs -->
-<div class="fab-w"><button class="fab" onclick="calc()">Calculate</button></div>
+
+<!-- ══ CUSTOMER VIEW SECTIONS ═══════════════════════════════════════ -->
+
+<!-- MY INVESTMENT -->
+<div id="s-ci" class="sec cust-sec" style="display:none">
+  <div class="cvs">
+    <div class="sec-h"><div class="sec-ic">&#128181;</div><div><div class="sec-ti">My Investment</div><div class="sec-su">Your equity stake &amp; savings summary</div></div></div>
+    <div class="card">
+      <div class="chdr gn">Select your profile</div>
+      <div class="fld">
+        <label class="flbl">Which customer are you?</label>
+        <select id="c-cust-sel" onchange="calcCustomer()" style="margin-bottom:0">
+          <option value="">-- Select your name --</option>
+        </select>
+        <div class="fhint">Customers are added by the developer in the Customers section. If your name is not here, contact the project developer.</div>
+      </div>
+    </div>
+    <div id="ci-content">
+      <div class="alert info">Select your customer profile above to see your investment details.</div>
+    </div>
+  </div>
+</div>
+
+<!-- MY SAVINGS -->
+<div id="s-cs" class="sec cust-sec" style="display:none">
+  <div class="cvs">
+    <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">My Savings</div><div class="sec-su">Solar vs direct TNEB billing comparison</div></div></div>
+    <div id="cs-content">
+      <div class="alert info">Select your profile in My Investment first, then return here to see your savings.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLIANCE STATUS -->
+<div id="s-cc" class="sec cust-sec" style="display:none">
+  <div class="cvs">
+    <div class="sec-h"><div class="sec-ic">&#10004;</div><div><div class="sec-ti">My Compliance Status</div><div class="sec-su">26% equity &amp; 51% consumption obligations</div></div></div>
+    <div class="alert or">As a captive consumer you must hold minimum 26% equity in the SPV and consume proportionally to your equity share each year. Non-compliance triggers CSS retroactively for the full year.</div>
+    <div id="cc-content">
+      <div class="alert info">Select your profile in My Investment first, then return here to see your compliance status.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     AI ASSISTANT — s-ai  (both dev + customer accessible)
+     ══════════════════════════════════════════════════════════════════ -->
+<div id="s-ai" class="sec" style="display:none">
+
+  <!-- ── LOCK SCREEN (shown until access granted) ── -->
+  <div id="ai-lock-screen" class="cvs" style="min-height:calc(100vh - 96px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px">
+    <div style="font-size:64px;margin-bottom:16px">🤖</div>
+    <div style="font-size:22px;font-weight:800;color:var(--n9);margin-bottom:8px">EIL Solar AI Assistant</div>
+    <div style="font-size:14px;color:var(--n5);line-height:1.7;max-width:340px;margin-bottom:8px">
+      Get instant answers to all your solar project questions — OA charges, savings, compliance, regulatory rules and more. Powered by AI, customised for your Group Captive CPP project.
+    </div>
+    <div style="margin:16px 0;padding:12px 20px;background:var(--g0);border:1.5px solid var(--g1);border-radius:12px;max-width:300px;width:100%">
+      <div style="font-size:11px;font-weight:700;color:var(--g6);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Premium Feature</div>
+      <div style="font-size:26px;font-weight:800;color:var(--g6)">₹999 <span style="font-size:14px;font-weight:500;color:var(--n5)">/month</span></div>
+      <div style="font-size:11.5px;color:var(--n5);margin-top:4px">Per customer. Includes unlimited questions, always up-to-date regulatory answers.</div>
+    </div>
+    <button onclick="aiRequestAccess()" style="background:var(--g6);color:#fff;border:none;border-radius:50px;padding:14px 40px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.35);margin-bottom:10px">Request Access</button>
+    <button onclick="aiUnlockDemo()" style="background:transparent;color:var(--g6);border:1.5px solid var(--g5);border-radius:50px;padding:10px 28px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">Try Demo (Developer)</button>
+    <div style="margin-top:16px;font-size:11.5px;color:var(--n5)">Demo mode uses preset answers &nbsp;·&nbsp; Full AI uses live Anthropic model</div>
+  </div>
+
+  <!-- ── CHATBOT UI (shown after unlock) ── -->
+  <div id="ai-chat-screen" style="display:none;height:calc(100vh - 96px);display:none;flex-direction:column;">
+
+    <!-- Chat header -->
+    <div class="ai-chat-hdr">
+      <div class="ai-chat-hdr-ic">🤖</div>
+      <div style="flex:1">
+        <div class="ai-chat-hdr-t">EIL Solar AI Assistant</div>
+        <div class="ai-chat-hdr-s" id="ai-mode-label">Group Captive CPP Expert</div>
+      </div>
+      <div class="ai-online" title="Online"></div>
+      <button onclick="aiReset()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-left:6px">↺ Reset</button>
+    </div>
+
+    <!-- Category filter tabs -->
+    <div class="ai-cats" id="ai-cat-tabs">
+      <button class="ai-cat-btn on" onclick="aiSetCat('all',this)">All</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('savings',this)">💰 Savings</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('compliance',this)">✅ Compliance</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('regulatory',this)">📋 Regulatory</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('technical',this)">⚙️ Technical</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('financial',this)">📊 Financial</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('general',this)">❓ General</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="ai-msgs" id="ai-msgs"></div>
+
+    <!-- Quick question chips -->
+    <div class="ai-qs">
+      <div class="ai-qs-t">Suggested questions — tap to ask</div>
+      <div class="ai-qs-scroll" id="ai-chips"></div>
+    </div>
+
+    <!-- Input row -->
+    <div class="ai-inp-row">
+      <textarea class="ai-inp" id="ai-inp" rows="1" placeholder="Type your question…" oninput="aiAutoResize(this)" onkeydown="aiKeyDown(event)"></textarea>
+      <button class="ai-send" id="ai-send-btn" onclick="aiSend()">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
+    </div>
+
+    <!-- Developer panel: manage Q&A bank -->
+    <div class="ai-dev-panel" id="ai-dev-panel" style="display:none">
+      <div class="ai-dev-panel-t">⚙️ Developer — Manage Q&amp;A Bank</div>
+      <div style="font-size:12px;color:var(--n5);margin-bottom:10px">Add, edit or remove preset questions. Customers see these as suggested chips. AI answers from your Q&amp;A bank first; if no match, uses live AI.</div>
+      <div class="ai-add-q-form">
+        <input type="text" id="ai-new-q" placeholder="Type new question…">
+        <select id="ai-new-cat" style="flex-shrink:0">
+          <option value="savings">Savings</option>
+          <option value="compliance">Compliance</option>
+          <option value="regulatory">Regulatory</option>
+          <option value="technical">Technical</option>
+          <option value="financial">Financial</option>
+          <option value="general">General</option>
+        </select>
+        <button class="ai-add-q-btn" onclick="aiAddQuestion()">+ Add</button>
+      </div>
+      <div class="ai-q-mgmt" id="ai-q-list" style="margin-top:10px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CALCULATE FAB — shown only in developer view -->
+<div class="fab-w" id="calc-fab"><button class="fab" onclick="calc()">&#9889; Calculate</button></div>
+
 
 <script>
-const BUILD='v7.1 | Build: 20260507-2200 IST';
+const BUILD='v7.2 | Build: 20260508-1600 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1162,25 +1355,49 @@ function setRole(r){
   document.getElementById('sb-title-dev').style.display=r==='dev'?'block':'none';
   document.getElementById('sb-title-cust').style.display=r==='cust'?'block':'none';
   document.getElementById('drw-role-sub').textContent=r==='dev'?'Developer View':'Customer View';
-  document.querySelectorAll('.dev-sec').forEach(s=>s.classList.remove('on'));
-  document.querySelectorAll('.cust-sec').forEach(s=>s.classList.remove('on'));
-  if(r==='dev'){document.getElementById('s-db').classList.add('on');setActiveSb('db');}
-  else{document.getElementById('s-ci').classList.add('on');setActiveSb('ci');updCustSelect();}
+  // FAB: only show in developer view (not needed in customer view)
+  const fab=document.getElementById('calc-fab');
+  if(fab)fab.style.display=r==='dev'?'flex':'none';
+  // Hide all sections first
+  document.querySelectorAll('.dev-sec').forEach(s=>{s.classList.remove('on');s.style.display='none';});
+  document.querySelectorAll('.cust-sec').forEach(s=>{s.style.display='none';});
+  if(r==='dev'){
+    const db=document.getElementById('s-db');
+    if(db){db.classList.add('on');db.style.display='block';}
+    setActiveSb('db');
+  } else {
+    const ci=document.getElementById('s-ci');
+    if(ci)ci.style.display='block';
+    setActiveSb('ci');
+    updCustSelect();
+    calcCustomer();
+  }
   buildDrawer();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 /* ── NAVIGATION ── */
-const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg'];
-const CUST_SECS=['ci','cs','cc','ca'];
+const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg','ai'];
+const CUST_SECS=['ci','cs','cc','ca','ai'];
 function go(id){
   const allSecs=[...DEV_SECS,...CUST_SECS];
-  allSecs.forEach(s=>{const el=document.getElementById('s-'+s);if(el)el.classList.remove('on');});
+  // Hide all dev sections
+  allSecs.forEach(s=>{
+    const el=document.getElementById('s-'+s);
+    if(!el)return;
+    el.classList.remove('on');
+    el.style.display='none';
+  });
   const target=document.getElementById('s-'+id);
-  if(target)target.classList.add('on');
+  if(target){
+    target.classList.add('on');
+    target.style.display='block';
+  }
   setActiveSb(id);
-  closeD();window.scrollTo({top:0,behavior:'smooth'});
+  closeD();
+  window.scrollTo({top:0,behavior:'smooth'});
   if(id==='ca')buildActualCustRows();
+  if(id==='ci'||id==='cs'||id==='cc')calcCustomer();
 }
 function setActiveSb(id){
   document.querySelectorAll('.sb-item,.di').forEach(el=>el.classList.remove('on'));
@@ -1209,11 +1426,15 @@ function buildDrawer(){
     {id:'tn',ic:'&#9989;',lbl:'TNERC Compliance',dsc:'Monthly tracking & TNPDCL cert'},
     {id:'---'},
     {id:'rg',ic:'&#128203;',lbl:'Regulatory',dsc:'Group captive & 110 kV'},
+    {id:'---'},
+    {id:'ai',ic:'&#129302;',lbl:'AI Assistant',dsc:'Customer Q&A chatbot'},
   ]:[
     {id:'ci',ic:'&#128181;',lbl:'My Investment',dsc:'Equity & returns'},
     {id:'cs',ic:'&#9889;',lbl:'My Savings',dsc:'vs direct TNEB billing'},
     {id:'cc',ic:'&#10004;',lbl:'Compliance Status',dsc:'26% equity & 51% consumption'},
     {id:'ca',ic:'&#128201;',lbl:'Actual vs Projected',dsc:'My usage data'},
+    {id:'---'},
+    {id:'ai',ic:'&#129302;',lbl:'AI Assistant',dsc:'Ask about your solar project'},
   ];
   body.innerHTML=items.map(it=>{
     if(it.id==='---')return '<div class="drw-sep"></div>';
@@ -3760,6 +3981,541 @@ function loadRegData(){
       const el=document.getElementById(id);if(el)el.value=val;
     });
   }catch(e){}
+}
+
+
+/* ══ GENERATE PPT (HTML SLIDES) ═════════════════════════════════ */
+function generatePPT(){
+  const co=(document.getElementById('q-company')||{value:''}).value||'[Company Name]';
+  const site=(document.getElementById('q-site')||{value:''}).value||'Tamil Nadu';
+  const rpdate=(document.getElementById('q-rpdate')||{value:''}).value||'May 2026';
+  const acMW=gv('ac'), dcMW=(acMW*gv('dac')).toFixed(2);
+  const tCap=(gv('epc')+gv('land')+gv('evac')+gv('misc')).toFixed(2);
+  const tariff=gv('tariff'), disc=gv('disc'), peak=gv('peak')/100, sur=gv('surcharge')/100;
+  const wt=tariff*(1+peak*sur), sp1=(wt*disc/100).toFixed(4);
+  const oa=gv('oa').toFixed(2);
+  const nr1=(parseFloat(sp1)-parseFloat(oa)).toFixed(4);
+  const plf=gv('plf').toFixed(1);
+  const tloss=gv('tloss').toFixed(1);
+  const dc_kWp=Math.round(acMW*gv('dac')*1000);
+  const grossGen=dc_kWp*gv('plf')/100*8760;
+  const netMU=(grossGen*(1-gv('tloss')/100)/1e6).toFixed(2);
+  const df=gv('df'), eq=100-df;
+  const dAmt=(parseFloat(tCap)*df/100).toFixed(2);
+  const eAmt=(parseFloat(tCap)*eq/100).toFixed(2);
+  const ir=gv('ir').toFixed(2);
+  // simple payback estimate
+  const nRev=(grossGen*(1-gv('tloss')/100)*parseFloat(sp1)/1e7).toFixed(2);
+  const oAch=(grossGen*(1-gv('tloss')/100)*parseFloat(oa)/1e7).toFixed(2);
+  const netRev=(parseFloat(nRev)-parseFloat(oAch)).toFixed(2);
+  const om1=(parseFloat(tCap)*gv('om')/100).toFixed(2);
+  const ebd1=(parseFloat(netRev)-parseFloat(om1)).toFixed(2);
+
+  const slideStyle=`<style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#1a1a2e;color:#fff;}
+    .slide{width:100%;min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:60px 80px;page-break-after:always;background:#0F6E56;position:relative;}
+    .slide.dark{background:#0a3d2b;}
+    .slide.navy{background:#0F4C81;}
+    .slide.slate{background:#1F2937;}
+    .slide-num{position:absolute;bottom:24px;right:36px;font-size:13px;opacity:0.5;}
+    h1{font-size:48px;font-weight:800;line-height:1.1;margin-bottom:12px;color:#fff;}
+    h2{font-size:32px;font-weight:700;margin-bottom:24px;color:#A7F3D0;}
+    h3{font-size:20px;font-weight:700;color:#A7F3D0;margin-bottom:12px;}
+    p{font-size:18px;line-height:1.6;opacity:0.85;}
+    .sub{font-size:20px;opacity:0.75;margin-bottom:8px;}
+    .badge{display:inline-block;background:rgba(255,255,255,0.15);padding:6px 18px;border-radius:20px;font-size:14px;font-weight:600;margin-bottom:20px;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:30px;width:100%;margin-top:20px;}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;width:100%;margin-top:20px;}
+    .kpi{background:rgba(255,255,255,0.12);border-radius:14px;padding:24px 20px;text-align:center;}
+    .kpi-v{font-size:36px;font-weight:800;color:#A7F3D0;font-family:monospace;}
+    .kpi-l{font-size:13px;opacity:0.7;margin-top:4px;text-transform:uppercase;letter-spacing:0.05em;}
+    .row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.12);}
+    .row:last-child{border-bottom:none;}
+    .rk{font-size:15px;opacity:0.8;}
+    .rv{font-size:16px;font-weight:700;font-family:monospace;color:#A7F3D0;}
+    ul{list-style:none;padding:0;}
+    li{padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.1);font-size:16px;opacity:0.85;}
+    li:before{content:"▶ ";color:#A7F3D0;font-size:12px;}
+    .alert-box{background:rgba(255,255,255,0.1);border-left:4px solid #A7F3D0;border-radius:8px;padding:18px 20px;margin-top:16px;font-size:16px;line-height:1.6;}
+    .logo{font-size:14px;font-weight:700;letter-spacing:0.1em;opacity:0.6;margin-bottom:16px;}
+    @media print{.slide{height:100vh;min-height:unset;page-break-after:always;}}
+  </style>`;
+
+  const slides=[
+    // Slide 1: Title
+    `<div class="slide">
+      <div class="logo">EIL SOLAR GROUND PWA — CONFIDENTIAL</div>
+      <div class="badge">Group Captive CPP | TNERC Model | Tamil Nadu</div>
+      <h1>${co}</h1>
+      <h2 style="color:#fff;font-size:28px">${acMW} MW AC / ${dcMW} MW DC Ground-Mount Solar Power Project</h2>
+      <p class="sub">Site: ${site}</p>
+      <p class="sub">Detailed Project Report — ${rpdate}</p>
+      <p class="sub">Prepared by EIL Solar Pvt. Ltd.</p>
+      <div class="slide-num">1</div>
+    </div>`,
+    // Slide 2: Project Snapshot
+    `<div class="slide dark">
+      <h2>Project Snapshot</h2>
+      <div class="grid3">
+        <div class="kpi"><div class="kpi-v">${acMW} MW</div><div class="kpi-l">AC Capacity</div></div>
+        <div class="kpi"><div class="kpi-v">${dcMW} MW</div><div class="kpi-l">DC Capacity</div></div>
+        <div class="kpi"><div class="kpi-v">${plf}%</div><div class="kpi-l">CUF / PLF</div></div>
+        <div class="kpi"><div class="kpi-v">Rs ${tCap} Cr</div><div class="kpi-l">Total Project Cost</div></div>
+        <div class="kpi"><div class="kpi-v">${netMU} MU</div><div class="kpi-l">Net Gen Yr-1</div></div>
+        <div class="kpi"><div class="kpi-v">${tloss}%</div><div class="kpi-l">Total Tech Loss</div></div>
+      </div>
+      <div class="slide-num">2</div>
+    </div>`,
+    // Slide 3: Tariff & Selling Price
+    `<div class="slide navy">
+      <h2>Tariff Structure &amp; Selling Price</h2>
+      <div style="width:100%">
+        <div class="row"><span class="rk">TNEB base tariff (Yr-1)</span><span class="rv">Rs ${tariff.toFixed(2)}/kWh</span></div>
+        <div class="row"><span class="rk">Weighted TNEB (ToD — T.O.6/2025)</span><span class="rv">Rs ${wt.toFixed(4)}/kWh</span></div>
+        <div class="row"><span class="rk">Selling price (${disc}% of weighted)</span><span class="rv">Rs ${sp1}/kWh</span></div>
+        <div class="row"><span class="rk">OA charge all-in (30% solar concession)</span><span class="rv">Rs ${oa}/kWh</span></div>
+        <div class="row"><span class="rk">Net realisation to developer</span><span class="rv" style="color:#FCD34D">Rs ${nr1}/kWh</span></div>
+        <div class="row"><span class="rk">CSS (Cross Subsidy Surcharge)</span><span class="rv">ZERO — Waived</span></div>
+        <div class="row"><span class="rk">Additional Surcharge</span><span class="rv">ZERO for Group Captive CPP</span></div>
+      </div>
+      <div class="slide-num">3</div>
+    </div>`,
+    // Slide 4: Capital Structure
+    `<div class="slide dark">
+      <h2>Capital Structure</h2>
+      <div class="grid2">
+        <div>
+          <div class="row"><span class="rk">Total Project Cost</span><span class="rv">Rs ${tCap} Cr</span></div>
+          <div class="row"><span class="rk">Debt (${df}%)</span><span class="rv">Rs ${dAmt} Cr</span></div>
+          <div class="row"><span class="rk">Equity (${eq}%)</span><span class="rv">Rs ${eAmt} Cr</span></div>
+          <div class="row"><span class="rk">Cost of debt</span><span class="rv">${ir}% p.a.</span></div>
+          <div class="row"><span class="rk">Loan tenure</span><span class="rv">${gv('tn')} years</span></div>
+        </div>
+        <div>
+          <div class="row"><span class="rk">EBITDA Yr-1</span><span class="rv">Rs ${ebd1} Cr</span></div>
+          <div class="row"><span class="rk">Gross Revenue Yr-1</span><span class="rv">Rs ${nRev} Cr</span></div>
+          <div class="row"><span class="rk">O&amp;M Yr-1 (${gv('om')}% of capex)</span><span class="rv">Rs ${om1} Cr</span></div>
+          <div class="row"><span class="rk">OA charges paid Yr-1</span><span class="rv">Rs ${oAch} Cr</span></div>
+          <div class="row"><span class="rk">Debt : Equity</span><span class="rv">${df}:${eq}</span></div>
+        </div>
+      </div>
+      <div class="slide-num">4</div>
+    </div>`,
+    // Slide 5: Regulatory Framework
+    `<div class="slide" style="background:#2D1B69">
+      <h2>Regulatory Framework — Group Captive CPP</h2>
+      <ul>
+        <li>TNERC Tariff Order: T.O. No.6 of 2025 (effective 01-07-2025)</li>
+        <li>Minimum collective equity: <strong>26%</strong> of SPV held by all captive consumers</li>
+        <li>Minimum captive consumption: <strong>51%</strong> of annual net generation</li>
+        <li>CSS: <strong>ZERO</strong> — full exemption under Group Captive rules</li>
+        <li>Additional Surcharge: <strong>ZERO</strong> for Group Captive CPP structure</li>
+        <li>OA charge: Rs ${oa}/kWh (30% solar concession per TNERC GEOA 2025)</li>
+        <li>Compliance authority: TNPDCL CE (OA), annual certificate required</li>
+        <li>Evacuation voltage: as per TNERC/CEA norm for ${acMW} MW AC plant</li>
+      </ul>
+      <div class="slide-num">5</div>
+    </div>`,
+    // Slide 6: Why Group Captive CPP?
+    `<div class="slide dark">
+      <h2>Why Group Captive CPP?</h2>
+      <div class="grid2">
+        <div>
+          <h3>Key Benefits</h3>
+          <ul>
+            <li>Zero CSS saving</li>
+            <li>Zero Additional Surcharge</li>
+            <li>30% OA charge concession for solar</li>
+            <li>25-year green power security</li>
+            <li>Selling price &lt; TNEB tariff</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Risk Mitigation</h3>
+          <ul>
+            <li>TNERC-regulated — stable tariff framework</li>
+            <li>No merchant risk — captive consumption</li>
+            <li>ToD pricing captures morning peak premium</li>
+            <li>BESS option for evening peak arbitrage</li>
+            <li>26% equity ensures skin-in-the-game</li>
+          </ul>
+        </div>
+      </div>
+      <div class="slide-num">6</div>
+    </div>`,
+    // Slide 7: Contact / Close
+    `<div class="slide">
+      <h1>Thank You</h1>
+      <h2 style="color:#fff;font-size:22px;margin-top:16px">${co} — ${acMW} MW Solar CPP</h2>
+      <p class="sub" style="margin-top:20px">Prepared by: EIL Solar Pvt. Ltd. | ${rpdate}</p>
+      <div class="alert-box">
+        This presentation is confidential and prepared for bank / investor use only. All financial figures are indicative and based on inputs entered in EIL Solar Ground PWA v7.1.
+      </div>
+      <div class="slide-num">7</div>
+    </div>`,
+  ];
+
+  const html=`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${co} — Solar CPP Presentation</title>${slideStyle}</head><body>${slides.join('\n')}</body></html>`;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8;'});
+  const fname=(co.replace(/[^a-zA-Z0-9]/g,'_')||'EIL_Solar')+'_Presentation.html';
+  triggerDownload(fname,blob);
+  const st=document.getElementById('pr-status');
+  if(st){st.style.display='block';st.textContent='Presentation downloaded as HTML. Open in browser → File → Print → Save as PDF, or upload to Google Slides.';}
+  setTimeout(()=>{if(st)st.style.display='none';},7000);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   AI ASSISTANT — v7.2
+   • Preset Q&A bank (developer managed, instantly editable)
+   • Anthropic Claude API for unanswered questions
+   • Lock screen with ₹999/month paywall (demo bypass for developer)
+   • Category filter, chip suggestions, full chat UI
+   ══════════════════════════════════════════════════════════════════ */
+
+let aiUnlocked = false;
+let aiCurrentCat = 'all';
+let aiChatHistory = [];
+
+/* ── PRESET Q&A BANK ──────────────────────────────────────────────
+   Developer: edit, add, remove in the app UI.
+   Format: { q, a, cat }
+   cat: savings | compliance | regulatory | technical | financial | general
+   ─────────────────────────────────────────────────────────────────*/
+let AI_QA = [
+  // SAVINGS
+  { cat:'savings', q:'How much will I save per year on my electricity bill?',
+    a:'Your annual saving depends on your equity stake and the plant\'s output. In Year 1, the solar selling price is Rs 9.165/kWh vs your current TNEB tariff. The net saving = (TNEB tariff − solar price − OA charge) × your annual units consumed. With HT-III at Rs 9.40/kWh, solar at Rs 9.165 + OA Rs 0.95 = Rs 10.115 all-in — so savings kick in from Year 2 as the TNEB tariff escalates at 3%/yr while your solar price is locked. Over 25 years, cumulative savings are typically 3–5× your equity investment.' },
+  { cat:'savings', q:'What is the solar selling price in Year 1?',
+    a:'The Year 1 solar selling price is Rs 9.165/kWh. This is calculated as: TNEB base tariff Rs 9.40 × solar weighted factor (33.3% morning peak × +25% surcharge) = weighted Rs 10.183/kWh × 90% discount = Rs 9.165/kWh. This escalates at 3%/yr along with TNEB tariff.' },
+  { cat:'savings', q:'What is the OA charge I have to pay?',
+    a:'The Open Access (OA) charge for solar Group Captive CPP is Rs 0.95/kWh in FY 2025-26. This includes: Wheeling Rs 0.728 + Transmission Rs 0.203 + SLDC Rs 0.028 = Rs 0.959/kWh (rounded to Rs 0.95). Solar projects get a 30% concession on wheeling, transmission and SLDC charges per TNERC GEOA Regulations 2025. CSS is ZERO and Additional Surcharge is also ZERO for Group Captive CPP.' },
+  { cat:'savings', q:'Is solar really cheaper than TNEB direct supply?',
+    a:'In Year 1, your all-in solar cost is Rs 9.165 (SP) + Rs 0.95 (OA) = Rs 10.115/kWh vs TNEB HT-III at Rs 9.40/kWh — so solar is slightly higher in Year 1. However, TNEB tariff escalates at ~3%/yr while your solar price is locked. From Year 3 onwards, solar becomes cheaper, and by Year 10 you save roughly Rs 2–3/kWh. The key benefit is long-term price certainty for 25 years, plus CSS and surcharge exemptions saving ~Rs 2.40/kWh additionally.' },
+  { cat:'savings', q:'What is CSS and do I have to pay it?',
+    a:'CSS stands for Cross Subsidy Surcharge. For HT consumers in Tamil Nadu, it is Rs 2.41/kWh normally. As a Group Captive CPP customer, CSS is COMPLETELY WAIVED — you pay ZERO. This is one of the biggest financial benefits of the Group Captive structure, saving you Rs 2.41 per unit. This exemption is granted under Section 42(2) of the Electricity Act 2003 and TNERC T.O. No.7 of 2022.' },
+  { cat:'savings', q:'What is Additional Surcharge and do I pay it?',
+    a:'Additional Surcharge for FY26 has been reduced to Rs 0.10/kWh from Rs 0.54/kWh (an 81.5% reduction per TNERC GEOA Regulations 2025, effective 01-Oct-2025). For Group Captive CPP, Additional Surcharge is also ZERO — fully exempted. This saves you another Rs 0.10–0.54/kWh vs a non-captive open access buyer.' },
+
+  // COMPLIANCE
+  { cat:'compliance', q:'What is the 26% equity rule?',
+    a:'The 26% rule requires that ALL captive customers COLLECTIVELY hold a minimum of 26% equity in the solar generating company (SPV). Individual customers can hold any percentage — what matters is the total across all customers. For example, if there are 4 customers each holding 7%, the collective 28% satisfies the rule. If total equity falls below 26%, the Group Captive CPP status is lost and CSS is reinstated retroactively for the entire year.' },
+  { cat:'compliance', q:'What is the 51% consumption rule?',
+    a:'At least 51% of the plant\'s annual net generation must be consumed by the captive customers collectively. This is verified at the end of each financial year by submitting actual meter data to TNPDCL. If consumption falls below 51% in any year, the captive status for that year is at risk. Your monthly consumption must roughly match your equity proportion — a ±10% tolerance is allowed per TNERC rules.' },
+  { cat:'compliance', q:'What happens if I don\'t consume my allotted units?',
+    a:'If your actual consumption is significantly below your proportional allotment (your equity % × net generation), you risk non-compliance with Rule 3 of the CERC Captive Rules 2001. The allowed tolerance is ±10% of your allotment per TNERC guidelines. If non-compliant, contact the plant operator immediately to adjust scheduling. Repeated non-compliance can result in CSS being imposed retroactively on all units for that year.' },
+  { cat:'compliance', q:'Who verifies compliance every year?',
+    a:'Annual compliance is verified and certified by TNPDCL (Tamil Nadu Power Distribution Corporation Limited) — specifically the CE (OA) office at 144 Anna Salai, Chennai 600002. The generating company must submit an annual compliance certificate by 30 April each year covering the previous financial year. This includes: equity holding proof, SLDC meter data for generation, and consumer meter data for consumption.' },
+  { cat:'compliance', q:'What documents do I need to maintain?',
+    a:'Key documents: (1) Share certificate showing your equity % in the SPV. (2) Monthly SLDC meter readings for generation. (3) Your TNEB meter readings for consumption. (4) Annual compliance certificate filed with TNPDCL. (5) Power Supply Agreement (PSA) with the generating company. (6) SLDC scheduling data. Keep these for at least 7 years for audit purposes.' },
+
+  // REGULATORY
+  { cat:'regulatory', q:'What is TNERC T.O. No.6 of 2025?',
+    a:'TNERC T.O. No.6 of 2025 (Tariff Order No.6) is the current electricity tariff order issued by the Tamil Nadu Electricity Regulatory Commission, effective from 01-July-2025. Key changes: HT-III Commercial tariff revised to Rs 9.40/kWh; Time-of-Day (ToD) surcharges confirmed for all HT categories — peak hours (6AM-10AM + 6PM-10PM) attract +25%, night (10PM-5AM) gets -5%. This order governs the tariff your TNEB bill is based on.' },
+  { cat:'regulatory', q:'What is the Time of Day (ToD) tariff?',
+    a:'ToD (Time of Day) pricing means your TNEB tariff varies by time of day: Peak hours 6AM-10AM and 6PM-10PM = base tariff +25%; Normal hours 5AM-6AM and 10AM-6PM = base tariff; Night hours 10PM-5AM = base tariff -5%. For the solar developer, only the morning peak (6AM-10AM) matters — that\'s 4 hours out of 12 solar generation hours = 33.3% of energy sold at peak price. Evening peak (6PM-10PM) earns nothing as solar generation is NIL by then.' },
+  { cat:'regulatory', q:'What is the TNERC GEOA Regulations 2025?',
+    a:'TNERC GEOA (Grid-connected Energy from Other sources, Open Access) Regulations 2025 governs Open Access charges effective 01-October-2025. Key impact for solar projects: solar energy sources get a 30% concession on wheeling charge, transmission charge, and SLDC charge. This brought the effective OA charge for solar captive from Rs 1.33 to Rs 0.95/kWh. CSS remains zero for Group Captive CPP.' },
+  { cat:'regulatory', q:'When is the next OA charge revision?',
+    a:'OA charges follow the TNERC Multi-Year Tariff (MYT) cycle, typically revised every 3 years or as a new tariff order is issued. The previous revision was in 2022 (T.O.7/2022). The next comprehensive review is expected around 2025-26. Monitor TNERC website (www.tnerc.gov.in) for new orders. The model uses 3%/yr escalation as a conservative estimate between revisions.' },
+
+  // TECHNICAL
+  { cat:'technical', q:'What is CUF and why does it matter?',
+    a:'CUF (Capacity Utilisation Factor) or PLF (Plant Load Factor) measures how much energy the plant actually generates vs its theoretical maximum. For this 26 MW project, the CUF is 20.42% — meaning the plant generates for the equivalent of 20.42% of the full year at rated capacity. Higher CUF = more energy = more revenue. Tamil Nadu ground mount solar typically achieves 18–22% CUF. Poor maintenance, soiling, or grid curtailment reduces CUF.' },
+  { cat:'technical', q:'What are the technical losses in this project?',
+    a:'Total technical loss is set at 7% of gross generation. This includes: DC cable losses 0.8% + Inverter and AC conversion 1.5% + Transformer losses 0.8% + Soiling and dust 3.0% + Mismatch and other 0.9% = 7.0% internal loss. Additionally, TNERC grid loss at 110kV injection is NIL for transmission (T.O.7/2022 Table 5-12), plus 1.52% distribution loss from 110kV to your 11kV connection. Total effective loss in the model is ~8.5% generation to your meter.' },
+  { cat:'technical', q:'What happens when panels degrade over 25 years?',
+    a:'Solar panels lose output gradually each year due to degradation. Year 1 has a steeper Light Induced Degradation (LID) of 2.0% as panels stabilise. Years 2–10: 0.68%/yr degradation per tier-1 manufacturer warranty. Years 11–25: 0.70%/yr. By Year 10, plant output is ~92.5% of Year 1. By Year 25, it\'s ~80.5% of Year 1. This is built into the financial model — generation in Year 25 is about 80.5% of Year 1 but still produces positive returns.' },
+  { cat:'technical', q:'What is the DC to AC ratio and why is it 1.30?',
+    a:'The DC:AC ratio of 1.30 means the solar panel capacity (26 MW DC) is 1.30 times the inverter capacity (20 MW AC). This is called "overdriving" or "clipping" — common in Tamil Nadu where peak irradiance is high. Benefits: lower cost per unit (panels are cheaper than inverters), better performance on cloudy/partial days, more generation hours at full inverter output. The 1.30 ratio is industry standard for TN ground mount projects.' },
+  { cat:'technical', q:'What evacuation voltage is used for this project?',
+    a:'This 26 MW (20 MW AC) project evacuates power at 110 kV EHT (Extra High Tension) level. CEA and TNERC norms: Up to 5 MW → 11 kV; 5–33 MW → 33 kV; Above 33 MW → 110 kV EHT. Since this project is above 33 MW DC (26 MW DC side), 110 kV injection is mandatory. Key advantage: transmission loss at 110 kV injection is NIL per TNERC T.O.7/2022 Table 5-12. TANTRANSCO bay allocation is required.' },
+
+  // FINANCIAL
+  { cat:'financial', q:'What is my equity investment and payback period?',
+    a:'Total project cost is Rs 92 Crores. At 30% equity, total equity is Rs 27.6 Crores. Your share = Rs 27.6 Cr × your equity %. Payback on equity depends on your share of net revenue after OA charges, O&M, interest and tax. Typically with HT-III tariff, EBITDA in Year 1 is Rs 31–35 Crores for the full project, and equity payback is around Year 5–7 for the full project. Your individual payback tracks proportional to your equity share.' },
+  { cat:'financial', q:'How is the selling price calculated each year?',
+    a:'Year 1 selling price = Rs 9.165/kWh. Each subsequent year: TNEB tariff escalates at 3%/yr, and the solar selling price follows at the same 3%/yr. Formula: Weighted TNEB = base tariff × (1 + 33.3% peak × 25% surcharge). Selling price = weighted TNEB × 90% discount. By Year 5: Rs 9.165 × (1.03)⁴ = Rs 10.31/kWh. By Year 10: Rs 11.96/kWh. Escalation protects returns over 25 years.' },
+  { cat:'financial', q:'What is DSCR and is this project bankable?',
+    a:'DSCR (Debt Service Coverage Ratio) = EBITDA ÷ (Interest + Principal). Lenders require a minimum DSCR of 1.2x–1.3x for solar project finance. In Year 1 (moratorium — interest only), DSCR = EBITDA / Interest = Rs 31.8 Cr / Rs 5.8 Cr ≈ 5.5x — comfortably above the threshold. From Year 2 when principal starts, DSCR is ~2.1x. The project is bankable with 70% debt at 9% interest over 10 years.' },
+  { cat:'financial', q:'What is the total 25-year return for the project?',
+    a:'Based on the current model (HT-III tariff, Rs 0.95/kWh OA, 3% escalation, Rs 92 Cr capex): Total 25-year FCF to developer is approximately Rs 280–320 Crores. Return multiple on equity is approximately 9–11x your equity investment. Net realisation starts at Rs 8.21/kWh in Year 1 and grows to Rs 18+/kWh by Year 25 as TNEB tariff escalates while OA and O&M costs grow more slowly. Exact figures update live — check the 25-Year Cash Flow section for current model output.' },
+  { cat:'financial', q:'What is the impact of the OA charge change from Rs 1.33 to Rs 0.95?',
+    a:'The OA charge reduction from Rs 1.33 to Rs 0.95 (30% solar concession per TNERC GEOA 2025) saves Rs 0.38/kWh on every unit. With 42.4 MU net generation in Year 1, this is Rs 16.1 Crores additional net revenue per year. Over 25 years (with 3% OA escalation), the cumulative improvement is approximately Rs 40–45 Crores. This single change significantly improves project IRR.' },
+
+  // GENERAL
+  { cat:'general', q:'What is Group Captive CPP and how is it different from direct solar?',
+    a:'A Group Captive Captive Power Plant (CPP) allows multiple industrial or commercial consumers to jointly own a solar plant and consume its output. Unlike regular open access (where you buy from a third-party generator), in Group Captive YOU own part of the generating company (minimum 26% equity collectively). This ownership status entitles you to ZERO CSS, ZERO Additional Surcharge, and reduced OA charges — saving Rs 3+ per unit vs regular open access consumers.' },
+  { cat:'general', q:'Who is EIL Solar and what is their role?',
+    a:'EIL Solar (Elango Industries Limited Solar / Kaveri Power Solutions) is TNEB-empanelled and acts as the project developer, EPC contractor and long-term O&M operator. EIL Solar structures the Group Captive CPP, handles all TNERC regulatory filings, TANTRANSCO bay allocation, SLDC registration, and annual compliance certification. As a listed company (BSE: 513452), EIL brings financial credibility to the project for bank financing.' },
+  { cat:'general', q:'What is the project size and location?',
+    a:'This is a 26 MW DC / 20 MW AC ground-mount solar project located in Tamil Nadu. The plant has 26,000 kWp of solar panels with a 1.30 DC:AC ratio and evacuates power at 110 kV EHT. Annual net generation in Year 1 is approximately 42.4 MU (million units). The plant runs for 25 years with a total project cost of Rs 92 Crores (excluding battery storage).' },
+  { cat:'general', q:'Can I increase my equity stake later?',
+    a:'Yes, equity stake can be adjusted through a share transfer in the SPV (generating company) subject to: (1) The collective 26% rule is maintained at all times. (2) TNPDCL is notified of equity changes. (3) The Power Supply Agreement (PSA) is amended to reflect new consumption allotment. Any increase in equity also increases your proportional consumption obligation. Transfers require Board approval of the SPV and potentially TNERC intimation.' },
+  { cat:'general', q:'What happens at the end of 25 years?',
+    a:'At Year 25: (1) The plant still operates at ~80.5% of original capacity — panels continue to generate beyond 25 years though at reduced output. (2) A salvage/residual value of 10% of capex (~Rs 9.2 Cr) is credited. (3) You can: (a) continue operating with a new O&M contract, (b) re-power with new panels, or (c) decommission and recover land value. The equity stake in the SPV remains yours indefinitely beyond 25 years.' },
+];
+
+let AI_UNLOCKED_PERM = false; // true = full API access; false = demo mode
+
+/* ── UNLOCK / LOCK ─────────────────────────────────────────────── */
+function aiRequestAccess(){
+  const msg = `Thank you for your interest in the EIL Solar AI Assistant!\n\nPricing: ₹999/month per customer\nIncludes: Unlimited AI questions, regulatory updates, 25-year model Q&A\n\nTo activate, please contact:\n📧 admin@kaveripower.com\n📱 WhatsApp your name and company to get started.\n\nThe developer will activate your access within 24 hours.`;
+  alert(msg);
+}
+
+function aiUnlockDemo(){
+  // Developer bypass — show chat UI in demo mode
+  AI_UNLOCKED_PERM = false;
+  aiShowChat('🔧 Developer Demo Mode — preset answers only');
+  if(ROLE === 'dev') document.getElementById('ai-dev-panel').style.display = 'block';
+}
+
+function aiUnlockFull(){
+  // Called when backend confirms payment — sets full API mode
+  AI_UNLOCKED_PERM = true;
+  aiShowChat('✅ Premium Access Active — AI powered by Claude');
+  document.getElementById('ai-dev-panel').style.display = 'none';
+}
+
+function aiShowChat(modeLabel){
+  document.getElementById('ai-lock-screen').style.display = 'none';
+  const chat = document.getElementById('ai-chat-screen');
+  chat.style.display = 'flex';
+  document.getElementById('ai-mode-label').textContent = modeLabel;
+  aiChatHistory = [];
+  aiRenderChips(aiCurrentCat);
+  aiRenderQList();
+  // Welcome message
+  const welcome = AI_UNLOCKED_PERM
+    ? 'Hello! I\'m your EIL Solar AI Assistant 🌞 I\'m connected to live AI and can answer any question about your Group Captive CPP solar project. What would you like to know?'
+    : 'Hello! I\'m your EIL Solar AI Assistant 🌞 I\'m running in demo mode with preset answers about your Group Captive CPP project. Tap a question below or type your own. For live AI responses, activate Premium Access.';
+  aiAddBubble('bot', welcome);
+}
+
+function aiReset(){
+  const chat = document.getElementById('ai-msgs');
+  chat.innerHTML = '';
+  aiChatHistory = [];
+  aiAddBubble('bot', 'Chat cleared. How can I help you? 🌞');
+}
+
+/* ── CATEGORY FILTER ──────────────────────────────────────────── */
+function aiSetCat(cat, btn){
+  aiCurrentCat = cat;
+  document.querySelectorAll('.ai-cat-btn').forEach(b => b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  aiRenderChips(cat);
+}
+
+/* ── CHIP RENDERING ───────────────────────────────────────────── */
+function aiRenderChips(cat){
+  const wrap = document.getElementById('ai-chips');
+  if(!wrap) return;
+  const filtered = cat === 'all' ? AI_QA : AI_QA.filter(x => x.cat === cat);
+  // Show up to 8 chips
+  const shown = filtered.slice(0, 8);
+  wrap.innerHTML = shown.map((item, i) =>
+    `<button class="ai-q-chip" onclick="aiAskPreset(${AI_QA.indexOf(item)})">${item.q}</button>`
+  ).join('');
+}
+
+/* ── ASK FROM PRESET CHIP ─────────────────────────────────────── */
+function aiAskPreset(idx){
+  const item = AI_QA[idx];
+  if(!item) return;
+  aiAddBubble('usr', item.q);
+  setTimeout(() => {
+    aiAddBubble('bot', item.a);
+  }, 400);
+}
+
+/* ── SEND FREE-TEXT MESSAGE ───────────────────────────────────── */
+async function aiSend(){
+  const inp = document.getElementById('ai-inp');
+  const msg = inp.value.trim();
+  if(!msg) return;
+  inp.value = '';
+  inp.style.height = 'auto';
+  aiAddBubble('usr', msg);
+  document.getElementById('ai-send-btn').disabled = true;
+
+  // Check preset bank first (fuzzy keyword match)
+  const preset = aiMatchPreset(msg);
+  if(preset){
+    const typingId = aiAddTyping();
+    await new Promise(r => setTimeout(r, 700));
+    aiRemoveTyping(typingId);
+    aiAddBubble('bot', preset.a);
+    document.getElementById('ai-send-btn').disabled = false;
+    return;
+  }
+
+  // If full AI mode, call Anthropic API
+  if(AI_UNLOCKED_PERM){
+    await aiCallAPI(msg);
+  } else {
+    // Demo mode — polite fallback
+    const typingId = aiAddTyping();
+    await new Promise(r => setTimeout(r, 600));
+    aiRemoveTyping(typingId);
+    aiAddBubble('bot', `I don't have a preset answer for that specific question in demo mode. For a full AI-powered answer, please activate Premium Access (₹999/month). You can also browse the suggested questions by category using the filter tabs above.`);
+  }
+  document.getElementById('ai-send-btn').disabled = false;
+}
+
+/* ── FUZZY PRESET MATCH ───────────────────────────────────────── */
+function aiMatchPreset(query){
+  const q = query.toLowerCase();
+  // Exact or near-exact match first
+  for(const item of AI_QA){
+    if(item.q.toLowerCase().includes(q.substring(0,20)) || q.includes(item.q.toLowerCase().substring(0,20))){
+      return item;
+    }
+  }
+  // Keyword match
+  const keywords = q.split(/\s+/).filter(w => w.length > 3);
+  let best = null, bestScore = 0;
+  for(const item of AI_QA){
+    const haystack = (item.q + ' ' + item.a).toLowerCase();
+    let score = 0;
+    keywords.forEach(kw => { if(haystack.includes(kw)) score++; });
+    if(score > bestScore && score >= 2){ bestScore = score; best = item; }
+  }
+  return best;
+}
+
+/* ── ANTHROPIC API CALL ───────────────────────────────────────── */
+async function aiCallAPI(userMsg){
+  const typingId = aiAddTyping();
+  // Build system prompt from project context
+  const ctx = aiGetProjectContext();
+  const systemPrompt = `You are EIL Solar AI Assistant — an expert on Group Captive CPP solar projects in Tamil Nadu, India. You have deep knowledge of TNERC tariff orders, OA charges, CSS exemptions, compliance rules, and project finance.
+
+PROJECT CONTEXT (live from model):
+${ctx}
+
+Answer concisely and accurately. Use Indian number formats (Rs, Crores, kWh, MU). If asked something outside the project scope, politely redirect. Keep answers under 180 words unless detail is critical.`;
+
+  aiChatHistory.push({ role:'user', content: userMsg });
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 400,
+        system: systemPrompt,
+        messages: aiChatHistory.slice(-8), // last 4 turns
+      })
+    });
+    const data = await resp.json();
+    const reply = data.content && data.content[0] ? data.content[0].text : 'Sorry, I could not get a response. Please try again.';
+    aiRemoveTyping(typingId);
+    aiAddBubble('bot', reply);
+    aiChatHistory.push({ role:'assistant', content: reply });
+  } catch(e){
+    aiRemoveTyping(typingId);
+    aiAddBubble('bot', 'I\'m having trouble connecting right now. Please check your internet and try again, or browse the preset questions above.');
+  }
+}
+
+/* ── PROJECT CONTEXT FOR AI ───────────────────────────────────── */
+function aiGetProjectContext(){
+  try {
+    const acMW = gv('ac'), dcMW = (acMW * gv('dac')).toFixed(1);
+    const tariff = gv('tariff'), disc = gv('disc'), oa = gv('oa');
+    const peak = gv('peak'), sur = gv('surcharge');
+    const wt = tariff*(1+peak/100*sur/100);
+    const sp1 = (wt*disc/100).toFixed(4);
+    const dc_kWp = Math.round(acMW*gv('dac')*1000);
+    const netMU = (dc_kWp*gv('plf')/100*8760*(1-gv('tloss')/100)/1e6).toFixed(2);
+    const tCap = (gv('epc')+gv('land')+gv('evac')+gv('misc')).toFixed(1);
+    const eq = (parseFloat(tCap)*(1-gv('df')/100)).toFixed(1);
+    return `Plant: ${acMW} MW AC / ${dcMW} MW DC | Net gen Yr1: ${netMU} MU | Tariff: HT-III Rs ${tariff}/kWh | Selling price Yr1: Rs ${sp1}/kWh | OA charge: Rs ${oa}/kWh | Net realisation: Rs ${(parseFloat(sp1)-oa).toFixed(2)}/kWh | Total capex: Rs ${tCap} Cr | Equity: Rs ${eq} Cr | CSS: ZERO | Additional Surcharge: ZERO | TNERC T.O.6/2025 active`;
+  } catch(e){ return 'Project: 26 MW DC / 20 MW AC Group Captive CPP, Tamil Nadu, TNERC T.O.6/2025'; }
+}
+
+/* ── BUBBLE / TYPING HELPERS ──────────────────────────────────── */
+function aiAddBubble(role, text){
+  const wrap = document.getElementById('ai-msgs');
+  if(!wrap) return;
+  const div = document.createElement('div');
+  div.className = 'ai-bubble ' + role;
+  // Convert **bold** markdown
+  div.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+let aiTypingCounter = 0;
+function aiAddTyping(){
+  const id = 'aityp-' + (++aiTypingCounter);
+  const wrap = document.getElementById('ai-msgs');
+  if(!wrap) return id;
+  const div = document.createElement('div');
+  div.className = 'ai-bubble typing';
+  div.id = id;
+  div.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+  return id;
+}
+function aiRemoveTyping(id){
+  const el = document.getElementById(id);
+  if(el) el.remove();
+}
+
+/* ── INPUT HELPERS ────────────────────────────────────────────── */
+function aiAutoResize(el){
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+function aiKeyDown(e){
+  if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); aiSend(); }
+}
+
+/* ── DEVELOPER Q&A MANAGEMENT ────────────────────────────────── */
+function aiAddQuestion(){
+  const q = document.getElementById('ai-new-q').value.trim();
+  const cat = document.getElementById('ai-new-cat').value;
+  if(!q) return;
+  AI_QA.push({ cat, q, a: '(Answer to be filled by developer — edit this in the Q&A bank below)' });
+  document.getElementById('ai-new-q').value = '';
+  aiRenderChips(aiCurrentCat);
+  aiRenderQList();
+}
+function aiDeleteQuestion(idx){
+  if(confirm('Remove this question from the Q&A bank?')){
+    AI_QA.splice(idx, 1);
+    aiRenderChips(aiCurrentCat);
+    aiRenderQList();
+  }
+}
+function aiRenderQList(){
+  const list = document.getElementById('ai-q-list');
+  if(!list) return;
+  if(AI_QA.length === 0){ list.innerHTML = '<div style="color:var(--n5);font-size:12px">No questions yet.</div>'; return; }
+  list.innerHTML = AI_QA.map((item, i) => `
+    <div class="ai-q-item">
+      <span class="ai-q-cat">${item.cat}</span>
+      <span title="${item.a}">${item.q}</span>
+      <button class="ai-q-del" onclick="aiDeleteQuestion(${i})">✕</button>
+    </div>`).join('');
+}
+
+/* ── GO() integration — ai section shows/hides properly ─────── */
+// Patch: when go('ai') is called, also handle dev panel visibility
+const _origGo = go;
+function go(id){
+  _origGo(id);
+  if(id === 'ai'){
+    // show/hide dev panel based on role
+    const devPanel = document.getElementById('ai-dev-panel');
+    if(devPanel && aiUnlocked){
+      devPanel.style.display = ROLE === 'dev' ? 'block' : 'none';
+    }
+  }
 }
 
 
