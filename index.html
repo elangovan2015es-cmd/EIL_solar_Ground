@@ -233,7 +233,9 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .mc-fld input:focus{outline:none;border-color:var(--g5)}
 
 /* FAB */
-.fab-w{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:9px 18px;padding-bottom:calc(9px + var(--safe-bot));background:linear-gradient(to top,#F3F4F6 65%,transparent);display:flex;justify-content:center}
+.fab-w{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:7px 18px;padding-bottom:calc(7px + var(--safe-bot));background:linear-gradient(to top,#F3F4F6 70%,transparent);display:flex;justify-content:flex-end;pointer-events:none;}
+.fab{background:var(--g6);color:#fff;border:none;border-radius:24px;padding:9px 20px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(15,110,86,.35);pointer-events:all;display:flex;align-items:center;gap:6px;}
+.fab:active{background:var(--g7);}
 .fab{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:14px 48px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.38);transition:all .14s;min-width:170px;letter-spacing:.01em}
 .fab:active{background:var(--g7);transform:scale(.97)}
 
@@ -402,7 +404,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v7.8 | 08-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v8.0 | 08-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -473,8 +475,6 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <!-- DASHBOARD -->
 <div id="s-db" class="sec dev-sec on">
   <div class="sec-h"><div class="sec-ic">&#128202;</div><div><div class="sec-ti">Developer Dashboard</div><div class="sec-su">Live project summary</div></div></div>
-  <div id="d-alerts"></div>
-  <div id="payback-warn" class="alert warn" style="display:none">&#9888; Payback under 4 years — review assumptions. Check total technical loss (suggest 9%), tariff category, and OA charge escalation.</div>
   <div id="r-pb" style="display:none"></div><div id="r-tfcf" style="display:none"></div>
   <div class="card">
     <div class="chdr">Project snapshot</div>
@@ -657,24 +657,30 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="fld"><label class="flbl">Default buyer category</label>
       <select id="i-buyer" onchange="updBuyer();calc()">
         <optgroup label="T.O. No.6 of 2025 — effective 01-07-2025 (CURRENT)">
-          <option value="9.40">HT-III Misc/Commercial — Rs 9.40/kWh normal (solar wt: Rs 10.183)</option>
-          <option value="7.50">HT-I Industries &amp; IT — Rs 7.50/kWh normal (solar wt: Rs 8.125)</option>
-          <option value="7.75">HT-IIA Govt Institutions — Rs 7.75/kWh normal (solar wt: Rs 8.396)</option>
-          <option value="8.25">HT-IIB Pvt Edu &amp; Hospitals — Rs 8.25/kWh normal (solar wt: Rs 8.938)</option>
-          <option value="13.25">HT-IV Construction/Temp — Rs 13.25/kWh normal (solar wt: Rs 14.354)</option>
+          <option value="7.50" selected>HT-I Industries &amp; IT — Rs 7.50/kWh (solar wt: Rs 8.125) ← Primary</option>
+          <option value="9.40">HT-III Misc/Commercial — Rs 9.40/kWh (solar wt: Rs 10.183)</option>
+          <option value="7.75">HT-IIA Govt Institutions — Rs 7.75/kWh (solar wt: Rs 8.396)</option>
+          <option value="8.25">HT-IIB Pvt Edu &amp; Hospitals — Rs 8.25/kWh (solar wt: Rs 8.938)</option>
+          <option value="13.25">HT-IV Construction/Temp — Rs 13.25/kWh (solar wt: Rs 14.354)</option>
         </optgroup>
         <optgroup label="T.O. No.7 of 2022 — effective 01-07-2023 (previous)">
           <option value="9.76">HT-III Commercial (2023) — Rs 9.76/kWh</option>
           <option value="7.74">HT-I Industry (2023) — Rs 7.74/kWh</option>
         </optgroup>
       </select>
+      <div class="fhint" style="margin-top:6px;background:var(--g0);border:1.5px solid var(--g1);border-radius:7px;padding:7px 11px;font-size:12px;color:var(--g6);line-height:1.6">
+        <strong>Discount policy (EIL Solar):</strong><br>
+        🏭 Industrial customers (HT-I) — <strong>85%</strong> of weighted tariff (15% discount)<br>
+        🏢 Commercial customers (HT-III) — <strong>80%</strong> of weighted tariff (20% discount)<br>
+        Discount auto-applied when category changes.
+      </div>
     </div>
     <div class="fld">
       <label class="flbl">TNEB base tariff Yr-1 <span>(Rs/kWh — auto-fills from category; for ToD categories this is the normal-hour rate)</span></label>
-      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">9.40</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">7.50</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div>
       <div id="tariff-explain" style="margin-top:10px;padding:11px 13px;background:var(--n1);border-radius:9px;font-size:12px;line-height:1.8;border:1px solid var(--n3)"></div>
     </div>
-    <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">90</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff — 85% for HT-I Industry, 80% for HT-III Commercial)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">85</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div></div>
     <div class="fld">
       <label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh — Group Captive CPP solar, 30% concession applied)</span></label>
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">0.95</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div>
@@ -1351,7 +1357,20 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
     <!-- Developer Q&A management panel -->
     <div class="ai-dev-panel" id="ai-dev-panel" style="display:none">
-      <div class="ai-dev-panel-t">⚙️ Developer — Manage Q&amp;A Bank</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="ai-dev-panel-t" style="margin-bottom:0">⚙️ Developer — Manage Q&amp;A Bank</div>
+        <button onclick="aiToggleGuide()" style="background:var(--b1);color:var(--b6);border:1px solid var(--b3);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer">? How to use</button>
+      </div>
+      <div id="ai-qa-guide" style="display:none;background:var(--n1);border:1px solid var(--n3);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.7;color:var(--n7)">
+        <strong style="color:var(--n9)">How to use the Q&amp;A Bank:</strong><br>
+        1. <strong>Type a question</strong> in the input box below and select its category (Savings, Compliance, etc.)<br>
+        2. Click <strong>+ Add</strong> — the question appears in the list and as a chip in the chat.<br>
+        3. The AI answers added questions automatically from this bank — <em>no API call needed</em>.<br>
+        4. To <strong>remove</strong> a question, tap ✕ next to it in the list.<br>
+        5. Questions you add are visible to <strong>all customers</strong> as suggested chips.<br>
+        6. For live AI answers to unlisted questions, the <strong>Anthropic API</strong> is called automatically.<br>
+        <span style="color:var(--o6)">⚠️ Answers are set to project-specific — always verify figures before sharing with customers.</span>
+      </div>
       <div class="ai-add-q-form">
         <input type="text" id="ai-new-q" placeholder="Add a new question…">
         <select id="ai-new-cat">
@@ -1380,7 +1399,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
 
 <script>
-const BUILD='v7.8 | Build: 20260508-2030 IST';
+const BUILD='v8.0 | Build: 20260508-2200 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1403,7 +1422,7 @@ function setRole(r){
   document.getElementById('drw-role-sub').textContent=r==='dev'?'Developer View':'Customer View';
   // FAB: only show in developer view (not needed in customer view)
   const fab=document.getElementById('calc-fab');
-  if(fab)fab.style.display=r==='dev'?'flex':'none';
+  if(fab)fab.style.display='none'; // hidden on role switch; shown by go() when on input sheet
   // Hide all sections first
   document.querySelectorAll('.dev-sec').forEach(s=>{s.classList.remove('on');s.style.display='none';});
   document.querySelectorAll('.cust-sec').forEach(s=>{s.style.display='none';});
@@ -1445,9 +1464,10 @@ function go(id){
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='ca')buildActualCustRows();
   if(id==='ci'||id==='cs'||id==='cc')calcCustomer();
-  // Hide Calculate FAB on AI page and in customer view
+  // FAB: only show on input sheets in developer view
+  const INPUT_SECS = ['in','cu','gl','bt','fi'];
   const fab=document.getElementById('calc-fab');
-  if(fab) fab.style.display=(ROLE==='dev'&&id!=='ai')?'flex':'none';
+  if(fab) fab.style.display=(ROLE==='dev' && INPUT_SECS.includes(id))?'flex':'none';
   if(id==='ai'){
     const devPanel=document.getElementById('ai-dev-panel');
     const chatScreen=document.getElementById('ai-chat-screen');
@@ -1505,7 +1525,7 @@ const PM={
   ac:{v:20,min:1,max:200,dec:0},dac:{v:1.30,min:1.0,max:1.6,dec:2},
   plf:{v:20.4,min:10,max:30,dec:1},tloss:{v:9.0,min:1,max:25,dec:1},
   peak:{v:33,min:0,max:50,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
-  tariff:{v:9.40,min:4,max:20,dec:2},disc:{v:90,min:70,max:99,dec:1},
+  tariff:{v:7.50,min:4,max:20,dec:2},disc:{v:85,min:70,max:99,dec:1},
   oa:{v:0.95,min:0.3,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
   epcMW:{v:500,min:200,max:800,dec:0},   // Rs Lakhs per MW AC — all-in TPC rate
   // derived by apportionCost() — do not edit directly:
@@ -1657,6 +1677,16 @@ function updBuyer(){
   PM['tariff'].v=base;
   const el=document.getElementById('v-tariff');
   if(el) el.textContent=base.toFixed(2);
+  // Auto-apply discount policy: HT-I Industry = 85% (15% disc), HT-III Commercial = 80% (20% disc)
+  const HT1_CATS=[7.50,7.74,7.75]; // HT-I and near-industrial
+  const HT3_CATS=[9.40,9.76];      // HT-III commercial
+  let autoDisc=85; // default industrial
+  if(HT3_CATS.includes(base)) autoDisc=80;
+  else if(HT1_CATS.includes(base)) autoDisc=85;
+  else autoDisc=85; // all others default to industrial rate
+  PM['disc'].v=autoDisc;
+  const dEl=document.getElementById('v-disc');
+  if(dEl) dEl.textContent=autoDisc.toFixed(1);
   buildTariffExplain(base, sel.options[sel.selectedIndex].text);
 }
 
@@ -2161,13 +2191,8 @@ function calc(){
   // Payback warning
   if(pwEl)pwEl.style.display=(payY&&payY<4)?'block':'none';
 
-  // Alerts
-  const aEl=document.getElementById('d-alerts');
-  if(aEl){aEl.innerHTML='';
-    if(!payY)aEl.innerHTML+='<div class="alert bad">Equity not recovered within 25 years. Review capex, tariff or OA.</div>';
-    else if(payY<=4)aEl.innerHTML+='<div class="alert warn">&#9888; Payback Year '+payY+' looks optimistic. Verify total technical loss (recommend 9%), buyer tariff category, and OA escalation.</div>';
-    else if(payY<=8)aEl.innerHTML+='<div class="alert ok">Good &mdash; equity payback Year '+payY+'.</div>';
-    else aEl.innerHTML+='<div class="alert warn">Payback beyond Year 8. Review capex or tariff.</div>';}
+  // Alerts suppressed — dashboard shows clean data only
+  // const aEl=document.getElementById('d-alerts'); // removed from dashboard
 
   // Y1 income statement
   const y1El=document.getElementById('y1s');
@@ -2284,7 +2309,7 @@ updLoss();
 apportionCost();   // set derived EPC/land/misc from TPC on first load
 addCustomer(); // Add one default customer
 calc();
-setTimeout(()=>{buildTariffExplain(PM['tariff'].v,'HT-III Misc/Commercial');},200);
+setTimeout(()=>{buildTariffExplain(PM['tariff'].v,'HT-I Industries & IT');updBuyer();calc();},200);
 setTimeout(()=>{loadRegData();loadPrData();refreshRegPreview();},300);
 
 
@@ -4243,13 +4268,13 @@ let aiChatHistory = [];
 let AI_QA = [
   // SAVINGS
   { cat:'savings', q:'How much will I save per year on my electricity bill?',
-    a:'Your annual saving depends on your equity stake and the plant\'s output. In Year 1, the solar selling price is Rs 9.165/kWh vs your current TNEB tariff. The net saving = (TNEB tariff − solar price − OA charge) × your annual units consumed. With HT-III at Rs 9.40/kWh, solar at Rs 9.165 + OA Rs 0.95 = Rs 10.115 all-in — so savings kick in from Year 2 as the TNEB tariff escalates at 3%/yr while your solar price is locked. Over 25 years, cumulative savings are typically 3–5× your equity investment.' },
+    a:'For **HT-I Industrial customers** (primary segment):\n\n| Item | Value |\n|---|---|\n| TNEB tariff (HT-I) | Rs 7.50/kWh |\n| Solar selling price (85% disc) | Rs 6.906/kWh |\n| OA charge | Rs 0.95/kWh |\n| Solar all-in | Rs 7.856/kWh |\n| CSS waived | Rs 2.41/kWh saved |\n\nYear 1 energy is Rs 0.356 higher but CSS saving of Rs 2.41 more than offsets it. From Year 2 as TNEB tariff escalates at 3%/yr, direct energy savings begin. Your proportional saving = your equity % × net generation MU × saving/kWh.' },
   { cat:'savings', q:'What is the solar selling price in Year 1?',
-    a:'The Year 1 solar selling price is Rs 9.165/kWh. This is calculated as: TNEB base tariff Rs 9.40 × solar weighted factor (33.3% morning peak × +25% surcharge) = weighted Rs 10.183/kWh × 90% discount = Rs 9.165/kWh. This escalates at 3%/yr along with TNEB tariff.' },
+    a:'**For Industrial customers (HT-I, primary segment):**\n\n| Item | Calculation | Value |\n|---|---|---|\n| TNEB base tariff | HT-I Rs 7.50/kWh | Rs 7.50 |\n| Weighted (ToD 33.3% peak) | 7.50 × 1.0833 | **Rs 8.125/kWh** |\n| Discount (15% off) | 85% of weighted | **Rs 6.906/kWh** |\n| OA charge | Solar CPP | Rs 0.95/kWh |\n| **All-in cost to you** | SP + OA | **Rs 7.856/kWh** |\n\n**For Commercial customers (HT-III):** weighted Rs 10.183 × 80% = Rs 8.147/kWh + OA Rs 0.95 = Rs 9.097/kWh.' },
   { cat:'savings', q:'What is the OA charge I have to pay?',
     a:'| OA Component | Full Rate | Solar 30% Concession | **You Pay** |\n|---|---|---|---|\n| Wheeling charge | Rs 1.04 | − Rs 0.312 | **Rs 0.728** |\n| Transmission | Rs 0.29 | − Rs 0.087 | **Rs 0.203** |\n| SLDC scheduling | Rs 0.04 | − Rs 0.012 | **Rs 0.028** |\n| **Total OA** | Rs 1.37 | − Rs 0.411 | **Rs 0.95** |\n| CSS | — | ZERO | **ZERO** |\n| Additional Surcharge | Rs 0.10 | ZERO (CPP) | **ZERO** |\n\nSource: TNERC GEOA Regulations 2025. Solar Group Captive CPP pays 70% of wheeling, transmission and SLDC charges.' },
   { cat:'savings', q:'Is solar really cheaper than TNEB direct supply?',
-    a:'| Component | TANGEDCO Direct | EIL Solar CPP |\n|---|---|---|\n| Energy charge | Rs 9.40/kWh | Rs 9.165/kWh |\n| OA charge | — | Rs 0.95/kWh |\n| CSS | Applicable | **ZERO** |\n| Additional Surcharge | Applicable | **ZERO** |\n| **All-in cost** | **Rs 9.40/kWh** | **Rs 10.115/kWh** |\n\n---\n\nYear 1: Solar is slightly higher (Rs 0.72/kWh), but TNEB tariff grows ~3%/yr while solar price is locked. From Year 3, solar becomes cheaper. By Year 10 you save ~Rs 2/kWh — plus CSS waiver saves Rs 2.41/kWh every year from Day 1.' },
+    a:'**HT-I Industrial comparison (primary customer):**\n\n| Component | TNEB Direct | EIL Solar CPP |\n|---|---|---|\n| Energy charge | Rs 7.50/kWh | Rs 6.906/kWh |\n| OA charge | — | Rs 0.95/kWh |\n| CSS (Rs 2.41) | Applicable | **ZERO** |\n| Additional Surcharge | Applicable | **ZERO** |\n| **All-in Year 1** | **Rs 7.50/kWh** | **Rs 7.856/kWh** |\n\nYear 1 solar is Rs 0.356 higher, but TNEB escalates ~3%/yr. Solar becomes cheaper from Year 2. CSS waiver alone saves Rs 2.41/kWh from Day 1.' },
   { cat:'savings', q:'What is CSS and do I have to pay it?',
     a:'CSS stands for Cross Subsidy Surcharge. For HT consumers in Tamil Nadu, it is Rs 2.41/kWh normally. As a Group Captive CPP customer, CSS is COMPLETELY WAIVED — you pay ZERO. This is one of the biggest financial benefits of the Group Captive structure, saving you Rs 2.41 per unit. This exemption is granted under Section 42(2) of the Electricity Act 2003 and TNERC T.O. No.7 of 2022.' },
   { cat:'savings', q:'What is Additional Surcharge and do I pay it?',
@@ -4476,14 +4501,21 @@ async function aiCallAPI(userMsg){
 PROJECT DATA (use these exact numbers — do not invent or estimate):
 ${ctx}
 
+DISCOUNT POLICY (EIL Solar — always apply this):
+- Primary customer base: HT-I INDUSTRIAL customers (largest segment)
+- Industrial customers (HT-I, Rs 7.50/kWh): Discount = 15% → Selling price = 85% of weighted tariff
+- Commercial customers (HT-III, Rs 9.40/kWh): Discount = 20% → Selling price = 80% of weighted tariff
+- Default all calculations to HT-I Industrial unless customer explicitly states they are commercial.
+- HT-I weighted tariff: Rs 8.125/kWh | Selling price to industry: Rs 6.906/kWh (85%) | OA: Rs 0.95/kWh | Net: Rs 5.956/kWh
+
 STRICT RULES:
-1. Answer ONLY what is asked. If asked about 1 MW, answer about 1 MW only. Do not add unrequested extra context about the full project.
+1. Answer ONLY what is asked. Do not add extra unrequested context.
 2. Use markdown tables when comparing 2+ items. Use **bold** for key numbers.
-3. Keep answers under 100 words. Tables are allowed in addition.
-4. Never start with "Great question", "Certainly", "Sure" or any filler phrase.
-5. Use exact figures from PROJECT DATA above — never generic estimates.
-6. If asked something outside solar/power/TNERC/finance: reply "This is outside my scope. Please contact EIL Solar team."
-7. Do not add "Note:", "Also note:", or unsolicited additional information after answering.`;
+3. Keep answers under 100 words plus any table.
+4. Never start with filler phrases.
+5. Use exact figures from PROJECT DATA — default to HT-I Industrial.
+6. If asked something outside solar/power/TNERC/finance: reply "This is outside my scope."
+7. Do not add "Note:" or unsolicited information after answering.`;
 
   aiChatHistory.push({ role:'user', content: userMsg });
 
@@ -4535,11 +4567,16 @@ function aiGetProjectContext(){
     const kWhPerKWp  = (grossKWh / dc_kWp).toFixed(0);
     const dailyKWhKWp= (grossKWh / dc_kWp / 365).toFixed(2);
 
-    // ── TARIFF & PRICE ───────────────────────────────────────────
-    const tariff  = gv('tariff');
+    // ── DISCOUNT POLICY ─────────────────────────────────────────
+    // Determine discount based on current buyer category
+    const isIndustrial = [7.50, 7.74, 7.75, 8.25].includes(tariff);
+    const isCommercial = [9.40, 9.76, 13.25].includes(tariff);
+    const discPct      = isCommercial ? 80 : 85; // 85% industrial, 80% commercial
+    const discLabel    = isCommercial ? 'Commercial (HT-III) — 20% discount' : 'Industrial (HT-I) — 15% discount';
+    const effectiveDisc = discPct;
     const peak    = gv('peak') / 100;
     const sur     = gv('surcharge') / 100;
-    const disc    = gv('disc') / 100;
+    const disc    = effectiveDisc / 100;   // policy-driven, not from PM
     const oa      = gv('oa');
     const taresc  = gv('taresc');
     const oaesc   = gv('oaesc');
@@ -4609,7 +4646,8 @@ GENERATION (Year 1):
 - Year 1 LID degradation: ${deg1}%
 
 TARIFF & PRICING (Year 1 — TNERC T.O. No.6 of 2025):
-- Buyer category: HT-III Miscellaneous/Commercial
+- PRIMARY CUSTOMER TYPE: ${discLabel}
+- Buyer category: ${isCommercial ? 'HT-III Misc/Commercial' : 'HT-I Industries & IT'}
 - TNEB base tariff: Rs ${tariff}/kWh
 - Morning peak %: ${(peak*100).toFixed(1)}% of solar generation (6AM–10AM = 4/12 hrs)
 - Peak surcharge: ${(sur*100).toFixed(0)}% above base
@@ -4773,12 +4811,48 @@ function aiAddBubble(role, text){
   div.className = 'ai-bubble ' + role;
   if(role === 'bot'){
     div.innerHTML = aiMarkdown(text);
+    // WhatsApp share button — strip markdown to plain text for sharing
+    const plain = text
+      .replace(/\*\*(.*?)\*\*/g,'$1')
+      .replace(/\*(.*?)\*/g,'$1')
+      .replace(/\|[-| :]+\|\n?/g,'')
+      .replace(/\|/g,' | ')
+      .replace(/#+\s+/g,'')
+      .replace(/\n{3,}/g,'\n\n')
+      .trim();
+    const waText = encodeURIComponent('*EIL Solar AI Assistant*\n\n' + plain + '\n\n_EIL Solar Ground PWA — Elango Industries Limited (BSE: 513452)_');
+    const shareDiv = document.createElement('div');
+    shareDiv.style.cssText = 'display:flex;gap:6px;margin-top:7px;justify-content:flex-end';
+    shareDiv.innerHTML = `
+      <a href="https://wa.me/?text=${waText}" target="_blank" rel="noopener"
+         style="display:inline-flex;align-items:center;gap:5px;background:#25D366;color:#fff;border-radius:16px;padding:5px 12px;font-size:11.5px;font-weight:700;font-family:'Inter',sans-serif;text-decoration:none;cursor:pointer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.522 5.857L.057 23.882l6.162-1.615A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.85 0-3.604-.5-5.12-1.38l-.36-.215-3.656.958.975-3.562-.235-.373A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Share on WhatsApp
+      </a>
+      <button onclick="aiCopyAnswer(this)" data-text="${plain.replace(/"/g,'&quot;')}"
+         style="display:inline-flex;align-items:center;gap:5px;background:var(--n1);color:var(--n6);border:1px solid var(--n3);border-radius:16px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">
+        📋 Copy
+      </button>`;
+    div.appendChild(shareDiv);
   } else {
-    // User bubble: plain text, escape HTML
     div.textContent = text;
   }
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
+}
+
+function aiCopyAnswer(btn){
+  const text = btn.getAttribute('data-text');
+  navigator.clipboard.writeText(text).then(()=>{
+    const orig = btn.innerHTML;
+    btn.innerHTML = '✅ Copied!';
+    setTimeout(()=>{ btn.innerHTML = orig; }, 1800);
+  }).catch(()=>{ btn.innerHTML = '❌ Failed'; setTimeout(()=>{ btn.innerHTML = '📋 Copy'; },1500); });
+}
+
+function aiToggleGuide(){
+  const g = document.getElementById('ai-qa-guide');
+  if(g) g.style.display = g.style.display === 'none' ? 'block' : 'none';
 }
 let aiTypingCounter = 0;
 function aiAddTyping(){
