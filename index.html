@@ -26,7 +26,7 @@
   --b6:#185FA5;--b1:#E6F1FB;--p6:#534AB7;--p1:#EEEDFE;
   --o6:#C05621;--o1:#FDEBD0;
   --n9:#111827;--n7:#374151;--n5:#6B7280;--n3:#D1D5DB;--n1:#F9FAFB;--w:#FFFFFF;
-  --hh:56px;--rh:40px;--sb:255px;
+  --hh:56px;--rh:0px;--sb:255px;
   --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -45,9 +45,7 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 .hl{width:16px;height:2px;background:#fff;border-radius:2px}
 
 /* ROLE BAR */
-.role-bar{position:fixed;top:var(--hh);left:0;right:0;z-index:290;background:var(--g7);height:var(--rh);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 12px;padding-top:0;}
-.role-btn{flex:1;max-width:180px;height:28px;border-radius:6px;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.65);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
-.role-btn.active{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.5)}
+/* role-bar removed — role switching via drawer */
 
 /* SIDEBAR */
 .sidebar{display:none;position:fixed;top:calc(var(--hh) + var(--rh));bottom:0;left:0;width:var(--sb);background:var(--w);border-right:1px solid var(--n3);overflow-y:auto;z-index:200;padding:10px 0;}
@@ -233,100 +231,77 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .mc-fld input:focus{outline:none;border-color:var(--g5)}
 
 /* FAB */
-.fab-w{position:fixed;bottom:0;left:0;right:0;z-index:200;padding:7px 18px;padding-bottom:calc(7px + var(--safe-bot));background:linear-gradient(to top,#F3F4F6 70%,transparent);display:flex;justify-content:flex-end;pointer-events:none;}
-.fab{background:var(--g6);color:#fff;border:none;border-radius:24px;padding:9px 20px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 10px rgba(15,110,86,.35);pointer-events:all;display:flex;align-items:center;gap:6px;}
+.fab-w{position:fixed;bottom:16px;right:16px;z-index:200;pointer-events:none;}
+@media(min-width:900px){.fab-w{right:24px;bottom:20px;}}
+.fab{background:var(--g6);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(15,110,86,.40);pointer-events:all;display:flex;align-items:center;gap:5px;opacity:.92;}
 .fab:active{background:var(--g7);}
 .fab{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:14px 48px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.38);transition:all .14s;min-width:170px;letter-spacing:.01em}
 .fab:active{background:var(--g7);transform:scale(.97)}
 
 /* ═══ AI ASSISTANT ══════════════════════════════════════════════ */
-/* s-ai overrides normal .sec flow — it becomes a fixed full-screen chat */
-#s-ai{
-  position:fixed!important;
-  top:calc(var(--hh) + var(--rh));
-  left:0;right:0;bottom:0;
-  display:none;
-  flex-direction:column;
-  z-index:150;
-  background:#F0FAF6;
-}
+#s-ai{position:fixed!important;top:var(--hh);left:0;right:0;bottom:0;display:none;flex-direction:column;z-index:150;background:#F5F9F7;}
 #s-ai.on{display:flex!important;}
-@media(min-width:900px){
-  #s-ai{left:var(--sb);}
-}
-/* lock screen */
-.ai-lock-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;overflow-y:auto;}
-/* chat wrapper fills remaining space */
+@media(min-width:900px){#s-ai{left:var(--sb);}}
+.ai-lock-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;overflow-y:auto;background:#F5F9F7;}
 .ai-chat-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
-/* chat top bar */
-.ai-chat-hdr{background:var(--g6);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-.ai-chat-hdr-ic{width:34px;height:34px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.ai-chat-hdr-t{color:#fff;font-size:14px;font-weight:700;}
-.ai-chat-hdr-s{color:rgba(255,255,255,.65);font-size:11px;}
-.ai-online{width:8px;height:8px;background:#4ADE80;border-radius:50%;flex-shrink:0;animation:pulse-dot 2s infinite;}
+.ai-chat-hdr{background:var(--g6);padding:9px 13px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.ai-chat-hdr-ic{width:28px;height:28px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.ai-chat-hdr-t{color:#fff;font-size:13px;font-weight:700;}
+.ai-online{width:7px;height:7px;background:#4ADE80;border-radius:50%;flex-shrink:0;animation:pulse-dot 2s infinite;}
 @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
-/* category filter row */
-.ai-cats{display:flex;gap:6px;padding:8px 10px;background:#fff;border-bottom:1px solid var(--n3);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.ai-cats{display:flex;gap:5px;padding:7px 10px;background:#fff;border-bottom:1px solid var(--n2);overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .ai-cats::-webkit-scrollbar{display:none}
-.ai-cat-btn{flex-shrink:0;background:var(--n1);border:1.5px solid var(--n3);border-radius:16px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--n7);transition:all .12s;white-space:nowrap;}
-.ai-cat-btn.on{background:var(--g1);border-color:var(--g5);color:var(--g6);}
-/* messages — this grows and scrolls */
-.ai-msgs{flex:1;overflow-y:auto;padding:14px 14px 6px;display:flex;flex-direction:column;gap:10px;background:#F0FAF6;-webkit-overflow-scrolling:touch;min-height:0;}
-/* bubbles */
-.ai-bubble{max-width:85%;padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.6;word-break:break-word;}
-.ai-bubble.bot{background:#fff;color:var(--n9);border-radius:4px 14px 14px 14px;box-shadow:0 1px 4px rgba(0,0,0,.08);align-self:flex-start;}
+.ai-cat-btn{flex-shrink:0;background:transparent;border:1.5px solid var(--n3);border-radius:14px;padding:4px 11px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;color:var(--n6);transition:all .1s;white-space:nowrap;}
+.ai-cat-btn.on{background:var(--g6);border-color:var(--g6);color:#fff;}
+.ai-msgs{flex:1;overflow-y:auto;padding:12px 12px 4px;display:flex;flex-direction:column;gap:8px;background:#F5F9F7;-webkit-overflow-scrolling:touch;min-height:0;}
+.ai-bubble{max-width:86%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.55;word-break:break-word;}
+.ai-bubble.bot{background:#fff;color:var(--n9);border-radius:4px 14px 14px 14px;box-shadow:0 1px 3px rgba(0,0,0,.07);align-self:flex-start;}
 .ai-bubble.usr{background:var(--g6);color:#fff;border-radius:14px 14px 4px 14px;align-self:flex-end;}
-.ai-bubble.typing{background:#fff;align-self:flex-start;border-radius:4px 14px 14px 14px;padding:14px;}
-/* markdown inside bot bubbles */
-.ai-bubble.bot strong{font-weight:700;color:var(--n9);}
-.ai-bubble.bot .ai-md-h{font-size:13px;font-weight:700;color:var(--g6);margin:8px 0 4px;padding-bottom:3px;border-bottom:1px solid var(--g1);}
-.ai-bubble.bot .ai-md-hr{border:none;border-top:1px solid var(--n3);margin:8px 0;}
-.ai-bubble.bot .ai-md-ul{margin:5px 0 5px 14px;padding:0;}
-.ai-bubble.bot .ai-md-ul li{margin-bottom:3px;font-size:13px;}
-.ai-bubble.bot .ai-md-table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0;border-radius:8px;overflow:hidden;}
-.ai-bubble.bot .ai-md-table th{background:var(--g6);color:#fff;font-weight:700;padding:7px 10px;text-align:left;font-size:11.5px;}
-.ai-bubble.bot .ai-md-table td{padding:6px 10px;border-bottom:1px solid var(--n3);vertical-align:top;}
+.ai-bubble.typing{background:#fff;align-self:flex-start;border-radius:4px 14px 14px 14px;padding:12px;}
+.ai-bubble.bot strong{font-weight:700;}
+.ai-bubble.bot .ai-md-h{font-size:12.5px;font-weight:700;color:var(--g6);margin:7px 0 3px;padding-bottom:2px;border-bottom:1px solid var(--g1);}
+.ai-bubble.bot .ai-md-hr{border:none;border-top:1px solid var(--n2);margin:6px 0;}
+.ai-bubble.bot .ai-md-ul{margin:4px 0 4px 12px;padding:0;}
+.ai-bubble.bot .ai-md-ul li{margin-bottom:2px;font-size:12.5px;}
+.ai-bubble.bot .ai-md-table{width:100%;border-collapse:collapse;font-size:11.5px;margin:6px 0;border-radius:7px;overflow:hidden;}
+.ai-bubble.bot .ai-md-table th{background:var(--g6);color:#fff;font-weight:700;padding:6px 9px;text-align:left;font-size:11px;}
+.ai-bubble.bot .ai-md-table td{padding:5px 9px;border-bottom:1px solid var(--n2);vertical-align:top;}
 .ai-bubble.bot .ai-md-table tr:last-child td{border-bottom:none;}
 .ai-bubble.bot .ai-md-table tr:nth-child(even) td{background:var(--n1);}
-.ai-bubble.bot .ai-md-table td:first-child{font-weight:600;color:var(--n7);white-space:nowrap;}
+.ai-bubble.bot .ai-md-table td:first-child{font-weight:600;color:var(--n7);}
 .ai-bubble.bot .ai-md-table .td-zero{color:var(--g6);font-weight:700;}
-.ai-bubble.bot .ai-md-table .td-amt{color:var(--b6);font-weight:700;font-family:'JetBrains Mono',monospace;}
-.ai-bubble.bot .ai-md-save{background:var(--g0);border:1.5px solid var(--g5);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13px;color:var(--g6);font-weight:700;}
-.ai-bubble.bot p{margin-bottom:6px;}
+.ai-bubble.bot .ai-md-table .td-amt{color:var(--b6);font-weight:700;}
+.ai-bubble.bot .ai-md-save{background:var(--g0);border:1.5px solid var(--g5);border-radius:7px;padding:7px 10px;margin:5px 0;font-size:12.5px;color:var(--g6);font-weight:700;}
+.ai-bubble.bot p{margin-bottom:5px;}
 .ai-bubble.bot p:last-child{margin-bottom:0;}
 .typing-dots{display:flex;gap:5px;align-items:center;}
-.typing-dots span{width:8px;height:8px;border-radius:50%;background:var(--n5);animation:bounce-dot 1.2s infinite;}
+.typing-dots span{width:7px;height:7px;border-radius:50%;background:var(--n4);animation:bounce-dot 1.2s infinite;}
 .typing-dots span:nth-child(2){animation-delay:.2s}
 .typing-dots span:nth-child(3){animation-delay:.4s}
-@keyframes bounce-dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
-/* suggested chips — vertical list */
-.ai-qs{flex-shrink:0;padding:8px 10px;background:#fff;border-top:1px solid var(--n3);max-height:172px;overflow-y:auto;}
-.ai-qs-t{font-size:10px;font-weight:700;color:var(--n5);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px;}
-.ai-qs-scroll{display:flex;flex-direction:column;gap:4px;}
-.ai-q-chip{width:100%;text-align:left;white-space:normal;background:var(--g0);border:1.5px solid var(--g1);color:var(--g6);border-radius:7px;padding:7px 11px;font-size:12.5px;font-weight:500;line-height:1.4;font-family:'Inter',sans-serif;cursor:pointer;transition:background .1s;}
-.ai-q-chip:active,.ai-q-chip:hover{background:var(--g1);}
-/* copyright watermark footer inside AI chat */
-.ai-watermark{text-align:center;font-size:10px;color:var(--n4);padding:4px 8px;background:#fff;border-top:1px solid var(--n2);flex-shrink:0;letter-spacing:.02em;}
-.ai-watermark a{color:var(--n4);text-decoration:none;}
-/* input row */
-.ai-inp-row{display:flex;gap:8px;padding:8px 12px;background:#fff;border-top:1px solid var(--n3);flex-shrink:0;align-items:flex-end;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));}
-.ai-inp{flex:1;font-size:13.5px;padding:10px 13px;border:2px solid var(--n3);border-radius:22px;font-family:'Inter',sans-serif;resize:none;max-height:90px;line-height:1.5;outline:none;color:var(--n9);background:#fff;}
+@keyframes bounce-dot{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.ai-qs{flex-shrink:0;padding:6px 10px 7px;background:#fff;border-top:1px solid var(--n2);}
+.ai-qs-t{font-size:9.5px;font-weight:700;color:var(--n4);text-transform:uppercase;letter-spacing:.07em;}
+.ai-qs-scroll{display:flex;flex-direction:column;gap:3px;margin-top:4px;max-height:130px;overflow-y:auto;}
+.ai-q-chip{width:100%;text-align:left;white-space:normal;background:#F5F9F7;border:1px solid var(--n2);color:var(--g6);border-radius:6px;padding:6px 10px;font-size:11.5px;font-weight:500;line-height:1.35;font-family:'Inter',sans-serif;cursor:pointer;transition:background .1s;}
+.ai-q-chip:hover{background:var(--g0);}
+.ai-watermark{text-align:center;font-size:9px;color:var(--n3);padding:3px 8px;background:#fff;border-top:1px solid var(--n2);flex-shrink:0;}
+.ai-inp-row{display:flex;gap:7px;padding:7px 10px;background:#fff;border-top:1px solid var(--n2);flex-shrink:0;align-items:flex-end;padding-bottom:calc(7px + env(safe-area-inset-bottom,0px));}
+.ai-inp{flex:1;font-size:13px;padding:9px 12px;border:1.5px solid var(--n3);border-radius:20px;font-family:'Inter',sans-serif;resize:none;max-height:80px;line-height:1.45;outline:none;color:var(--n9);background:#fff;}
 .ai-inp:focus{border-color:var(--g5);}
-.ai-send{width:42px;height:42px;background:var(--g6);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:all .12s;}
-.ai-send:disabled{background:var(--n3);cursor:not-allowed;}
-.ai-send svg{width:18px;height:18px;fill:#fff;}
-/* developer Q&A panel */
-.ai-dev-panel{background:#fff;border-top:3px solid var(--o6);padding:12px 14px;flex-shrink:0;max-height:200px;overflow-y:auto;}
-.ai-dev-panel-t{font-size:11px;font-weight:700;color:var(--o6);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
-.ai-q-mgmt{display:flex;flex-direction:column;gap:5px;}
-.ai-q-item{display:flex;align-items:center;gap:8px;background:var(--n1);border-radius:7px;padding:7px 9px;border:1px solid var(--n3);}
-.ai-q-item span{flex:1;font-size:11.5px;color:var(--n7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ai-q-cat{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;background:var(--g1);color:var(--g6);flex-shrink:0;}
-.ai-q-del{background:var(--r1);color:var(--r6);border:none;border-radius:5px;padding:3px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
-.ai-add-q-form{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
-.ai-add-q-form input,.ai-add-q-form select{font-size:12px;padding:6px 9px;border:1.5px solid var(--n3);border-radius:7px;font-family:'Inter',sans-serif;background:#fff;}
-.ai-add-q-form input{flex:1;min-width:140px;}
-.ai-add-q-btn{background:var(--g6);color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0;}
+.ai-send{width:38px;height:38px;background:var(--g6);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.ai-send:disabled{background:var(--n3);}
+.ai-send svg{width:16px;height:16px;fill:#fff;}
+.ai-dev-panel{background:#fff;border-top:2px solid var(--o5);padding:10px 12px;flex-shrink:0;max-height:180px;overflow-y:auto;}
+.ai-dev-panel-t{font-size:10px;font-weight:700;color:var(--o6);text-transform:uppercase;letter-spacing:.06em;}
+.ai-q-mgmt{display:flex;flex-direction:column;gap:4px;}
+.ai-q-item{display:flex;align-items:center;gap:7px;background:var(--n1);border-radius:6px;padding:6px 8px;border:1px solid var(--n2);}
+.ai-q-item span{flex:1;font-size:11px;color:var(--n7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ai-q-cat{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:9px;background:var(--g1);color:var(--g6);flex-shrink:0;}
+.ai-q-del{background:var(--r1);color:var(--r6);border:none;border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+.ai-add-q-form{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
+.ai-add-q-form input,.ai-add-q-form select{font-size:11.5px;padding:5px 8px;border:1.5px solid var(--n3);border-radius:6px;font-family:'Inter',sans-serif;background:#fff;}
+.ai-add-q-form input{flex:1;min-width:120px;}
+.ai-add-q-btn{background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0;}
 
 #inst-ban{background:var(--g6);color:#fff;border-radius:11px;padding:11px 13px;margin-bottom:12px;display:none;align-items:center;justify-content:space-between;gap:10px}
 #inst-ban p{font-size:12.5px;font-weight:500}
@@ -404,7 +379,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v8.2 | 08-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v8.3 | 09-May-2026</span>
+      <span id="role-pill" onclick="openD()" style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);cursor:pointer;white-space:nowrap;letter-spacing:.03em">&#127970; Dev</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -412,11 +388,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   </div>
 </div>
 
-<!-- ROLE BAR -->
-<div class="role-bar">
-  <button class="role-btn active" id="rb-dev" onclick="setRole('dev')">&#127970; Developer View</button>
-  <button class="role-btn" id="rb-cust" onclick="setRole('cust')">&#128181; Customer View</button>
-</div>
+
 
 <!-- DESKTOP SIDEBAR -->
 <nav class="sidebar" id="sidebar">
@@ -455,13 +427,18 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v8.2</div>
-    <div class="drw-s" id="drw-role-sub">Developer View</div>
+    <div>
+      <div class="drw-t">EIL Solar Ground v8.3</div>
+      <div class="drw-s" id="drw-role-sub">Developer View</div>
+    </div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
-  <div class="drw-body" id="drw-body">
-    <!-- populated by JS based on role -->
+  <!-- Role switcher inside drawer -->
+  <div style="display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.12)">
+    <button id="rb-dev" onclick="setRole('dev');closeD()" style="flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.18);color:#fff;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer">&#127970; Developer</button>
+    <button id="rb-cust" onclick="setRole('cust');closeD()" style="flex:1;padding:8px 4px;border-radius:8px;border:1.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128181; Customer</button>
   </div>
+  <div class="drw-body" id="drw-body"></div>
 </div>
 
 <!-- MAIN CANVAS -->
@@ -1292,89 +1269,76 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════
-     AI ASSISTANT — s-ai
-     Fixed full-screen: sits below header+rolebar, right of sidebar
-     ══════════════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════
+     AI ASSISTANT — s-ai  Clean minimal design
+     ═══════════════════════════════════════════════════════ -->
 <div id="s-ai" class="sec">
 
   <!-- LOCK SCREEN -->
   <div id="ai-lock-screen" class="ai-lock-wrap">
-    <div style="font-size:56px;margin-bottom:14px">🤖</div>
-    <div style="font-size:20px;font-weight:800;color:var(--n9);margin-bottom:8px">EIL Solar AI Assistant</div>
-    <div style="font-size:13.5px;color:var(--n5);line-height:1.7;max-width:320px;margin-bottom:20px">
-      Instant answers about your Group Captive CPP solar project — OA charges, savings, compliance, TNERC rules and 25-year returns.
+    <div style="width:64px;height:64px;background:var(--g6);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px;box-shadow:0 4px 20px rgba(15,110,86,.3)">🤖</div>
+    <div style="font-size:18px;font-weight:800;color:var(--n9);margin-bottom:6px">Solar AI Assistant</div>
+    <div style="font-size:13px;color:var(--n5);line-height:1.6;max-width:280px;text-align:center;margin-bottom:24px">
+      Ask anything about your solar project — savings, compliance, tariffs, returns.
     </div>
-    <div style="margin:0 0 20px;padding:14px 24px;background:var(--g0);border:2px solid var(--g5);border-radius:14px;max-width:280px;width:100%;text-align:center">
-      <div style="font-size:11px;font-weight:700;color:var(--g6);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px">🎉 Currently</div>
-      <div style="font-size:34px;font-weight:900;color:var(--g6);line-height:1">FREE</div>
-      <div style="font-size:11.5px;color:var(--n5);margin-top:6px;line-height:1.5">Complimentary for all project customers.<br>Premium features may be introduced later.</div>
-    </div>
-    <button onclick="aiUnlockFree()" style="background:var(--g6);color:#fff;border:none;border-radius:50px;padding:15px 44px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.35);width:100%;max-width:280px;margin-bottom:10px">
-      ✨ Launch AI Assistant
+    <button onclick="aiUnlockFree()" style="background:var(--g6);color:#fff;border:none;border-radius:12px;padding:13px 0;font-size:14px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(15,110,86,.3);width:100%;max-width:260px;margin-bottom:20px">
+      Start Chat
     </button>
-    <div style="font-size:11px;color:var(--n5)">No login needed &nbsp;·&nbsp; Project-specific answers &nbsp;·&nbsp; Always up-to-date</div>
-    <div style="margin-top:16px;font-size:10px;color:var(--n4);text-align:center;padding:0 20px">© 2026 Elango Industries Limited (BSE: 513452) · EIL Solar Ground PWA · All rights reserved</div>
+    <div style="font-size:10px;color:var(--n4);text-align:center">© 2026 Elango Industries Limited (BSE: 513452) · All rights reserved</div>
   </div>
 
-  <!-- CHAT SCREEN (hidden until unlocked) -->
+  <!-- CHAT SCREEN -->
   <div id="ai-chat-screen" class="ai-chat-wrap" style="display:none">
 
-    <!-- Chat header bar -->
+    <!-- Slim header -->
     <div class="ai-chat-hdr">
       <div class="ai-chat-hdr-ic">🤖</div>
       <div style="flex:1;min-width:0">
-        <div class="ai-chat-hdr-t">EIL Solar AI Assistant</div>
-        <div class="ai-chat-hdr-s" id="ai-mode-label">Group Captive CPP Expert</div>
+        <div class="ai-chat-hdr-t">Solar AI Assistant</div>
       </div>
-      <div class="ai-online" title="Online"></div>
-      <button onclick="aiClearChat()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-left:6px;flex-shrink:0">🗑 Clear</button>
-      <button onclick="aiReset()" style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.75);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;margin-left:4px;flex-shrink:0">↺</button>
+      <div class="ai-online"></div>
+      <button onclick="aiClearChat()" title="Clear chat" style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-left:8px">🗑 Clear</button>
     </div>
 
-    <!-- Category filter -->
+    <!-- Category tabs — scrollable, compact -->
     <div class="ai-cats" id="ai-cat-tabs">
       <button class="ai-cat-btn on" onclick="aiSetCat('all',this)">All</button>
-      <button class="ai-cat-btn" onclick="aiSetCat('savings',this)">💰 Savings</button>
-      <button class="ai-cat-btn" onclick="aiSetCat('compliance',this)">✅ Compliance</button>
-      <button class="ai-cat-btn" onclick="aiSetCat('regulatory',this)">📋 Regulatory</button>
-      <button class="ai-cat-btn" onclick="aiSetCat('technical',this)">⚙️ Technical</button>
-      <button class="ai-cat-btn" onclick="aiSetCat('financial',this)">📊 Financial</button>
-      <button class="ai-cat-btn" onclick="aiSetCat('general',this)">❓ General</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('savings',this)">Savings</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('compliance',this)">Compliance</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('regulatory',this)">Regulatory</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('technical',this)">Technical</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('financial',this)">Financial</button>
+      <button class="ai-cat-btn" onclick="aiSetCat('general',this)">General</button>
     </div>
 
-    <!-- Messages area -->
+    <!-- Messages -->
     <div class="ai-msgs" id="ai-msgs"></div>
 
-    <!-- Suggested chips -->
-    <div class="ai-qs">
-      <div class="ai-qs-t">Suggested — tap to ask</div>
+    <!-- Suggested questions — collapsible tray -->
+    <div class="ai-qs" id="ai-qs-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="ai-qs-t">Suggested</div>
+        <button onclick="aiToggleChips()" id="ai-chips-toggle" style="font-size:10px;color:var(--n5);background:none;border:none;cursor:pointer;padding:0 2px">▲ Hide</button>
+      </div>
       <div class="ai-qs-scroll" id="ai-chips"></div>
     </div>
 
-    <!-- Text input -->
+    <!-- Input row -->
     <div class="ai-inp-row">
-      <textarea class="ai-inp" id="ai-inp" rows="1" placeholder="Type your question here…" oninput="aiAutoResize(this)" onkeydown="aiKeyDown(event)"></textarea>
+      <textarea class="ai-inp" id="ai-inp" rows="1" placeholder="Ask about savings, compliance, tariffs…" oninput="aiAutoResize(this)" onkeydown="aiKeyDown(event)"></textarea>
       <button class="ai-send" id="ai-send-btn" onclick="aiSend()">
         <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
       </button>
     </div>
 
-    <!-- Developer Q&A management panel -->
+    <!-- Developer panel — hidden by default, accessible from gear icon -->
     <div class="ai-dev-panel" id="ai-dev-panel" style="display:none">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <div class="ai-dev-panel-t" style="margin-bottom:0">⚙️ Developer — Manage Q&amp;A Bank</div>
-        <button onclick="aiToggleGuide()" style="background:var(--b1);color:var(--b6);border:1px solid var(--b3);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer">? How to use</button>
+        <div class="ai-dev-panel-t" style="margin-bottom:0">⚙️ Manage Q&amp;A Bank</div>
+        <button onclick="aiToggleGuide()" style="background:var(--b1);color:var(--b6);border:1px solid var(--b3);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer">? Help</button>
       </div>
       <div id="ai-qa-guide" style="display:none;background:var(--n1);border:1px solid var(--n3);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.7;color:var(--n7)">
-        <strong style="color:var(--n9)">How to use the Q&amp;A Bank:</strong><br>
-        1. <strong>Type a question</strong> in the input box below and select its category (Savings, Compliance, etc.)<br>
-        2. Click <strong>+ Add</strong> — the question appears in the list and as a chip in the chat.<br>
-        3. The AI answers added questions automatically from this bank — <em>no API call needed</em>.<br>
-        4. To <strong>remove</strong> a question, tap ✕ next to it in the list.<br>
-        5. Questions you add are visible to <strong>all customers</strong> as suggested chips.<br>
-        6. For live AI answers to unlisted questions, the <strong>Anthropic API</strong> is called automatically.<br>
-        <span style="color:var(--o6)">⚠️ Answers are set to project-specific — always verify figures before sharing with customers.</span>
+        <strong>How to use:</strong> Type a question, choose category, click + Add. Questions appear as chips for all customers. The AI answers from this bank instantly — no API cost. Tap ✕ to remove any question. Unlisted questions go to live AI automatically.
       </div>
       <div class="ai-add-q-form">
         <input type="text" id="ai-new-q" placeholder="Add a new question…">
@@ -1391,10 +1355,8 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
       <div class="ai-q-mgmt" id="ai-q-list"></div>
     </div>
 
-    <!-- Copyright watermark -->
-    <div class="ai-watermark">
-      © 2026 Elango Industries Limited (BSE: 513452) · EIL Solar Ground PWA · All rights reserved · Unauthorised reproduction or distribution prohibited
-    </div>
+    <!-- Minimal copyright strip -->
+    <div class="ai-watermark">© 2026 Elango Industries Limited (BSE: 513452) · All rights reserved</div>
 
   </div><!-- /ai-chat-screen -->
 </div><!-- /s-ai -->
@@ -1404,7 +1366,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
 
 <script>
-const BUILD='v8.2 | Build: 20260509-0030 IST';
+const BUILD='v8.3 | Build: 20260509-0900 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1418,13 +1380,29 @@ if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catc
 let ROLE='dev';
 function setRole(r){
   ROLE=r;
-  document.getElementById('rb-dev').classList.toggle('active',r==='dev');
-  document.getElementById('rb-cust').classList.toggle('active',r==='cust');
+  // Update drawer role buttons appearance
+  const rbDev=document.getElementById('rb-dev');
+  const rbCust=document.getElementById('rb-cust');
+  if(rbDev){
+    rbDev.style.background=r==='dev'?'rgba(255,255,255,.22)':'transparent';
+    rbDev.style.color=r==='dev'?'#fff':'rgba(255,255,255,.55)';
+    rbDev.style.borderColor=r==='dev'?'rgba(255,255,255,.45)':'rgba(255,255,255,.15)';
+    rbDev.style.fontWeight=r==='dev'?'700':'500';
+  }
+  if(rbCust){
+    rbCust.style.background=r==='cust'?'rgba(255,255,255,.22)':'transparent';
+    rbCust.style.color=r==='cust'?'#fff':'rgba(255,255,255,.55)';
+    rbCust.style.borderColor=r==='cust'?'rgba(255,255,255,.45)':'rgba(255,255,255,.15)';
+    rbCust.style.fontWeight=r==='cust'?'700':'500';
+  }
   document.getElementById('sb-dev-items').style.display=r==='dev'?'block':'none';
   document.getElementById('sb-cust-items').style.display=r==='cust'?'block':'none';
   document.getElementById('sb-title-dev').style.display=r==='dev'?'block':'none';
   document.getElementById('sb-title-cust').style.display=r==='cust'?'block':'none';
-  document.getElementById('drw-role-sub').textContent=r==='dev'?'Developer View':'Customer View';
+  const rSub=document.getElementById('drw-role-sub');
+  if(rSub) rSub.textContent=r==='dev'?'Developer View':'Customer View';
+  const pill=document.getElementById('role-pill');
+  if(pill) pill.textContent=r==='dev'?'\uD83C\uDFD7 Dev':'\uD83D\uDC64 Customer';
   // FAB: only show in developer view (not needed in customer view)
   const fab=document.getElementById('calc-fab');
   if(fab)fab.style.display='none'; // hidden on role switch; shown by go() when on input sheet
@@ -4364,10 +4342,8 @@ let AI_UNLOCKED_PERM = false; // true = full API access; false = demo mode
 
 /* ── UNLOCK ────────────────────────────────────────────────────── */
 function aiUnlockFree(){
-  // Free for all users — no paywall
   AI_UNLOCKED_PERM = true;
-  aiShowChat('🌞 EIL Solar AI — Group Captive CPP Expert');
-  // Show dev management panel if developer role
+  aiShowChat('Group Captive CPP Expert');
   const devPanel = document.getElementById('ai-dev-panel');
   if(devPanel) devPanel.style.display = ROLE === 'dev' ? 'block' : 'none';
 }
@@ -4379,7 +4355,8 @@ function aiShowChat(modeLabel){
   document.getElementById('ai-lock-screen').style.display = 'none';
   const chat = document.getElementById('ai-chat-screen');
   chat.style.display = 'flex';
-  document.getElementById('ai-mode-label').textContent = modeLabel;
+  const modeEl=document.getElementById('ai-mode-label');
+  if(modeEl) modeEl.textContent = modeLabel;
   aiChatHistory = [];
   aiRenderChips(aiCurrentCat);
   aiRenderQList();
@@ -4884,6 +4861,15 @@ function aiCopyAnswer(btn){
     btn.innerHTML = '✅ Copied!';
     setTimeout(()=>{ btn.innerHTML = orig; }, 1800);
   }).catch(()=>{ btn.innerHTML = '❌ Failed'; setTimeout(()=>{ btn.innerHTML = '📋 Copy'; },1500); });
+}
+
+function aiToggleChips(){
+  const scroll = document.getElementById('ai-chips');
+  const btn = document.getElementById('ai-chips-toggle');
+  if(!scroll || !btn) return;
+  const hidden = scroll.style.display === 'none';
+  scroll.style.display = hidden ? 'flex' : 'none';
+  btn.textContent = hidden ? '▲ Hide' : '▼ Show';
 }
 
 function aiToggleGuide(){
