@@ -404,7 +404,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v8.0 | 08-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v8.1 | 08-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -455,7 +455,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="ovl" id="ovl" onclick="closeD()"></div>
 <div class="drw" id="drw">
   <div class="drw-hdr">
-    <div class="drw-t">EIL Solar Ground v7.3</div>
+    <div class="drw-t">EIL Solar Ground v8.1</div>
     <div class="drw-s" id="drw-role-sub">Developer View</div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
   </div>
@@ -680,19 +680,23 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('tariff',-0.01)">&#8722;</button><span class="pm-val" id="v-tariff">7.50</span><button class="pm-btn right" onclick="pmStep('tariff',0.01)">+</button></div>
       <div id="tariff-explain" style="margin-top:10px;padding:11px 13px;background:var(--n1);border-radius:9px;font-size:12px;line-height:1.8;border:1px solid var(--n3)"></div>
     </div>
-    <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff — 85% for HT-I Industry, 80% for HT-III Commercial)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">85</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div></div>
+    <div class="fld"><label class="flbl">Discount to buyer <span>(% of weighted tariff — 85% for HT-I Industry, 80% for HT-III Commercial)</span></label><div class="pm-row"><button class="pm-btn left" onclick="pmStep('disc',-0.5)">&#8722;</button><span class="pm-val" id="v-disc">85</span><button class="pm-btn right" onclick="pmStep('disc',0.5)">+</button></div>
+      <div class="fhint" style="margin-top:5px;background:#FFF7ED;border:1.5px solid var(--o3);border-radius:7px;padding:7px 11px;font-size:12px;color:var(--o7);line-height:1.6">
+        <strong>Important:</strong> The discount % is the <strong>landed cost to the customer — final price they pay</strong>. OA charges (wheeling, transmission, SLDC) are borne entirely by the <strong>developer</strong> and deducted from developer revenue. The customer pays the selling price only — nothing extra.
+      </div>
+    </div>
     <div class="fld">
-      <label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh — Group Captive CPP solar, 30% concession applied)</span></label>
+      <label class="flbl">OA charge all-in Yr-1 <span>(Rs/kWh — <strong>borne by developer</strong>, deducted from developer revenue, NOT charged to customer)</span></label>
       <div class="pm-row"><button class="pm-btn left" onclick="pmStep('oa',-0.01)">&#8722;</button><span class="pm-val" id="v-oa">0.95</span><button class="pm-btn right" onclick="pmStep('oa',0.01)">+</button></div>
       <div style="margin-top:10px;padding:11px 13px;background:var(--b1);border-radius:9px;font-size:12px;line-height:1.9;border:1px solid #A8C8F0">
-        <strong style="color:var(--b6)">OA charge breakdown — FY 2025-26 (TNERC T.O.7/2022 revised)</strong><br>
+        <strong style="color:var(--b6)">OA charge breakdown — FY 2025-26 (TNERC T.O.7/2022 revised) — Developer cost only</strong><br>
         <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:6px;border-radius:6px">
         <table style="width:100%;min-width:360px;font-size:11.5px;border-collapse:collapse">
           <tr style="background:var(--n1)">
             <th style="text-align:left;padding:5px 7px;border:1px solid var(--n3)">Component</th>
             <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">Full rate</th>
             <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">Solar 30% concession</th>
-            <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">You pay</th>
+            <th style="text-align:right;padding:5px 7px;border:1px solid var(--n3)">Developer pays</th>
           </tr>
           <tr>
             <td style="padding:5px 7px;border:1px solid var(--n3)">Wheeling charge (HT, FY26)</td>
@@ -713,7 +717,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
             <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;color:var(--g6)">Rs 0.028</td>
           </tr>
           <tr style="background:var(--g1)">
-            <td style="padding:5px 7px;border:1px solid var(--n3);font-weight:700">Total OA charge (solar captive)</td>
+            <td style="padding:5px 7px;border:1px solid var(--n3);font-weight:700">Total OA (solar captive) — developer bears</td>
             <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700">Rs 1.37</td>
             <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700;color:var(--r6)">&#8722; Rs 0.411</td>
             <td style="text-align:right;padding:5px 7px;border:1px solid var(--n3);font-family:monospace;font-weight:700;color:var(--g6)">Rs 0.959</td>
@@ -1309,7 +1313,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
     <button onclick="aiUnlockFree()" style="background:var(--g6);color:#fff;border:none;border-radius:50px;padding:15px 44px;font-size:15px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.35);width:100%;max-width:280px;margin-bottom:10px">
       ✨ Launch AI Assistant
     </button>
-    <div style="font-size:11px;color:var(--n5)">No login needed &nbsp;·&nbsp; Project-specific answers &nbsp;·&nbsp; Powered by Claude AI</div>
+    <div style="font-size:11px;color:var(--n5)">No login needed &nbsp;·&nbsp; Project-specific answers &nbsp;·&nbsp; Always up-to-date</div>
     <div style="margin-top:16px;font-size:10px;color:var(--n4);text-align:center;padding:0 20px">© 2026 Elango Industries Limited (BSE: 513452) · EIL Solar Ground PWA · All rights reserved</div>
   </div>
 
@@ -1399,7 +1403,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
 
 <script>
-const BUILD='v8.0 | Build: 20260508-2200 IST';
+const BUILD='v8.1 | Build: 20260508-2330 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1725,33 +1729,37 @@ function buildTariffExplain(base, labelRaw){
   const sp=+(sw*PM['disc'].v/100).toFixed(4);
   const nr=+(sp-PM['oa'].v).toFixed(4);
   const label=labelRaw.split('—')[0].trim().split('(')[0].trim();
+  const discPct=PM['disc'].v;
+  const oaVal=PM['oa'].v.toFixed(2);
+  const custType=discPct>=85?'Industrial (HT-I)':'Commercial (HT-III)';
+  const custDisc=100-discPct;
 
   if(isFlat){
     el.innerHTML=
       `<strong>${label} — FLAT RATE (no Time of Day differentiation)</strong><br>`+
-      `&#9899; All hours (12 AM–12 PM–12 AM): <strong>Rs ${base.toFixed(2)}/kWh</strong> — same rate all 24 hours<br>`+
-      `<span style="color:var(--n5)">No peak surcharge. No night discount. ToD applies to HT-III as well per T.O.6/2025: peak +25%, night −5%.</span><br>`+
+      `&#9899; All hours: <strong>Rs ${base.toFixed(2)}/kWh</strong><br>`+
       `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
-      `&#128200; <strong>Solar weighted = Rs ${sw.toFixed(4)}/kWh</strong> (flat, same as base)<br>`+
-      `&#128994; Selling price (${PM['disc'].v}% of weighted) = <strong>Rs ${sp}/kWh</strong><br>`+
-      `&#128997; Less OA charge = Rs ${PM['oa'].v.toFixed(2)}/kWh<br>`+
-      `<strong style="color:var(--g6)">&#9989; Net realisation = Rs ${nr}/kWh</strong><br>`+
+      `&#128200; <strong>Solar weighted = Rs ${sw.toFixed(4)}/kWh</strong><br>`+
+      `&#128994; <strong>Selling price to customer (${discPct}% — ${custType}, ${custDisc}% discount) = Rs ${sp}/kWh</strong><br>`+
+      `<span style="color:var(--g6);font-weight:700">&#9989; Customer pays Rs ${sp}/kWh — this is their landed cost. Nothing extra.</span><br>`+
+      `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
+      `<span style="color:var(--b6)">Developer P&amp;L: Gross revenue = Rs ${sp}/kWh. Less OA borne by developer = Rs ${oaVal}/kWh. <strong>Net realisation = Rs ${nr}/kWh</strong></span><br>`+
       `<span style="color:var(--n5);font-size:11px">Source: TNERC T.O. No.6 of 2025, effective 01-07-2025</span>`;
   } else {
     el.innerHTML=
       `<strong>${label} — Time of Day (ToD) tariff (T.O. No.6 of 2025)</strong><br>`+
-      `&#128308; <strong>Peak</strong> (6–10 AM &amp; 6–10 PM = 8 hrs): Rs ${p}/kWh (+25% above normal)<br>`+
-      `&#9899; <strong>Normal</strong> (5–6 AM + 10 AM–6 PM = 9 hrs): Rs ${base.toFixed(2)}/kWh (base rate)<br>`+
-      `&#128994; <strong>Night</strong> (10 PM–5 AM = 7 hrs): Rs ${ni}/kWh (−5% discount)<br>`+
-      `<span style="color:var(--n5)">Consumer weighted avg = (8×${p} + 9×${base} + 7×${ni}) / 24 = Rs ${cw}/kWh</span><br>`+
+      `&#128308; <strong>Peak</strong> (6–10 AM &amp; 6–10 PM = 8 hrs): Rs ${p}/kWh (+25%)<br>`+
+      `&#9899; <strong>Normal</strong> (10 AM–6 PM + 5–6 AM = 9 hrs): Rs ${base.toFixed(2)}/kWh<br>`+
+      `&#128994; <strong>Night</strong> (10 PM–5 AM = 7 hrs): Rs ${ni}/kWh (−5%)<br>`+
+      `<span style="color:var(--n5)">Consumer weighted avg (24 hrs) = Rs ${cw}/kWh</span><br>`+
       `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
-      `<strong>For solar developer (Group Captive CPP):</strong><br>`+
-      `&#9728; Morning peak earns premium: 6–10 AM = 4 hrs out of 12 solar hrs = <strong>33.3%</strong><br>`+
-      `&#9900; Evening peak 6–10 PM = zero solar generation = earns nothing<br>`+
-      `&#128200; Solar weighted = (4h×${p} + 8h×${base}) / 12 = <strong>Rs ${sw}/kWh</strong><br>`+
-      `&#128994; Selling price (${PM['disc'].v}% × Rs ${sw}) = <strong>Rs ${sp}/kWh</strong><br>`+
-      `&#128997; Less OA charge = Rs ${PM['oa'].v.toFixed(2)}/kWh<br>`+
-      `<strong style="color:var(--g6)">&#9989; Net realisation = Rs ${nr}/kWh</strong><br>`+
+      `<strong>Solar developer (Group Captive CPP):</strong><br>`+
+      `&#9728; Solar peak: 6–10 AM = 4 hrs / 12 solar hrs = 33.3% at Rs ${p}/kWh<br>`+
+      `&#128200; Solar weighted = (4×${p} + 8×${base}) / 12 = <strong>Rs ${sw}/kWh</strong><br>`+
+      `&#128994; <strong>Selling price to customer (${discPct}% — ${custType}, ${custDisc}% discount) = Rs ${sp}/kWh</strong><br>`+
+      `<span style="color:var(--g6);font-weight:700">&#9989; Customer pays Rs ${sp}/kWh only — landed cost, nothing extra.</span><br>`+
+      `<hr style="border:none;border-top:1px solid var(--n3);margin:7px 0">`+
+      `<span style="color:var(--b6)">Developer P&amp;L: Revenue Rs ${sp}/kWh. Less OA (developer bears) Rs ${oaVal}/kWh. <strong>Net realisation to developer = Rs ${nr}/kWh</strong></span><br>`+
       `<span style="color:var(--n5);font-size:11px">Source: TNERC T.O. No.6 of 2025, effective 01-07-2025</span>`;
   }
 }
@@ -1937,7 +1945,7 @@ function calcCustomer(){
   const directBill=custMU*tariff;
   const solarBill=custMU*spYr1;
   const oaPaid=custMU*oaChg;
-  const netSaving=directBill-(solarBill+oaPaid);
+  const netSaving=directBill-solarBill; // customer pays SP only; OA borne by developer
   const payback=netSaving>0?custEq/netSaving:null;
   const distLoss=c.recvKv==='11'?1.52:c.recvKv==='33'?0.50:0;
 
@@ -1958,10 +1966,10 @@ function calcCustomer(){
       <div class="sr"><span class="sk">My allocation from plant (Yr-1)</span><span class="sv gn">${custMU.toFixed(2)} MU</span></div>
       <div class="sr"><span class="sk">Receiving voltage</span><span class="sv">${c.recvKv} kV</span></div>
       <div class="sr"><span class="sk">TNERC grid loss (my voltage)</span><span class="sv pu">${distLoss.toFixed(2)}%</span></div>
-      <div class="sr"><span class="sk">Solar selling price to me (Yr-1)</span><span class="sv gn">Rs ${spYr1.toFixed(4)}/kWh</span></div>
-      <div class="sr"><span class="sk">OA charge I pay (Yr-1)</span><span class="sv rd">Rs ${oaChg.toFixed(2)}/kWh</span></div>
+      <div class="sr"><span class="sk">Solar selling price to me (Yr-1) — my landed cost</span><span class="sv gn">Rs ${spYr1.toFixed(4)}/kWh</span></div>
+      <div class="sr" style="background:var(--g0);border-radius:6px"><span class="sk" style="color:var(--g6);font-weight:700">✅ I pay this price only. OA/wheeling charges are borne by the developer.</span><span class="sv gn" style="font-weight:800">Rs ${spYr1.toFixed(4)}/kWh</span></div>
       <div class="sr"><span class="sk">What I would pay TNEB directly</span><span class="sv rd">Rs ${directBill.toFixed(2)} Cr</span></div>
-      <div class="sr"><span class="sk">What I pay via solar (SP + OA)</span><span class="sv am">Rs ${(solarBill+oaPaid).toFixed(2)} Cr</span></div>
+      <div class="sr"><span class="sk">What I pay via solar (SP only — my landed cost)</span><span class="sv am">Rs ${solarBill.toFixed(2)} Cr</span></div>
       <div class="sr"><span class="sk">Net annual saving (Yr-1)</span><span class="sv gn">Rs ${netSaving.toFixed(2)} Cr</span></div>
     </div>`;
 
@@ -1971,10 +1979,10 @@ function calcCustomer(){
       <div class="chdr gn">My savings vs direct TNEB billing</div>
       <div class="sr"><span class="sk">TNEB direct tariff (${c.recvKv} kV, ${c.tariffCat} category)</span><span class="sv rd">Rs ${tariff.toFixed(2)}/kWh</span></div>
       <div class="sr"><span class="sk">Weighted TNEB (peak surcharge applied)</span><span class="sv rd">Rs ${wtTNEB.toFixed(4)}/kWh</span></div>
-      <div class="sr"><span class="sk">Solar selling price (${gv('disc')}% of weighted)</span><span class="sv gn">Rs ${spYr1.toFixed(4)}/kWh</span></div>
-      <div class="sr"><span class="sk">OA charge I pay</span><span class="sv am">Rs ${oaChg.toFixed(2)}/kWh</span></div>
-      <div class="sr"><span class="sk">My effective all-in cost from solar</span><span class="sv gn">Rs ${(spYr1+oaChg).toFixed(4)}/kWh</span></div>
-      <div class="sr"><span class="sk">My saving per kWh vs TNEB tariff</span><span class="sv gn">Rs ${(tariff-spYr1-oaChg).toFixed(4)}/kWh</span></div>
+      <div class="sr"><span class="sk">Solar selling price (${gv('disc')}% of weighted — landed cost to me)</span><span class="sv gn">Rs ${spYr1.toFixed(4)}/kWh</span></div>
+      <div class="sr" style="background:var(--g0);border-radius:5px"><span class="sk" style="color:var(--g6)">✅ OA charges borne by developer — not my cost</span><span class="sv gn">Rs 0.00/kWh to me</span></div>
+      <div class="sr"><span class="sk">My effective all-in cost from solar</span><span class="sv gn">Rs ${spYr1.toFixed(4)}/kWh</span></div>
+      <div class="sr"><span class="sk">My saving per kWh vs TNEB tariff</span><span class="sv gn">Rs ${(tariff-spYr1).toFixed(4)}/kWh</span></div>
       <div class="sr"><span class="sk">Annual consumption from plant</span><span class="sv">${custMU.toFixed(2)} MU</span></div>
       <div class="sr"><span class="sk">My annual saving Yr-1 (Rs Cr)</span><span class="sv gn">Rs ${netSaving.toFixed(2)} Cr</span></div>
       <div class="sr"><span class="sk">25-yr cumulative saving (Rs Cr, 3% escalation)</span><span class="sv gn">Rs ${(netSaving*((Math.pow(1.03,25)-1)/0.03)).toFixed(1)} Cr</span></div>
@@ -4268,13 +4276,13 @@ let aiChatHistory = [];
 let AI_QA = [
   // SAVINGS
   { cat:'savings', q:'How much will I save per year on my electricity bill?',
-    a:'For **HT-I Industrial customers** (primary segment):\n\n| Item | Value |\n|---|---|\n| TNEB tariff (HT-I) | Rs 7.50/kWh |\n| Solar selling price (85% disc) | Rs 6.906/kWh |\n| OA charge | Rs 0.95/kWh |\n| Solar all-in | Rs 7.856/kWh |\n| CSS waived | Rs 2.41/kWh saved |\n\nYear 1 energy is Rs 0.356 higher but CSS saving of Rs 2.41 more than offsets it. From Year 2 as TNEB tariff escalates at 3%/yr, direct energy savings begin. Your proportional saving = your equity % × net generation MU × saving/kWh.' },
+    a:'For **HT-I Industrial customers** (primary segment):\n\n| Item | Value |\n|---|---|\n| TNEB tariff (HT-I) | Rs 7.50/kWh |\n| **Your solar price (landed cost)** | **Rs 6.901/kWh** |\n| OA charges | Borne by developer — not your cost |\n| **Your saving Year 1** | **Rs 0.599/kWh** |\n| CSS waived (bonus benefit) | Rs 2.41/kWh |\n\nYour saving = Rs 0.599/kWh on energy + Rs 2.41/kWh CSS waiver. From Year 2 as TNEB tariff escalates 3%/yr, energy savings grow further. Over 25 years, cumulative savings are 3–5× your equity investment.' },
   { cat:'savings', q:'What is the solar selling price in Year 1?',
-    a:'**For Industrial customers (HT-I, primary segment):**\n\n| Item | Calculation | Value |\n|---|---|---|\n| TNEB base tariff | HT-I Rs 7.50/kWh | Rs 7.50 |\n| Weighted (ToD 33.3% peak) | 7.50 × 1.0833 | **Rs 8.125/kWh** |\n| Discount (15% off) | 85% of weighted | **Rs 6.906/kWh** |\n| OA charge | Solar CPP | Rs 0.95/kWh |\n| **All-in cost to you** | SP + OA | **Rs 7.856/kWh** |\n\n**For Commercial customers (HT-III):** weighted Rs 10.183 × 80% = Rs 8.147/kWh + OA Rs 0.95 = Rs 9.097/kWh.' },
+    a:'**For Industrial customers (HT-I — primary):**\n\n| Step | Calculation | Result |\n|---|---|---|\n| TNEB base tariff (HT-I) | T.O.6/2025 | Rs 7.50/kWh |\n| Solar weighted (ToD 33.3% peak) | 7.50 × 1.0833 | Rs 8.119/kWh |\n| 15% discount (industrial) | 85% of weighted | **Rs 6.901/kWh** |\n| OA charges | **Borne by developer** | Rs 0.00 to you |\n| **Your landed cost** | **Final price you pay** | **Rs 6.901/kWh** |\n\n**For Commercial (HT-III):** 80% × Rs 10.176 = **Rs 8.141/kWh** (developer bears OA there too).' },
   { cat:'savings', q:'What is the OA charge I have to pay?',
-    a:'| OA Component | Full Rate | Solar 30% Concession | **You Pay** |\n|---|---|---|---|\n| Wheeling charge | Rs 1.04 | − Rs 0.312 | **Rs 0.728** |\n| Transmission | Rs 0.29 | − Rs 0.087 | **Rs 0.203** |\n| SLDC scheduling | Rs 0.04 | − Rs 0.012 | **Rs 0.028** |\n| **Total OA** | Rs 1.37 | − Rs 0.411 | **Rs 0.95** |\n| CSS | — | ZERO | **ZERO** |\n| Additional Surcharge | Rs 0.10 | ZERO (CPP) | **ZERO** |\n\nSource: TNERC GEOA Regulations 2025. Solar Group Captive CPP pays 70% of wheeling, transmission and SLDC charges.' },
+    a:'**You pay ZERO OA charges.** The developer bears all Open Access costs.\n\n| OA Component | Full Rate | 30% Solar Concession | Developer Pays |\n|---|---|---|---|\n| Wheeling charge | Rs 1.04 | − Rs 0.312 | Rs 0.728 |\n| Transmission | Rs 0.29 | − Rs 0.087 | Rs 0.203 |\n| SLDC scheduling | Rs 0.04 | − Rs 0.012 | Rs 0.028 |\n| **Total OA** | Rs 1.37 | − Rs 0.411 | **Rs 0.95 (developer)** |\n\nThe selling price of Rs 6.901/kWh is your complete cost. The developer deducts OA from their revenue internally.' },
   { cat:'savings', q:'Is solar really cheaper than TNEB direct supply?',
-    a:'**HT-I Industrial comparison (primary customer):**\n\n| Component | TNEB Direct | EIL Solar CPP |\n|---|---|---|\n| Energy charge | Rs 7.50/kWh | Rs 6.906/kWh |\n| OA charge | — | Rs 0.95/kWh |\n| CSS (Rs 2.41) | Applicable | **ZERO** |\n| Additional Surcharge | Applicable | **ZERO** |\n| **All-in Year 1** | **Rs 7.50/kWh** | **Rs 7.856/kWh** |\n\nYear 1 solar is Rs 0.356 higher, but TNEB escalates ~3%/yr. Solar becomes cheaper from Year 2. CSS waiver alone saves Rs 2.41/kWh from Day 1.' },
+    a:'**HT-I Industrial comparison (primary customer):**\n\n| Component | TNEB Direct | EIL Solar CPP |\n|---|---|---|\n| Energy charge | Rs 7.50/kWh | **Rs 6.901/kWh** |\n| OA charge to you | — | **ZERO** (developer pays) |\n| CSS (Rs 2.41) | You pay | **ZERO — waived** |\n| Additional Surcharge | You pay | **ZERO — waived** |\n| **Your total cost** | **Rs 7.50/kWh** | **Rs 6.901/kWh** |\n\n**Year 1 saving: Rs 0.599/kWh.** Plus CSS waiver Rs 2.41/kWh. From Year 2 TNEB escalates 3%/yr while your solar price is locked — savings grow every year.' },
   { cat:'savings', q:'What is CSS and do I have to pay it?',
     a:'CSS stands for Cross Subsidy Surcharge. For HT consumers in Tamil Nadu, it is Rs 2.41/kWh normally. As a Group Captive CPP customer, CSS is COMPLETELY WAIVED — you pay ZERO. This is one of the biggest financial benefits of the Group Captive structure, saving you Rs 2.41 per unit. This exemption is granted under Section 42(2) of the Electricity Act 2003 and TNERC T.O. No.7 of 2022.' },
   { cat:'savings', q:'What is Additional Surcharge and do I pay it?',
@@ -4501,12 +4509,13 @@ async function aiCallAPI(userMsg){
 PROJECT DATA (use these exact numbers — do not invent or estimate):
 ${ctx}
 
-DISCOUNT POLICY (EIL Solar — always apply this):
-- Primary customer base: HT-I INDUSTRIAL customers (largest segment)
-- Industrial customers (HT-I, Rs 7.50/kWh): Discount = 15% → Selling price = 85% of weighted tariff
-- Commercial customers (HT-III, Rs 9.40/kWh): Discount = 20% → Selling price = 80% of weighted tariff
-- Default all calculations to HT-I Industrial unless customer explicitly states they are commercial.
-- HT-I weighted tariff: Rs 8.125/kWh | Selling price to industry: Rs 6.906/kWh (85%) | OA: Rs 0.95/kWh | Net: Rs 5.956/kWh
+PRICING STRUCTURE — CRITICAL (always apply):
+- PRIMARY customer base: HT-I INDUSTRIAL (largest segment)
+- Industrial (HT-I, Rs 7.50/kWh): Selling price = 85% of weighted = Rs 6.901/kWh → THIS IS CUSTOMER'S LANDED COST. NOTHING EXTRA.
+- Commercial (HT-III, Rs 9.40/kWh): Selling price = 80% of weighted = Rs 8.140/kWh → CUSTOMER'S LANDED COST.
+- OA charges (Rs 0.95/kWh) are BORNE BY THE DEVELOPER — deducted from developer revenue. Customer NEVER pays OA.
+- Never say "customer pays SP + OA". Customer pays SP only. OA is developer's cost.
+- Developer net realisation = SP − OA (developer's internal P&L only, not customer-facing).
 
 STRICT RULES:
 1. Answer ONLY what is asked. Do not add extra unrequested context.
@@ -4615,9 +4624,10 @@ function aiGetProjectContext(){
     const fcf1  = +(ebd1 - int1).toFixed(2);
 
     // ── SAVINGS vs TNEB ──────────────────────────────────────────
-    const savKWh    = +(tariff - sp1 - oa).toFixed(4);  // net saving/kWh vs TNEB (excl CSS)
-    const cssValue  = 2.41;                              // HT-III CSS Rs/kWh (waived)
-    const totalSavKWh = +(tariff - sp1 - oa + cssValue).toFixed(4); // incl CSS saving
+    // Customer pays SP only — OA borne by developer
+    const custSavKWh  = +(tariff - sp1).toFixed(4);  // customer saving: TNEB tariff vs solar SP
+    const cssValue    = 2.41;                          // HT-III CSS waived (Group Captive)
+    const totalCustSav= +(tariff - sp1 + cssValue).toFixed(4); // incl CSS waiver value
 
     // ── EVACUATION VOLTAGE ────────────────────────────────────────
     const evacVolt = acMW <= 5 ? '11 kV' : acMW <= 33 ? '33 kV' : '110 kV EHT';
@@ -4656,12 +4666,19 @@ TARIFF & PRICING (Year 1 — TNERC T.O. No.6 of 2025):
 - **Selling price Year 1: Rs ${sp1}/kWh**
 - TNEB escalation: ${taresc}%/yr
 
-OPEN ACCESS CHARGES (FY26 — Group Captive CPP, 30% solar concession):
+OPEN ACCESS CHARGES — DEVELOPER COST (not charged to customer):
 - OA charge Year 1: Rs ${oa}/kWh (Wheeling Rs 0.728 + Trans Rs 0.203 + SLDC Rs 0.028)
 - OA escalation: ${oaesc}%/yr
+- OA is borne ENTIRELY by the developer — deducted from developer revenue
+- Customer NEVER pays OA — customer pays selling price only
 - CSS (Cross Subsidy Surcharge): ZERO — fully waived (saves Rs ${cssValue}/kWh)
 - Additional Surcharge: ZERO for Group Captive CPP (general rate Rs ${addlSur}/kWh, waived)
-- **Net realisation to developer: Rs ${nr1}/kWh**
+- **Net realisation to developer (after OA): Rs ${nr1}/kWh — this is developer P&L only**
+
+CUSTOMER PRICING (what customer pays — landed cost, nothing extra):
+- Industrial customer (HT-I) sells price: Rs ${sp1}/kWh — FINAL PRICE, OA not added
+- Customer saving vs TNEB direct: Rs ${custSavKWh}/kWh (Year 1)
+- Customer saving incl CSS waiver: Rs ${totalCustSav}/kWh
 
 PROJECT COST (Rs Crores):
 - Rate: Rs ${epcMW} Lakhs/MW AC all-in
@@ -4688,12 +4705,13 @@ YEAR 1 FINANCIALS (Rs Crores):
 - Interest (moratorium yr): Rs ${int1} Cr
 - **FCF to developer: Rs ${fcf1} Cr**
 
-SAVINGS vs TNEB (Year 1, per kWh):
-- Solar net cost (SP + OA): Rs ${(sp1 + oa).toFixed(4)}/kWh
-- TNEB direct tariff: Rs ${tariff}/kWh
-- Tariff saving (excl CSS): Rs ${savKWh}/kWh
-- CSS waiver saving: Rs ${cssValue}/kWh
-- **Total saving incl CSS: Rs ${totalSavKWh}/kWh vs direct TNEB**
+CUSTOMER SAVINGS vs TNEB (Year 1 — customer pays SP only):
+- Solar landed cost to customer: Rs ${sp1}/kWh (selling price only)
+- TNEB direct tariff (HT-I): Rs ${tariff}/kWh
+- Customer saving Year 1: Rs ${custSavKWh}/kWh
+- CSS waiver value: Rs ${cssValue}/kWh (benefit to customer)
+- **Total customer benefit incl CSS: Rs ${totalCustSav}/kWh vs direct TNEB**
+- NOTE: OA Rs ${oa}/kWh is developer's cost — NOT deducted from customer savings
 
 COMPLIANCE (CERC Captive Rules 2001 + TNERC):
 - Minimum collective equity: 26% of SPV (collective, not per customer)
