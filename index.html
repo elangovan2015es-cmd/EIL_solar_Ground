@@ -237,8 +237,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .mc-fld input:focus{outline:none;border-color:var(--g5)}
 
 /* FAB */
-.fab-w{position:fixed;bottom:14px;right:14px;z-index:200;pointer-events:none;display:flex;gap:7px;align-items:center;}
-@media(min-width:900px){.fab-w{right:24px;bottom:18px;}}
+.fab-w{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:200;pointer-events:none;display:flex;gap:7px;align-items:center;white-space:nowrap;}
+@media(min-width:900px){.fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;}}
 .fab{background:var(--g6);color:#fff;border:none;border-radius:22px;padding:9px 18px;font-size:12.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(15,110,86,.38);transition:all .14s;pointer-events:all;display:flex;align-items:center;gap:5px;}
 .fab:active{background:var(--g7);transform:scale(.97);}
 
@@ -355,7 +355,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .hbtn{display:none}
   .hdr-t{font-size:14px}
   .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh) + var(--rh) + 24px) 32px 60px 32px;box-sizing:border-box}
-  .fab-w{left:var(--sb);right:24px;bottom:18px;}
+  .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;right:auto;}
   .sec-ti{font-size:20px}
   .mv{font-size:18px}.mv.lg{font-size:28px}
   .ml{font-size:10.5px}
@@ -384,7 +384,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .hbtn{display:none}
   .hdr-t{font-size:15px}
   .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh) + var(--rh) + 24px) 32px 60px 32px;box-sizing:border-box}
-  .fab-w{left:var(--sb);right:24px;bottom:18px;}
+  .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;right:auto;}
   .sec-ti{font-size:21px}
   .mv{font-size:18px}.mv.lg{font-size:28px}
   .ml{font-size:10.5px}.mu{font-size:10px}
@@ -1406,7 +1406,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 </div><!-- /s-ai -->
 
 <!-- CALCULATE FAB — shown only in developer view -->
-<div class="fab-w" id="calc-fab"><button class="fab" style="background:var(--p6);box-shadow:0 3px 10px rgba(83,74,183,.38)" id="fab-ai-btn" onclick="fabOpenAI()">🤖 Ask AI</button><button class="fab" onclick="calc()">&#9889; Calculate</button></div>
+<div class="fab-w" id="calc-fab"><button class="fab" onclick="calc()">&#9889; Calculate</button></div>
 
 
 <script>
@@ -1482,17 +1482,10 @@ function go(id){
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='ca')buildActualCustRows();
   if(id==='ci'||id==='cs'||id==='cc')calcCustomer();
-  // FAB: show on all dev pages (both buttons), hide on AI page and customer pages
+  // FAB: show Calculate only on input pages in developer view
   const fab=document.getElementById('calc-fab');
-  const fabAI=document.getElementById('fab-ai-btn');
   const INPUT_SECS=['in','cu','gl','bt','fi'];
-  const ALL_DEV=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg'];
-  if(fab){
-    fab.style.display=(ROLE==='dev' && ALL_DEV.includes(id))?'flex':'none';
-    // Calculate button: only on input pages
-    const calcBtn=fab.querySelector('button:last-child');
-    if(calcBtn) calcBtn.style.display=INPUT_SECS.includes(id)?'flex':'none';
-  }
+  if(fab) fab.style.display=(ROLE==='dev' && INPUT_SECS.includes(id))?'flex':'none';
   if(id==='ai'){
     const devPanel=document.getElementById('ai-dev-panel');
     const chatScreen=document.getElementById('ai-chat-screen');
@@ -4992,22 +4985,31 @@ function aiRenderQList(){
 <!-- ══ PAGE-LEVEL AI FLOATING PANEL ═════════════════════════════════ -->
 <div class="pai-overlay" id="pai-overlay" onclick="paiClose()"></div>
 <div class="pai-panel" id="pai-panel">
+  <!-- Header -->
   <div class="pai-hdr">
     <div class="pai-hdr-ic">🤖</div>
     <div style="flex:1;min-width:0">
       <div class="pai-hdr-t">Solar AI Assistant</div>
-      <div class="pai-hdr-pg" id="pai-page-label">Page Q&A</div>
+      <div class="pai-hdr-pg" id="pai-page-label">Page Q&amp;A</div>
     </div>
-    <div class="ai-online" style="margin-right:4px"></div>
-    <button class="pai-close" onclick="paiClose()">✕ Close</button>
+    <div class="ai-online" style="margin-right:6px"></div>
+    <button onclick="paiScrollToChips()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;padding:4px 8px;font-size:10.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-right:4px">❓</button>
+    <button onclick="paiClearChat()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;padding:4px 8px;font-size:10.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;margin-right:4px" title="Clear chat">🗑</button>
+    <button class="pai-close" onclick="paiClose()">✕</button>
   </div>
+  <!-- Suggested questions - collapsible -->
   <div class="pai-qs" id="pai-qs-wrap">
-    <div class="pai-qs-t">💡 Suggested questions for this page</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+      <div class="pai-qs-t">💡 Tap a question — instant answer</div>
+      <button onclick="paiToggleChips()" id="pai-chips-toggle" style="font-size:10px;color:var(--p6);background:none;border:none;cursor:pointer;padding:0 2px;font-weight:700">▲ Hide</button>
+    </div>
     <div class="pai-chips" id="pai-chips"></div>
   </div>
+  <!-- Messages -->
   <div class="pai-msgs" id="pai-msgs"></div>
+  <!-- Input row -->
   <div class="pai-inp-row">
-    <textarea class="pai-inp" id="pai-inp" rows="1" placeholder="Ask about this page…" oninput="paiAutoResize(this)" onkeydown="paiKeyDown(event)"></textarea>
+    <textarea class="pai-inp" id="pai-inp" rows="1" placeholder="Type your own question…" oninput="paiAutoResize(this)" onkeydown="paiKeyDown(event)"></textarea>
     <button class="pai-send" id="pai-send-btn" onclick="paiSend()">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
     </button>
@@ -5023,9 +5025,45 @@ function fabOpenAI(){
   if(PAGE_AI_QA[pageId]){
     paiOpen(pageId);
   } else {
-    // fallback: go to AI page
     go('ai');
   }
+}
+
+function paiScrollToChips(){
+  const qs = document.getElementById('pai-qs-wrap');
+  if(qs) qs.scrollIntoView({behavior:'smooth',block:'start'});
+  // Also expand chips if collapsed
+  const chips = document.getElementById('pai-chips');
+  const toggle = document.getElementById('pai-chips-toggle');
+  if(chips && chips.style.display === 'none'){
+    chips.style.display = 'flex';
+    if(toggle) toggle.textContent = '▲ Hide';
+  }
+  // Scroll the panel itself to top
+  const msgs = document.getElementById('pai-msgs');
+  if(msgs) msgs.scrollTop = 0;
+}
+
+function paiToggleChips(){
+  const chips = document.getElementById('pai-chips');
+  const toggle = document.getElementById('pai-chips-toggle');
+  if(!chips || !toggle) return;
+  const hidden = chips.style.display === 'none';
+  chips.style.display = hidden ? 'flex' : 'none';
+  toggle.textContent = hidden ? '▲ Hide' : '▼ Show';
+}
+
+function paiClearChat(){
+  const msgs = document.getElementById('pai-msgs');
+  if(msgs) msgs.innerHTML = '';
+  paiHistory = [];
+  const inp = document.getElementById('pai-inp');
+  if(inp){ inp.value = ''; inp.style.height = 'auto'; }
+  // Show chips again after clear
+  const chips = document.getElementById('pai-chips');
+  const toggle = document.getElementById('pai-chips-toggle');
+  if(chips){ chips.style.display = 'flex'; }
+  if(toggle){ toggle.textContent = '▲ Hide'; }
 }
 const PAGE_AI_QA = {
   db: {
@@ -5184,7 +5222,10 @@ function paiOpen(pageId) {
     chips.innerHTML = qa.qs.map((item, i) =>
       `<button class="pai-chip" onclick="paiAskPreset(${i})">${item.q}</button>`
     ).join('');
+    chips.style.display = 'flex';
   }
+  const toggle = document.getElementById('pai-chips-toggle');
+  if(toggle) toggle.textContent = '▲ Hide';
   
   // Show panel
   document.getElementById('pai-overlay').classList.add('on');
@@ -5209,8 +5250,21 @@ function paiAskPreset(idx) {
   if (!qa || !qa.qs[idx]) return;
   const item = qa.qs[idx];
   paiAddBubble('usr', item.q);
-  // Use preset answer directly (instant)
   paiAddBubble('bot', item.a);
+  // After answer, add a "Back to questions" chip at bottom of messages
+  const msgs = document.getElementById('pai-msgs');
+  if(msgs){
+    msgs.scrollTop = msgs.scrollHeight;
+    // Remove any existing back-btn
+    const old = msgs.querySelector('.pai-back-btn-wrap');
+    if(old) old.remove();
+    const backWrap = document.createElement('div');
+    backWrap.className = 'pai-back-btn-wrap';
+    backWrap.style.cssText = 'text-align:center;padding:8px 0 4px;';
+    backWrap.innerHTML = '<button onclick="paiScrollToChips()" style="background:var(--p1);border:1.5px solid #C4BDEC;color:var(--p6);border-radius:16px;padding:6px 16px;font-size:11.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer">⬆ Back to questions</button>';
+    msgs.appendChild(backWrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
 }
 
 function paiAddBubble(role, text) {
@@ -5219,17 +5273,15 @@ function paiAddBubble(role, text) {
   const div = document.createElement('div');
   div.className = 'pai-bubble ' + role;
   if (role === 'bot') {
-    // Simple markdown: bold
     let html = text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1<\/strong>')
       .replace(/\n\n/g, '<br><br>')
       .replace(/\n/g, '<br>');
-    // Simple table support
     if (html.includes('|')) {
-      const lines = text.split('\n');
+      const lns = text.split('\n');
       let inTable = false, tableHtml = '';
       let resultLines = [];
-      for (let line of lines) {
+      for (let line of lns) {
         const isSep = /^\|[-| :]+\|/.test(line);
         const isRow = line.trim().startsWith('|') && !isSep;
         if (isRow) {
@@ -5248,6 +5300,26 @@ function paiAddBubble(role, text) {
       html = resultLines.join('<br>');
     }
     div.innerHTML = html;
+    // WhatsApp share + Copy
+    const plain = text.replace(/\*\*(.*?)\*\*/g,'$1').replace(/\|[-| :]+\|\n?/g,'').replace(/\|/g,' | ').replace(/#+\s+/g,'').replace(/\n{3,}/g,'\n\n').trim();
+    const pageLbl = (document.getElementById('pai-page-label')||{textContent:'Solar Project'}).textContent.replace(' — Page Assistant','');
+    const waMsg = '*EIL Solar AI — ' + pageLbl + '*\n\n' + plain + '\n\n_EIL Solar Ground PWA \u2014 Elango Industries Limited (BSE: 513452)_';
+    const waText = encodeURIComponent(waMsg);
+    const shareDiv = document.createElement('div');
+    shareDiv.style.cssText = 'display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;';
+    const waLink = document.createElement('a');
+    waLink.href = 'https://wa.me/?text=' + waText;
+    waLink.target = '_blank';
+    waLink.rel = 'noopener';
+    waLink.style.cssText = 'display:inline-flex;align-items:center;gap:4px;background:#25D366;color:#fff;border-radius:14px;padding:4px 11px;font-size:11px;font-weight:700;font-family:Inter,sans-serif;text-decoration:none;';
+    waLink.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.522 5.857L.057 23.882l6.162-1.615A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.85 0-3.604-.5-5.12-1.38l-.36-.215-3.656.958.975-3.562-.235-.373A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/><\/svg> WhatsApp';
+    const copyBtn = document.createElement('button');
+    copyBtn.style.cssText = 'display:inline-flex;align-items:center;gap:4px;background:var(--n1);color:var(--n7);border:1px solid var(--n3);border-radius:14px;padding:4px 11px;font-size:11px;font-weight:600;font-family:Inter,sans-serif;cursor:pointer;';
+    copyBtn.textContent = '\uD83D\uDCCB Copy';
+    copyBtn.onclick = function(){ navigator.clipboard.writeText(plain).then(()=>{ copyBtn.textContent='\u2705 Copied!'; setTimeout(()=>{ copyBtn.textContent='\uD83D\uDCCB Copy'; },1800); }).catch(()=>{}); };
+    shareDiv.appendChild(waLink);
+    shareDiv.appendChild(copyBtn);
+    div.appendChild(shareDiv);
   } else {
     div.textContent = text;
   }
@@ -5315,6 +5387,18 @@ Answer questions specifically about the ${pageLabel} page and concepts related t
     paiHistory.push({ role: 'assistant', content: text });
     if (paiHistory.length > 20) paiHistory = paiHistory.slice(-20);
     paiAddBubble('bot', text);
+    // Add back button
+    const msgs2 = document.getElementById('pai-msgs');
+    if(msgs2){
+      const old = msgs2.querySelector('.pai-back-btn-wrap');
+      if(old) old.remove();
+      const bw = document.createElement('div');
+      bw.className = 'pai-back-btn-wrap';
+      bw.style.cssText = 'text-align:center;padding:8px 0 4px;';
+      bw.innerHTML = '<button onclick="paiScrollToChips()" style="background:var(--p1);border:1.5px solid #C4BDEC;color:var(--p6);border-radius:16px;padding:6px 16px;font-size:11.5px;font-weight:700;font-family:Inter,sans-serif;cursor:pointer">⬆ Back to questions</button>';
+      msgs2.appendChild(bw);
+      msgs2.scrollTop = msgs2.scrollHeight;
+    }
   }).catch(() => {
     typDiv.remove();
     paiAddBubble('bot', '⚠️ Could not reach AI. Please check your connection. Your preset questions above work offline.');
