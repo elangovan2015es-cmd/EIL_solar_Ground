@@ -92,7 +92,11 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 .cust-sec{display:none}
 
 /* SECTION HEADING */
-.sec-h{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:10px;border-bottom:2.5px solid var(--g5)}
+.sec-h{display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:10px;border-bottom:2.5px solid var(--g5);}
+.sec-h-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0;}
+.page-ai-btn{display:inline-flex;align-items:center;gap:5px;background:var(--p6);color:#fff;border:none;border-radius:12px;padding:5px 10px;font-size:10.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 6px rgba(83,74,183,.28);transition:all .15s;flex-shrink:0;white-space:nowrap;}
+.page-ai-btn:active{opacity:.85;transform:scale(.97);}
+.page-ai-btn .pai-dot{width:5px;height:5px;background:#4ADE80;border-radius:50%;animation:pulse-dot 2s infinite;flex-shrink:0;}
 .sec-ic{font-size:20px}
 .sec-ti{font-size:17px;font-weight:700;color:var(--n9)}
 .sec-su{font-size:11px;color:var(--n5);margin-top:2px}
@@ -233,12 +237,10 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .mc-fld input:focus{outline:none;border-color:var(--g5)}
 
 /* FAB */
-.fab-w{position:fixed;bottom:16px;right:16px;z-index:200;pointer-events:none;}
-@media(min-width:900px){.fab-w{right:24px;bottom:20px;}}
-.fab{background:var(--g6);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(15,110,86,.40);pointer-events:all;display:flex;align-items:center;gap:5px;opacity:.92;}
-.fab:active{background:var(--g7);}
-.fab{background:var(--g6);color:#fff;border:none;border-radius:50px;padding:14px 48px;font-size:16px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 4px 16px rgba(15,110,86,.38);transition:all .14s;min-width:170px;letter-spacing:.01em}
-.fab:active{background:var(--g7);transform:scale(.97)}
+.fab-w{position:fixed;bottom:14px;right:14px;z-index:200;pointer-events:none;display:flex;gap:7px;align-items:center;}
+@media(min-width:900px){.fab-w{right:24px;bottom:18px;}}
+.fab{background:var(--g6);color:#fff;border:none;border-radius:22px;padding:9px 18px;font-size:12.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(15,110,86,.38);transition:all .14s;pointer-events:all;display:flex;align-items:center;gap:5px;}
+.fab:active{background:var(--g7);transform:scale(.97);}
 
 /* ═══ AI ASSISTANT ══════════════════════════════════════════════ */
 #s-ai{position:fixed!important;top:calc(var(--hh) + var(--rh));left:0;right:0;bottom:0;display:none;flex-direction:column;z-index:150;background:#F5F9F7;}
@@ -305,6 +307,43 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .ai-add-q-form input{flex:1;min-width:120px;}
 .ai-add-q-btn{background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;flex-shrink:0;}
 
+/* ═══ PAGE-LEVEL AI PANEL ═══════════════════════════════════════ */
+.page-ai-btn{display:inline-flex;align-items:center;gap:6px;background:var(--p6);color:#fff;border:none;border-radius:20px;padding:8px 16px;font-size:12.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(83,74,183,.35);transition:all .15s;margin-top:10px;margin-bottom:2px;}
+.page-ai-btn:active{background:var(--p6);transform:scale(.97);}
+.page-ai-btn .pai-dot{width:7px;height:7px;background:#4ADE80;border-radius:50%;animation:pulse-dot 2s infinite;}
+
+/* Floating page AI panel */
+.pai-overlay{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.40);opacity:0;pointer-events:none;transition:opacity .2s;}
+.pai-overlay.on{opacity:1;pointer-events:all;}
+.pai-panel{position:fixed;bottom:0;left:0;right:0;z-index:700;background:var(--w);border-radius:18px 18px 0 0;box-shadow:0 -4px 30px rgba(0,0,0,.18);display:flex;flex-direction:column;max-height:75vh;min-height:300px;transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);}
+.pai-panel.on{transform:translateY(0);}
+@media(min-width:600px){
+  .pai-panel{left:auto;right:20px;width:420px;bottom:60px;border-radius:16px;max-height:72vh;transform:translateY(calc(100% + 80px));}
+  .pai-panel.on{transform:translateY(0);}
+}
+.pai-hdr{background:var(--p6);border-radius:18px 18px 0 0;padding:12px 15px 10px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
+@media(min-width:600px){.pai-hdr{border-radius:18px 18px 0 0;}}
+.pai-hdr-ic{width:28px;height:28px;background:rgba(255,255,255,.18);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.pai-hdr-t{color:#fff;font-size:13px;font-weight:700;flex:1;}
+.pai-hdr-pg{color:rgba(255,255,255,.7);font-size:10px;margin-top:1px;}
+.pai-close{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;}
+.pai-qs{flex-shrink:0;padding:7px 11px 6px;background:#F8F4FF;border-bottom:1px solid #E8E2FF;}
+.pai-qs-t{font-size:9px;font-weight:700;color:var(--p6);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+.pai-chips{display:flex;flex-direction:column;gap:3px;max-height:120px;overflow-y:auto;}
+.pai-chip{width:100%;text-align:left;background:#fff;border:1px solid #C4BDEC;color:var(--p6);border-radius:6px;padding:6px 10px;font-size:11.5px;font-weight:500;line-height:1.35;font-family:'Inter',sans-serif;cursor:pointer;transition:background .1s;}
+.pai-chip:hover{background:#F0EEFF;}
+.pai-msgs{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:7px;background:#F5F9F7;min-height:80px;}
+.pai-bubble{max-width:88%;padding:9px 11px;border-radius:13px;font-size:12.5px;line-height:1.5;word-break:break-word;}
+.pai-bubble.bot{background:#fff;color:var(--n9);border-radius:4px 13px 13px 13px;box-shadow:0 1px 3px rgba(0,0,0,.07);align-self:flex-start;}
+.pai-bubble.usr{background:var(--p6);color:#fff;border-radius:13px 13px 4px 13px;align-self:flex-end;}
+.pai-bubble.bot strong{font-weight:700;}
+.pai-inp-row{display:flex;gap:6px;padding:7px 10px;background:#fff;border-top:1px solid var(--n3);flex-shrink:0;align-items:flex-end;padding-bottom:calc(7px + env(safe-area-inset-bottom,0px));}
+.pai-inp{flex:1;font-size:13px;padding:8px 11px;border:1.5px solid var(--n3);border-radius:18px;font-family:'Inter',sans-serif;resize:none;max-height:70px;line-height:1.4;outline:none;color:var(--n9);}
+.pai-inp:focus{border-color:var(--p6);}
+.pai-send{width:36px;height:36px;background:var(--p6);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.pai-send:disabled{background:var(--n3);}
+.pai-send svg{width:15px;height:15px;fill:#fff;}
+
 #inst-ban{background:var(--g6);color:#fff;border-radius:11px;padding:11px 13px;margin-bottom:12px;display:none;align-items:center;justify-content:space-between;gap:10px}
 #inst-ban p{font-size:12.5px;font-weight:500}
 #inst-btn{background:#fff;color:var(--g6);border:none;border-radius:6px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
@@ -316,7 +355,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .hbtn{display:none}
   .hdr-t{font-size:14px}
   .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh) + var(--rh) + 24px) 32px 60px 32px;box-sizing:border-box}
-  .fab-w{left:var(--sb)}
+  .fab-w{left:var(--sb);right:24px;bottom:18px;}
   .sec-ti{font-size:20px}
   .mv{font-size:18px}.mv.lg{font-size:28px}
   .ml{font-size:10.5px}
@@ -329,7 +368,6 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   table{font-size:11.5px;min-width:auto}
   td{font-size:11.5px;padding:8px 9px}
   th{font-size:10.5px;padding:8px 9px}
-  .fab{padding:15px 56px;font-size:17px}
   .mg4{grid-template-columns:repeat(4,1fr)}
 }
 @media print{
@@ -346,7 +384,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .hbtn{display:none}
   .hdr-t{font-size:15px}
   .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh) + var(--rh) + 24px) 32px 60px 32px;box-sizing:border-box}
-  .fab-w{left:var(--sb)}
+  .fab-w{left:var(--sb);right:24px;bottom:18px;}
   .sec-ti{font-size:21px}
   .mv{font-size:18px}.mv.lg{font-size:28px}
   .ml{font-size:10.5px}.mu{font-size:10px}
@@ -360,7 +398,6 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   td{font-size:11.5px;padding:8px 9px}
   th{font-size:10.5px;padding:8px 9px}
   .mg4{grid-template-columns:repeat(4,1fr)}
-  .fab{padding:15px 56px;font-size:17px}
   .sec-h{margin-bottom:20px;padding-bottom:14px}
   .cust-grid{grid-template-columns:1fr 1fr 1fr}
 }
@@ -381,7 +418,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v8.4 | 09-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v9.0 | 09-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
@@ -435,7 +472,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 <div class="drw" id="drw">
   <div class="drw-hdr">
     <div>
-      <div class="drw-t">EIL Solar Ground v8.4</div>
+      <div class="drw-t">EIL Solar Ground v9.0</div>
       <div class="drw-s" id="drw-role-sub">Developer View</div>
     </div>
     <button class="drw-x" onclick="closeD()">&#x2715;</button>
@@ -453,7 +490,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- DASHBOARD -->
 <div id="s-db" class="sec dev-sec on">
-  <div class="sec-h"><div class="sec-ic">&#128202;</div><div><div class="sec-ti">Developer Dashboard</div><div class="sec-su">Live project summary</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128202;</div><div><div class="sec-ti">Developer Dashboard</div><div class="sec-su">Live project summary</div></div></div><button class="page-ai-btn" onclick="paiOpen('db')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div id="r-pb" style="display:none"></div><div id="r-tfcf" style="display:none"></div>
   <div class="card">
     <div class="chdr">Project snapshot</div>
@@ -486,7 +523,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- PROJECT INPUTS -->
 <div id="s-in" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">Project Inputs</div><div class="sec-su">Capacity, tariff &amp; costs</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">Project Inputs</div><div class="sec-su">Capacity, tariff &amp; costs</div></div></div><button class="page-ai-btn" onclick="paiOpen('in')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="card">
     <div class="chdr">Plant capacity &mdash; AC side first</div>
     <div class="fld"><label class="flbl">AC installed capacity <span>(MW AC &mdash; editable; default 20 MW)</span></label>
@@ -537,8 +574,8 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <!-- ── INPUT 2: COST PER MW ── -->
     <div class="fld" style="background:var(--b1);border:2px solid var(--b6);border-radius:10px;padding:13px 15px;margin-bottom:8px">
       <label class="flbl" style="color:var(--b6);font-weight:700">&#9654; Cost per MW AC <span style="font-weight:400;color:var(--n6)">(Rs Lakhs per MW AC — all-in total project cost rate)</span></label>
-      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('epcMW',-5);apportionCost()">&#8722;</button><span class="pm-val" id="v-epcMW">500</span><button class="pm-btn right" onclick="pmStep('epcMW',5);apportionCost()">+</button></div>
-      <div class="fhint" style="margin-top:5px">All-in project rate (solar + electricals + evacuation + land + civil + SCADA + prelim). 2025 market for 20 MW at 33 kV: Rs 450–560 L/MW AC. Default Rs 500 L/MW.</div>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('epcMW',-5);apportionCost()">&#8722;</button><span class="pm-val" id="v-epcMW">550</span><button class="pm-btn right" onclick="pmStep('epcMW',5);apportionCost()">+</button></div>
+      <div class="fhint" style="margin-top:5px">All-in project rate (solar panels + electricals + evacuation + land + civil + SCADA + prelim). <strong>Rs 5.50 Cr/MW</strong> — 2025 market benchmark including all components. Stepped from Rs 5.00 to Rs 5.50 Cr/MW due to equipment & civil cost escalation. Default Rs 550 L/MW.</div>
     </div>
 
     <!-- ── TOTAL PROJECT COST (auto) ── -->
@@ -723,7 +760,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- CUSTOMERS -->
 <div id="s-cu" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128100;</div><div><div class="sec-ti">Customers</div><div class="sec-su">Unlimited captive consumers &mdash; add or remove</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128100;</div><div><div class="sec-ti">Customers</div><div class="sec-su">Unlimited captive consumers &mdash; add or remove</div></div></div><button class="page-ai-btn" onclick="paiOpen('cu')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="alert info">All captive consumers collectively must hold minimum 26% equity in the SPV. Individual customers can hold any % — what matters is the total. Each customer must also consume proportionally to their equity share. Add each consumer below.</div>
   <div id="cust-list"></div>
   <button class="add-cust-btn" onclick="addCustomer()">+ Add Customer</button>
@@ -735,7 +772,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- GRID LOSSES -->
 <div id="s-gl" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128268;</div><div><div class="sec-ti">Grid Losses</div><div class="sec-su">TNERC deemed loss &mdash; inputable per voltage</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128268;</div><div><div class="sec-ti">Grid Losses</div><div class="sec-su">TNERC deemed loss &mdash; inputable per voltage</div></div></div><button class="page-ai-btn" onclick="paiOpen('gl')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="alert pu">TNERC T.O. No.7 of 2022, Table 5-12 publishes deemed loss percentages by injection and receiving voltage. These are deducted in kind at SLDC injection point. The values below are pre-filled from TNERC table but are fully editable when SLDC provides certified values.</div>
   <div class="card">
     <div class="chdr pu">Plant injection voltage</div>
@@ -794,7 +831,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- BATTERY & EVACUATION -->
 <div id="s-bt" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128267;</div><div><div class="sec-ti">Battery &amp; Evacuation</div><div class="sec-su">BESS sizing &amp; 110 kV infrastructure</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128267;</div><div><div class="sec-ti">Battery &amp; Evacuation</div><div class="sec-su">BESS sizing &amp; 110 kV infrastructure</div></div></div><button class="page-ai-btn" onclick="paiOpen('bt')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="alert warn">Grid congestion during solar hours is rising in TN. LFP battery prices have fallen sharply &mdash; current 2025 market: Rs 0.65 to 0.85 Cr per MWh. Evening storage earns peak premium and avoids curtailment.</div>
   <div class="card">
     <div class="chdr">Battery storage (BESS)</div>
@@ -834,7 +871,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- DEBT & EQUITY -->
 <div id="s-fi" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#127974;</div><div><div class="sec-ti">Debt &amp; Equity</div><div class="sec-su">Capital structure, O&amp;M &amp; taxation</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#127974;</div><div><div class="sec-ti">Debt &amp; Equity</div><div class="sec-su">Capital structure, O&amp;M &amp; taxation</div></div></div><button class="page-ai-btn" onclick="paiOpen('fi')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="alert bl" style="background:var(--b1);color:var(--b6);border-left:4px solid #378ADD;padding:11px 13px;border-radius:9px;font-size:12.5px;margin-bottom:13px;font-weight:500">
     <strong>Why does reducing debt extend payback?</strong> Payback is measured against equity invested. Less debt means more equity upfront. Even though FCF improves slightly (less interest), you have far more equity to recover &mdash; so payback extends. This is correct financial behaviour, not a model error. Lower debt = lower risk but longer payback.</div>
   <div class="card">
@@ -880,7 +917,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- 25-YEAR CASH FLOW -->
 <div id="s-cf" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128200;</div><div><div class="sec-ti">25-Year Cash Flow</div><div class="sec-su">FCF, payback &amp; chart</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128200;</div><div><div class="sec-ti">25-Year Cash Flow</div><div class="sec-su">FCF, payback &amp; chart</div></div></div><button class="page-ai-btn" onclick="paiOpen('cf')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div id="pb-alert" class="alert ok">&#8212;</div>
   <div class="card" style="padding:15px 15px 8px">
     <div class="chdr">Cumulative cash flow</div>
@@ -896,7 +933,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- 25-YEAR REPORT -->
 <div id="s-rp" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128196;</div><div><div class="sec-ti">25-Year Detailed Report</div><div class="sec-su">Full P&amp;L, depreciation, tax &amp; debt service</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128196;</div><div><div class="sec-ti">25-Year Detailed Report</div><div class="sec-su">Full P&amp;L, depreciation, tax &amp; debt service</div></div></div><button class="page-ai-btn" onclick="paiOpen('rp')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div id="pb-note2" class="alert ok">&#8212;</div>
   <div class="card"><div class="chdr">Generation &amp; Revenue (Rs Cr)</div><div class="tw"><table><thead><tr><th>Yr</th><th>Gross MU</th><th>Loss%</th><th>Net MU</th><th>SP</th><th>OA</th><th>Net Rs</th><th>GrossRev</th><th>OAChg</th><th>NetRev</th></tr></thead><tbody id="rpt-gen"></tbody></table></div></div>
   <div class="card"><div class="chdr">Costs, EBITDA &amp; IT Depreciation (Rs Cr)</div><div class="tw"><table><thead><tr><th>Yr</th><th>O&amp;M</th><th>Ins</th><th>OpEx</th><th>EBITDA</th><th>EBITDA%</th><th>WDV Open</th><th>IT Dep</th><th>WDV Close</th></tr></thead><tbody id="rpt-ebd"></tbody></table></div></div>
@@ -907,7 +944,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- ACTUAL vs PROJECTED -->
 <div id="s-av" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128201;</div><div><div class="sec-ti">Actual vs Projected</div><div class="sec-su">Live data capture &amp; variance analysis</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128201;</div><div><div class="sec-ti">Actual vs Projected</div><div class="sec-su">Live data capture &amp; variance analysis</div></div></div><button class="page-ai-btn" onclick="paiOpen('av')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="alert or">Enter actual monthly generation and billing data. The app automatically calculates variance against projected values and shows performance trend.</div>
   <div class="card">
     <div class="chdr or">Commissioning date &amp; year</div>
@@ -958,7 +995,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 <!-- REGULATORY -->
 <div id="s-rg" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">All fields editable &mdash; update when TNERC issues new orders</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">All fields editable &mdash; update when TNERC issues new orders</div></div></div><button class="page-ai-btn" onclick="paiOpen('rg')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
   <div class="alert info">Every field is editable. Update whenever TNERC issues a new Tariff Order or OA charge is revised. Click Save to store in your browser for next session.</div>
   <div class="card">
     <div class="chdr" style="display:flex;justify-content:space-between;align-items:center"><span>Group Captive CPP &mdash; Key parameters</span><button onclick="saveRegData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button></div>
@@ -1021,7 +1058,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 </div>
 
 <div id="s-tn" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#9989;</div><div><div class="sec-ti">TNERC Compliance</div><div class="sec-su">Monthly tracking &amp; annual TNPDCL certificate</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#9989;</div><div><div class="sec-ti">TNERC Compliance</div><div class="sec-su">Monthly tracking &amp; annual TNPDCL certificate</div></div></div><button class="page-ai-btn" onclick="paiOpen('tn')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
 
   <div class="alert or">
     <strong>Annual obligation:</strong> At the end of each year submit to TNPDCL that Group Captive CPP status is maintained. Three rules must be met: (1) All customers collectively hold &ge;26% SPV equity. (2) Total captive consumption &ge;51% of net generation. (3) Each customer consumes proportionally to their equity stake (&plusmn;10% tolerance per TNERC). This section tracks all three month by month.
@@ -1097,7 +1134,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
      PROJECT REPORT — s-pr  (was missing — now added in v6.7)
      ══════════════════════════════════════════════════════════════════ -->
 <div id="s-pr" class="sec dev-sec">
-  <div class="sec-h"><div class="sec-ic">&#128194;</div><div><div class="sec-ti">Project Report</div><div class="sec-su">Full bankable DPR — fill questionnaire &rarr; generate &rarr; share</div></div></div>
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128194;</div><div><div class="sec-ti">Project Report</div><div class="sec-su">Full bankable DPR — fill questionnaire &rarr; generate &rarr; share</div></div></div><button class="page-ai-btn" onclick="paiOpen('pr')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
 
   <div class="alert or" style="font-size:13px">
     <strong>How to use:</strong> Fill the questionnaire below (one-time, saved in browser). Click <em>Generate Full Report (.txt)</em> to download a Word-ready DPR. Use <em>Export P&amp;L to CSV</em> for an Excel-ready financial table. Share buttons let you email or WhatsApp the report directly.
@@ -1369,11 +1406,11 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 </div><!-- /s-ai -->
 
 <!-- CALCULATE FAB — shown only in developer view -->
-<div class="fab-w" id="calc-fab"><button class="fab" onclick="calc()">&#9889; Calculate</button></div>
+<div class="fab-w" id="calc-fab"><button class="fab" style="background:var(--p6);box-shadow:0 3px 10px rgba(83,74,183,.38)" id="fab-ai-btn" onclick="fabOpenAI()">🤖 Ask AI</button><button class="fab" onclick="calc()">&#9889; Calculate</button></div>
 
 
 <script>
-const BUILD='v8.4 | Build: 20260509-1000 IST';
+const BUILD='v9.0 | Build: 20260509-1800 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -1423,6 +1460,7 @@ function setRole(r){
 /* ── NAVIGATION ── */
 const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg','ai'];
 const CUST_SECS=['ci','cs','cc','ca','ai'];
+let currentPage = 'db';
 function go(id){
   const allSecs=[...DEV_SECS,...CUST_SECS];
   // Hide all sections
@@ -1438,15 +1476,23 @@ function go(id){
     // AI section is a fixed flex column — don't override with 'block'
     target.style.display = (id==='ai') ? '' : 'block';
   }
+  currentPage = id;
   setActiveSb(id);
   closeD();
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='ca')buildActualCustRows();
   if(id==='ci'||id==='cs'||id==='cc')calcCustomer();
-  // FAB: only show on input sheets in developer view
-  const INPUT_SECS = ['in','cu','gl','bt','fi'];
+  // FAB: show on all dev pages (both buttons), hide on AI page and customer pages
   const fab=document.getElementById('calc-fab');
-  if(fab) fab.style.display=(ROLE==='dev' && INPUT_SECS.includes(id))?'flex':'none';
+  const fabAI=document.getElementById('fab-ai-btn');
+  const INPUT_SECS=['in','cu','gl','bt','fi'];
+  const ALL_DEV=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg'];
+  if(fab){
+    fab.style.display=(ROLE==='dev' && ALL_DEV.includes(id))?'flex':'none';
+    // Calculate button: only on input pages
+    const calcBtn=fab.querySelector('button:last-child');
+    if(calcBtn) calcBtn.style.display=INPUT_SECS.includes(id)?'flex':'none';
+  }
   if(id==='ai'){
     const devPanel=document.getElementById('ai-dev-panel');
     const chatScreen=document.getElementById('ai-chat-screen');
@@ -1506,7 +1552,7 @@ const PM={
   peak:{v:33,min:0,max:50,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
   tariff:{v:7.50,min:4,max:20,dec:2},disc:{v:85,min:70,max:99,dec:1},
   oa:{v:0.95,min:0.3,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
-  epcMW:{v:500,min:200,max:800,dec:0},   // Rs Lakhs per MW AC — all-in TPC rate
+  epcMW:{v:550,min:200,max:900,dec:0},   // Rs Lakhs per MW AC — all-in TPC rate (5.50 Cr/MW includes land+electricals+evacuation+solar equipment)
   // derived by apportionCost() — do not edit directly:
   epc:{v:70.0,min:0,max:500,dec:2},land:{v:10.80,min:0,max:100,dec:2},
   evac:{v:10.0,min:0,max:60,dec:2},misc:{v:10.0,min:0,max:50,dec:2},
@@ -3993,7 +4039,7 @@ Net Generation: ${netMU} MU/year
 Selling Price: Rs ${sp1}/kWh | OA: Rs ${oa}/kWh
 CSS & Additional Surcharge: ZERO (Group Captive CPP)
 TNERC T.O. ref: ${(document.getElementById('rg-to-ref')||{value:'T.O. No.7/2022'}).value}
-App: EIL Solar Ground PWA v6.7`;
+App: EIL Solar Ground PWA v9.0`;
 }
 function shareViaEmail(){
   const co=(document.getElementById('q-company')||{value:''}).value||'Company';
@@ -4942,9 +4988,352 @@ function aiRenderQList(){
 }
 
 
+</script>
+<!-- ══ PAGE-LEVEL AI FLOATING PANEL ═════════════════════════════════ -->
+<div class="pai-overlay" id="pai-overlay" onclick="paiClose()"></div>
+<div class="pai-panel" id="pai-panel">
+  <div class="pai-hdr">
+    <div class="pai-hdr-ic">🤖</div>
+    <div style="flex:1;min-width:0">
+      <div class="pai-hdr-t">Solar AI Assistant</div>
+      <div class="pai-hdr-pg" id="pai-page-label">Page Q&A</div>
+    </div>
+    <div class="ai-online" style="margin-right:4px"></div>
+    <button class="pai-close" onclick="paiClose()">✕ Close</button>
+  </div>
+  <div class="pai-qs" id="pai-qs-wrap">
+    <div class="pai-qs-t">💡 Suggested questions for this page</div>
+    <div class="pai-chips" id="pai-chips"></div>
+  </div>
+  <div class="pai-msgs" id="pai-msgs"></div>
+  <div class="pai-inp-row">
+    <textarea class="pai-inp" id="pai-inp" rows="1" placeholder="Ask about this page…" oninput="paiAutoResize(this)" onkeydown="paiKeyDown(event)"></textarea>
+    <button class="pai-send" id="pai-send-btn" onclick="paiSend()">
+      <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+    </button>
+  </div>
+</div>
 
+<script>
+/* ══ PAGE-LEVEL AI QUESTIONS ════════════════════════════════════════ */
 
+function fabOpenAI(){
+  // Open page AI for the current visible page
+  const pageId = currentPage || 'db';
+  if(PAGE_AI_QA[pageId]){
+    paiOpen(pageId);
+  } else {
+    // fallback: go to AI page
+    go('ai');
+  }
+}
+const PAGE_AI_QA = {
+  db: {
+    label: 'Dashboard',
+    qs: [
+      { q: 'What does the Dashboard show me at a glance?',
+        a: '**Dashboard** is your real-time project command centre. It shows:\n\n| Metric | Meaning |\n|---|---|\n| Total Capex | Full project investment (solar + BESS if any) |\n| Equity | Your 30% contribution upfront |\n| Net Gen Yr-1 | Actual units sold after all losses |\n| EBITDA Yr-1 | Profit before interest, tax, depreciation |\n| FCF Yr-1 | Cash in pocket after debt service |\n| Return multiple | Total 25-yr return ÷ equity invested |\n\nAll figures update live as you change any input.' },
+      { q: 'Why is EBITDA different from FCF?',
+        a: '**EBITDA vs FCF:**\n\n- **EBITDA** = Revenue − O&M − Insurance. No interest, no tax, no loan repayment.\n- **FCF (Free Cash Flow)** = EBITDA − Interest − Principal − Tax. This is actual cash available to equity holders.\n\nIn early years (debt repayment period), FCF is significantly lower than EBITDA. After Year 10 (loan repaid), FCF ≈ EBITDA − Tax. That jump in Year 11+ is when equity returns accelerate dramatically.' },
+      { q: 'What is the return multiple and is it good?',
+        a: '**Return multiple** = Total 25-year FCF ÷ Equity invested.\n\nAt Rs 5.50 Cr/MW with 70% debt:\n- Equity ≈ Rs 33 Cr for 20 MW project\n- Total 25-year FCF ≈ Rs 280–330 Cr\n- Return multiple ≈ **8.5 to 10x equity**\n\nFor context: A fixed deposit gives 1.8x over 25 years. Equity markets average 4–5x. Solar Group Captive at 8–10x is excellent — with locked tariff, government-backed TNERC framework, and zero market risk.' },
+      { q: 'How is selling price calculated on the dashboard?',
+        a: '**Selling price (Year 1)** = TNEB weighted tariff × Discount %\n\nFor HT-I Industry (Rs 7.50/kWh base):\n- Solar weighted = (4 peak hrs × Rs 9.375 + 8 normal hrs × Rs 7.50) ÷ 12 = **Rs 8.125/kWh**\n- Selling price at 85% = **Rs 6.906/kWh**\n- Developer net after OA Rs 0.95 = **Rs 5.956/kWh**\n\nThis escalates ~3%/yr. By Year 10, customer pays ~Rs 9.27/kWh vs direct TNEB ~Rs 10.08/kWh. Savings widen every year.' },
+    ]
+  },
+  in: {
+    label: 'Project Inputs',
+    qs: [
+      { q: 'Why is the project cost set at Rs 5.50 Cr per MW?',
+        a: '**Rs 5.50 Cr/MW (Rs 550 Lakhs/MW)** is the 2025–26 all-in benchmark for ground-mount solar in Tamil Nadu, including:\n\n| Component | Inclusion |\n|---|---|\n| Solar panels (ALMM-listed) | ✅ Yes |\n| String inverters / central inverters | ✅ Yes |\n| Mounting structures (ground) | ✅ Yes |\n| DC & AC cabling | ✅ Yes |\n| Electricals & HT panels | ✅ Yes |\n| Evacuation substation | ✅ Yes |\n| Land (3 acres/MW × Rs 18 L/acre) | ✅ Yes |\n| Civil & fencing | ✅ Yes |\n| SCADA / monitoring | ✅ Yes |\n| Preliminary & contingency | ✅ Yes |\n\nPrevious Rs 5.00 Cr benchmark was revised upward due to equipment cost escalation (module prices, steel structures, copper cabling) and increased civil costs.' },
+      { q: 'What is DC to AC ratio and why 1.30?',
+        a: '**DC:AC ratio** = DC panel capacity ÷ AC inverter capacity.\n\nAt 1.30: 20 MW AC inverters are fitted with 26 MW DC panels.\n\n**Why overdrive?** Solar irradiation is rarely at peak 100% simultaneously. Inverter clipping occurs <5% of time. Benefits:\n- Better utilisation during morning and evening hours\n- Higher annual energy yield at modest extra cost\n- TNERC / lenders accept up to 1.35 for Tamil Nadu\n\n1.30 is the Tamil Nadu industry standard — optimised for Chennai–Trichy irradiation belt (~1,820 kWh/m²/yr).' },
+      { q: 'What is CUF / PLF and is 20.4% realistic?',
+        a: '**CUF (Capacity Utilisation Factor)** = Annual generation ÷ (Installed MW × 8760 hrs).\n\n20.4% CUF means the 20 MW plant generates 20.4% of what it would at 100% for 8760 hrs.\n\n**Tamil Nadu benchmarks (TNERC / MNRE):**\n- P50 (50% probability) for ground-mount: **19–22%**\n- South TN (Tirunelveli, Thoothukudi): up to 24%\n- North TN (Chennai, Kancheepuram): 18–21%\n\n20.4% is conservative and lender-safe. Real-world TN projects often achieve 21–22% once panel soiling is managed with regular cleaning.' },
+      { q: 'What is the OA charge and why does the developer bear it?',
+        a: '**Open Access (OA) charge** is the fee paid to TANTRANSCO/TANGEDCO for using the state grid to wheel power from the solar plant to the customer.\n\nTotal OA = Rs 0.95/kWh (with 30% solar concession):\n\n| Component | Full rate | After 30% concession |\n|---|---|---|\n| Wheeling (HT) | Rs 1.04 | Rs 0.728 |\n| State transmission | Rs 0.224/MWh | Rs 0.157 |\n| SLDC scheduling | Rs 0.064/MWh | Rs 0.045 |\n| Additional surcharge | Rs 0.10 | Rs 0.10 |\n\nDeveloper bears it so **customer sees only one clean price** (the selling price). This simplifies billing — customer pays Rs 6.906/kWh and nothing else.' },
+    ]
+  },
+  cu: {
+    label: 'Customers',
+    qs: [
+      { q: 'What is the 26% equity rule for customers?',
+        a: '**CERC Captive Rules 2001 — Rule 3:** All captive consumers collectively must own minimum **26% equity** in the generating SPV.\n\n- This 26% is the **collective total** — not per customer\n- Developer / promoter holds the remaining 74%\n- Any individual customer can hold any %, as long as all customers together ≥ 26%\n\n**Penalty for breach:** If collective equity drops below 26% in any year, the plant loses captive status for that year → CSS (Cross Subsidy Surcharge ≈ Rs 2.41/kWh) is levied retroactively on ALL units consumed. That could wipe out an entire year\'s profit.' },
+      { q: 'What is the 51% consumption obligation?',
+        a: '**Rule 4 of CERC Captive Rules 2001:** At least 51% of total annual generation must be consumed by captive consumers.\n\n**Example:** If plant generates 40 MU in a year, captive consumers must collectively consume at least **20.4 MU** (51%).\n\nNote: The 51% rule works alongside the proportional consumption rule — each customer must consume proportional to their equity share (±10% tolerance). If a customer\'s consumption falls below their allotment, TNPDCL may charge CSS on the deficit units.' },
+      { q: 'How is each customer\'s allotment calculated?',
+        a: '**Customer allotment** = Customer equity % ÷ Total customer equity % × Net annual generation.\n\n**Example:**\n- Total net generation: 40 MU\n- Customer A holds 30% equity (of the 26% collective = 7.8% of total project)\n- Customer A\'s allotment = 30% ÷ 100% × 40 × 51% = proportional share\n\nThe app calculates this automatically for each customer. Monthly tracker in TNERC Compliance tab shows running total vs obligation.\n\n**Tolerance:** ±10% per TNERC is allowed. Shortfall beyond 10% triggers CSS on deficit.' },
+      { q: 'Can a customer exit or transfer their equity stake?',
+        a: '**Yes — equity is transferable** but with conditions:\n1. SPV Board approval required\n2. Collective 26% rule must remain satisfied after transfer\n3. TNPDCL to be notified of equity change\n4. Power Supply Agreement (PSA) amended for new allotment\n5. If new investor is not from same industry category, tariff may need revision\n\n**Transfer timeline:** Typically 30–60 days for regulatory update. During transition, the outgoing customer continues to consume their allotment to avoid compliance breach.' },
+    ]
+  },
+  gl: {
+    label: 'Grid Losses',
+    qs: [
+      { q: 'How did you arrive at a technical loss of 7.5%? Can you explain?',
+        a: '**Total Technical Loss = 7.5%** is the sum of three components:\n\n| Component | Loss % | Source |\n|---|---|---|\n| Transmission loss (110 kV injection) | **0.0%** | TNERC T.O.7/2022 Table 5-12 — NIL at 110 kV |\n| Distribution loss (110 kV → 11 kV buyer) | **1.5%** | TNERC T.O.7/2022 Table 5-12 |\n| Plant internal losses | **6.0%** | Industry standard breakdown |\n| **Total** | **7.5%** | |\n\n**Plant internal 6.0% breakdown:**\n- DC cable losses: 1.5%\n- Inverter conversion losses: 2.0%\n- Transformer losses: 0.5%\n- Soiling, mismatch, shading: 2.0%\n\nSo of every 100 units generated by panels, 7.5 units are lost — 92.5 units actually reach customers. This 7.5% is conservative and consistent with TNERC / CERC project norms.' },
+      { q: 'What happens if the grid loss percentage changes?',
+        a: '**Impact of changing grid loss %:**\n\nIf loss increases from 7.5% to 9.0%:\n- Net generation drops by 1.5% × Gross generation\n- For 46 MU gross → net drops from 42.6 MU to 41.9 MU (−0.7 MU)\n- Revenue impact: −0.7 MU × Rs 6.91/kWh ≈ **−Rs 48 Lakhs/year**\n- Over 25 years with escalation: **−Rs 3–4 Crores** cumulative\n\nUse actual SLDC-certified loss values at commissioning — they may differ from TNERC published norms. The app lets you edit each component independently.' },
+      { q: 'What is the difference between transmission and distribution loss?',
+        a: '**Transmission loss** = Loss in the high-voltage backbone network (110 kV and above) from the plant injection point to the grid substation. At 110 kV injection, TNERC sets this at **NIL** — the 110 kV network is assumed lossless for billing purposes.\n\n**Distribution loss** = Loss in the lower-voltage distribution network from 110 kV substation down to the customer\'s receiving meter (11 kV or 33 kV). At 11 kV receiving voltage: **1.52%** per TNERC.\n\n**Plant internal loss** is separate — this is within the solar plant boundary before the grid injection meter.' },
+      { q: 'Which TNERC order governs the loss table?',
+        a: '**TNERC T.O. No.7 of 2022** (effective 01-07-2023), Table 5-12 — "Deemed Loss Percentages for Open Access Transactions."\n\nKey values from Table 5-12:\n\n| Injection → Delivery | Trans | Distrib | Total |\n|---|---|---|---|\n| 110 kV → 11 kV | 0.00% | 1.52% | **1.52%** |\n| 110 kV → 33 kV | 0.00% | 0.50% | **0.50%** |\n| 33 kV → 11 kV | 3.91% | 1.52% | **5.43%** |\n| 33 kV → 33 kV | 3.91% | 0.00% | **3.91%** |\n\nThese are "deemed" losses — actual physical losses may differ, but TNERC uses these for billing calculations. Update when TNERC issues a new T.O.' },
+    ]
+  },
+  bt: {
+    label: 'Battery & Evacuation',
+    qs: [
+      { q: 'Should we include a battery (BESS) in this project?',
+        a: '**Battery storage (BESS) — Decision matrix:**\n\n| Factor | Without BESS | With BESS |\n|---|---|---|\n| Evening peak revenue | ❌ Zero | ✅ Rs 1.50/kWh premium |\n| Grid curtailment risk | Higher | Lower |\n| Added capex (10 MWh LFP) | — | +Rs 7.5 Cr |\n| IRR impact | Base | +0.8–1.2% |\n| Payback extension | — | +6–9 months |\n\nFor this project, BESS is recommended if:\n1. Grid congestion during 12–4 PM is frequent in your district\n2. Evening peak demand exists from industrial consumers\n3. You can negotiate Rs 1.50–2.00/kWh evening premium\n\nLFP prices have fallen to Rs 0.65–0.85 Cr/MWh (2025), making BESS increasingly viable.' },
+      { q: 'What is the 110 kV evacuation requirement for 20 MW?',
+        a: '**CEA / TNERC voltage norms for Tamil Nadu:**\n\n| Capacity | Evacuation voltage |\n|---|---|\n| Up to 5 MW | 11 kV (TANGEDCO HT feeder) |\n| 5 MW to 33 MW | **33 kV (TANTRANSCO)** |\n| Above 33 MW | 110 kV EHT (TANTRANSCO) |\n\n**This project: 20 MW AC → 33 kV evacuation** is the mandatory standard. However, if land is close to an existing 110 kV TANTRANSCO substation and they have spare bay capacity, upgrading to 110 kV reduces transmission loss from 3.91% to NIL. Actual voltage is fixed at the time of TANTRANSCO bay allotment application.' },
+      { q: 'What is round-trip efficiency and why does it matter?',
+        a: '**Round-trip efficiency (RTE)** = Energy out of battery ÷ Energy put into battery.\n\nAt 88% RTE:\n- For every 100 kWh stored from solar → only 88 kWh available for evening dispatch\n- 12 kWh is lost as heat in battery chemistry, converters, and BMS\n\n**Impact on economics:**\n- 15% of solar stored × 88% RTE = 13.2% of generation available for evening premium\n- If evening premium = Rs 1.50/kWh → net gain = Rs 1.50 × 88% = Rs 1.32/kWh on stored energy\n\nLFP batteries (Lithium Iron Phosphate) achieve 88–92% RTE — best choice for solar storage due to 6,000+ cycle life and thermal stability.' },
+    ]
+  },
+  fi: {
+    label: 'Debt & Equity',
+    qs: [
+      { q: 'What is the payback period for this project?',
+        a: '**Payback period** = Time taken to recover the equity investment from free cash flow.\n\nAt Rs 5.50 Cr/MW, 20 MW project:\n- Total capex: Rs 110 Cr\n- Equity (30%): **Rs 33 Cr**\n- FCF Year 1 (after interest, principal, tax): ~Rs 4–5 Cr\n- Equity payback: **Year 6 to Year 8**\n\nAfter debt repayment (Year 10+), FCF nearly doubles — equity paid back from free cash flow that grows 3% per year with TNEB tariff escalation. The remaining 15+ years are essentially pure return on already-recovered equity.' },
+      { q: 'Will 70% debt make the project viable? Is it too risky?',
+        a: '**70% debt is the industry-standard for solar projects in India** and is considered optimal, not risky:\n\n| Parameter | This project |\n|---|---|\n| Debt | 70% = Rs 77 Cr |\n| Equity | 30% = Rs 33 Cr |\n| Interest rate | 9% p.a. |\n| Tenure | 10 years |\n| DSCR Year 1 (moratorium) | ~2.8x (only interest) |\n| DSCR Year 2 onwards | ~1.8–2.2x |\n\n**Lender minimum DSCR = 1.25x** — this project clears that comfortably.\n\n70% debt amplifies equity returns (leverage effect). At 100% equity, IRR ≈ 12%. At 70% debt, equity IRR rises to 18–20% due to leverage. Lower risk projects like solar (25-year TNEB-linked revenue) support higher leverage safely.' },
+      { q: 'What is the IRR for this project?',
+        a: '**IRR (Internal Rate of Return)** = The discount rate that makes NPV of all cash flows = zero.\n\n**Project-level IRR (WACC basis):**\n- Gross capex: Rs 110 Cr (20 MW × Rs 5.50 Cr)\n- 25-year FCFF stream (before financing)\n- **Project IRR ≈ 13.5–15.5%**\n\n**Equity IRR (levered — what promoter earns):**\n- Equity invested: Rs 33 Cr\n- 25-year FCF to equity (after debt service)\n- **Equity IRR ≈ 18–22%**\n\nIRR is highly sensitive to:\n- Tariff escalation assumption (3% used here)\n- OA charge stability\n- PLF/CUF achievement\n\nUse the 25-Year Cash Flow tab to see the exact IRR computed from live model values.' },
+      { q: 'If cost of debt goes beyond 9%, how does it affect the project?',
+        a: '**Sensitivity: Cost of Debt vs Project Returns**\n\n| Cost of Debt | Annual Interest (Rs Cr) | FCF Yr-1 impact | Equity IRR |\n|---|---|---|---|\n| 8.0% | Rs 6.16 Cr | Base + Rs 0.77 Cr | +1.2% |\n| **9.0% (base)** | **Rs 6.93 Cr** | **Base** | **Base** |\n| 10.0% | Rs 7.70 Cr | −Rs 0.77 Cr | −1.4% |\n| 11.0% | Rs 8.47 Cr | −Rs 1.54 Cr | −2.7% |\n| 12.0% | Rs 9.24 Cr | −Rs 2.31 Cr | −4.0% |\n\n**At 11%:** Project still viable (DSCR ~1.5x), equity IRR drops to ~16–17% — still acceptable.\n**At 12%+:** Project viable but equity returns compress; may need tariff renegotiation.\n\nMitigation: Lock interest rate at financial close (floating → fixed swap), or negotiate a 6-month moratorium extension.' },
+      { q: 'What is O&M cost and why does it escalate at 5% per year?',
+        a: '**O&M (Operations & Maintenance)** at 1% of solar capex per year is industry standard:\n\n| O&M component | Approx % |\n|---|---|\n| Module cleaning (water, labour) | 0.35% |\n| Inverter servicing | 0.20% |\n| Security & civil maintenance | 0.15% |\n| Electrical maintenance | 0.15% |\n| SCADA / monitoring | 0.10% |\n| Miscellaneous | 0.05% |\n\n5% annual escalation reflects wage inflation, spare parts cost increases, and aging-related maintenance. By Year 10, O&M = 1.63% of original capex. By Year 25, O&M = 3.39% — but tariff escalation keeps it covered.' },
+    ]
+  },
+  cf: {
+    label: '25-Year Cash Flow',
+    qs: [
+      { q: 'What is FCF and how is it calculated?',
+        a: '**FCF (Free Cash Flow)** = Revenue − O&M − Insurance − Interest − Principal − Tax\n\n**Year-by-Year structure:**\n\n| Year | Event |\n|---|---|\n| 1 | Moratorium: only interest, no principal. FCF higher. |\n| 2–10 | Full debt service: interest + EMI principal. FCF compressed. |\n| 11–25 | Debt free. FCF = EBITDA − Tax. Nearly doubles. |\n\n**Growth drivers:**\n- TNEB tariff escalation: +3%/yr (selling price grows)\n- O&M escalation: +5%/yr (cost grows faster)\n- Net effect: FCF grows at ~2.5%/yr on average over 25 years' },
+      { q: 'When does the equity payback happen?',
+        a: '**Equity payback** = Year when cumulative FCF first exceeds equity invested.\n\nAt Rs 5.50 Cr/MW, 20 MW, 70% debt:\n- Equity = Rs 33 Cr\n- Cumulative FCF crosses Rs 33 Cr in **Year 7 or 8**\n\nAfter payback, all subsequent FCF is pure return — equivalent to getting your money back and then 15+ more years of income. This is why long-tenor solar projects are compelling as infrastructure investments.' },
+      { q: 'What is the 25-year cumulative return?',
+        a: '**25-year cumulative FCF** at current model parameters:\n- TNEB HT-I tariff, Rs 6.91/kWh Year 1, 3% escalation\n- 20 MW, Rs 5.50 Cr/MW, 70% debt at 9%, 10 years\n\nExpected range: **Rs 290–340 Crores** (total FCF over 25 years to equity)\n\nAgainst equity of Rs 33 Cr → **Return multiple ≈ 8.8–10.3x**\n\nSee exact figure in the 25-Year Report tab — it shows year-by-year FCF, cumulative, payback year, and return multiple computed from live inputs.' },
+    ]
+  },
+  rp: {
+    label: '25-Year Report',
+    qs: [
+      { q: 'What is included in the 25-Year Report?',
+        a: '**25-Year Report** is the full P&L + balance sheet projection:\n\n✅ Annual revenue (escalating TNEB tariff × net generation)\n✅ O&M expenses (5% escalation)\n✅ EBITDA (Earnings Before Interest, Tax, Depreciation, Amortisation)\n✅ Depreciation (WDV method, 40% Year 1 + 20% subsequent)\n✅ Interest (reducing balance on 70% debt)\n✅ PBT (Profit Before Tax)\n✅ Tax (25% on PBT, with deferred tax in early years)\n✅ PAT (Profit After Tax)\n✅ FCF (actual cash — PAT + depreciation − principal)\n✅ Cumulative FCF and payback marker\n\nExport to CSV opens in Excel with all 25 years.' },
+      { q: 'Why is depreciation important in the financial model?',
+        a: '**Depreciation reduces taxable profit** — this is the most powerful tax shield in solar:\n\n**WDV (Written Down Value) method:**\n- Year 1: 40% of capex depreciated (Rs 44 Cr on Rs 110 Cr)\n- Year 2: 20% of remaining WDV\n- Subsequent years: 20% of remaining WDV\n\nIn Years 1–5, depreciation is so high that PBT may be near zero → **near-zero tax** in early years. This front-loads cash flow when debt repayment is heaviest — a deliberate tax planning benefit.\n\nBy Year 10+, WDV is small → depreciation shrinks → tax kicks in. But by then, debt is repaid and FCF is very high.' },
+    ]
+  },
+  av: {
+    label: 'Actual vs Projected',
+    qs: [
+      { q: 'How do I use the Actual vs Projected tracker?',
+        a: '**Actual vs Projected tracker:**\n\n1. **Projected** values auto-fill from the financial model (your PLF, tariff, etc.)\n2. Enter each month\'s **actual generation (MU)** from your SLDC meter reading\n3. Enter **actual billing (Rs Cr)** from invoices to customers\n4. App calculates **variance %** and flags underperformance\n\n**Green** = actual ≥ projected\n**Amber** = within 5% shortfall\n**Red** = >5% shortfall → investigate (soiling, equipment fault, curtailment)\n\nYear-to-date summary shows cumulative performance — critical for bank reporting and TNPDCL compliance.' },
+      { q: 'What could cause actual generation to be below projected?',
+        a: '**Common causes of generation underperformance:**\n\n| Cause | Typical Impact | Fix |\n|---|---|---|\n| Panel soiling (dust) | −5 to −15% | Increase cleaning frequency |\n| Grid curtailment | −2 to −8% | SLDC scheduling dispute |\n| Inverter faults | −1 to −5% | Preventive maintenance |\n| Shading (new obstruction) | −1 to −3% | Site survey |\n| Weather (below P50 irradiation) | −2 to −10% | Not controllable |\n| Meter error | −2 to +2% | Meter calibration check |\n\nCompare against SLDC daily generation logs. If actual < SLDC reading, check metering. If SLDC < projected, check curtailment or irradiation data.' },
+    ]
+  },
+  pr: {
+    label: 'Project Report',
+    qs: [
+      { q: 'What is the DPR and who needs it?',
+        a: '**DPR (Detailed Project Report)** is the bankable feasibility report submitted to:\n1. **Financing banks** — for project loan sanction\n2. **TANTRANSCO** — for 110 kV bay allocation and evacuation approval\n3. **TNERC** — for Group Captive CPP registration\n4. **Investors / customers** — for equity commitment\n\nThis app generates a full DPR with: project background, technical parameters, financial projections, regulatory framework, O&M plan, risk analysis, and compliance structure.\n\nGenerate → Download → Open in Word/Google Docs → Format → Submit.' },
+      { q: 'Which banks typically finance Group Captive CPP solar projects?',
+        a: '**Banks active in TN solar project finance (2025):**\n\n| Bank | Typical terms |\n|---|---|\n| State Bank of India | 9–10% p.a., 10–12 yr, DSCR 1.25x |\n| Indian Renewable Energy Dev Agency (IREDA) | 8.5–9.5%, 15 yr |\n| Punjab National Bank | 9–9.5%, 10 yr |\n| Bank of Baroda | 9–9.5%, 10 yr |\n| Axis Bank / HDFC Bank | 9.5–10.5%, 8–10 yr |\n\n**Documents needed (besides DPR):**\n- Land documents (patta, EC)\n- TNERC in-principle approval\n- Power Supply Agreements (PSAs) with customers\n- Customer financial statements (for captive consumption guarantee)' },
+    ]
+  },
+  tn: {
+    label: 'TNERC Compliance',
+    qs: [
+      { q: 'What are the three rules for Group Captive compliance?',
+        a: '**Three mandatory rules (CERC Captive Rules 2001):**\n\n**Rule 1 — Collective equity ≥ 26%**\nAll captive customers together must hold ≥ 26% of SPV equity. Monitor annually.\n\n**Rule 2 — Total consumption ≥ 51%**\nAll captive customers collectively must consume ≥ 51% of net annual generation.\n\n**Rule 3 — Proportional consumption**\nEach customer must consume proportional to their equity share (±10% tolerance).\n\n**Penalty:** Breach of any rule → CSS (Cross Subsidy Surcharge ≈ Rs 2.41/kWh) levied retroactively on all units for the year. Annual certificate to TNPDCL by 30th April each year.' },
+      { q: 'When is the TNPDCL compliance certificate due?',
+        a: '**TNPDCL Annual Compliance Certificate:**\n\n- **Due date:** 30th April each year (for previous financial year April–March)\n- **Authority:** TNPDCL — Chief Engineer (Open Access), 144 Anna Salai, Chennai 600002\n- **Format:** As per TNERC Group Captive OA Regulations\n\n**Certificate contents:**\n1. SPV details and equity register\n2. Customer-wise equity % (must total ≥ 26%)\n3. Monthly SLDC-metered generation\n4. Customer-wise consumption (TANGEDCO meter)\n5. Proportionality check (each customer ±10% of allotment)\n6. Auditor certificate (CA attestation)\n\nUse the Export button in this section to generate the Excel certificate in TNPDCL format.' },
+    ]
+  },
+  rg: {
+    label: 'Regulatory',
+    qs: [
+      { q: 'What is the 30% solar concession on OA charges?',
+        a: '**30% solar concession** is a TNERC policy benefit:\n\nSolar open access projects pay only 70% of each component:\n\n| Component | Full rate | 30% off | Solar pays |\n|---|---|---|---|\n| Wheeling charge | Rs 1.04/kWh | −Rs 0.312 | Rs 0.728 |\n| State transmission | Rs 0.224/MWh | −Rs 0.067 | Rs 0.157 |\n| SLDC scheduling | Rs 0.091/MWh | −Rs 0.027 | Rs 0.064 |\n\n**Legal basis:** TNERC Intra-State Open Access Regulations + TNERC GEOA 2025 (effective 01-10-2025).\n\nThis concession is subject to revision in each new Tariff Order. Current benefit: ~Rs 0.40/kWh saving vs non-solar OA.' },
+      { q: 'What is CSS and why is it zero for Group Captive CPP?',
+        a: '**CSS (Cross Subsidy Surcharge)** is levied on open access consumers to compensate TANGEDCO for loss of subsidised industrial customer revenue.\n\n**For regular open access:** CSS = Rs 2.41/kWh (HT-III Commercial) — a huge cost.\n\n**For Group Captive CPP:** CSS = **ZERO** — full exemption per Electricity Act 2003 Section 9 and CERC Captive Rules 2001.\n\n**Why?** Captive consumers own the plant. Legally, they are consuming their own power — not buying from a third party. So CSS (designed for third-party purchases) does not apply.\n\nThis is the single biggest financial advantage of the Group Captive structure — saving Rs 2.41/kWh on every unit.' },
+    ]
+  }
+};
 
+/* ══ PAGE-LEVEL AI STATE ═══════════════════════════════════════════ */
+let paiCurrentPage = 'db';
+let paiHistory = [];
+let paiTypingId = null;
+
+function paiOpen(pageId) {
+  paiCurrentPage = pageId;
+  const qa = PAGE_AI_QA[pageId];
+  if (!qa) return;
+  
+  // Set label
+  const lbl = document.getElementById('pai-page-label');
+  if (lbl) lbl.textContent = qa.label + ' — Page Assistant';
+  
+  // Render chips
+  const chips = document.getElementById('pai-chips');
+  if (chips) {
+    chips.innerHTML = qa.qs.map((item, i) =>
+      `<button class="pai-chip" onclick="paiAskPreset(${i})">${item.q}</button>`
+    ).join('');
+  }
+  
+  // Show panel
+  document.getElementById('pai-overlay').classList.add('on');
+  document.getElementById('pai-panel').classList.add('on');
+  document.body.style.overflow = 'hidden';
+  
+  // Welcome message if first open
+  const msgs = document.getElementById('pai-msgs');
+  if (msgs && msgs.children.length === 0) {
+    paiAddBubble('bot', `👋 Hi! I'm your **${qa.label}** page assistant.\n\nTap a question above or type your own — I'll explain any aspect of this section in detail.`);
+  }
+}
+
+function paiClose() {
+  document.getElementById('pai-overlay').classList.remove('on');
+  document.getElementById('pai-panel').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+function paiAskPreset(idx) {
+  const qa = PAGE_AI_QA[paiCurrentPage];
+  if (!qa || !qa.qs[idx]) return;
+  const item = qa.qs[idx];
+  paiAddBubble('usr', item.q);
+  // Use preset answer directly (instant)
+  paiAddBubble('bot', item.a);
+}
+
+function paiAddBubble(role, text) {
+  const wrap = document.getElementById('pai-msgs');
+  if (!wrap) return;
+  const div = document.createElement('div');
+  div.className = 'pai-bubble ' + role;
+  if (role === 'bot') {
+    // Simple markdown: bold
+    let html = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1<\/strong>')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+    // Simple table support
+    if (html.includes('|')) {
+      const lines = text.split('\n');
+      let inTable = false, tableHtml = '';
+      let resultLines = [];
+      for (let line of lines) {
+        const isSep = /^\|[-| :]+\|/.test(line);
+        const isRow = line.trim().startsWith('|') && !isSep;
+        if (isRow) {
+          if (!inTable) { inTable = true; tableHtml = '<table class="ai-md-table"><tbody>'; }
+          const parts = line.split('|');
+          const cols = parts.slice(1, parts.length - 1).map(c => '<td>' + c.trim().replace(/\*\*(.*?)\*\*/g,'<strong>$1<\/strong>') + '<\/td>');
+          tableHtml += '<tr>' + cols.join('') + '<\/tr>';
+        } else if (isSep) {
+          tableHtml = tableHtml.replace('<tbody><tr>','<thead><tr>').replace('<\/tr>','<\/tr><\/thead><tbody>');
+        } else {
+          if (inTable) { tableHtml += '<\/tbody><\/table>'; resultLines.push(tableHtml); inTable = false; tableHtml = ''; }
+          resultLines.push(line);
+        }
+      }
+      if (inTable) { tableHtml += '<\/tbody><\/table>'; resultLines.push(tableHtml); }
+      html = resultLines.join('<br>');
+    }
+    div.innerHTML = html;
+  } else {
+    div.textContent = text;
+  }
+  wrap.appendChild(div);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function paiAutoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 70) + 'px';
+}
+
+function paiKeyDown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); paiSend(); }
+}
+
+function paiSend() {
+  const inp = document.getElementById('pai-inp');
+  const q = inp ? inp.value.trim() : '';
+  if (!q) return;
+  inp.value = ''; inp.style.height = 'auto';
+  paiAddBubble('usr', q);
+  
+  const btn = document.getElementById('pai-send-btn');
+  if (btn) btn.disabled = true;
+  
+  // Build live context from model
+  const liveCtx = buildLiveContext();
+  const qa = PAGE_AI_QA[paiCurrentPage];
+  const pageLabel = qa ? qa.label : 'Solar Project';
+  
+  // Preset Q&A for quick match
+  const preset = qa ? qa.qs.find(x => q.toLowerCase().includes(x.q.toLowerCase().substring(0, 20).toLowerCase())) : null;
+  if (preset) {
+    paiAddBubble('bot', preset.a);
+    if (btn) btn.disabled = false;
+    return;
+  }
+  
+  // AI call
+  const typDiv = document.createElement('div');
+  typDiv.className = 'pai-bubble bot';
+  typDiv.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  document.getElementById('pai-msgs').appendChild(typDiv);
+  document.getElementById('pai-msgs').scrollTop = 99999;
+  
+  paiHistory.push({ role: 'user', content: q });
+  
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1000,
+      system: `You are an expert solar project AI assistant embedded in the "${pageLabel}" page of the EIL Solar Ground PWA — a 26 MW DC / 20 MW AC Group Captive CPP solar financial model tool for Tamil Nadu, India. 
+
+LIVE PROJECT DATA: ${liveCtx}
+
+Answer questions specifically about the ${pageLabel} page and concepts related to it. Be concise but thorough. Use markdown tables and **bold** for key figures. Keep answers under 200 words unless detail is essential. Always relate answers back to the live project numbers when relevant.`,
+      messages: paiHistory
+    })
+  }).then(r => r.json()).then(data => {
+    typDiv.remove();
+    const text = (data.content && data.content[0] && data.content[0].text) || 'Sorry, I could not get a response. Please try again.';
+    paiHistory.push({ role: 'assistant', content: text });
+    if (paiHistory.length > 20) paiHistory = paiHistory.slice(-20);
+    paiAddBubble('bot', text);
+  }).catch(() => {
+    typDiv.remove();
+    paiAddBubble('bot', '⚠️ Could not reach AI. Please check your connection. Your preset questions above work offline.');
+  }).finally(() => {
+    if (btn) btn.disabled = false;
+  });
+}
+
+function buildLiveContext() {
+  const gv2 = (id) => { const p = PM[id]; return p ? p.v : 0; };
+  const ac = gv2('ac'), dac = gv2('dac'), plf = gv2('plf');
+  const tloss = gv2('tloss'), tariff = gv2('tariff'), disc = gv2('disc'), oa = gv2('oa');
+  const epcMW = gv2('epcMW'), tpc = gv2('tpc');
+  const df = gv2('df'), ir = gv2('ir'), tn2 = gv2('tn');
+  const netGenYr1 = Math.round(ac * dac * 1000 * plf/100 * 8760 * (1-tloss/100)) / 1e6;
+  const swt = tariff * (TOD_2025 ? (TOD_2025.solar_peak_hrs*TOD_2025.peak_mult + TOD_2025.solar_normal_hrs) / TOD_2025.solar_total_hrs : 1.083);
+  const sp = +(swt * disc/100).toFixed(3);
+  const equity = +(tpc * (100-df)/100).toFixed(2);
+  return `AC=${ac}MW DC=${+(ac*dac).toFixed(1)}MW PLF=${plf}% TotalLoss=${tloss}% BaseTariff=Rs${tariff}/kWh Disc=${disc}% SellingPrice=Rs${sp}/kWh OA=Rs${oa}/kWh NetGenYr1=${netGenYr1.toFixed(2)}MU TotalCapex=Rs${tpc.toFixed(1)}Cr CostPerMW=Rs${epcMW}L/MW Debt=${df}% Equity=Rs${equity}Cr Interest=${ir}% Tenure=${tn2}yr`;
+}
 </script>
 </body>
-</html>
