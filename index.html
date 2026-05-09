@@ -1270,7 +1270,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 <!-- MY INVESTMENT -->
 <div id="s-ci" class="sec cust-sec" style="display:none">
   <div class="cvs">
-    <div class="sec-h"><div class="sec-ic">&#128181;</div><div><div class="sec-ti">My Investment</div><div class="sec-su">Your equity stake &amp; savings summary</div></div></div>
+    <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128181;</div><div><div class="sec-ti">My Investment</div><div class="sec-su">Your equity stake &amp; savings summary</div></div></div><button class="page-ai-btn" onclick="paiOpen('ci')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
     <div class="card">
       <div class="chdr gn">Select your profile</div>
       <div class="fld">
@@ -1290,7 +1290,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 <!-- MY SAVINGS -->
 <div id="s-cs" class="sec cust-sec" style="display:none">
   <div class="cvs">
-    <div class="sec-h"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">My Savings</div><div class="sec-su">Solar vs direct TNEB billing comparison</div></div></div>
+    <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#9889;</div><div><div class="sec-ti">My Savings</div><div class="sec-su">Solar vs direct TNEB billing comparison</div></div></div><button class="page-ai-btn" onclick="paiOpen('cs')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
     <div id="cs-content">
       <div class="alert info">Select your profile in My Investment first, then return here to see your savings.</div>
     </div>
@@ -1300,7 +1300,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 <!-- COMPLIANCE STATUS -->
 <div id="s-cc" class="sec cust-sec" style="display:none">
   <div class="cvs">
-    <div class="sec-h"><div class="sec-ic">&#10004;</div><div><div class="sec-ti">My Compliance Status</div><div class="sec-su">26% equity &amp; 51% consumption obligations</div></div></div>
+    <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#10004;</div><div><div class="sec-ti">My Compliance Status</div><div class="sec-su">26% equity &amp; 51% consumption obligations</div></div></div><button class="page-ai-btn" onclick="paiOpen('cc')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
     <div class="alert or">As a captive consumer you must hold minimum 26% equity in the SPV and consume proportionally to your equity share each year. Non-compliance triggers CSS retroactively for the full year.</div>
     <div id="cc-content">
       <div class="alert info">Select your profile in My Investment first, then return here to see your compliance status.</div>
@@ -5199,7 +5199,50 @@ const PAGE_AI_QA = {
       { q: 'What is CSS and why is it zero for Group Captive CPP?',
         a: '**CSS (Cross Subsidy Surcharge)** is levied on open access consumers to compensate TANGEDCO for loss of subsidised industrial customer revenue.\n\n**For regular open access:** CSS = Rs 2.41/kWh (HT-III Commercial) — a huge cost.\n\n**For Group Captive CPP:** CSS = **ZERO** — full exemption per Electricity Act 2003 Section 9 and CERC Captive Rules 2001.\n\n**Why?** Captive consumers own the plant. Legally, they are consuming their own power — not buying from a third party. So CSS (designed for third-party purchases) does not apply.\n\nThis is the single biggest financial advantage of the Group Captive structure — saving Rs 2.41/kWh on every unit.' },
     ]
-  }
+  },
+
+  // ══ CUSTOMER VIEW PAGES ══════════════════════════════════════════
+  ci: {
+    label: 'My Investment',
+    qs: [
+      { q: 'How much equity do I need to invest and what do I get?',
+        a: '**Your equity investment** buys you a share of the solar SPV and the right to consume solar power at a discounted rate.\n\n| What you pay | What you get |\n|---|---|\n| Equity % × Total capex × 30% | Proportional generation allotment |\n| Example: 5% share in 20 MW | 5% of net 40 MU = 2 MU/year |\n| One-time investment | 25-year power supply at fixed discount |\n\n**Return comes in two forms:**\n1. **Cash savings** — lower power bill every month vs TNEB direct\n2. **Equity appreciation** — your SPV stake grows in value as project generates revenue\n\nTypically equity investors recover their investment through bill savings alone within 4–6 years.' },
+      { q: 'What is my annual saving compared to direct TNEB billing?',
+        a: '**Annual saving** = (TNEB direct rate − Solar rate) × Your annual consumption (kWh)\n\n**Example for HT-I Industry customer:**\n\n| Parameter | TNEB Direct | Solar CPP |\n|---|---|---|\n| Rate Year 1 | Rs 7.50/kWh | Rs 6.91/kWh |\n| Your consumption | 20 lakh kWh | 20 lakh kWh |\n| Annual bill | Rs 1.50 Cr | Rs 1.38 Cr |\n| **Annual saving** | — | **Rs 12 Lakhs** |\n\nBy Year 5 (TNEB escalates ~5%/yr, solar ~3%/yr), saving widens to Rs 18–22 Lakhs/year. Over 25 years, total saving = Rs 3–4 Crores per customer — far exceeding the equity invested.' },
+      { q: 'Can I exit the project and get my money back?',
+        a: '**Exit is possible** — your equity stake in the SPV is transferable, subject to:\n\n1. SPV Board approval\n2. Buyer found (developer/other customers/new investor)\n3. Collective 26% rule still satisfied after your exit\n4. TNPDCL notified of equity change\n\n**Valuation on exit:**\n- Early years (1–5): near book value\n- Later years (10+): significant premium — project is de-risked, revenue proven\n- A 20 MW solar project in Year 10 may trade at 1.5–2× original equity\n\n**No penalty** for exit per se, but you lose future savings and appreciation. Most investors prefer to stay for the full 25 years.' },
+      { q: 'What is the difference between equity return and bill saving?',
+        a: '**Two separate benefits:**\n\n**Bill Saving (monthly):**\n- You pay Rs 6.91/kWh instead of Rs 7.50/kWh TNEB\n- Saving = Rs 0.59/kWh × your consumption\n- Directly reduces your electricity cost every month\n- This is the PRIMARY benefit — visible, guaranteed, recurring\n\n**Equity Return (long-term):**\n- Your SPV stake earns dividends from the developer\'s 74% share revenue\n- Less certain, depends on SPV profit distribution policy\n- Grows as project debt is repaid (post Year 10, FCF nearly doubles)\n\nFor most customers, **bill saving alone** justifies the investment. Equity appreciation is a bonus.' },
+    ]
+  },
+
+  cs: {
+    label: 'My Savings',
+    qs: [
+      { q: 'How is my solar bill calculated vs my TNEB bill?',
+        a: '**Solar bill calculation:**\n\nSolar rate = Developer selling price (Rs 6.91/kWh Year 1)\nThis is your all-inclusive rate — no demand charge, no fuel surcharge, no additional surcharge.\n\n**TNEB direct bill (HT-I Industry) has multiple components:**\n\n| Component | Amount |\n|---|---|\n| Energy charge | Rs 6.50/kWh |\n| Demand charge | ~Rs 300/kVA/month |\n| Fixed charge | Rs 400/HP/month |\n| Fuel surcharge | ~Rs 0.50/kWh |\n| Additional surcharge | Rs 0.36/kWh |\n| **Effective blended rate** | **Rs 7.50–8.50/kWh** |\n\nSolar at Rs 6.91/kWh saves Rs 0.59–1.59 per unit. Saving widens every year as TNEB hikes tariff faster than solar escalation.' },
+      { q: 'Will my solar rate increase every year?',
+        a: '**Yes — but much less than TNEB.**\n\n| Year | TNEB rate (est.) | Solar rate | Saving/unit |\n|---|---|---|---|\n| Year 1 | Rs 7.50 | Rs 6.91 | Rs 0.59 |\n| Year 3 | Rs 8.27 | Rs 7.33 | Rs 0.94 |\n| Year 5 | Rs 9.14 | Rs 7.77 | Rs 1.37 |\n| Year 10 | Rs 11.67 | Rs 8.98 | Rs 2.69 |\n\n**TNEB** historically escalates at 5–7% per year (subject to TNERC order).\n**Solar** escalates at 3% per year (locked in your Power Supply Agreement).\n\nThe saving gap **widens every year** — making solar more valuable over time, not less.' },
+      { q: 'What happens if I consume more or less than my allotment?',
+        a: '**If you consume LESS than allotment:**\n- ±10% tolerance allowed by TNERC\n- Beyond 10% shortfall: CSS (Rs 2.41/kWh) levied on the deficit units retroactively\n- Example: Allotment 20 lakh kWh, consumed 16 lakh kWh (20% short) → CSS on 2 lakh kWh shortfall = Rs 4.82 Lakhs penalty\n\n**If you consume MORE than allotment:**\n- Excess units purchased from TNEB at standard rate\n- No CSS penalty on excess\n- You may negotiate additional allotment from other customers\n\n**Best practice:** Consume within 5% of allotment each month. Monitor via the Actual vs Projected tab.' },
+      { q: 'How does the ToD (Time of Day) tariff affect my bill?',
+        a: '**TNERC ToD tariff (T.O. No.6 of 2025)** applies to HT consumers:\n\n| Time slot | Multiplier | Solar Rate (Year 1) |\n|---|---|---|\n| Peak (6–9 AM, 6–9 PM) | +25% | Rs 8.64/kWh |\n| Normal (9 AM–6 PM, 9–10 PM) | Base | Rs 6.91/kWh |\n| Night (10 PM–6 AM) | −5% | Rs 6.56/kWh |\n\n**Solar plant generates mainly during normal hours (9 AM–6 PM).** So most of your allotment is at the base rate.\n\nFor TNEB too, ToD applies — peak hours are even more expensive from TNEB. This makes solar even more attractive if you can shift consumption to day hours.' },
+    ]
+  },
+
+  cc: {
+    label: 'My Compliance Status',
+    qs: [
+      { q: 'What is my compliance obligation as a captive customer?',
+        a: '**Three rules you must satisfy every financial year:**\n\n**Rule 1 — Own minimum equity:**\nYou (and all customers together) must hold ≥ 26% of SPV equity. Your individual share must remain above what you committed in the PSA.\n\n**Rule 2 — Consume proportionally:**\nYour actual consumption ÷ net generation must equal your equity % (±10% tolerance).\n\n**Rule 3 — Collective 51% consumption:**\nAll captive customers together must consume ≥ 51% of total net generation.\n\n**Annual compliance certificate** due to TNPDCL by 30th April each year. Your CA must attest the certificate with actual meter readings.' },
+      { q: 'What is CSS and what happens if I breach compliance?',
+        a: '**CSS = Cross Subsidy Surcharge = Rs 2.41/kWh** (current HT-III rate)\n\nIf you breach any compliance rule in a financial year:\n- TNPDCL levies CSS on ALL units consumed by you that year\n- Not just the excess/deficit — the ENTIRE year\'s consumption\n- Example: Consume 20 lakh kWh in a non-compliant year → CSS penalty = Rs 48.2 Lakhs\n\n**This wipes out 3–4 years of savings in one shot.**\n\nPrevention:\n- Monitor monthly via Actual vs Projected tab\n- If consumption is falling short mid-year, increase factory operations or shift TNEB loads to solar\n- If equity is at risk (customer exiting), find a replacement buyer before they leave' },
+      { q: 'How do I read my compliance dashboard?',
+        a: '**Compliance dashboard shows:**\n\n| Indicator | Green | Amber | Red |\n|---|---|---|---|\n| Equity % | ≥ 26% collective | 25–26% | Below 25% |\n| Your consumption vs allotment | Within ±5% | 5–10% short | >10% short |\n| Collective 51% rule | ≥ 51% consumed | 45–51% | Below 45% |\n\n**Month-by-month tracker:**\n- Enter actual SLDC meter reading each month\n- App calculates running year-to-date position\n- Flags if you are on track to breach by year-end\n- Export to Excel for CA certification\n\nCheck this tab at least monthly — by the time you notice a problem in Q4 it may be too late to rectify.' },
+      { q: 'What is a Power Supply Agreement (PSA) and what does it say?',
+        a: '**PSA (Power Supply Agreement)** is the contract between you and the SPV developer. Key clauses:\n\n| Clause | Typical term |\n|---|---|\n| Tenure | 25 years |\n| Base selling price | Rs 6.91/kWh (Year 1) |\n| Annual escalation | 3% per year |\n| Your allotment | Your equity % of net generation |\n| Consumption obligation | Proportional to equity |\n| Exit clause | 6–12 months notice, buyer to be arranged |\n| Force majeure | Grid curtailment excluded from compliance |\n| Dispute resolution | TNERC arbitration |\n\nRead Clause 7 (payment), Clause 9 (default), and Clause 12 (termination) most carefully before signing.' },
+    ]
+  },
 };
 
 /* ══ PAGE-LEVEL AI STATE ═══════════════════════════════════════════ */
