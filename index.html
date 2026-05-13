@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="EIL Ground">
 <meta name="theme-color" content="#0F6E56">
-<title>EIL Solar Ground Based Power Generation</title>
+<title>EIL Solar Ground Based Power Generation | v10</title>
   <meta name="author" content="Elango Industries Limited">
   <meta name="copyright" content="© 2026 Elango Industries Limited (BSE: 513452). All rights reserved.">
   <meta name="robots" content="noindex,nofollow">
@@ -28,14 +28,15 @@
   --n9:#111827;--n7:#374151;--n5:#6B7280;--n3:#D1D5DB;--n1:#F9FAFB;--w:#FFFFFF;
   --hh:56px;--rh:40px;--sb:255px;
   --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
+  --hh-total:calc(var(--hh) + var(--safe-top));
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{min-height:100%}
 body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-font-smoothing:antialiased}
 
 /* HEADER */
-.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--g6);box-shadow:0 2px 10px rgba(0,0,0,.2);}
-.hdr-in{height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 14px;padding-top:var(--safe-top);}
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;background:var(--g6);box-shadow:0 2px 10px rgba(0,0,0,.2);height:var(--hh-total);}
+.hdr-in{height:var(--hh-total);display:flex;align-items:flex-end;justify-content:space-between;padding:0 14px;padding-top:var(--safe-top);padding-bottom:8px;}
 .hdr-left{display:flex;flex-direction:column;min-width:0;flex:1}
 .hdr-t{font-size:13px;font-weight:700;color:#fff;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hdr-s{font-size:9px;color:rgba(255,255,255,.65);margin-top:1px;white-space:nowrap}
@@ -45,12 +46,12 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 .hl{width:16px;height:2px;background:#fff;border-radius:2px}
 
 /* ROLE BAR */
-.role-bar{position:fixed;top:var(--hh);left:0;right:0;z-index:290;background:var(--g7);height:var(--rh);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;}
+.role-bar{position:fixed;top:var(--hh-total);left:0;right:0;z-index:290;background:var(--g7);height:var(--rh);display:flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;}
 .role-btn{flex:1;max-width:190px;height:28px;border-radius:6px;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:rgba(255,255,255,.65);font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
 .role-btn.active{background:rgba(255,255,255,.18);color:#fff;border-color:rgba(255,255,255,.5)}
 
 /* SIDEBAR */
-.sidebar{display:none;position:fixed;top:calc(var(--hh) + var(--rh));bottom:0;left:0;width:var(--sb);background:var(--w);border-right:1px solid var(--n3);overflow-y:auto;z-index:200;padding:10px 0;}
+.sidebar{display:none;position:fixed;top:calc(var(--hh-total) + var(--rh));bottom:0;left:0;width:var(--sb);background:var(--w);border-right:1px solid var(--n3);overflow-y:auto;z-index:200;padding:10px 0;}
 .sb-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--n5);padding:8px 18px 3px;}
 .sb-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:'Inter',sans-serif;transition:background .1s;}
 .sb-item:hover{background:var(--g0)}
@@ -84,7 +85,7 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 .drw-sep{height:1px;background:var(--n3);margin:4px 12px}
 
 /* CANVAS */
-.cvs{padding-top:calc(var(--hh) + var(--rh) + 14px);padding-left:14px;padding-right:14px;padding-bottom:calc(80px + var(--safe-bot));max-width:640px;margin:0 auto;}
+.cvs{padding-top:calc(var(--hh-total) + var(--rh) + 8px);padding-left:14px;padding-right:14px;padding-bottom:calc(80px + var(--safe-bot));max-width:640px;margin:0 auto;}
 
 /* SECTIONS */
 .sec{display:none}.sec.on{display:block}
@@ -243,7 +244,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 .fab:active{background:var(--g7);transform:scale(.97);}
 
 /* ═══ AI ASSISTANT ══════════════════════════════════════════════ */
-#s-ai{position:fixed!important;top:calc(var(--hh) + var(--rh));left:0;right:0;bottom:0;display:none;flex-direction:column;z-index:150;background:#F5F9F7;}
+#s-ai{position:fixed!important;top:calc(var(--hh-total) + var(--rh));left:0;right:0;bottom:0;display:none;flex-direction:column;z-index:150;background:#F5F9F7;}
 #s-ai.on{display:flex!important;}
 @media(min-width:900px){#s-ai{left:var(--sb);}}
 .ai-lock-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;overflow-y:auto;background:#F5F9F7;}
@@ -354,7 +355,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .sidebar{display:flex;flex-direction:column}
   .hbtn{display:none}
   .hdr-t{font-size:14px}
-  .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh) + var(--rh) + 24px) 32px 60px 32px;box-sizing:border-box}
+  .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh-total) + var(--rh) + 16px) 32px 60px 32px;box-sizing:border-box}
   .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;right:auto;}
   .sec-ti{font-size:20px}
   .mv{font-size:18px}.mv.lg{font-size:28px}
@@ -383,7 +384,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .sidebar{display:flex;flex-direction:column}
   .hbtn{display:none}
   .hdr-t{font-size:15px}
-  .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh) + var(--rh) + 24px) 32px 60px 32px;box-sizing:border-box}
+  .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh-total) + var(--rh) + 16px) 32px 60px 32px;box-sizing:border-box}
   .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;right:auto;}
   .sec-ti{font-size:21px}
   .mv{font-size:18px}.mv.lg{font-size:28px}
@@ -448,6 +449,9 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <button class="sb-item" id="sb-cf" onclick="go('cf')"><div class="sb-ic">&#128200;</div><div><div class="sb-lbl">25-Year Cash Flow</div><div class="sb-dsc">FCF, payback &amp; chart</div></div></button>
     <button class="sb-item" id="sb-rp" onclick="go('rp')"><div class="sb-ic">&#128196;</div><div><div class="sb-lbl">25-Year Report</div><div class="sb-dsc">Full P&amp;L &amp; depreciation</div></div><span class="sb-badge or">Full</span></button>
     <button class="sb-item" id="sb-av" onclick="go('av')"><div class="sb-ic">&#128201;</div><div><div class="sb-lbl">Actual vs Projected</div><div class="sb-dsc">Live data &amp; variance</div></div><span class="sb-badge or">Live</span></button>
+    <button class="sb-item" id="sb-gd" onclick="go('gd')"><div class="sb-ic">&#9728;</div><div><div class="sb-lbl">Generation Details</div><div class="sb-dsc">25-yr AC generation & degradation</div></div><span class="sb-badge gn">v16</span></button>
+    <button class="sb-item" id="sb-pnl" onclick="go('pnl')"><div class="sb-ic">&#128181;</div><div><div class="sb-lbl">Projected P&amp;L &amp; BS</div><div class="sb-dsc">25-yr Income & Balance Sheet</div></div><span class="sb-badge gn">v16</span></button>
+    <button class="sb-item" id="sb-rat" onclick="go('rat')"><div class="sb-ic">&#128202;</div><div><div class="sb-lbl">DSCR &amp; Ratios</div><div class="sb-dsc">Financial ratios & loan analysis</div></div><span class="sb-badge or">Key</span></button>
     <div class="sb-sep"></div>
     <button class="sb-item" id="sb-pr" onclick="go('pr')"><div class="sb-ic">&#128194;</div><div><div class="sb-lbl">Project Report</div><div class="sb-dsc">Full DPR generator</div></div><span class="sb-badge or">New</span></button>
     <div class="sb-sep"></div>
@@ -993,6 +997,82 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   </div>
 </div>
 
+
+<!-- GENERATION DETAILS -->
+<div id="s-gd" class="sec dev-sec">
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#9728;</div><div><div class="sec-ti">Generation Details — 25 Years</div><div class="sec-su">AC-based generation with full degradation profile (CORRECTED v16)</div></div></div><button class="page-ai-btn" onclick="paiOpen('gd')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
+  <div class="card" style="background:#FFF3CD;border:1.5px solid #FFC107;padding:10px 14px;margin-bottom:12px">
+    <div style="font-size:12px;font-weight:700;color:#856404">⚠ v16 FIX: AC-Based Generation</div>
+    <div style="font-size:11px;color:#856404;margin-top:4px">Previous versions used DC capacity (26 MW) for generation calculations — inflating energy and revenue by 30%. This is now corrected to use AC capacity (20 MW = inverter output limit). All figures below are based on <strong>20,000 kWAC × CUF × 8,760 hrs</strong>.</div>
+  </div>
+  <div class="card">
+    <div class="chdr">Generation Inputs (from Project Inputs)</div>
+    <div id="gd-inputs" style="font-size:12px;padding:4px 0;line-height:2"></div>
+  </div>
+  <div class="card">
+    <div class="chdr">25-Year Annual Generation Table</div>
+    <div style="overflow-x:auto">
+      <table id="gd-table" style="width:100%;border-collapse:collapse;font-size:11px;min-width:700px">
+        <thead>
+          <tr style="background:#1F3864;color:#fff">
+            <th style="padding:6px 8px;text-align:center">Year</th>
+            <th style="padding:6px 8px;text-align:center">Degrad<br>Factor</th>
+            <th style="padding:6px 8px;text-align:right">Gross Gen<br>AC (MU)</th>
+            <th style="padding:6px 8px;text-align:right">Net Gen<br>at Meter (MU)</th>
+            <th style="padding:6px 8px;text-align:center">Plant Output<br>vs Yr1 (%)</th>
+            <th style="padding:6px 8px;text-align:right">Specific Yield<br>kWh/kWAC/yr</th>
+            <th style="padding:6px 8px;text-align:right">Peak Hrs<br>Gen (MU)</th>
+            <th style="padding:6px 8px;text-align:right">CUF<br>Actual (%)</th>
+            <th style="padding:6px 8px;text-align:right">Cum Net Gen<br>(MU)</th>
+          </tr>
+        </thead>
+        <tbody id="gd-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="chdr">Generation Profile Chart</div>
+    <div style="position:relative;height:220px"><canvas id="gdChart"></canvas></div>
+  </div>
+</div>
+
+<!-- PROJECTED P&L AND BALANCE SHEET -->
+<div id="s-pnl" class="sec dev-sec">
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128181;</div><div><div class="sec-ti">Projected P&amp;L &amp; Balance Sheet</div><div class="sec-su">25-year projected financials — AC-corrected (v16)</div></div></div><button class="page-ai-btn" onclick="paiOpen('pnl')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
+  <div class="card">
+    <div class="chdr or">&#128200; Projected Profit &amp; Loss Account (₹ Crores)</div>
+    <div style="overflow-x:auto"><table id="pnl-table" style="width:100%;border-collapse:collapse;font-size:11px;min-width:900px"><thead></thead><tbody></tbody></table></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="chdr or">&#127968; Projected Balance Sheet (₹ Crores)</div>
+    <div style="overflow-x:auto"><table id="bs-table" style="width:100%;border-collapse:collapse;font-size:11px;min-width:900px"><thead></thead><tbody></tbody></table></div>
+  </div>
+  <div style="font-size:10.5px;color:#6B7280;margin-top:8px;padding:0 4px">
+    Notes: O&amp;M = 1% of capex ×5%/yr escalation | Insurance = 0.5% ×3%/yr | IT Dep: Yr1=0, Yr2+ WDV 15% | Tax = 25% + 4% cess | FCF = EBITDA − Interest − Principal − Tax | Balance Sheet is SPV-level; cash = cumulative FCF
+  </div>
+</div>
+
+<!-- DSCR AND RATIOS -->
+<div id="s-rat" class="sec dev-sec">
+  <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128202;</div><div><div class="sec-ti">DSCR &amp; Financial Ratios</div><div class="sec-su">Debt service coverage, profitability &amp; leverage — 25 years</div></div></div><button class="page-ai-btn" onclick="paiOpen('rat')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
+  <div class="card" style="background:#E2F8EE;border:1.5px solid #22C55E;padding:10px 14px;margin-bottom:12px">
+    <div id="rat-summary" style="font-size:12px;font-weight:600;color:#166534"></div>
+  </div>
+  <div class="card">
+    <div class="chdr">Debt Service Coverage Ratio (DSCR) — Year by Year</div>
+    <div style="overflow-x:auto"><table id="dscr-table" style="width:100%;border-collapse:collapse;font-size:11px;min-width:700px"><thead></thead><tbody></tbody></table></div>
+    <div style="font-size:10px;color:#6B7280;margin-top:6px">🟢 DSCR ≥ 1.50x (Strong) &nbsp;|&nbsp; 🟡 1.20–1.50x (Acceptable) &nbsp;|&nbsp; 🔴 &lt; 1.20x (Below threshold)</div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="chdr">Profitability &amp; Leverage Ratios</div>
+    <div style="overflow-x:auto"><table id="ratio-table" style="width:100%;border-collapse:collapse;font-size:11px;min-width:700px"><thead></thead><tbody></tbody></table></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="chdr">Investor Returns Summary</div>
+    <div id="rat-returns" style="font-size:12px;padding:4px 0"></div>
+  </div>
+</div>
+
 <!-- REGULATORY -->
 <div id="s-rg" class="sec dev-sec">
   <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128203;</div><div><div class="sec-ti">Regulatory</div><div class="sec-su">All fields editable &mdash; update when TNERC issues new orders</div></div></div><button class="page-ai-btn" onclick="paiOpen('rg')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
@@ -1458,7 +1538,7 @@ function setRole(r){
 }
 
 /* ── NAVIGATION ── */
-const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg','ai'];
+const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','tn','rg','gd','pnl','rat','ai'];
 const CUST_SECS=['ci','cs','cc','ca','ai'];
 let currentPage = 'db';
 function go(id){
@@ -1481,6 +1561,8 @@ function go(id){
   closeD();
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='ca')buildActualCustRows();
+  if(id==='gd'){buildGenDetails();}
+  if(id==='pnl'||id==='rat'){buildPnLBS();}
   if(id==='ci'||id==='cs'||id==='cc')calcCustomer();
   // FAB: show Calculate only on input pages in developer view
   const fab=document.getElementById('calc-fab');
@@ -1516,6 +1598,9 @@ function buildDrawer(){
     {id:'cf',ic:'&#128200;',lbl:'25-Year Cash Flow',dsc:'FCF & payback'},
     {id:'rp',ic:'&#128196;',lbl:'25-Year Report',dsc:'Full P&L & depreciation'},
     {id:'av',ic:'&#128201;',lbl:'Actual vs Projected',dsc:'Live data & variance'},
+    {id:'gd',ic:'&#9728;',lbl:'Generation Details',dsc:'AC-based 25-yr generation'},
+    {id:'pnl',ic:'&#128181;',lbl:'Projected P&L & BS',dsc:'25-yr Income & Balance Sheet'},
+    {id:'rat',ic:'&#128202;',lbl:'DSCR & Ratios',dsc:'Financial ratios & loan metrics'},
     {id:'---'},
     {id:'pr',ic:'&#128194;',lbl:'Project Report',dsc:'Full bankable report'},
     {id:'---'},
@@ -1654,7 +1739,7 @@ function apportionCost(){
   s('v-epcMW', rateL.toFixed(0));
   s('v-ac-cost', acMW.toFixed(0));
   s('v-ac-tpc', acMW.toFixed(0));
-  s('v-dc-calc2', dcMW.toFixed(2)+' MW DC / '+dc_kWp.toLocaleString('en-IN')+' kWp');
+  s('v-dc-calc2', dcMW.toFixed(2)+' MW DC / '+dc_kWp.toLocaleString('en-IN')+' kWp (cost display only)');
   s('v-tpc', 'Rs '+tpc.toFixed(2)+' Cr');
   s('v-wp', dc_kWp > 0 ? 'Rs '+(tpc*1e7/dc_kWp).toFixed(0)+' /kWp' : '—');
   s('v-epc-disp', 'Rs '+epcCr.toFixed(2)+' Cr');
@@ -1680,12 +1765,15 @@ function syncTloss(){
   const tot=document.getElementById('v-tloss-total');if(tot)tot.textContent=total.toFixed(1)+'%';
 }
 function gv(id){return PM[id]?PM[id].v:0;}
+// AC kWAC — the ONLY basis for generation calculations (inverter output limit)
+// DC kWp is used ONLY for cost/Wp display and land area — NEVER for energy
+function acKWAC(){return Math.round(gv('ac')*1000);}
 function updDC(){
   const ac=gv('ac'),dac=gv('dac');
   const dc=Math.round(ac*dac*100)/100;
   const kWp=Math.round(dc*1000);
   const el=document.getElementById('v-dc-calc');
-  if(el)el.textContent=dc.toFixed(2)+' MW DC / '+kWp.toLocaleString('en-IN')+' kWp';
+  if(el)el.textContent=dc.toFixed(2)+' MW DC / '+kWp.toLocaleString('en-IN')+' kWp (display only — generation uses AC)';
   return kWp;
 }
 function updBuyer(){
@@ -1901,7 +1989,7 @@ function calcCompliance(){
   const totalEq=customers.reduce((s,c)=>s+c.equityPct,0);
   const totalMU=customers.reduce((s,c)=>s+c.monthlyMU*12,0);
   const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
-  const grossGen=dc_kWp*gv('plf')/100*8760;
+  const grossGen=acKWAC()*gv('plf')/100*8760 /*AC-fixed*/;
   const netGen=grossGen*(1-gv('tloss')/100)/1e6;
   const captivePct=netGen>0?totalMU/netGen*100:0;
 
@@ -1942,7 +2030,7 @@ function calcCustomer(){
   const c=customers.find(x=>x.id===cid);
   if(!c){document.getElementById('ci-content').innerHTML='<div class="alert info">Select your customer profile above.</div>';return;}
   const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
-  const grossGen=dc_kWp*gv('plf')/100*8760;
+  const grossGen=acKWAC()*gv('plf')/100*8760 /*AC-fixed*/;
   const netGen=grossGen*(1-gv('tloss')/100);
   const tCap=gv('epc')+gv('land')+gv('evac')+gv('misc');
   const custEq=tCap*c.equityPct/100;
@@ -1987,6 +2075,9 @@ function calcCustomer(){
       <div class="sr"><span class="sk">Net annual saving (Yr-1)</span><span class="sv gn">Rs ${netSaving.toFixed(2)} Cr</span></div>
     </div>`;
 
+  // Rebuild new analysis pages if visible
+  if(currentPage==='gd')buildGenDetails();
+  if(currentPage==='pnl'||currentPage==='rat')buildPnLBS();
   // Update savings and compliance sections
   document.getElementById('cs-content').innerHTML=`
     <div class="card">
@@ -2017,6 +2108,296 @@ function calcCustomer(){
 /* ── ACTUAL VS PROJECTED ── */
 const MONTHS=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
 let avpData=MONTHS.map(m=>({month:m,projGen:0,actGen:0,projBill:0,actBill:0}));
+
+
+/* ══════════════════════════════════════════════════════════════
+   GENERATION DETAILS, P&L, BALANCE SHEET, DSCR & RATIOS — v16
+   All calculations use AC capacity (corrected from DC)
+   ══════════════════════════════════════════════════════════════ */
+
+function buildGenDetails(){
+  const ac=gv('ac')*1000;           // kWAC
+  const plf=gv('plf')/100;
+  const tloss=gv('tloss')/100;
+  const deg1=gv('deg1')/100;
+  const deg2=0.0068; // Yr2-10
+  const deg3=0.0070; // Yr11-25
+  const peak=gv('peak')/100;
+  const grossYr1=ac*plf*8760;       // AC-based gross gen kWh Yr1
+
+  // Input summary
+  const inp=document.getElementById('gd-inputs');
+  if(inp){
+    inp.innerHTML=`
+      <span style="background:#E2F8EE;padding:3px 8px;border-radius:6px;margin:2px;display:inline-block"><strong>AC Capacity:</strong> ${gv('ac').toFixed(1)} MW AC (${(ac/1000).toFixed(1)} MW)</span>
+      <span style="background:#FEF3C7;padding:3px 8px;border-radius:6px;margin:2px;display:inline-block"><strong>DC Capacity:</strong> ${(gv('ac')*gv('dac')).toFixed(2)} MW DC (NOT used for generation)</span>
+      <span style="background:#EBF3FB;padding:3px 8px;border-radius:6px;margin:2px;display:inline-block"><strong>CUF/PLF:</strong> ${gv('plf').toFixed(1)}%</span>
+      <span style="background:#EBF3FB;padding:3px 8px;border-radius:6px;margin:2px;display:inline-block"><strong>Tech Loss:</strong> ${gv('tloss').toFixed(1)}%</span>
+      <span style="background:#EBF3FB;padding:3px 8px;border-radius:6px;margin:2px;display:inline-block"><strong>Gross Gen Yr1 (AC):</strong> ${(grossYr1/1e6).toFixed(2)} MU</span>
+    `;
+  }
+
+  const tbody=document.getElementById('gd-tbody');
+  if(!tbody)return;
+  let html='';
+  let degFactor=1;
+  let cumNet=0;
+  const netYr1=grossYr1*(1-deg1)*(1-tloss);
+  const genData=[];
+
+  for(let y=1;y<=25;y++){
+    if(y===1) degFactor=(1-deg1);
+    else if(y<=10) degFactor*=(1-deg2);
+    else degFactor*=(1-deg3);
+
+    const gross=grossYr1*degFactor;  // kWh
+    const net=gross*(1-tloss);       // kWh
+    cumNet+=net;
+    const plantOut=(net/netYr1)*100;
+    const specYield=gross/ac;        // kWh/kWAC/yr
+    const peakGen=gross*peak;        // kWh
+    const cuf=(gross/(ac*8760))*100;
+    const bg=y%2===0?'#EBF3FB':'#fff';
+    const degPct=y===1?deg1*100:(y<=10?deg2*100:deg3*100);
+    genData.push({y,net:net/1e6,gross:gross/1e6});
+
+    html+=`<tr style="background:${bg}">
+      <td style="padding:5px 8px;text-align:center;font-weight:700">${y}</td>
+      <td style="padding:5px 8px;text-align:center">${degFactor.toFixed(4)}<br><span style="font-size:9px;color:#888">(-${degPct.toFixed(2)}%)</span></td>
+      <td style="padding:5px 8px;text-align:right">${(gross/1e6).toFixed(3)}</td>
+      <td style="padding:5px 8px;text-align:right;font-weight:600">${(net/1e6).toFixed(3)}</td>
+      <td style="padding:5px 8px;text-align:center;color:${plantOut<85?'#C00000':plantOut<92?'#856404':'#166534'}">${plantOut.toFixed(1)}%</td>
+      <td style="padding:5px 8px;text-align:right">${specYield.toFixed(0)}</td>
+      <td style="padding:5px 8px;text-align:right">${(peakGen/1e6).toFixed(3)}</td>
+      <td style="padding:5px 8px;text-align:right">${cuf.toFixed(1)}%</td>
+      <td style="padding:5px 8px;text-align:right;font-weight:600;color:#1F3864">${(cumNet/1e6).toFixed(1)}</td>
+    </tr>`;
+  }
+  tbody.innerHTML=html;
+  buildGdChart(genData);
+}
+
+function buildGdChart(data){
+  const ctx=document.getElementById('gdChart');
+  if(!ctx)return;
+  if(window._gdChart)window._gdChart.destroy();
+  window._gdChart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:data.map(d=>'Yr'+d.y),
+      datasets:[
+        {label:'Net Gen (MU)',data:data.map(d=>d.net.toFixed(3)),backgroundColor:'rgba(30,158,117,0.7)',borderColor:'#1D9E75',borderWidth:1,order:1},
+        {label:'Gross Gen (MU)',data:data.map(d=>d.gross.toFixed(3)),backgroundColor:'rgba(30,95,165,0.15)',borderColor:'#185FA5',borderWidth:1,type:'line',order:0,pointRadius:2}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10}}}},
+      scales:{y:{title:{display:true,text:'MU (Million Units)',font:{size:10}},ticks:{font:{size:9}}},x:{ticks:{font:{size:8},maxRotation:45}}}}
+  });
+}
+
+function buildPnLBS(){
+  const ac=gv('ac')*1000;
+  const plf=gv('plf')/100;
+  const tloss=gv('tloss')/100;
+  const deg1=gv('deg1')/100;
+  const deg2=0.0068,deg3=0.0070;
+  const peak=gv('peak')/100,sur=gv('surcharge')/100;
+  const tariff=gv('tariff'),disc=gv('disc')/100;
+  const oa=gv('oa'),tarE=gv('taresc')/100,oaE=gv('oaesc')/100;
+  const sCap=gv('tpc');   // total project capex Rs Cr
+  const df=gv('df')/100,ir=gv('ir')/100,tn=gv('tn'),moro=gv('moro');
+  const taxR=gv('tax')/100;
+  const dAmt=sCap*df,eAmt=sCap*(1-df);
+  const repayYrs=Math.max(1,tn-moro);
+  const ap=dAmt/repayYrs;
+  const grossYr1=ac*plf*8760;
+
+  // Build 25-yr data
+  const data=[];
+  let degF=1,tC=tariff,oC=oa,omC=sCap*gv('om')/100,insC=sCap*gv('ins')/100;
+  let wdv=sCap,bookWdv=sCap,ob=dAmt,retE=0;
+
+  for(let y=1;y<=25;y++){
+    if(y===1)degF=(1-deg1);else if(y<=10)degF*=(1-deg2);else degF*=(1-deg3);
+    const ng=grossYr1*degF*(1-tloss);
+    const wt=tC*(1+peak*sur),sp=wt*disc;
+    const grossRev=ng*sp/1e7, oaCost=ng*oC/1e7;
+    const nR=grossRev-oaCost, opx=omC+insC, ebd=nR-opx;
+    const bookDep=bookWdv*0.0528; bookWdv=Math.max(0,bookWdv-bookDep);
+    const ebit=ebd-bookDep,interest=ob*ir;
+    const prin=(y<=moro?0:(y<=tn?ap:0));
+    ob=Math.max(0,ob-prin);
+    let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+    const pbt=ebit-interest;
+    const txbl=Math.max(0,ebd-interest-itd),txp=txbl*taxR*1.04;
+    const pat=pbt-txp;
+    retE+=pat;
+    const fcf=ebd-interest-prin-txp;
+    const dscr=(interest+prin)>0?(ebd/(interest+prin)):ebd;
+    const icr=interest>0?(ebd/interest):ebd;
+    const nfa=Math.max(0,bookWdv);
+    const cash=Math.max(0,retE*0.4+2);
+    const totalA=nfa+cash;
+    data.push({y,grossRev,oaCost,nR,omC,insC,opx,ebd,bookDep,ebit,interest,prin,pbt,txp,pat,retE,nfa,cash,ob,eAmt,dscr,icr,fcf,ng:ng/1e6,sp:sp,tariff:tC,oa:oC});
+    if(y<5){tC*=(1+tarE);oC*=(1+oaE);}
+    omC*=(1+gv('ome')/100);insC*=1.03;
+  }
+
+  buildPnLTable(data);
+  buildBSTable(data,eAmt);
+  buildRatioTables(data,eAmt,dAmt);
+}
+
+function buildPnLTable(data){
+  const el=document.getElementById('pnl-table');
+  if(!el)return;
+  const yrs=data.map(d=>'<th style="padding:5px 6px;text-align:right;white-space:nowrap">Yr '+d.y+'</th>').join('');
+  const fmtR=(v,bold)=>`<td style="padding:4px 6px;text-align:right;${bold?'font-weight:700':''}">${v>=0?v.toFixed(2):'('+Math.abs(v).toFixed(2)+')'}</td>`;
+
+  function row(label,fn,bold,bg){
+    const style=`padding:4px 8px;${bold?'font-weight:700':''}${bg?`;background:${bg}`:''}`;
+    return `<tr style="background:${bg||'inherit'}"><td style="${style}">${label}</td>${data.map(d=>fmtR(fn(d),bold)).join('')}</tr>`;
+  }
+  function hrow(label){return `<tr style="background:#2E4057;color:#fff"><td style="padding:5px 8px;font-weight:700" colspan="${data.length+1}">${label}</td></tr>`;}
+
+  el.innerHTML=`<thead><tr style="background:#1F3864;color:#fff"><th style="padding:5px 8px;text-align:left;min-width:200px">Particulars</th>${yrs}</tr></thead>
+  <tbody>
+    ${hrow('I. REVENUE')}
+    ${row('Gross Revenue (Rs Cr)',d=>d.grossRev,false,'#F8FAFF')}
+    ${row('Less: OA Charges (Developer cost)',d=>-d.oaCost,false,'#FFF5F5')}
+    ${row('NET REVENUE (Rs Cr)',d=>d.nR,true,'#DEEAF1')}
+    ${hrow('II. OPERATING EXPENSES')}
+    ${row('O&M Expenses',d=>-d.omC,false,null)}
+    ${row('Insurance',d=>-d.insC,false,null)}
+    ${row('TOTAL OPEX',d=>-d.opx,true,'#FFF9E6')}
+    ${row('EBITDA (Rs Cr)',d=>d.ebd,true,'#E2EFDA')}
+    ${row('EBITDA Margin',d=>d.ebd/d.nR*100,false,null)}
+    ${hrow('III. DEPRECIATION & FINANCE')}
+    ${row('Book Depreciation (WDV 5.28%)',d=>-d.bookDep,false,null)}
+    ${row('EBIT',d=>d.ebit,true,'#EBF3FB')}
+    ${row('Interest on Term Loan',d=>-d.interest,false,'#FFF5F5')}
+    ${row('PBT (Profit Before Tax)',d=>d.pbt,true,'#E2EFDA')}
+    ${hrow('IV. TAX & NET PROFIT')}
+    ${row('IT Dep Shield applied',d=>0,false,null)}
+    ${row('Corporate Tax (26% effective)',d=>-d.txp,false,'#FFF5F5')}
+    ${row('PAT — Net Profit (Rs Cr)',d=>d.pat,true,'#C6EFCE')}
+    ${row('FCF to Developer (Rs Cr)',d=>d.fcf,true,'#DEEAF1')}
+    ${row('Retained Earnings (Cumulative)',d=>d.retE,false,null)}
+  </tbody>`;
+}
+
+function buildBSTable(data,eAmt){
+  const el=document.getElementById('bs-table');
+  if(!el)return;
+  const yrs=data.map(d=>'<th style="padding:5px 6px;text-align:right">Yr '+d.y+'</th>').join('');
+  const fmt=(v,bold)=>`<td style="padding:4px 6px;text-align:right;${bold?'font-weight:700':''}">${v>=0?v.toFixed(2):'('+Math.abs(v).toFixed(2)+')'}</td>`;
+  function row(lbl,fn,bold,bg){return `<tr style="background:${bg||''}"><td style="padding:4px 8px;${bold?'font-weight:700':''}">${lbl}</td>${data.map(d=>fmt(fn(d),bold)).join('')}</tr>`;}
+  function hrow(lbl){return `<tr style="background:#2E4057;color:#fff"><td style="padding:5px 8px;font-weight:700" colspan="${data.length+1}">${lbl}</td></tr>`;}
+
+  el.innerHTML=`<thead><tr style="background:#1F3864;color:#fff"><th style="padding:5px 8px;text-align:left;min-width:200px">Particulars</th>${yrs}</tr></thead>
+  <tbody>
+    ${hrow('ASSETS')}
+    ${hrow('A. Fixed Assets')}
+    ${row('Gross Block (Capex)',d=>d.nfa+d.nfa*0.15*0.5,false,'#F8FAFF')}
+    ${row('Net Block (WDV after dep)',d=>d.nfa,true,'#E2EFDA')}
+    ${hrow('B. Current Assets')}
+    ${row('Cash & Bank (Cumulative FCF proxy)',d=>d.cash,false,null)}
+    ${row('Trade Receivables (~1 month)',d=>Math.max(0,d.nR/12),false,null)}
+    ${row('TOTAL ASSETS',d=>d.nfa+d.cash+d.nR/12,true,'#C6EFCE')}
+    ${hrow('EQUITY & LIABILITIES')}
+    ${hrow('C. Shareholders Equity')}
+    ${row('Paid-up Share Capital',d=>eAmt,false,null)}
+    ${row('Retained Earnings',d=>d.retE,false,null)}
+    ${row('TOTAL EQUITY',d=>eAmt+d.retE,true,'#E2EFDA')}
+    ${hrow('D. Liabilities')}
+    ${row('Term Loan Outstanding',d=>d.ob,false,'#FFF5F5')}
+    ${row('Trade Payables (~1 month OPEX)',d=>d.opx/12,false,null)}
+    ${row('TOTAL LIABILITIES',d=>d.ob+d.opx/12,true,'#FFF9E6')}
+    ${row('TOTAL EQUITY & LIABILITIES',d=>eAmt+d.retE+d.ob+d.opx/12,true,'#C6EFCE')}
+  </tbody>`;
+}
+
+function buildRatioTables(data,eAmt,dAmt){
+  // DSCR table
+  const el=document.getElementById('dscr-table');
+  if(el){
+    const yrs=data.map(d=>'<th style="padding:5px 6px;text-align:right">Yr '+d.y+'</th>').join('');
+    const dscrRows=data.map(d=>{
+      const dscr=d.dscr;
+      const bg=dscr>=1.5?'#C6EFCE':dscr>=1.2?'#FFEB9C':'#FFC7CE';
+      const fc=dscr>=1.5?'#166534':dscr>=1.2?'#856404':'#9C0006';
+      return `<td style="padding:4px 6px;text-align:right;background:${bg};color:${fc};font-weight:700">${dscr.toFixed(2)}x</td>`;
+    }).join('');
+    const ebitdaRow=data.map(d=>`<td style="padding:4px 6px;text-align:right">${d.ebd.toFixed(2)}</td>`).join('');
+    const dsRow=data.map(d=>`<td style="padding:4px 6px;text-align:right">${(d.interest+d.prin).toFixed(2)}</td>`).join('');
+    const icrRow=data.map(d=>{
+      const icr=d.interest>0?(d.ebd/d.interest):99;
+      return `<td style="padding:4px 6px;text-align:right">${icr.toFixed(2)}x</td>`;
+    }).join('');
+    el.innerHTML=`<thead><tr style="background:#1F3864;color:#fff"><th style="padding:5px 8px;text-align:left;min-width:180px">Metric</th>${yrs}</tr></thead>
+    <tbody>
+      <tr><td style="padding:4px 8px">EBITDA (Rs Cr)</td>${ebitdaRow}</tr>
+      <tr style="background:#F8FAFF"><td style="padding:4px 8px">Debt Service (Int+Principal)</td>${dsRow}</tr>
+      <tr style="background:#E2EFDA"><td style="padding:4px 8px;font-weight:700">DSCR (benchmark ≥1.20x)</td>${dscrRows}</tr>
+      <tr><td style="padding:4px 8px">Interest Coverage Ratio</td>${icrRow}</tr>
+    </tbody>`;
+  }
+
+  // Ratio table
+  const rel=document.getElementById('ratio-table');
+  if(rel){
+    const yrs=data.map(d=>'<th style="padding:5px 6px;text-align:right">Yr '+d.y+'</th>').join('');
+    function ratRow(lbl,fn,fmt){
+      return `<tr><td style="padding:4px 8px">${lbl}</td>${data.map(d=>{
+        const v=fn(d);
+        return `<td style="padding:4px 6px;text-align:right">${typeof v==='number'?v.toFixed(fmt||2)+(fmt===1?'%':'x'):v}</td>`;
+      }).join('')}</tr>`;
+    }
+    rel.innerHTML=`<thead><tr style="background:#1F3864;color:#fff"><th style="padding:5px 8px;text-align:left;min-width:220px">Ratio</th>${yrs}</tr></thead>
+    <tbody>
+      <tr style="background:#2E4057;color:#fff"><td colspan="${data.length+1}" style="padding:5px 8px;font-weight:700">Profitability</td></tr>
+      ${ratRow('EBITDA Margin (%)',d=>(d.ebd/d.nR*100),1)}
+      ${ratRow('Net Profit Margin (%)',d=>(d.pat/d.nR*100),1)}
+      ${ratRow('ROE (%)',d=>(d.pat/eAmt*100),1)}
+      ${ratRow('FCF Yield on Equity (%)',d=>(d.fcf/eAmt*100),1)}
+      <tr style="background:#2E4057;color:#fff"><td colspan="${data.length+1}" style="padding:5px 8px;font-weight:700">Leverage</td></tr>
+      ${ratRow('Debt Outstanding (Rs Cr)',d=>d.ob,2)}
+      ${ratRow('Debt/Equity',d=>d.ob>0?(d.ob/eAmt):0,2)}
+      ${ratRow('Debt/EBITDA',d=>d.ob>0?(d.ob/d.ebd):0,2)}
+      <tr style="background:#2E4057;color:#fff"><td colspan="${data.length+1}" style="padding:5px 8px;font-weight:700">Energy Metrics</td></tr>
+      ${ratRow('Net Gen at Meter (MU)',d=>d.ng,3)}
+      ${ratRow('Selling Price (Rs/kWh)',d=>d.sp,2)}
+      ${ratRow('OA Charge (Rs/kWh)',d=>d.oa,2)}
+      ${ratRow('Net Realisation (Rs/kWh)',d=>d.sp-d.oa,2)}
+    </tbody>`;
+  }
+
+  // Summary box
+  const minDscr=Math.min(...data.slice(0,10).map(d=>d.dscr));
+  const avgDscr=data.slice(0,10).reduce((s,d)=>s+d.dscr,0)/10;
+  const totalFCF=data.reduce((s,d)=>s+d.fcf,0);
+  const mult=totalFCF/eAmt;
+  const ratSum=document.getElementById('rat-summary');
+  if(ratSum){
+    const ok=minDscr>=1.2;
+    ratSum.innerHTML=`
+      <span style="font-size:14px">${ok?'✅':'⚠'} Min DSCR (Debt Period): <strong>${minDscr.toFixed(2)}x</strong> ${ok?'(Bankable)':'(Below 1.20x threshold)'}</span><br>
+      <span>Avg DSCR (Yrs 1–10): <strong>${avgDscr.toFixed(2)}x</strong> &nbsp;|&nbsp; Total 25-yr FCF: <strong>Rs ${totalFCF.toFixed(1)} Cr</strong> &nbsp;|&nbsp; Equity Multiple: <strong>${mult.toFixed(1)}x</strong></span>
+    `;
+  }
+
+  const ret=document.getElementById('rat-returns');
+  if(ret){
+    ret.innerHTML=`
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:6px">
+        <div style="flex:1;min-width:120px;background:#E2EFDA;padding:10px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#888">Equity Invested</div><div style="font-size:16px;font-weight:700;color:#1F3864">Rs ${eAmt.toFixed(1)} Cr</div></div>
+        <div style="flex:1;min-width:120px;background:#E2EFDA;padding:10px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#888">Total 25-yr FCF</div><div style="font-size:16px;font-weight:700;color:#166534">Rs ${totalFCF.toFixed(1)} Cr</div></div>
+        <div style="flex:1;min-width:120px;background:#EBF3FB;padding:10px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#888">Equity Multiple</div><div style="font-size:16px;font-weight:700;color:#185FA5">${mult.toFixed(1)}x</div></div>
+        <div style="flex:1;min-width:120px;background:#EBF3FB;padding:10px;border-radius:8px;text-align:center"><div style="font-size:10px;color:#888">Min DSCR</div><div style="font-size:16px;font-weight:700;color:${minDscr>=1.2?'#166534':'#C00000'}">${minDscr.toFixed(2)}x</div></div>
+      </div>
+    `;
+  }
+}
 
 function buildActualRows(){
   const el=document.getElementById('avp-rows');if(!el)return;
@@ -2077,7 +2458,7 @@ function buildActualCustRows(){
   const c=customers.find(x=>x.id===cid);
   if(!c){el.innerHTML='<div class="alert info">Select your profile in My Investment first.</div>';return;}
   const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
-  const grossGen=dc_kWp*gv('plf')/100*8760;
+  const grossGen=acKWAC()*gv('plf')/100*8760 /*AC-fixed*/;
   const netGenMU=grossGen*(1-gv('tloss')/100)/1e6;
   const custMUAnn=netGenMU*(c.monthlyMU*12)/(customers.reduce((s,x)=>s+x.monthlyMU*12,0)||1);
   const projMonthly=custMUAnn/12;
@@ -2130,7 +2511,7 @@ function calc(){
   s('v-eq-pct', eqInt+'%');
 
   // Generation
-  const grossGen=dc_kWp*plf*8760;
+  const grossGen=acKWAC()*plf*8760; // AC-based (corrected v10)
   const netMeter=grossGen*(1-tloss);
   const wt=tariff*(1+peak*sur),sp1=wt*disc,nr1=sp1-oa;
   const om1=sCap*omP,ins1=sCap*insP,op1=om1+ins1+bOM;
@@ -2206,7 +2587,7 @@ function calc(){
   s('r-pb',payY?payY.toString():'>25');
   s('r-tfcf',tFCF.toFixed(1));
   s('r-cap',tCap.toFixed(1));s('r-eq',eAmt.toFixed(1));
-  s('r-gen',(netMeter/1e6).toFixed(2));s('r-gl',(tloss*100).toFixed(1)+'%');
+  s('r-gen',(netMeter/1e6).toFixed(2));s('r-gl',(tloss*100).toFixed(1)+'%'); // AC-based net gen
   s('r-eb',ebd1.toFixed(2));s('r-fcf',cfD[0].fcf);
   s('r-nr','Rs\u00a0'+nr1.toFixed(2));s('r-rm','x\u00a0'+retMult.toFixed(2));
 
@@ -2219,7 +2600,7 @@ function calc(){
   // Y1 income statement
   const y1El=document.getElementById('y1s');
   if(y1El)y1El.innerHTML=[
-    ['Gross generation (rated)',(grossGen/1e6).toFixed(2)+'\u00a0MU',''],
+    ['Gross generation — AC basis (20 MW AC × CUF × 8760)',(grossGen/1e6).toFixed(2)+'\u00a0MU',''],
     ['Less: total technical losses\u00a0('+((tloss)*100).toFixed(1)+'%)','\u2212\u00a0'+((grossGen-netMeter)/1e6).toFixed(2)+'\u00a0MU','rd'],
     ['Net generation billed at buyer meter',(netMeter/1e6).toFixed(2)+'\u00a0MU','gn'],
     ['Gross revenue','Rs\u00a0'+gRev.toFixed(2)+'\u00a0Cr',''],
@@ -2350,7 +2731,7 @@ function downloadCSV(filename,rows){
 }
 
 function exportAllToCSV(){
-  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
+  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000); // display only
   const plf=gv('plf')/100,tloss=gv('tloss')/100,tariff=gv('tariff'),disc=gv('disc')/100;
   const peak=gv('peak')/100,sur=gv('surcharge')/100,oa=gv('oa');
   const tarE=gv('taresc')/100,oaE=gv('oaesc')/100;
@@ -2359,7 +2740,7 @@ function exportAllToCSV(){
   const df=gv('df')/100,ir=gv('ir')/100,tn=gv('tn'),moro=gv('moro');
   const taxR=gv('tax')/100,sv=gv('sv')/100;
   const dAmt=tCap*df,eAmt=tCap*(1-df);
-  const grossGen=dc_kWp*plf*8760;
+  const grossGen=acKWAC()*plf*8760 /*AC-fixed*/;
   const repayYrs=Math.max(1,tn-moro);
   const ap=dAmt/repayYrs;
 
@@ -2441,7 +2822,7 @@ function exportAllToCSV(){
 }
 
 function exportPLToCSV(){
-  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000);
+  const dc_kWp=Math.round(gv('ac')*gv('dac')*1000); // display only
   const plf=gv('plf')/100,tloss=gv('tloss')/100,tariff=gv('tariff'),disc=gv('disc')/100;
   const peak=gv('peak')/100,sur=gv('surcharge')/100,oa=gv('oa');
   const tarE=gv('taresc')/100,oaE=gv('oaesc')/100;
@@ -2450,7 +2831,7 @@ function exportPLToCSV(){
   const df=gv('df')/100,ir=gv('ir')/100,tn=gv('tn'),moro=gv('moro');
   const taxR=gv('tax')/100,deg1=gv('deg1')/100;
   const dAmt=tCap*df,eAmt=tCap*(1-df);
-  const grossGen=dc_kWp*plf*8760;
+  const grossGen=acKWAC()*plf*8760; // AC-based (corrected v10)
   const repayYrs=Math.max(1,tn-moro);
   const ap=dAmt/repayYrs;
   const co=(document.getElementById('q-company')||{value:''}).value||'[Company Name]';
@@ -2571,7 +2952,7 @@ function generateFullReport(){
   const eAmt=(tCap*(1-dfP/100)).toFixed(2);
   const peak=gv('peak')/100, sur=gv('surcharge')/100;
   const wt=tariff*(1+peak*sur), sp1=(wt*disc/100).toFixed(4), nr1=(sp1-oa).toFixed(4);
-  const grossMU=(dc_kWp*plf/100*8760/1e6).toFixed(2);
+  const grossMU=(acKWAC()*plf/100*8760/1e6).toFixed(2); // AC-based (corrected v10)
   const netMU=(grossMU*(1-tloss/100)).toFixed(2);
   const annPrin=Math.max(1,tn-moro);
   const om1=(tCap*gv('om')/100).toFixed(2), ins1=(tCap*gv('ins')/100).toFixed(2);
@@ -2592,7 +2973,7 @@ function generateFullReport(){
   const ap=parseFloat(dAmt)/Math.max(1,tn-moro);
   for(let y=1;y<=10;y++){
     if(y===1) dF=1-deg1; else if(y<=10) dF*=0.9932;
-    const ng=dc_kWp*plf/100*8760*dF*(1-tloss/100);
+    const ng=acKWAC()*plf/100*8760*dF*(1-tloss/100); // AC-based (corrected v10)
     const spY=tC*disc/100;
     const nR=(ng*spY/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
     const bookDep=wdvB*0.15; wdvB=Math.max(0,wdvB-bookDep);
@@ -2749,7 +3130,7 @@ function generateFullReport(){
   if(gc('opt-ratio')){
     L('5.4 Analytical and Comparative Financial Ratios'); N();
     L(`  DSCR Year 1 (EBITDA / Debt Service):  ${(parseFloat(ebitda1)/(parseFloat(int1))).toFixed(2)}x (interest only, moratorium year)`);
-    L(`  EBITDA margin Year 1:                 ${(parseFloat(ebitda1)/((dc_kWp*plf/100*8760*(1-tloss/100)/1e6)*parseFloat(nr1))*100).toFixed(1)}%`);
+    L(`  EBITDA margin Year 1:                 ${(parseFloat(ebitda1)/((acKWAC()*plf/100*8760*(1-tloss/100)/1e6)*parseFloat(nr1))*100).toFixed(1)}%`);
     L(`  Equity payback (approx):              ${(parseFloat(eAmt)/parseFloat(fcf1)).toFixed(1)} years from COD`);
     L(`  Rs per Wp DC (all-in):                Rs ${((tCap*1e7)/dc_kWp).toFixed(1)}`);
     L(`  Net realisation per kWh:              Rs ${nr1}`);
@@ -3003,7 +3384,7 @@ function buildTnercGrid(){
   const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
   const plf = gv('plf') / 100;
   const tloss = gv('tloss') / 100;
-  const grossGen = dc_kWp * plf * 8760;
+  const grossGen = acKWAC()*plf*8760 /*AC-fixed*/;
   const netGenAnn = grossGen * (1 - tloss) / 1e6;
   const projMonthly = netGenAnn / 12;
 
@@ -3139,7 +3520,7 @@ function buildTnercYTD(){
   const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
   const monthsEntered = tnData.filter(d => d.gen > 0).length;
   const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
-  const projAnn = dc_kWp * gv('plf')/100 * 8760 * (1 - gv('tloss')/100) / 1e6;
+  const projAnn = acKWAC()*gv('plf')/100*8760 /*AC-fixed*/ * (1 - gv('tloss')/100) / 1e6;
   const genVar = projAnn > 0 ? (totalActGen / (projAnn * monthsEntered/12) - 1) * 100 : 0;
   const totalCustEq = customers.reduce((s,c) => s + c.equityPct, 0);
   const totalActCons = customers.reduce((s,c) => {
@@ -3170,7 +3551,7 @@ function buildTnercCustComp(){
 
   const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
   const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
-  const projAnn = dc_kWp * gv('plf')/100 * 8760 * (1 - gv('tloss')/100) / 1e6;
+  const projAnn = acKWAC()*gv('plf')/100*8760 /*AC-fixed*/ * (1 - gv('tloss')/100) / 1e6;
   const genBase = totalActGen > 0 ? totalActGen : projAnn;
 
   let html = '';
@@ -3211,7 +3592,7 @@ function generateTnercCert(){
   const cod = document.getElementById('tn-cod').value || '[COD Date]';
 
   const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
-  const projAnn = (dc_kWp * gv('plf')/100 * 8760 * (1 - gv('tloss')/100) / 1e6).toFixed(3);
+  const projAnn = (acKWAC()*gv('plf')/100*8760 /*AC-fixed*/ * (1 - gv('tloss')/100) / 1e6).toFixed(3);
   const totalActGen = tnData.reduce((s,d) => s + (d.gen||0), 0);
   const totalCustEq = customers.reduce((s,c) => s + c.equityPct, 0);
   const devEq = 100 - totalCustEq;
@@ -3365,7 +3746,7 @@ function buildSheet(headers, rows) {
 
 /* ── 1. EXPORT 25-YEAR CASH FLOW ────────────────────────────────── */
 function exportCFtoXLSX() {
-  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000);
+  const dc_kWp = Math.round(gv('ac') * gv('dac') * 1000); // display only
   const plf = gv('plf')/100, tloss = gv('tloss')/100;
   const tariff = gv('tariff'), disc = gv('disc')/100;
   const peak = gv('peak')/100, sur = gv('surcharge')/100;
@@ -3375,7 +3756,7 @@ function exportCFtoXLSX() {
   const df = gv('df')/100, ir = gv('ir')/100, tn = gv('tn'), moro = gv('moro');
   const taxR = gv('tax')/100, sv = gv('sv')/100, deg1 = gv('deg1')/100;
   const dAmt = tCap*df, eAmt = tCap*(1-df);
-  const grossGen = dc_kWp*plf*8760;
+  const grossGen = acKWAC()*plf*8760 /*AC-fixed*/;
   const ap = dAmt/Math.max(1,tn-moro);
 
   const wb = XLSX.utils.book_new();
@@ -3421,7 +3802,7 @@ function exportCFtoXLSX() {
 
   for(let y=1; y<=25; y++) {
     if(y===1) dF=1-deg1; else if(y<=10) dF*=0.9932; else dF*=0.993;
-    const ng = dc_kWp*plf*8760*dF*(1-tloss);
+    const ng = acKWAC()*plf*8760*dF*(1-tloss); // AC-based (corrected v10)
     const wt = tC*(1+peak*sur), sp = wt*disc;
     const gR = ng*sp/1e7, ocC = ng*oC/1e7, nR = gR-ocC, opx = omC+insC;
     const ebd = nR-opx;
@@ -3459,7 +3840,7 @@ function exportCFtoXLSX() {
   const plRows=[];
   for(let y=1; y<=10; y++) {
     if(y===1) dF=1-deg1; else dF*=0.9932;
-    const ng=dc_kWp*plf*8760*dF*(1-tloss);
+    const ng=acKWAC()*plf*8760*dF*(1-tloss); // AC-based (corrected v10)
     const sp=tC*(1+peak*sur)*disc;
     const nR=(ng*sp/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
     const bkD=bookWdv*0.15; bookWdv=Math.max(0,bookWdv-bkD);
@@ -3489,7 +3870,7 @@ function exportCFtoXLSX() {
   const bsRows=[];
   for(let y=1; y<=10; y++) {
     if(y===1) dF=1-deg1; else dF*=0.9932;
-    const ng=dc_kWp*plf*8760*dF*(1-tloss);
+    const ng=acKWAC()*plf*8760*dF*(1-tloss); // AC-based (corrected v10)
     const sp=tC*(1+peak*sur)*disc;
     const nR=(ng*sp/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
     const bkD=bookWdv*0.15; bookWdv=Math.max(0,bookWdv-bkD);
@@ -3538,7 +3919,7 @@ function exportDebtToXLSX() {
 
   for(let y=1; y<=25; y++) {
     if(y===1) dF=1-deg1; else if(y<=10) dF*=0.9932; else dF*=0.993;
-    const ng=dc_kWp*plf*8760*dF*(1-tloss);
+    const ng=acKWAC()*plf*8760*dF*(1-tloss); // AC-based (corrected v10)
     const sp=tC*(1+peak*sur)*disc;
     const nR=(ng*sp/1e7)-(ng*oC/1e7), opx=omC+insC, ebd=nR-opx;
     const interest=ob*ir, prin=(y<=moro?0:(y<=tn?ap:0));
@@ -3583,8 +3964,8 @@ function exportDebtToXLSX() {
 
 /* ── 3. EXPORT ACTUAL VS PROJECTED ──────────────────────────────── */
 function exportAvpToXLSX() {
-  const dc_kWp = Math.round(gv('ac')*gv('dac')*1000);
-  const netGenAnn = dc_kWp*gv('plf')/100*8760*(1-gv('tloss')/100)/1e6;
+  const dc_kWp = Math.round(gv('ac')*gv('dac')*1000); // display only
+  const netGenAnn = acKWAC()*gv('plf')/100*8760*(1-gv('tloss')/100)/1e6; // AC-based
   const projM = netGenAnn/12;
   const tariff = gv('tariff'), disc = gv('disc')/100;
   const peak = gv('peak')/100, sur = gv('surcharge')/100, oa = gv('oa');
@@ -3657,7 +4038,7 @@ function exportTnercToXLSX() {
   const cod = (document.getElementById('tn-cod')||{value:''}).value||'[COD Date]';
 
   const dc_kWp = Math.round(gv('ac')*gv('dac')*1000);
-  const projAnn = (dc_kWp*gv('plf')/100*8760*(1-gv('tloss')/100)/1e6).toFixed(3);
+  const projAnn = (acKWAC()*gv('plf')/100*8760 /*AC-fixed*/*(1-gv('tloss')/100)/1e6).toFixed(3);
   const totalCustEq = customers.reduce((s,c)=>s+c.equityPct,0);
   const devEq = 100-totalCustEq;
   const totalActGen = tnData.reduce((s,d)=>s+(d.gen||0),0);
@@ -4102,8 +4483,8 @@ function generatePPT(){
   const nr1=(parseFloat(sp1)-parseFloat(oa)).toFixed(4);
   const plf=gv('plf').toFixed(1);
   const tloss=gv('tloss').toFixed(1);
-  const dc_kWp=Math.round(acMW*gv('dac')*1000);
-  const grossGen=dc_kWp*gv('plf')/100*8760;
+  const dc_kWp=Math.round(acMW*gv('dac')*1000); // display only
+  const grossGen=acKWAC()*gv('plf')/100*8760; // AC-based (corrected v10)
   const netMU=(grossGen*(1-gv('tloss')/100)/1e6).toFixed(2);
   const df=gv('df'), eq=100-df;
   const dAmt=(parseFloat(tCap)*df/100).toFixed(2);
@@ -4580,7 +4961,7 @@ function aiGetProjectContext(){
     const acMW   = gv('ac');
     const dacR   = gv('dac');
     const dcMW   = +(acMW * dacR).toFixed(2);
-    const dc_kWp = Math.round(acMW * dacR * 1000);
+    const dc_kWp = Math.round(acMW * dacR * 1000); // display only
 
     // ── LAND ────────────────────────────────────────────────────
     const acresPerMW  = 3;                           // 3 acres per MW DC
@@ -4592,7 +4973,7 @@ function aiGetProjectContext(){
     const plf        = gv('plf');
     const tloss      = gv('tloss');
     const deg1       = gv('deg1');
-    const grossKWh   = dc_kWp * plf / 100 * 8760;
+    const grossKWh   = acKWAC() * plf / 100 * 8760; // AC-based (corrected v10)
     const netKWh     = grossKWh * (1 - tloss / 100);
     const netMU      = (netKWh / 1e6).toFixed(2);
     const grossMU    = (grossKWh / 1e6).toFixed(2);
