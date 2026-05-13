@@ -541,7 +541,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
     <div class="comp-row"><span class="comp-lbl">DC capacity (auto)</span><span class="comp-val" id="v-dc-calc">26 MW DC / 26,000 kWp</span></div>
     <div class="dv"></div>
     <div class="fld"><label class="flbl">Plant load factor / CUF <span>(%)</span></label>
-      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('plf',-0.1)">&#8722;</button><span class="pm-val" id="v-plf">20.4</span><button class="pm-btn right" onclick="pmStep('plf',0.1)">+</button></div>
+      <div class="pm-row"><button class="pm-btn left" onclick="pmStep('plf',-0.1)">&#8722;</button><span class="pm-val" id="v-plf">21.3</span><button class="pm-btn right" onclick="pmStep('plf',0.1)">+</button></div>
     </div>
     <div class="fld">
       <label class="flbl">Total technical loss &mdash; generation to customer <span>(%)</span></label>
@@ -1625,13 +1625,13 @@ function buildDrawer(){
 /* ── PM STEPPER ── */
 const PM={
   ac:{v:20,min:1,max:200,dec:0},dac:{v:1.30,min:1.0,max:1.6,dec:2},
-  plf:{v:20.4,min:10,max:30,dec:1},tloss:{v:9.0,min:1,max:25,dec:1},
+  plf:{v:21.3,min:10,max:30,dec:1},tloss:{v:9.0,min:1,max:25,dec:1},
   peak:{v:33,min:0,max:50,dec:0},surcharge:{v:25,min:0,max:40,dec:0},deg1:{v:2.0,min:0,max:5,dec:1},
   tariff:{v:7.50,min:4,max:20,dec:2},disc:{v:85,min:70,max:99,dec:1},
   oa:{v:0.95,min:0.3,max:4,dec:2},taresc:{v:3.0,min:0,max:10,dec:1},oaesc:{v:3.0,min:0,max:10,dec:1},
   epcMW:{v:550,min:200,max:900,dec:0},   // Rs Lakhs per MW AC — all-in TPC rate (5.50 Cr/MW includes land+electricals+evacuation+solar equipment)
   // derived by apportionCost() — do not edit directly:
-  epc:{v:70.0,min:0,max:500,dec:2},land:{v:10.80,min:0,max:100,dec:2},
+  epc:{v:70.0,min:0,max:500,dec:2},land:{v:10.80,min:0,max:100,dec:2},elec:{v:11.0,min:0,max:100,dec:2},
   evac:{v:10.0,min:0,max:60,dec:2},misc:{v:10.0,min:0,max:50,dec:2},
   tpc:{v:100.0,min:0,max:500,dec:2},
   // legacy inputs no longer shown but kept for backward compat:
@@ -1702,6 +1702,7 @@ function apportionCost(){
   PM['epc'].v  = epcCr;
   PM['land'].v = landCr;
   PM['evac'].v = evacCr;
+  PM['elec'].v = elecCr;   // FIX v10: electrical 10% was missing from calc() sCap
   PM['misc'].v = Math.round((civilCr + scadaCr + prelimCr) * 100) / 100;
 
   // ── Evacuation voltage advisory ──
@@ -2492,7 +2493,8 @@ function calc(){
 
   // Capex
   const eCap=htLen*htC+ssC+mC;
-  const sCap=epc+land+evac+misc;
+  const elec=gv('elec');
+  const sCap=epc+land+evac+elec+misc;  // FIX v10: elec (10% TPC) was missing
   const bCap=bMWh*bC;
   const tCap=sCap+bCap;
   const dAmt=tCap*df,eAmt=tCap*(1-df);
@@ -3207,7 +3209,7 @@ function generateFullReport(){
     L('  + Battery storage option enables evening peak dispatch'); N();
     L('WEAKNESSES:');
     L('  - Intermittent generation: no output at night, reduced during monsoon (June to September)');
-    L('  - PLF of 20 to 22% versus thermal plant PLF of 80 to 85%');
+    L('  - PLF of 21.3% (this project) versus thermal plant PLF of 80 to 85%');
     L('  - High upfront capital: Rs '+sCap+' Crores required before any revenue');
     L('  - Land acquisition and agricultural conversion: 12 to 18 months typical lead time'); N();
     L('OPPORTUNITIES:');
@@ -4400,7 +4402,7 @@ function getPrSummary(){
   const tCap=(gv('epc')+gv('land')+gv('evac')+gv('misc')).toFixed(1);
   const oa=gv('oa'), tariff=gv('tariff'), disc=gv('disc'), peak=gv('peak')/100, sur=gv('surcharge')/100;
   const wt=tariff*(1+peak*sur), sp1=(wt*disc/100).toFixed(2);
-  const netMU=((Math.round(gv('ac')*gv('dac')*1000)*gv('plf')/100*8760*(1-gv('tloss')/100))/1e6).toFixed(2);
+  const netMU=((acKWAC()*gv('plf')/100*8760*(1-gv('tloss')/100))/1e6).toFixed(2); // AC-based
   const site=(document.getElementById('q-site')||{value:''}).value||'Tamil Nadu';
   const rpdate=(document.getElementById('q-rpdate')||{value:''}).value||'May 2026';
   return `EIL Solar — Project Summary (${rpdate})
@@ -4710,7 +4712,7 @@ let AI_QA = [
   { cat:'technical', q:'What is the land cost for this project?',
     a:'**Land: 78 acres × Rs 18 Lakhs/acre = Rs 14.04 Crores** (model value: Rs 11.70 Cr — update with actual market rate at site).\n\n| Item | Value |\n|---|---|\n| DC capacity | 26 MW DC |\n| Norm | 3 acres/MW DC |\n| Total acres | 78 acres |\n| Rate (model) | Rs 18 Lakhs/acre |\n| Land cost (model) | Rs 11.70 Crores |\n\nActual land cost depends on the specific district and whether land is owned, purchased or leased. Update in Project Inputs when the site is finalised.' },
   { cat:'technical', q:'What is CUF and why does it matter?',
-    a:'CUF (Capacity Utilisation Factor) or PLF (Plant Load Factor) measures how much energy the plant actually generates vs its theoretical maximum. For this 26 MW project, the CUF is 20.42% — meaning the plant generates for the equivalent of 20.42% of the full year at rated capacity. Higher CUF = more energy = more revenue. Tamil Nadu ground mount solar typically achieves 18–22% CUF. Poor maintenance, soiling, or grid curtailment reduces CUF.' },
+    a:'CUF (Capacity Utilisation Factor) or PLF (Plant Load Factor) measures how much energy the plant actually generates vs its theoretical maximum. For this project, the CUF is 21.3% (AC basis — 20 MW AC × 21.3% × 8,760 hrs = 37.3 MU/yr) — meaning the plant generates for the equivalent of 21.3% of the full year at rated capacity. Higher CUF = more energy = more revenue. Tamil Nadu ground mount solar typically achieves 18–22% CUF. Poor maintenance, soiling, or grid curtailment reduces CUF.' },
   { cat:'technical', q:'What are the technical losses in this project?',
     a:'Total technical loss is set at 7% of gross generation. This includes: DC cable losses 0.8% + Inverter and AC conversion 1.5% + Transformer losses 0.8% + Soiling and dust 3.0% + Mismatch and other 0.9% = 7.0% internal loss. Additionally, TNERC grid loss at 110kV injection is NIL for transmission (T.O.7/2022 Table 5-12), plus 1.52% distribution loss from 110kV to your 11kV connection. Total effective loss in the model is ~8.5% generation to your meter.' },
   { cat:'technical', q:'What happens when panels degrade over 25 years?',
@@ -5466,8 +5468,8 @@ const PAGE_AI_QA = {
         a: '**Rs 5.50 Cr/MW (Rs 550 Lakhs/MW)** is the 2025–26 all-in benchmark for ground-mount solar in Tamil Nadu, including:\n\n| Component | Inclusion |\n|---|---|\n| Solar panels (ALMM-listed) | ✅ Yes |\n| String inverters / central inverters | ✅ Yes |\n| Mounting structures (ground) | ✅ Yes |\n| DC & AC cabling | ✅ Yes |\n| Electricals & HT panels | ✅ Yes |\n| Evacuation substation | ✅ Yes |\n| Land (3 acres/MW × Rs 18 L/acre) | ✅ Yes |\n| Civil & fencing | ✅ Yes |\n| SCADA / monitoring | ✅ Yes |\n| Preliminary & contingency | ✅ Yes |\n\nPrevious Rs 5.00 Cr benchmark was revised upward due to equipment cost escalation (module prices, steel structures, copper cabling) and increased civil costs.' },
       { q: 'What is DC to AC ratio and why 1.30?',
         a: '**DC:AC ratio** = DC panel capacity ÷ AC inverter capacity.\n\nAt 1.30: 20 MW AC inverters are fitted with 26 MW DC panels.\n\n**Why overdrive?** Solar irradiation is rarely at peak 100% simultaneously. Inverter clipping occurs <5% of time. Benefits:\n- Better utilisation during morning and evening hours\n- Higher annual energy yield at modest extra cost\n- TNERC / lenders accept up to 1.35 for Tamil Nadu\n\n1.30 is the Tamil Nadu industry standard — optimised for Chennai–Trichy irradiation belt (~1,820 kWh/m²/yr).' },
-      { q: 'What is CUF / PLF and is 20.4% realistic?',
-        a: '**CUF (Capacity Utilisation Factor)** = Annual generation ÷ (Installed MW × 8760 hrs).\n\n20.4% CUF means the 20 MW plant generates 20.4% of what it would at 100% for 8760 hrs.\n\n**Tamil Nadu benchmarks (TNERC / MNRE):**\n- P50 (50% probability) for ground-mount: **19–22%**\n- South TN (Tirunelveli, Thoothukudi): up to 24%\n- North TN (Chennai, Kancheepuram): 18–21%\n\n20.4% is conservative and lender-safe. Real-world TN projects often achieve 21–22% once panel soiling is managed with regular cleaning.' },
+      { q: 'What is CUF / PLF and is 21.3% realistic?',
+        a: '**CUF (Capacity Utilisation Factor)** = Annual generation ÷ (Installed MW × 8760 hrs).\n\n21.3% CUF means the 20 MW plant generates 21.3% of what it would at 100% for 8760 hrs.\n\n**Tamil Nadu benchmarks (TNERC / MNRE):**\n- P50 (50% probability) for ground-mount: **19–22%**\n- South TN (Tirunelveli, Thoothukudi): up to 24%\n- North TN (Chennai, Kancheepuram): 18–21%\n\n21.3% is a realistic and lender-acceptable figure. Real-world TN projects in the central belt often achieve 21–23% with regular panel cleaning every 2 weeks.' },
       { q: 'What is the OA charge and why does the developer bear it?',
         a: '**Open Access (OA) charge** is the fee paid to TANTRANSCO/TANGEDCO for using the state grid to wheel power from the solar plant to the customer.\n\nTotal OA = Rs 0.95/kWh (with 30% solar concession):\n\n| Component | Full rate | After 30% concession |\n|---|---|---|\n| Wheeling (HT) | Rs 1.04 | Rs 0.728 |\n| State transmission | Rs 0.224/MWh | Rs 0.157 |\n| SLDC scheduling | Rs 0.064/MWh | Rs 0.045 |\n| Additional surcharge | Rs 0.10 | Rs 0.10 |\n\nDeveloper bears it so **customer sees only one clean price** (the selling price). This simplifies billing — customer pays Rs 6.906/kWh and nothing else.' },
     ]
@@ -5589,12 +5591,12 @@ const PAGE_AI_QA = {
         a: '**DC oversizing is deliberate and standard practice in all solar plants.**\n\n**Why panels rarely produce full rated output:**\n- Heat losses (panels lose efficiency above 25°C)\n- Dust and soiling on glass surface\n- Cable and mismatch losses between panels\n- Weather variation — cloud, haze, humidity\n- Module degradation over time\n\n**How oversizing helps:**\nBy installing higher DC capacity (typically **1.30× AC capacity**), the inverter works near full load for longer hours — especially during morning ramp-up and evening ramp-down. This improves annual CUF significantly.\n\n**Example in this project:**\n- AC inverter capacity: 20 MW AC (inverter output limit)\n- DC panel capacity: 26 MWp (1.30× = extra panels installed)\n- Extra panels cost far less than upgrading inverter + transformer + evacuation infrastructure\n\n**Revenue is always based on AC export** — actual units delivered to the customer meter. DC clipping during peak noon hours is a small loss, but overall annual generation increases.\n\n**TNERC / lenders accept:** DC:AC ratio up to 1.35 for Tamil Nadu ground-mount projects.' },
       { q: 'Why does generation decrease every year?',
         a: '**Panel degradation** is the natural decline in solar cell efficiency over time, caused by UV exposure, thermal cycling, and light-induced degradation.\n\n**Degradation profile in this project:**\n\n| Period | Rate | Cause |\n|---|---|---|\n| Year 1 (LID) | **−2.00%** | Light Induced Degradation — steepest, occurs in first few months |\n| Years 2–10 | **−0.68%/year** | Normal aging per Tier-1 manufacturer warranty |\n| Years 11–25 | **−0.70%/year** | Slightly higher post-decade aging |\n\n**Cumulative effect:**\n- Year 10: plant produces ~92.5% of Year 1 output\n- Year 25: plant produces ~82.9% of Year 1 output\n\nTier-1 manufacturers (Jinko, Longi, Canadian Solar) guarantee ≥80% output at Year 25. This project\'s model is conservative and within warranty specs.' },
-      { q: 'What is CUF / PLF and how does 20.42% compare to Tamil Nadu benchmarks?',
-        a: '**CUF (Capacity Utilisation Factor)** = Annual gross generation ÷ (AC capacity in kW × 8,760 hours)\n\nAt 20.42% CUF with 20,000 kWAC:\n- Annual gross = 20,000 × 0.2042 × 8,760 = **35.78 MU**\n\n**Tamil Nadu benchmarks (TNERC / MNRE data):**\n\n| Region | Typical CUF |\n|---|---|\n| South TN (Tirunelveli, Thoothukudi) | 22–25% |\n| Central TN (Trichy, Madurai) | 20–23% |\n| North TN (Chennai, Kancheepuram) | 18–21% |\n| MNRE P50 estimate for TN | 19–22% |\n\n**20.42% is conservative and lender-safe.** Real-world TN ground-mount projects in the central belt often achieve 21–22% with good O&M (regular cleaning every 2 weeks). The model uses a P50 estimate — meaning 50% probability of achieving this or better.' },
+      { q: 'What is CUF / PLF and how does 21.3% compare to Tamil Nadu benchmarks?',
+        a: '**CUF (Capacity Utilisation Factor)** = Annual gross generation ÷ (AC capacity in kW × 8,760 hours)\n\nAt 21.3% CUF with 20,000 kWAC:\n- Annual gross = 20,000 × 0.213 × 8,760 = **37.32 MU**\n\n**Tamil Nadu benchmarks (TNERC / MNRE data):**\n\n| Region | Typical CUF |\n|---|---|\n| South TN (Tirunelveli, Thoothukudi) | 22–25% |\n| Central TN (Trichy, Madurai) | 20–23% |\n| North TN (Chennai, Kancheepuram) | 18–21% |\n| MNRE P50 estimate for TN | 19–22% |\n\n**21.3% is realistic and lender-acceptable.** Real-world TN ground-mount projects in the central belt often achieve 21–22% with good O&M (regular cleaning every 2 weeks). The model uses a P50 estimate — meaning 50% probability of achieving this or better.' },
       { q: 'What is P90 generation and why do lenders use it?',
         a: '**P90 generation** = Generation level with 90% probability of being achieved or exceeded.\n\nIn this model, P90 is shown as **90% of net generation**. In practice, P90 from a solar resource study (NISE/SolarAnywhere/Solargis) accounts for:\n- Irradiation variability year-to-year\n- Equipment underperformance risk\n- Weather uncertainty\n\n**Why lenders require P90:**\n- Banks lend based on P90 generation — conservative scenario\n- Debt service must be comfortably covered even in a bad year\n- If DSCR at P90 ≥ 1.20x → project is bankable\n- If DSCR at P50 (base case) ≥ 1.40x → comfortable margin\n\n**Rule of thumb:** P90 ≈ P50 × 0.90 for a well-designed TN ground-mount plant. This project shows P90 generation in the rightmost column of the generation table.' },
       { q: 'What is Specific Yield and what is a good number for Tamil Nadu?',
-        a: '**Specific Yield** = Annual AC generation ÷ AC capacity = kWh/kWAC/year\n\nThis measures how efficiently the plant converts installed AC capacity into actual energy.\n\n**At 20.42% CUF:**\n- Specific Yield = 0.2042 × 8,760 = **1,789 kWh/kWAC/year**\n\n**Tamil Nadu benchmarks:**\n\n| Region | Specific Yield (kWh/kWAC/yr) |\n|---|---|\n| South TN (Tirunelveli) | 1,900–2,100 |\n| Central TN (Trichy) | 1,750–2,000 |\n| North TN (Chennai) | 1,580–1,840 |\n| This project | **1,789** |\n\nSpecific yield above 1,700 is acceptable for lenders. MNRE benchmark for TN ground-mount is 1,800–2,000 kWh/kWAC/yr. This project is conservative and within the acceptable range for North/Central TN sites.' },
+        a: '**Specific Yield** = Annual AC generation ÷ AC capacity = kWh/kWAC/year\n\nThis measures how efficiently the plant converts installed AC capacity into actual energy.\n\n**At 21.3% CUF:**\n- Specific Yield = 0.213 × 8,760 = **1,866 kWh/kWAC/year**\n\n**Tamil Nadu benchmarks:**\n\n| Region | Specific Yield (kWh/kWAC/yr) |\n|---|---|\n| South TN (Tirunelveli) | 1,900–2,100 |\n| Central TN (Trichy) | 1,750–2,000 |\n| North TN (Chennai) | 1,580–1,840 |\n| This project | **1,866** |\n\nSpecific yield above 1,700 is acceptable for lenders. MNRE benchmark for TN ground-mount is 1,800–2,000 kWh/kWAC/yr. This project is conservative and within the acceptable range for North/Central TN sites.' },
     ]
   },
 
