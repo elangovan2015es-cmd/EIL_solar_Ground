@@ -85,8 +85,8 @@ body{font-family:'Inter',sans-serif;background:#F3F4F6;color:var(--n9);-webkit-f
 .di-dsc{font-size:10.5px;color:var(--n5);margin-top:1px}
 .drw-sep{height:1px;background:var(--n3);margin:4px 12px}
 
-/* CANVAS */
-.cvs{padding-top:calc(var(--hh-total) + var(--rh) + 8px);padding-left:14px;padding-right:14px;padding-bottom:calc(80px + var(--safe-bot));max-width:640px;margin:0 auto;}
+/* CANVAS — mobile base: full width, no auto-centering */
+.cvs{padding-top:calc(var(--hh-total) + var(--rh) + 8px);padding-left:14px;padding-right:14px;padding-bottom:calc(80px + var(--safe-bot));width:100%;box-sizing:border-box;}
 
 /* SECTIONS */
 .sec{display:none}.sec.on{display:block}
@@ -350,112 +350,91 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 /* ════════════════════════════════════════════════════════════════
    DESKTOP LAYOUT  ≥ 900 px
-   Sidebar always visible, canvas fills remaining width, grids expand
+   body gets padding-left = sidebar width → everything clears sidebar
+   Role-bar + AI panel also shifted; hamburger hidden
 ════════════════════════════════════════════════════════════════ */
 @media(min-width:900px){
-  /* ── root ── */
   :root{--sb:255px}
 
-  /* ── sidebar: always on, full height ── */
-  .sidebar{display:flex!important;flex-direction:column}
+  /* ── The key fix: offset the entire body so nothing hides under sidebar ── */
+  body{padding-left:var(--sb);}
 
-  /* ── hide hamburger (drawer not needed) ── */
-  .hbtn{display:none!important}
+  /* ── Sidebar: always visible ── */
+  .sidebar{display:flex!important;flex-direction:column;}
 
-  /* ── header: slightly larger text ── */
-  .hdr-t{font-size:15px}
+  /* ── Hamburger: hidden on desktop ── */
+  .hbtn{display:none!important;}
 
-  /* ── role-bar: start after sidebar ── */
-  .role-bar{left:var(--sb);padding:0 24px}
+  /* ── Header: spans full viewport (sidebar included) — looks correct ── */
+  .hdr-t{font-size:15px;}
 
-  /* ── AI section (fixed panel): start after sidebar ── */
-  #s-ai{left:var(--sb)!important}
+  /* ── Role-bar: shift right of sidebar ── */
+  .role-bar{left:var(--sb);padding:0 24px;}
 
-  /* ── canvas: push right of sidebar, fill full remaining width ──
-     Use padding-top to clear the fixed header + role-bar           */
+  /* ── AI full-screen section: shift right of sidebar ── */
+  #s-ai{left:var(--sb)!important;}
+
+  /* ── Canvas: now just needs normal padding, body offset does the rest ── */
   .cvs{
-    margin-left:var(--sb);
-    width:calc(100vw - var(--sb));
-    max-width:calc(100vw - var(--sb));
+    width:100%;
+    max-width:100%;
+    margin:0;
     padding:calc(var(--hh-total) + var(--rh) + 20px) 36px 80px 36px;
     box-sizing:border-box;
   }
 
-  /* ── FAB: centred in the content area, not the full viewport ── */
-  .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:20px;right:auto}
+  /* ── FAB ── */
+  .fab-w{left:50%;transform:translateX(-50%);bottom:20px;right:auto;}
 
-  /* ── PAI panel (page AI): position nicely bottom-right ── */
-  .pai-panel{left:auto;right:28px;width:440px;bottom:72px;border-radius:16px;max-height:74vh}
+  /* ── Page AI panel: bottom-right of content area ── */
+  .pai-panel{left:auto;right:28px;width:440px;bottom:72px;border-radius:16px;max-height:74vh;}
 
-  /* ── section heading ── */
-  .sec-h{margin-bottom:20px;padding-bottom:14px}
-  .sec-ti{font-size:21px}
-  .sec-ic{font-size:24px}
+  /* ── Typography & spacing upgrades ── */
+  .sec-h{margin-bottom:20px;padding-bottom:14px;}
+  .sec-ti{font-size:21px;}
+  .sec-ic{font-size:24px;}
+  .card{padding:22px 24px;margin-bottom:16px;border-radius:14px;}
+  .chdr{margin-bottom:14px;font-size:11px;}
+  .met{padding:14px 12px;}
+  .ml{font-size:10.5px;}.mu{font-size:10px;}
+  .mv{font-size:18px;}.mv.lg{font-size:28px;}
+  .mg4{grid-template-columns:repeat(4,1fr);}
+  .sk{font-size:13.5px;}.sv{font-size:13px;min-width:140px;}
+  .pm-val{font-size:18px;}.pm-btn{width:46px;height:46px;font-size:22px;}
+  .flbl{font-size:14px;}
+  .fhint{font-size:12px;}
+  select{font-size:14px;}
+  input[type=text]{font-size:14px;}
+  table{font-size:12px;min-width:auto;}
+  td{font-size:12px;padding:8px 10px;}
+  th{font-size:10.5px;padding:8px 10px;}
+  .alert{font-size:13px;}
+  .comp-val{font-size:15px;}
+  .avp-row{grid-template-columns:100px 1fr 1fr 1fr;font-size:13px;}
 
-  /* ── cards ── */
-  .card{padding:22px 24px;margin-bottom:16px;border-radius:14px}
-  .chdr{margin-bottom:14px;font-size:11px}
-
-  /* ── metric tiles ── */
-  .met{padding:14px 12px}
-  .ml{font-size:10.5px}.mu{font-size:10px}
-  .mv{font-size:18px}.mv.lg{font-size:28px}
-  /* Always 4 columns on desktop for mg4; allow mg2/mg3 to stay */
-  .mg4{grid-template-columns:repeat(4,1fr)}
-
-  /* ── summary rows ── */
-  .sk{font-size:13.5px}.sv{font-size:13px;min-width:140px}
-
-  /* ── steppers ── */
-  .pm-val{font-size:18px}.pm-btn{width:46px;height:46px;font-size:22px}
-
-  /* ── form fields ── */
-  .flbl{font-size:14px}
-  .fhint{font-size:12px}
-  select{font-size:14px}
-  input[type=text]{font-size:14px}
-
-  /* ── tables: larger text, no forced min-width (scroll handles it) ── */
-  table{font-size:12px;min-width:auto}
-  td{font-size:12px;padding:8px 10px}
-  th{font-size:10.5px;padding:8px 10px}
-
-  /* ── questionnaire / customer-card grid: 3 columns ── */
-  .cust-grid{grid-template-columns:repeat(3,1fr)!important}
-
-  /* ── milestone card grid: 2 columns ── */
-  .mc-grid{grid-template-columns:repeat(3,1fr)}
-
-  /* ── alerts: slightly larger text ── */
-  .alert{font-size:13px}
-
-  /* ── comp-row: stay single line ── */
-  .comp-val{font-size:15px}
-
-  /* ── AVP row: more columns visible ── */
-  .avp-row{grid-template-columns:100px 1fr 1fr 1fr;font-size:13px}
+  /* ── Grids: 3 columns on 900px+ ── */
+  .cust-grid{grid-template-columns:repeat(3,1fr)!important;}
+  .mc-grid{grid-template-columns:repeat(3,1fr);}
 }
 
 /* ════════════════════════════════════════════════════════════════
-   EXTRA-WIDE  ≥ 1280 px  — use even more space
+   EXTRA-WIDE  ≥ 1280 px
 ════════════════════════════════════════════════════════════════ */
 @media(min-width:1280px){
-  /* 4-col questionnaire grid */
-  .cust-grid{grid-template-columns:repeat(4,1fr)!important}
-  /* A touch more padding */
-  .cvs{padding-left:48px;padding-right:48px}
-  /* Slightly wider sidebar */
-  :root{--sb:270px}
+  :root{--sb:270px;}
+  .cust-grid{grid-template-columns:repeat(4,1fr)!important;}
+  .cvs{padding-left:48px;padding-right:48px;}
 }
 
 /* ════════════════════════════════════════════════════════════════
    PRINT
 ════════════════════════════════════════════════════════════════ */
 @media print{
-  .hdr,.role-bar,.sidebar,.hbtn,.fab-w{display:none!important}
-  .cvs{margin-left:0!important;padding:14px!important;max-width:100%!important;width:100%!important}
-  .sec,.dev-sec,.cust-sec{display:block!important;page-break-after:always}
-  .card{break-inside:avoid}
+  .hdr,.role-bar,.sidebar,.hbtn,.fab-w{display:none!important;}
+  body{padding-left:0!important;}
+  .cvs{padding:14px!important;width:100%!important;}
+  .sec,.dev-sec,.cust-sec{display:block!important;page-break-after:always;}
+  .card{break-inside:avoid;}
 }
 </style>
 </head>
