@@ -240,14 +240,12 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 
 /* FAB */
 .fab-w{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:200;pointer-events:none;display:flex;gap:7px;align-items:center;white-space:nowrap;}
-@media(min-width:900px){.fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;}}
 .fab{background:var(--g6);color:#fff;border:none;border-radius:22px;padding:9px 18px;font-size:12.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(15,110,86,.38);transition:all .14s;pointer-events:all;display:flex;align-items:center;gap:5px;}
 .fab:active{background:var(--g7);transform:scale(.97);}
 
 /* ═══ AI ASSISTANT ══════════════════════════════════════════════ */
 #s-ai{position:fixed!important;top:calc(var(--hh-total) + var(--rh));left:0;right:0;bottom:0;display:none;flex-direction:column;z-index:150;background:#F5F9F7;}
 #s-ai.on{display:flex!important;}
-@media(min-width:900px){#s-ai{left:var(--sb);}}
 .ai-lock-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px 20px;overflow-y:auto;background:#F5F9F7;}
 .ai-chat-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;}
 .ai-chat-hdr{background:var(--g6);padding:9px 13px;display:flex;align-items:center;gap:9px;flex-shrink:0;}
@@ -350,62 +348,112 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
 #inst-ban p{font-size:12.5px;font-weight:500}
 #inst-btn{background:#fff;color:var(--g6);border:none;border-radius:6px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0}
 
-/* DESKTOP >= 900px */
+/* ════════════════════════════════════════════════════════════════
+   DESKTOP LAYOUT  ≥ 900 px
+   Sidebar always visible, canvas fills remaining width, grids expand
+════════════════════════════════════════════════════════════════ */
 @media(min-width:900px){
+  /* ── root ── */
   :root{--sb:255px}
-  .sidebar{display:flex;flex-direction:column}
-  .hbtn{display:none}
-  .hdr-t{font-size:14px}
-  .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh-total) + var(--rh) + 16px) 32px 60px 32px;box-sizing:border-box}
-  .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;right:auto;}
-  .sec-ti{font-size:20px}
-  .mv{font-size:18px}.mv.lg{font-size:28px}
-  .ml{font-size:10.5px}
+
+  /* ── sidebar: always on, full height ── */
+  .sidebar{display:flex!important;flex-direction:column}
+
+  /* ── hide hamburger (drawer not needed) ── */
+  .hbtn{display:none!important}
+
+  /* ── header: slightly larger text ── */
+  .hdr-t{font-size:15px}
+
+  /* ── role-bar: start after sidebar ── */
+  .role-bar{left:var(--sb);padding:0 24px}
+
+  /* ── AI section (fixed panel): start after sidebar ── */
+  #s-ai{left:var(--sb)!important}
+
+  /* ── canvas: push right of sidebar, fill full remaining width ──
+     Use padding-top to clear the fixed header + role-bar           */
+  .cvs{
+    margin-left:var(--sb);
+    width:calc(100vw - var(--sb));
+    max-width:calc(100vw - var(--sb));
+    padding:calc(var(--hh-total) + var(--rh) + 20px) 36px 80px 36px;
+    box-sizing:border-box;
+  }
+
+  /* ── FAB: centred in the content area, not the full viewport ── */
+  .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:20px;right:auto}
+
+  /* ── PAI panel (page AI): position nicely bottom-right ── */
+  .pai-panel{left:auto;right:28px;width:440px;bottom:72px;border-radius:16px;max-height:74vh}
+
+  /* ── section heading ── */
+  .sec-h{margin-bottom:20px;padding-bottom:14px}
+  .sec-ti{font-size:21px}
+  .sec-ic{font-size:24px}
+
+  /* ── cards ── */
+  .card{padding:22px 24px;margin-bottom:16px;border-radius:14px}
+  .chdr{margin-bottom:14px;font-size:11px}
+
+  /* ── metric tiles ── */
   .met{padding:14px 12px}
-  .card{padding:20px;margin-bottom:16px;border-radius:14px}
-  .chdr{margin-bottom:14px}
-  .sk{font-size:13.5px}.sv{font-size:13px;min-width:130px}
-  .pm-val{font-size:18px}.pm-btn{width:44px;height:44px}
-  .flbl{font-size:14px}.fhint{font-size:11.5px}
-  table{font-size:11.5px;min-width:auto}
-  td{font-size:11.5px;padding:8px 9px}
-  th{font-size:10.5px;padding:8px 9px}
+  .ml{font-size:10.5px}.mu{font-size:10px}
+  .mv{font-size:18px}.mv.lg{font-size:28px}
+  /* Always 4 columns on desktop for mg4; allow mg2/mg3 to stay */
   .mg4{grid-template-columns:repeat(4,1fr)}
-}
-@media print{
-  .hdr,.role-bar,.sidebar,.hbtn,.fab-w{display:none!important}
-  .cvs{margin-left:0!important;padding:14px!important}
-  .sec,.dev-sec,.cust-sec{display:block!important;page-break-after:always}
-  .card{break-inside:avoid}
+
+  /* ── summary rows ── */
+  .sk{font-size:13.5px}.sv{font-size:13px;min-width:140px}
+
+  /* ── steppers ── */
+  .pm-val{font-size:18px}.pm-btn{width:46px;height:46px;font-size:22px}
+
+  /* ── form fields ── */
+  .flbl{font-size:14px}
+  .fhint{font-size:12px}
+  select{font-size:14px}
+  input[type=text]{font-size:14px}
+
+  /* ── tables: larger text, no forced min-width (scroll handles it) ── */
+  table{font-size:12px;min-width:auto}
+  td{font-size:12px;padding:8px 10px}
+  th{font-size:10.5px;padding:8px 10px}
+
+  /* ── questionnaire / customer-card grid: 3 columns ── */
+  .cust-grid{grid-template-columns:repeat(3,1fr)!important}
+
+  /* ── milestone card grid: 2 columns ── */
+  .mc-grid{grid-template-columns:repeat(3,1fr)}
+
+  /* ── alerts: slightly larger text ── */
+  .alert{font-size:13px}
+
+  /* ── comp-row: stay single line ── */
+  .comp-val{font-size:15px}
+
+  /* ── AVP row: more columns visible ── */
+  .avp-row{grid-template-columns:100px 1fr 1fr 1fr;font-size:13px}
 }
 
-/* ═══ DESKTOP 900px+ ═══ */
-@media(min-width:900px){
-  :root{--sb:255px}
-  .sidebar{display:flex;flex-direction:column}
-  .hbtn{display:none}
-  .hdr-t{font-size:15px}
-  .cvs{margin-left:var(--sb);width:calc(100vw - var(--sb));max-width:calc(100vw - var(--sb));padding:calc(var(--hh-total) + var(--rh) + 16px) 32px 60px 32px;box-sizing:border-box}
-  .fab-w{left:calc(var(--sb) + 50%);transform:translateX(-50%);bottom:18px;right:auto;}
-  .sec-ti{font-size:21px}
-  .mv{font-size:18px}.mv.lg{font-size:28px}
-  .ml{font-size:10.5px}.mu{font-size:10px}
-  .met{padding:14px 12px}
-  .card{padding:20px;margin-bottom:16px;border-radius:14px}
-  .chdr{margin-bottom:14px}
-  .sk{font-size:13.5px}.sv{font-size:13px;min-width:130px}
-  .pm-val{font-size:18px}.pm-btn{width:44px;height:44px}
-  .flbl{font-size:14px}.fhint{font-size:11.5px}
-  table{font-size:11.5px;min-width:auto}
-  td{font-size:11.5px;padding:8px 9px}
-  th{font-size:10.5px;padding:8px 9px}
-  .mg4{grid-template-columns:repeat(4,1fr)}
-  .sec-h{margin-bottom:20px;padding-bottom:14px}
-  .cust-grid{grid-template-columns:1fr 1fr 1fr}
+/* ════════════════════════════════════════════════════════════════
+   EXTRA-WIDE  ≥ 1280 px  — use even more space
+════════════════════════════════════════════════════════════════ */
+@media(min-width:1280px){
+  /* 4-col questionnaire grid */
+  .cust-grid{grid-template-columns:repeat(4,1fr)!important}
+  /* A touch more padding */
+  .cvs{padding-left:48px;padding-right:48px}
+  /* Slightly wider sidebar */
+  :root{--sb:270px}
 }
+
+/* ════════════════════════════════════════════════════════════════
+   PRINT
+════════════════════════════════════════════════════════════════ */
 @media print{
   .hdr,.role-bar,.sidebar,.hbtn,.fab-w{display:none!important}
-  .cvs{margin-left:0!important;padding:14px!important}
+  .cvs{margin-left:0!important;padding:14px!important;max-width:100%!important;width:100%!important}
   .sec,.dev-sec,.cust-sec{display:block!important;page-break-after:always}
   .card{break-inside:avoid}
 }
@@ -420,7 +468,7 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
       <div class="hdr-s">Group Captive CPP &middot; Tamil Nadu &middot; TNERC Model</div>
     </div>
     <div class="hdr-right">
-      <span class="ver-badge" id="ver-tag">v9.0 | 09-May-2026</span>
+      <span class="ver-badge" id="ver-tag">v11 | 16-May-2026</span>
       <div class="hbtn" onclick="openD()" aria-label="Menu">
         <div class="hl"></div><div class="hl"></div><div class="hl"></div>
       </div>
