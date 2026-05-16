@@ -19,7 +19,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
 <style>
 :root{
   --g7:#085041;--g6:#0F6E56;--g5:#1D9E75;--g1:#E1F5EE;--g0:#F0FAF6;
@@ -1249,9 +1248,13 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
   <!-- ── QUESTIONNAIRE ── -->
   <div class="card">
-    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center">
+    <div class="chdr" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
       <span>&#9997; Company &amp; Project Questionnaire</span>
-      <button onclick="savePrData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button onclick="paiOpen('pr')" style="background:var(--p6);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;display:flex;align-items:center;gap:4px"><span style="width:5px;height:5px;background:#4ADE80;border-radius:50%;display:inline-block"></span>🤖 AI Assist</button>
+        <button onclick="clearPrData()" style="background:var(--r1);color:var(--r6);border:1px solid #F1A8A8;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128465; Clear</button>
+        <button onclick="savePrData()" style="background:var(--g6);color:#fff;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer">&#128190; Save</button>
+      </div>
     </div>
     <div class="cust-grid">
       <div class="cust-fld"><label>Company / SPV name</label><input type="text" id="q-company" placeholder="e.g. ABC Solar Power Pvt. Ltd."></div>
@@ -4344,6 +4347,25 @@ function loadPrData(){
   }catch(e){}
 }
 
+function clearPrData(){
+  if(!confirm('Clear all questionnaire fields? This will also delete the saved version from browser. Cannot be undone.')) return;
+  const fields=['q-company','q-incorp','q-promoter','q-industry','q-turnover','q-addr',
+    'q-activities','q-products','q-mktpos','q-employees','q-tneb','q-category',
+    'q-powerbill','q-consumption','q-customers','q-competitors','q-competitive',
+    'q-site','q-land','q-landstatus','q-dist','q-epcname','q-procure','q-bank',
+    'q-eqsrc','q-loans','q-credit','q-cod','q-approvals','q-co2','q-jobs-const',
+    'q-jobs-perm','q-local','q-csr','q-social','q-rationale','q-rpdate','q-prepby',
+    'q-refno','q-conf','opt-c1-title','opt-c1-text','opt-c2-title','opt-c2-text'];
+  fields.forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['opt-market','opt-bess','opt-swot','opt-reg','opt-socio'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.checked=true;
+  });
+  try{localStorage.removeItem('eil_pr_data');}catch(e){}
+  const st=document.getElementById('pr-save-status');
+  if(st){st.style.display='block';st.style.background='var(--r1)';st.style.color='var(--r6)';st.textContent='All fields cleared. Ready for new project entry.';}
+  setTimeout(()=>{if(st){st.style.display='none';st.style.background='var(--g1)';st.style.color='var(--g6)';}},3500);
+}
+
 /* ══ REGULATORY PREVIEW (live from rg- fields) ══════════════════ */
 function refreshRegPreview(){
   const rg=(id,fb)=>{const el=document.getElementById(id);return (el&&el.value.trim())?el.value.trim():fb;};
@@ -4503,1011 +4525,399 @@ function loadRegData(){
 
 
 /* ══════════════════════════════════════════════════════════════════
-   GENERATE COLOURFUL WORD REPORT (.docx) — Full Bankable DPR
-   Uses docx.js loaded from CDN (window.docx)
+   GENERATE BANKABLE DPR WORKBOOK (.xlsx)
+   Uses SheetJS (already loaded) — no external CDN needed.
+   20 sheets covering all DPR chapters + coloured headers.
 ══════════════════════════════════════════════════════════════════ */
-async function generateWordReport() {
+function generateWordReport() {
   const st = document.getElementById('pr-status');
-  if (st) { st.style.display = 'block'; st.textContent = '⏳ Building Word report — please wait...'; st.style.background = 'var(--b1)'; st.style.color = 'var(--b6)'; }
+  const show = (msg, ok=true) => { if(st){st.style.display='block'; st.style.background=ok?'var(--b1)':'var(--r1)'; st.style.color=ok?'var(--b6)':'var(--r6)'; st.textContent=msg;} };
+  const done = (msg) => { if(st){st.style.display='block'; st.style.background='var(--g1)'; st.style.color='var(--g6)'; st.textContent=msg; setTimeout(()=>{if(st)st.style.display='none';},9000);} };
 
-  // ── Safely wait for docx CDN to load ───────────────────────
-  if (typeof docx === 'undefined' || !docx.Document) {
-    if (st) { st.textContent = '❌ Word report library not loaded. Please check internet connection and try again.'; st.style.background = 'var(--r1)'; st.style.color = 'var(--r6)'; }
-    return;
-  }
-  const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-          AlignmentType, HeadingLevel, BorderStyle, WidthType, ShadingType,
-          VerticalAlign, PageBreak, LevelFormat, Header, Footer, PageNumber } = docx;
+  show('⏳ Building DPR workbook — please wait…');
 
-  // ── Helper shortcuts ───────────────────────────────────────
-  const q  = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
-  const co = q('q-company') || 'Solar Project SPV';
-  const site = q('q-site') || 'Tamil Nadu';
-  const rpdate = q('q-rpdate') || new Date().toLocaleDateString('en-IN', { month: 'long', year: 'numeric' });
-
-  // ── Live financial model data ──────────────────────────────
-  const acMW   = gv('ac');
-  const dacR   = gv('dac');
-  const dcMW   = +(acMW * dacR).toFixed(2);
-  const dc_kWp = Math.round(acMW * dacR * 1000);
-  const plf    = gv('plf');
-  const tloss  = gv('tloss');
-  const tariff = gv('tariff');
-  const disc   = gv('disc') / 100;
-  const peak   = gv('peak') / 100;
-  const sur    = gv('surcharge') / 100;
-  const oa     = gv('oa');
-  const taresc = gv('taresc');
-  const oaesc  = gv('oaesc');
-  const ir     = gv('ir') / 100;
-  const tn     = gv('tn');
-  const moro   = gv('moro');
-  const taxR   = gv('tax') / 100;
-  const sv     = gv('sv') / 100;
-  const deg1   = gv('deg1') / 100;
-  const om_pct = gv('om') / 100;
-  const ins_pct= gv('ins') / 100;
-  const ome    = gv('ome') / 100;
-  const sCap   = gv('epc') + gv('land') + gv('evac') + gv('misc');
-  const bessCap = (document.getElementById('i-batt') && document.getElementById('i-batt').value === '1') ? gv('bmwh') * gv('bc') : 0;
-  const tCap   = sCap + bessCap;
-  const dfPct  = gv('df') / 100;
-  const dAmt   = +(tCap * dfPct).toFixed(2);
-  const eAmt   = +(tCap * (1 - dfPct)).toFixed(2);
-  const ap     = dAmt / Math.max(1, tn - moro);
-  const wt1    = tariff * (1 + peak * sur);
-  const sp1    = +(wt1 * disc).toFixed(4);
-  const nr1    = +(sp1 - oa).toFixed(4);
-  const grossKWh = acKWAC() * plf / 100 * 8760;
-  const netMU  = +(grossKWh * (1 - tloss / 100) / 1e6).toFixed(2);
-  const gRev1  = +(grossKWh * (1 - tloss / 100) * sp1 / 1e7).toFixed(2);
-  const oAch1  = +(grossKWh * (1 - tloss / 100) * oa / 1e7).toFixed(2);
-  const nRev1  = +(gRev1 - oAch1).toFixed(2);
-  const om1    = +(sCap * om_pct).toFixed(2);
-  const ins1   = +(sCap * ins_pct).toFixed(2);
-  const ebd1   = +(nRev1 - om1 - ins1).toFixed(2);
-  const int1   = +(dAmt * ir).toFixed(2);
-  const fcf1   = +(ebd1 - int1).toFixed(2);
-  const co2yr  = +(netMU * 0.82 * 1000).toFixed(0);  // 0.82 kgCO2/kWh CEA factor
-
-  // ── 25-year CF rows ────────────────────────────────────────
-  const cfRows = [];
-  let ob = dAmt, dF = 1, tC = tariff, oC = oa;
-  let omC = sCap * om_pct, insC = sCap * ins_pct;
-  let wdv = sCap, cum = -eAmt, payY = null;
-  for (let y = 1; y <= 25; y++) {
-    if (y === 1) dF = 1 - deg1; else if (y <= 10) dF *= 0.9932; else dF *= 0.993;
-    const ng    = acKWAC() * plf / 100 * 8760 * dF * (1 - tloss / 100);
-    const wt    = tC * (1 + peak * sur), sp = wt * disc;
-    const gR    = ng * sp / 1e7, ocC = ng * oC / 1e7, nR = gR - ocC, opx = omC + insC, ebd = nR - opx;
-    const interest = ob * ir, prin = (y <= moro ? 0 : (y <= tn ? ap : 0));
-    ob = Math.max(0, ob - prin);
-    let itd = 0; if (y > 1) { itd = wdv * 0.15; wdv = Math.max(0, wdv - itd); }
-    const txbl = Math.max(0, ebd - interest - itd), txp = txbl * taxR * 1.04;
-    const sal  = y === 25 ? tCap * sv : 0, fcf = ebd - interest - prin - txp + sal;
-    cum += fcf;
-    if (cum >= 0 && !payY) payY = y;
-    cfRows.push({ y, ng: +(ng / 1e6).toFixed(3), sp: +sp.toFixed(4), oC: +oC.toFixed(4),
-      nr: +(sp - oC).toFixed(4), gR: +gR.toFixed(2), ocC: +ocC.toFixed(2), nR: +nR.toFixed(2),
-      omC: +omC.toFixed(2), insC: +insC.toFixed(2), ebd: +ebd.toFixed(2),
-      interest: +interest.toFixed(2), prin: +prin.toFixed(2),
-      itd: +itd.toFixed(2), txp: +txp.toFixed(2), fcf: +fcf.toFixed(2), cum: +cum.toFixed(2) });
-    if (y < 5) { tC *= (1 + taresc / 100); oC *= (1 + oaesc / 100); }
-    omC *= (1 + ome); insC *= 1.03;
-  }
-  const totalFCF = cfRows.reduce((s, r) => s + r.fcf, 0).toFixed(2);
-  const retMul   = eAmt > 0 ? (totalFCF / eAmt).toFixed(2) : 'N/A';
-  const evacVolt = acMW <= 5 ? '11 kV' : acMW <= 33 ? '33 kV' : '110 kV EHT';
-
-  // ── Colour palette ─────────────────────────────────────────
-  const GREEN   = '0F6E56';
-  const DKGREEN = '085041';
-  const BLUE    = '1D4ED8';
-  const ORANGE  = 'C05621';
-  const PURPLE  = '534AB7';
-  const YELLOW  = 'B45309';
-  const WHITE   = 'FFFFFF';
-  const LTGREEN = 'D1FAE5';
-  const LTBLUE  = 'DBEAFE';
-  const LTPURP  = 'EDE9FE';
-  const LTORG   = 'FEF3C7';
-  const LGRAY   = 'F3F4F6';
-  const MGRAY   = 'D1D5DB';
-  const DKGRAY  = '1F2937';
-
-  // ── Style helpers ──────────────────────────────────────────
-  const pageW = 9360; // DXA content width (US Letter 1" margins)
-  const border = { style: BorderStyle.SINGLE, size: 1, color: MGRAY };
-  const borders = { top: border, bottom: border, left: border, right: border };
-
-  function hdr1(text, color = GREEN) {
-    return new Paragraph({
-      heading: HeadingLevel.HEADING_1,
-      children: [new TextRun({ text, bold: true, size: 32, color: WHITE, font: 'Arial' })],
-      shading: { fill: color, type: ShadingType.CLEAR },
-      spacing: { before: 360, after: 120 },
-      border: { bottom: { style: BorderStyle.SINGLE, size: 8, color: DKGREEN } },
-    });
-  }
-  function hdr2(text, color = GREEN) {
-    return new Paragraph({
-      heading: HeadingLevel.HEADING_2,
-      children: [new TextRun({ text, bold: true, size: 26, color: color, font: 'Arial' })],
-      spacing: { before: 240, after: 100 },
-      border: { bottom: { style: BorderStyle.SINGLE, size: 4, color: color } },
-    });
-  }
-  function hdr3(text, color = DKGRAY) {
-    return new Paragraph({
-      children: [new TextRun({ text, bold: true, size: 22, color, font: 'Arial' })],
-      spacing: { before: 180, after: 60 },
-    });
-  }
-  function para(text, opts = {}) {
-    return new Paragraph({
-      children: [new TextRun({ text, size: opts.size || 22, color: opts.color || DKGRAY, bold: opts.bold || false, font: 'Arial', italics: opts.italics || false })],
-      spacing: { before: 60, after: 60 },
-      alignment: opts.align || AlignmentType.LEFT,
-    });
-  }
-  function pgBreak() {
-    return new Paragraph({ children: [new PageBreak()] });
-  }
-  function kv(label, value, labelColor = '4B5563', valueColor = DKGRAY) {
-    return new Paragraph({
-      children: [
-        new TextRun({ text: label + ':  ', size: 20, color: labelColor, font: 'Arial', bold: true }),
-        new TextRun({ text: String(value), size: 20, color: valueColor, font: 'Arial' }),
-      ],
-      spacing: { before: 40, after: 40 },
-    });
-  }
-  function tblHdrCell(text, bgColor = GREEN, w = null) {
-    return new TableCell({
-      width: w ? { size: w, type: WidthType.DXA } : undefined,
-      shading: { fill: bgColor, type: ShadingType.CLEAR },
-      borders, margins: { top: 80, bottom: 80, left: 120, right: 120 },
-      verticalAlign: VerticalAlign.CENTER,
-      children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: String(text), bold: true, size: 18, color: WHITE, font: 'Arial' })] })],
-    });
-  }
-  function tblCell(text, bgColor = null, align = AlignmentType.RIGHT, color = DKGRAY, bold = false) {
-    return new TableCell({
-      shading: bgColor ? { fill: bgColor, type: ShadingType.CLEAR } : undefined,
-      borders, margins: { top: 60, bottom: 60, left: 100, right: 100 },
-      children: [new Paragraph({ alignment: align, children: [new TextRun({ text: String(text), size: 18, color, font: 'Courier New', bold })] })],
-    });
-  }
-  function tblCellL(text, bgColor = null, color = DKGRAY, bold = false) {
-    return tblCell(text, bgColor, AlignmentType.LEFT, color, bold);
-  }
-
-  // ────────────────────────────────────────────────────────────
-  // BUILD DOCUMENT SECTIONS
-  // ────────────────────────────────────────────────────────────
-  const children = [];
-
-  // ──────────────────────────────────────────────────────────
-  // COVER PAGE
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    new Paragraph({ spacing: { before: 800 } }),
-    new Paragraph({
-      alignment: AlignmentType.CENTER,
-      shading: { fill: GREEN, type: ShadingType.CLEAR },
-      spacing: { before: 120, after: 60 },
-      children: [new TextRun({ text: 'DETAILED PROJECT REPORT', bold: true, size: 52, color: WHITE, font: 'Arial' })]
-    }),
-    new Paragraph({
-      alignment: AlignmentType.CENTER,
-      shading: { fill: DKGREEN, type: ShadingType.CLEAR },
-      spacing: { before: 0, after: 120 },
-      children: [new TextRun({ text: 'Group Captive CPP — Ground-Mount Solar Power Project', size: 30, color: 'A7F3D0', font: 'Arial' })]
-    }),
-    new Paragraph({ spacing: { before: 300 } }),
-    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: co, bold: true, size: 40, color: GREEN, font: 'Arial' })] }),
-    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: site + ', Tamil Nadu', size: 28, color: '4B5563', font: 'Arial' })] }),
-    new Paragraph({ spacing: { before: 200 } }),
-    new Paragraph({
-      alignment: AlignmentType.CENTER,
-      shading: { fill: LTGREEN, type: ShadingType.CLEAR },
-      spacing: { before: 80, after: 80 },
-      children: [new TextRun({ text: `${acMW} MW AC / ${dcMW} MW DC  |  ${netMU} MU/yr  |  Rs ${tCap.toFixed(1)} Cr Total CAPEX`, bold: true, size: 26, color: DKGREEN, font: 'Arial' })]
-    }),
-    new Paragraph({ spacing: { before: 300 } }),
-    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Prepared by: ' + (q('q-prepby') || 'EIL Solar Pvt. Ltd.'), size: 22, color: '6B7280', font: 'Arial', italics: true })] }),
-    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: 'Date: ' + rpdate + '  |  Ref: ' + (q('q-refno') || 'EIL/DPR/2026'), size: 22, color: '6B7280', font: 'Arial' })] }),
-    new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ text: q('q-conf') || 'Strictly Confidential — For Bank Use Only', size: 20, color: ORANGE, font: 'Arial', italics: true })] }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // INDEX / TABLE OF CONTENTS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('INDEX', GREEN),
-    ...[
-      ['1', 'Executive Summary', '3'],
-      ['2', 'Dashboard — Key Project Metrics', '4'],
-      ['3', 'Project Inputs and Assumptions', '5'],
-      ['4', 'Grid Losses — Technical Analysis', '6'],
-      ['5', 'Battery Storage (BESS) and Evacuation Infrastructure', '7'],
-      ['6', 'Project Cost and Means of Finance', '8'],
-      ['7', 'Debt and Equity Structure', '9'],
-      ['8', '25-Year Cash Flow Statement', '10'],
-      ['9', 'Generation Details — 25 Years', '14'],
-      ['10', 'Projected Profit and Loss Account', '16'],
-      ['11', 'Projected Balance Sheet', '17'],
-      ['12', 'DSCR and Financial Ratios', '18'],
-      ['13', 'Regulatory Framework — Tamil Nadu (TNERC)', '19'],
-      ['14', 'Government Thrust Areas — Solar Energy', '20'],
-      ['15', 'India Solar Industry — Present and Future', '21'],
-      ['16', 'Energy Crisis — Global and Indian Perspective', '22'],
-      ['17', 'Customer Savings Analysis', '23'],
-      ['18', 'Environmental and Social Impact', '24'],
-      ['19', 'Risk Assessment and Mitigants', '24'],
-      ['20', 'Implementation Schedule', '25'],
-    ].map(([no, title, pg]) =>
-      new Paragraph({
-        spacing: { before: 60, after: 60 },
-        children: [
-          new TextRun({ text: `${no}.  `, bold: true, size: 22, color: GREEN, font: 'Arial' }),
-          new TextRun({ text: title, size: 22, color: DKGRAY, font: 'Arial' }),
-          new TextRun({ text: `  ...... ${pg}`, size: 22, color: '9CA3AF', font: 'Arial', italics: true }),
-        ]
-      })
-    ),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 1 — EXECUTIVE SUMMARY
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('1.  EXECUTIVE SUMMARY', GREEN),
-    para(`${co} (the "Company") proposes to set up a ${acMW} MW AC (${dcMW} MW DC, ${dc_kWp.toLocaleString('en-IN')} kWp) ground-mounted solar power plant at ${site}, Tamil Nadu, under the Group Captive Captive Power Plant (CPP) structure. The project will supply green energy directly to industrial / commercial consumers, reducing their power procurement cost while providing the Company an attractive long-term return on its equity investment.`),
-    para(`The project will generate approximately ${netMU} Million Units (MU) of net energy per year at a Plant Load Factor (CUF) of ${plf}%, supplying power at a selling price of Rs ${sp1}/kWh — representing a saving of Rs ${(tariff - sp1).toFixed(2)}/kWh against direct TNEB tariff of Rs ${tariff}/kWh for the buyer's category.`),
-    hdr2('Key Highlights', BLUE),
-  );
-
-  // Highlight box table
-  const hiRows = [
-    ['Parameter', 'Value'],
-    ['AC Installed Capacity', `${acMW} MW AC`],
-    ['DC Panel Capacity', `${dcMW} MW DC  (${dc_kWp.toLocaleString('en-IN')} kWp)`],
-    ['Total Project CAPEX', `Rs ${tCap.toFixed(2)} Crores`],
-    ['Equity Contribution', `Rs ${eAmt.toFixed(2)} Crores  (${(100 - gv('df')).toFixed(0)}%)`],
-    ['Debt (Term Loan)', `Rs ${dAmt.toFixed(2)} Crores  (${gv('df').toFixed(0)}%)`],
-    ['Net Annual Generation (Yr 1)', `${netMU} MU`],
-    ['Selling Price — Year 1', `Rs ${sp1}/kWh`],
-    ['Developer Net Realisation', `Rs ${nr1}/kWh  (after OA Rs ${oa}/kWh)`],
-    ['EBITDA — Year 1', `Rs ${ebd1.toFixed(2)} Crores`],
-    ['FCF — Year 1', `Rs ${fcf1.toFixed(2)} Crores`],
-    ['Total 25-yr FCF', `Rs ${totalFCF} Crores`],
-    ['Return Multiple on Equity', `${retMul}x`],
-    ['Payback Period', payY ? `Year ${payY}` : 'After Year 25'],
-    ['CO₂ Offset per Year', `${Number(co2yr).toLocaleString('en-IN')} tonnes`],
-  ];
-  const hiColW = [4200, 5160];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA },
-      columnWidths: hiColW,
-      rows: hiRows.map((row, ri) => new TableRow({
-        children: [
-          tblCell(row[0], ri === 0 ? GREEN : (ri % 2 === 0 ? LGRAY : WHITE), AlignmentType.LEFT, ri === 0 ? WHITE : DKGRAY, ri === 0 || ri % 2 !== 0),
-          tblCell(row[1], ri === 0 ? DKGREEN : (ri % 2 === 0 ? LTGREEN : WHITE), AlignmentType.LEFT, ri === 0 ? WHITE : GREEN, ri === 0),
-        ]
-      }))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 2 — DASHBOARD
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('2.  DASHBOARD — KEY PROJECT METRICS', BLUE),
-    para('The following dashboard summarises the critical financial and technical metrics of the project, computed live from the financial model inputs.'),
-    hdr2('Financial Metrics — Year 1', BLUE),
-  );
-  const dashRows = [
-    ['Metric', 'Year 1', 'Year 5', 'Year 10', 'Year 25'],
-    ['Net Generation (MU)', cfRows[0].ng, cfRows[4].ng, cfRows[9].ng, cfRows[24].ng],
-    ['Selling Price (Rs/kWh)', cfRows[0].sp, cfRows[4].sp, cfRows[9].sp, cfRows[24].sp],
-    ['Net Realisation (Rs/kWh)', cfRows[0].nr, cfRows[4].nr, cfRows[9].nr, cfRows[24].nr],
-    ['Net Revenue (Rs Cr)', cfRows[0].nR, cfRows[4].nR, cfRows[9].nR, cfRows[24].nR],
-    ['EBITDA (Rs Cr)', cfRows[0].ebd, cfRows[4].ebd, cfRows[9].ebd, cfRows[24].ebd],
-    ['FCF (Rs Cr)', cfRows[0].fcf, cfRows[4].fcf, cfRows[9].fcf, cfRows[24].fcf],
-    ['Cumulative CF (Rs Cr)', cfRows[0].cum, cfRows[4].cum, cfRows[9].cum, cfRows[24].cum],
-  ];
-  const dashColW = [2800, 1640, 1640, 1640, 1640];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: dashColW,
-      rows: dashRows.map((row, ri) => new TableRow({ children: row.map((cell, ci) => tblCell(String(cell), ri === 0 ? BLUE : ci === 0 ? LGRAY : (ri % 2 === 0 ? LTBLUE : WHITE), ci === 0 ? AlignmentType.LEFT : AlignmentType.RIGHT, ri === 0 ? WHITE : (ci === 0 ? DKGRAY : BLUE), ri === 0 || (ci === 0 && ri > 0))) }))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 3 — PROJECT INPUTS AND ASSUMPTIONS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('3.  PROJECT INPUTS AND ASSUMPTIONS', PURPLE),
-    hdr2('3.1  Capacity and Generation Assumptions', PURPLE),
-  );
-  const inputRows = [
-    ['Parameter', 'Value', 'Basis / Remark'],
-    ['AC installed capacity', `${acMW} MW AC`, 'Design basis — inverter output side'],
-    ['DC:AC ratio (overdrive)', `${dacR}`, 'Tamil Nadu industry standard (1.25–1.35)'],
-    ['DC panel capacity', `${dcMW} MW DC = ${dc_kWp.toLocaleString('en-IN')} kWp`, 'Auto-calculated'],
-    ['Plant Load Factor / CUF', `${plf}%`, 'TNERC / MNRE P50 for Central TN: 19–22%'],
-    ['Year-1 LID degradation', `${gv('deg1')}%`, 'Light-induced degradation — module manufacturer spec'],
-    ['Annual degradation (Yr 2–10)', '0.68%/yr', 'ALMM module warranty (0.68% per IEC 61215)'],
-    ['Annual degradation (Yr 11–25)', '0.70%/yr', 'Post-warranty period'],
-    ['Total technical loss', `${tloss}%`, 'DC cable + inverter + transformer + soiling + grid'],
-    ['Evacuation voltage', evacVolt, 'TNERC voltage norm by MW capacity'],
-    ['Land requirement (3 ac/MW DC)', `${Math.round(dcMW * 3)} acres`, '3 acres per MW DC ground-mount standard'],
-    ['TNEB base tariff (buyer)', `Rs ${tariff}/kWh`, 'TNERC T.O. No.6 of 2025'],
-    ['Discount to buyer', `${gv('disc')}%`, 'HT-I Industrial — 15% disc; HT-III Comm. — 20% disc'],
-    ['ToD peak surcharge', `${gv('surcharge')}%`, 'TNERC T.O.6/2025 — +25% morning peak 6AM–10AM'],
-    ['Selling price Year 1', `Rs ${sp1}/kWh`, 'Weighted tariff × discount'],
-    ['OA charges (30% solar concession)', `Rs ${oa}/kWh`, 'TNERC 2022 — borne by developer'],
-    ['Tariff escalation (capped Yr5)', `${taresc}%/yr`, 'TNERC pattern — escalation for 5 years then flat'],
-    ['OA escalation', `${oaesc}%/yr`, 'MYT cycle — capped 5 years'],
-  ];
-  const inputColW = [3000, 2200, 4160];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: inputColW,
-      rows: inputRows.map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 ? PURPLE : LGRAY, ri === 0 ? WHITE : DKGRAY, true),
-        tblCell(row[1], ri === 0 ? '#7C3AED' : LTPURP, AlignmentType.CENTER, ri === 0 ? WHITE : PURPLE, ri === 0),
-        tblCellL(row[2], ri === 0 ? '#7C3AED' : WHITE, ri === 0 ? WHITE : '6B7280', false),
-      ]}))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 4 — GRID LOSSES
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('4.  GRID LOSSES — TECHNICAL ANALYSIS', ORANGE),
-    para('Technical losses reduce the net energy available at the customer meter. Under TNERC T.O. No. 7 of 2022, "deemed losses" are used for billing calculations in Open Access transactions. The total technical loss modelled for this project is ' + tloss + '%, comprising plant internal losses and grid losses.'),
-    hdr2('4.1  Loss Component Breakdown', ORANGE),
-  );
-  const lossRows = [
-    ['Loss Component', 'Rate (%)', 'Basis'],
-    ['DC cable losses (panel to inverter)', '1.5%', 'IEC 62548 — standard for ground-mount string arrays'],
-    ['Inverter conversion losses', '2.0%', 'Manufacturer datasheet, CEC-weighted efficiency 98%'],
-    ['Transformer (LT to HT) losses', '0.5%', 'Distribution transformer 99.5% efficiency'],
-    ['Soiling, mismatch and shading', '2.0%', 'TN semi-arid condition, cleaning every 2 weeks'],
-    ['Grid transmission loss (at 110 kV injection)', '0.0%', 'TNERC T.O.7/2022 Table 5-12: NIL at 110 kV'],
-    ['Grid distribution loss (110 kV → 11 kV buyer)', '1.5%', 'TNERC T.O.7/2022 Table 5-12: 1.52%'],
-    ['Miscellaneous / margin', `${Math.max(0, tloss - 7.5).toFixed(1)}%`, 'Project-specific additional margin'],
-    ['TOTAL MODELLED LOSS', `${tloss}%`, 'Of every 100 units generated, ' + (100 - tloss).toFixed(1) + ' units reach customer'],
-  ];
-  const lossColW = [3500, 1400, 4460];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: lossColW,
-      rows: lossRows.map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 || ri === lossRows.length - 1 ? ORANGE : LGRAY, ri === 0 || ri === lossRows.length - 1 ? WHITE : DKGRAY, ri === 0 || ri === lossRows.length - 1),
-        tblCell(row[1], ri === 0 || ri === lossRows.length - 1 ? '#C05621' : LTORG, AlignmentType.CENTER, ri === 0 || ri === lossRows.length - 1 ? WHITE : ORANGE, true),
-        tblCellL(row[2], ri === 0 ? '#C05621' : WHITE, ri === 0 ? WHITE : '6B7280', false),
-      ]}))
-    }),
-    para('Note: TNERC T.O. No. 7 of 2022, Table 5-12 specifies deemed loss percentages. At 110 kV injection the transmission loss is NIL. Distribution loss of 1.52% applies for 110 kV → 11 kV customer connections. These figures are deemed/normative — actual losses are settled using SLDC-certified metering.'),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 5 — BATTERY AND EVACUATION
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('5.  BATTERY STORAGE (BESS) AND EVACUATION INFRASTRUCTURE', DKGREEN),
-    hdr2('5.1  Battery Energy Storage System (BESS)', DKGREEN),
-    para(`BESS Capacity: ${bessCap > 0 ? gv('bmwh') + ' MWh LFP (Lithium Iron Phosphate) — Rs ' + bessCap.toFixed(2) + ' Crores' : 'Not included in base case. Can be added as Phase 2 to shift evening peak demand and monetise ToD peak window.'}`),
-    para('LFP batteries are the preferred chemistry for utility-scale solar storage due to their superior thermal stability, 6,000+ cycle life, lower degradation rate (~2%/yr), and no cobalt dependency. A 10-hour peak discharge capability shifts stored solar energy to the 6PM–10PM TNERC peak window, earning the +25% ToD surcharge on additional units.'),
-    para('TNERC treatment: Same-day charge/discharge in a co-located BESS is treated as a single Open Access transaction — no additional OA wheeling charge is levied on the BESS discharge.'),
-    hdr2('5.2  Evacuation Infrastructure', DKGREEN),
-    para(`Evacuation voltage: ${evacVolt} (TANTRANSCO grid injection)`),
-    ...[
-      `The plant's AC output is stepped up to ${evacVolt} through a dedicated plant substation. The HT line runs from the plant boundary to the nearest ${evacVolt} TANTRANSCO grid substation.`,
-      `Key approvals required: (1) TANTRANSCO — 110 kV bay allocation and REC (Right of Exclusive Connection) approval, (2) CEIG (Chief Electrical Inspector, Govt of TN) — approval for HT installation, (3) SLDC Tamil Nadu — Open Access scheduling registration and ISTS/STOA connectivity.`,
-      `Estimated evacuation line length: ${q('q-dist') || '~5'} km from plant to nearest ${evacVolt} substation.`,
-      `The evacuation infrastructure cost is included in the Total Project Cost at ${(gv('evac') / tCap * 100).toFixed(1)}% of TPC (Rs ${gv('evac').toFixed(2)} Crores).`,
-    ].map(t => para(t)),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 6 — PROJECT COST AND MEANS OF FINANCE
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('6.  PROJECT COST AND MEANS OF FINANCE', BLUE),
-    hdr2('6.1  Component-wise Project Cost', BLUE),
-  );
-  const costRows = [
-    ['Cost Component', 'Rs Crores', '% of TPC', 'Basis'],
-    ['Solar EPC (panels, inverters, structures, cabling)', gv('epc').toFixed(2), (gv('epc') / tCap * 100).toFixed(1) + '%', 'ALMM-listed modules, string inverters, galvanised GI structure'],
-    ['Land (3 ac/MW DC × Rs 18 L/ac)', gv('land').toFixed(2), (gv('land') / tCap * 100).toFixed(1) + '%', 'Land purchase or long-term lease'],
-    ['Evacuation substation & HT line (' + evacVolt + ')', gv('evac').toFixed(2), (gv('evac') / tCap * 100).toFixed(1) + '%', 'TANTRANSCO-approved design, bay charges'],
-    ['Electrical & AC-side (HT panels, cables, metering)', (gv('elec') || 0).toFixed(2), ((gv('elec') || 0) / tCap * 100).toFixed(1) + '%', 'AC yard equipment, metering, protection relay'],
-    ['Civil & infrastructure (fencing, roads, drainage)', (tCap * 0.05).toFixed(2), '5.0%', 'Standard ground-mount civil norms'],
-    ['SCADA, monitoring & communications', (tCap * 0.02).toFixed(2), '2.0%', 'SCADA, data logger, SLDC communication'],
-    ['Preliminary, pre-operative & contingency', (tCap * 0.03).toFixed(2), '3.0%', 'DPR, environmental study, approvals, 2% contingency'],
-    ...(bessCap > 0 ? [['BESS — LFP Battery Storage', bessCap.toFixed(2), (bessCap / tCap * 100).toFixed(1) + '%', gv('bmwh') + ' MWh LFP @ Rs ' + gv('bc').toFixed(2) + ' Cr/MWh']] : []),
-    ['TOTAL PROJECT COST', tCap.toFixed(2), '100%', 'All-in, including land, evacuation, BESS'],
-  ];
-  const costColW = [3600, 1400, 1400, 2960];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: costColW,
-      rows: costRows.map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 || ri === costRows.length - 1 ? BLUE : LGRAY, ri === 0 || ri === costRows.length - 1 ? WHITE : DKGRAY, ri === 0 || ri === costRows.length - 1),
-        tblCell(row[1], ri === 0 || ri === costRows.length - 1 ? '#1E40AF' : LTBLUE, AlignmentType.RIGHT, ri === 0 || ri === costRows.length - 1 ? WHITE : BLUE, ri === costRows.length - 1),
-        tblCell(row[2], ri === 0 || ri === costRows.length - 1 ? '#1E40AF' : WHITE, AlignmentType.CENTER, ri === 0 || ri === costRows.length - 1 ? WHITE : BLUE),
-        tblCellL(row[3], ri === 0 ? '#1E40AF' : WHITE, ri === 0 ? WHITE : '6B7280', false),
-      ]}))
-    }),
-    hdr2('6.2  Means of Finance', BLUE),
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: [3000, 2200, 1800, 2360],
-      rows: [
-        ['Source', 'Rs Crores', 'Percentage', 'Terms'],
-        ['Term Loan (Debt)', dAmt.toFixed(2), gv('df').toFixed(0) + '%', `${gv('ir')}% p.a., ${tn} yrs tenure, ${moro} yr moratorium`],
-        ['Equity / Promoter Contribution', eAmt.toFixed(2), (100 - gv('df')).toFixed(0) + '%', 'Internal accruals + promoter funds'],
-        ['TOTAL', tCap.toFixed(2), '100%', 'Debt:Equity = ' + gv('df').toFixed(0) + ':' + (100 - gv('df')).toFixed(0)],
-      ].map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 || ri === 3 ? BLUE : ri === 1 ? LTBLUE : LTGREEN, ri === 0 || ri === 3 ? WHITE : DKGRAY, ri === 0 || ri === 3),
-        tblCell(row[1], ri === 0 || ri === 3 ? '#1E40AF' : WHITE, AlignmentType.RIGHT, ri === 0 || ri === 3 ? WHITE : DKGRAY, ri === 3),
-        tblCell(row[2], ri === 0 || ri === 3 ? '#1E40AF' : WHITE, AlignmentType.CENTER, ri === 0 || ri === 3 ? WHITE : '6B7280'),
-        tblCellL(row[3], ri === 0 ? '#1E40AF' : WHITE, ri === 0 ? WHITE : '6B7280'),
-      ]}))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 7 — DEBT AND EQUITY
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('7.  DEBT AND EQUITY STRUCTURE', PURPLE),
-    hdr2('7.1  Debt Parameters', PURPLE),
-    kv('Loan Amount', `Rs ${dAmt.toFixed(2)} Crores (${gv('df').toFixed(0)}% of TPC)`),
-    kv('Interest Rate', `${gv('ir')}% per annum (floating / fixed)`),
-    kv('Tenure', `${tn} years`),
-    kv('Moratorium', `${moro} year(s) — interest only during construction`),
-    kv('Repayment Period', `${tn - moro} years`),
-    kv('Annual Principal', `Rs ${ap.toFixed(2)} Crores`),
-    kv('Repayment Mode', 'Annual or quarterly instalments (equated principal)'),
-    kv('Eligible Lenders', 'SBI, PNB, Indian Bank, PFC, IREDA — all eligible under MNRE solar project guidelines'),
-    hdr2('7.2  Equity Parameters', PURPLE),
-    kv('Equity Amount', `Rs ${eAmt.toFixed(2)} Crores (${(100 - gv('df')).toFixed(0)}% of TPC)`),
-    kv('Equity Source', q('q-eqsrc') || 'Internal accruals and promoter contribution'),
-    kv('Group Captive Equity Rule', 'Minimum 26% of SPV equity must be collectively held by captive consumers (CERC Captive Rules 2001)'),
-    kv('Minimum Consumption Rule', '51% of annual net generation must be consumed by captive consumers (Rule 4)'),
-    kv('Proportional Tolerance', '±10% per customer per year'),
-    kv('CSS Saving (waived for Group Captive)', `Rs 2.41/kWh — FULLY WAIVED under TNERC T.O. 7/2022`),
-    hdr2('7.3  25-Year Debt Service Summary', PURPLE),
-  );
-  const totalInterest = cfRows.reduce((s, r) => s + r.interest, 0);
-  const totalPrin     = cfRows.reduce((s, r) => s + r.prin, 0);
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: [4500, 4860],
-      rows: [
-        ['Item', 'Amount (Rs Crores)'],
-        ['Opening Debt', dAmt.toFixed(2)],
-        ['Total Interest Paid (25 years)', totalInterest.toFixed(2)],
-        ['Total Principal Repaid', totalPrin.toFixed(2)],
-        ['Total Debt Service', (totalInterest + totalPrin).toFixed(2)],
-        ['Debt fully repaid by Year', `Year ${tn}`],
-      ].map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 ? PURPLE : LGRAY, ri === 0 ? WHITE : DKGRAY, ri === 0),
-        tblCell(row[1], ri === 0 ? '#6D28D9' : LTPURP, AlignmentType.RIGHT, ri === 0 ? WHITE : PURPLE, ri === 0),
-      ]}))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 8 — 25-YEAR CASH FLOW
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('8.  25-YEAR CASH FLOW STATEMENT', GREEN),
-    para('The table below presents the full 25-year project cash flow. All figures in Rs Crores unless otherwise stated.'),
-  );
-  const cfHeaders = ['Yr', 'Net Gen (MU)', 'SP (Rs/kWh)', 'Net Rev', 'O&M', 'EBITDA', 'Interest', 'Prin', 'Tax', 'FCF', 'Cum CF'];
-  const cfColW = [500, 900, 900, 800, 750, 850, 850, 750, 700, 800, 950];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: cfColW,
-      rows: [
-        new TableRow({ children: cfHeaders.map((h, ci) => tblHdrCell(h, GREEN, cfColW[ci])) }),
-        ...cfRows.map(r => {
-          const isRepaid = r.y > tn;
-          const bg = isRepaid ? LTGREEN : (r.y <= moro ? LTORG : (r.y % 2 === 0 ? LGRAY : WHITE));
-          return new TableRow({ children: [
-            tblCell(r.y, bg, AlignmentType.CENTER, DKGRAY, true),
-            tblCell(r.ng, bg), tblCell(r.sp, bg), tblCell(r.nR, bg), tblCell((r.omC + r.insC).toFixed(2), bg),
-            tblCell(r.ebd, bg, AlignmentType.RIGHT, GREEN, true),
-            tblCell(r.interest, bg), tblCell(r.prin, bg), tblCell(r.txp, bg),
-            tblCell(r.fcf, bg, AlignmentType.RIGHT, r.fcf >= 0 ? GREEN : '#DC2626', true),
-            tblCell(r.cum, bg, AlignmentType.RIGHT, r.cum >= 0 ? DKGREEN : '#DC2626', r.cum >= 0),
-          ]});
-        }),
-        new TableRow({ children: [
-          tblHdrCell('TOTAL', DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.ng, 0).toFixed(2), DKGREEN),
-          tblHdrCell('—', DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.nR, 0).toFixed(2), DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.omC + r.insC, 0).toFixed(2), DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.ebd, 0).toFixed(2), DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.interest, 0).toFixed(2), DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.prin, 0).toFixed(2), DKGREEN),
-          tblHdrCell(cfRows.reduce((s, r) => s + r.txp, 0).toFixed(2), DKGREEN),
-          tblHdrCell(totalFCF, DKGREEN),
-          tblHdrCell(cfRows[24].cum.toFixed(2), DKGREEN),
-        ]})
-      ]
-    }),
-    para(`Total 25-Year Free Cash Flow: Rs ${totalFCF} Crores  |  Return Multiple: ${retMul}x Equity  |  Payback: Year ${payY || 'N/A'}`),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 9 — GENERATION DETAILS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('9.  GENERATION DETAILS — 25 YEARS', DKGREEN),
-    para(`The plant generates power based on irradiation data specific to ${site}, Tamil Nadu. The CUF of ${plf}% reflects P50 irradiation values from MNRE / NISE solar resource maps for the region.`),
-  );
-  const genColW = [500, 1200, 1200, 1200, 1400, 1400, 2460];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: genColW,
-      rows: [
-        new TableRow({ children: ['Yr', 'Gross Gen (MU)', 'Loss (MU)', 'Net Gen (MU)', 'SP (Rs/kWh)', 'Net Rev (Rs Cr)', 'Cumulative Net Gen (MU)'].map((h, ci) => tblHdrCell(h, DKGREEN, genColW[ci])) }),
-        ...cfRows.map((r, idx) => {
-          const grossMU = +(r.ng / (1 - tloss / 100)).toFixed(3);
-          const lossMU  = +(grossMU - r.ng).toFixed(3);
-          const cumGen  = cfRows.slice(0, idx + 1).reduce((s, x) => s + x.ng, 0);
-          const bg = idx % 2 === 0 ? LGRAY : WHITE;
-          return new TableRow({ children: [
-            tblCell(r.y, bg, AlignmentType.CENTER, DKGRAY, true),
-            tblCell(grossMU, bg), tblCell(lossMU, bg), tblCell(r.ng, bg, AlignmentType.RIGHT, DKGREEN, true),
-            tblCell(r.sp, bg), tblCell(r.nR, bg, AlignmentType.RIGHT, GREEN),
-            tblCell(cumGen.toFixed(2), bg, AlignmentType.RIGHT, DKGRAY),
-          ]});
-        }),
-      ]
-    }),
-    para(`Total 25-Year Net Generation: ${cfRows.reduce((s, r) => s + r.ng, 0).toFixed(2)} MU  |  Total CO₂ Offset: ${(cfRows.reduce((s, r) => s + r.ng, 0) * 0.82 * 1000).toLocaleString('en-IN')} tonnes`),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 10 — P&L
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('10.  PROJECTED PROFIT AND LOSS ACCOUNT', BLUE),
-    para('The following P&L is prepared on accrual basis in accordance with the Companies Act 2013, using the Straight-Line Method (SLM) of depreciation for book purposes and the Written-Down Value (WDV) method for IT Act purposes.'),
-  );
-  // Compute 10-year P&L
-  let ob2 = dAmt, dF2 = 1, tC2 = tariff, oC2 = oa;
-  let omC2 = sCap * om_pct, insC2 = sCap * ins_pct;
-  let bookWdv2 = sCap, retE2 = 0;
-  const plData = [];
-  for (let y = 1; y <= 10; y++) {
-    if (y === 1) dF2 = 1 - deg1; else dF2 *= 0.9932;
-    const ng2   = acKWAC() * plf / 100 * 8760 * dF2 * (1 - tloss / 100);
-    const sp2   = tC2 * (1 + peak * sur) * disc;
-    const gR2   = ng2 * sp2 / 1e7, ocC2 = ng2 * oC2 / 1e7, nR2 = gR2 - ocC2;
-    const opx2  = omC2 + insC2, ebd2 = nR2 - opx2;
-    const bkD2  = bookWdv2 * 0.15; bookWdv2 = Math.max(0, bookWdv2 - bkD2);
-    const interest2 = ob2 * ir, prin2 = (y <= moro ? 0 : (y <= tn ? ap : 0));
-    ob2 = Math.max(0, ob2 - prin2);
-    let itd2 = 0; if (y > 1) { const wdvT2 = sCap * Math.pow(1 - 0.15, y - 1); itd2 = wdvT2 * 0.15; }
-    const ebit2 = ebd2 - bkD2, pbt2 = ebit2 - interest2;
-    const txbl2 = Math.max(0, ebd2 - interest2 - itd2), txp2 = txbl2 * taxR * 1.04, pat2 = pbt2 - txp2;
-    retE2 += pat2;
-    plData.push({ y, nR2: +nR2.toFixed(2), opx2: +opx2.toFixed(2), ebd2: +ebd2.toFixed(2), bkD2: +bkD2.toFixed(2), ebit2: +ebit2.toFixed(2), interest2: +interest2.toFixed(2), pbt2: +pbt2.toFixed(2), txp2: +txp2.toFixed(2), pat2: +pat2.toFixed(2) });
-    if (y < 5) { tC2 *= (1 + taresc / 100); oC2 *= (1 + oaesc / 100); }
-    omC2 *= (1 + ome); insC2 *= 1.03;
-  }
-  const plColW = [600, 1100, 1000, 1050, 1050, 1000, 1100, 1050, 800, 800];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: plColW,
-      rows: [
-        new TableRow({ children: ['Yr', 'Net Rev', 'O&M+Ins', 'EBITDA', 'Book Dep', 'EBIT', 'Interest', 'PBT', 'Tax', 'PAT'].map((h, ci) => tblHdrCell(h, BLUE, plColW[ci])) }),
-        ...plData.map(r => {
-          const bg = r.y % 2 === 0 ? LGRAY : WHITE;
-          return new TableRow({ children: [
-            tblCell(r.y, bg, AlignmentType.CENTER, DKGRAY, true), tblCell(r.nR2, bg),
-            tblCell(r.opx2, bg), tblCell(r.ebd2, bg, AlignmentType.RIGHT, GREEN),
-            tblCell(r.bkD2, bg), tblCell(r.ebit2, bg),
-            tblCell(r.interest2, bg), tblCell(r.pbt2, bg),
-            tblCell(r.txp2, bg), tblCell(r.pat2, bg, AlignmentType.RIGHT, r.pat2 >= 0 ? GREEN : '#DC2626', true),
-          ]});
-        }),
-      ]
-    }),
-    para('Note: Book depreciation at 15% SLM on plant cost. IT depreciation (WDV 15%) used for tax computation. Tax = 25% + 4% health & education cess.'),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 11 — BALANCE SHEET
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('11.  PROJECTED BALANCE SHEET', BLUE),
-  );
-  let ob3 = dAmt, dF3 = 1, tC3 = tariff, oC3 = oa;
-  let omC3 = sCap * om_pct, insC3 = sCap * ins_pct;
-  let bookWdv3 = sCap, retE3 = 0;
-  const bsData = [];
-  for (let y = 1; y <= 10; y++) {
-    if (y === 1) dF3 = 1 - deg1; else dF3 *= 0.9932;
-    const ng3  = acKWAC() * plf / 100 * 8760 * dF3 * (1 - tloss / 100);
-    const sp3  = tC3 * (1 + peak * sur) * disc;
-    const nR3  = (ng3 * sp3 / 1e7) - (ng3 * oC3 / 1e7);
-    const ebd3 = nR3 - omC3 - insC3;
-    const bkD3 = bookWdv3 * 0.15; bookWdv3 = Math.max(0, bookWdv3 - bkD3);
-    const int3 = ob3 * ir, prin3 = (y <= moro ? 0 : (y <= tn ? ap : 0));
-    ob3 = Math.max(0, ob3 - prin3);
-    let itd3 = 0; if (y > 1) { const wdvT3 = sCap * Math.pow(1 - 0.15, y - 1); itd3 = wdvT3 * 0.15; }
-    const txp3 = Math.max(0, ebd3 - int3 - itd3) * taxR * 1.04;
-    const pat3 = (ebd3 - bkD3 - int3) - txp3;
-    retE3 += pat3;
-    const ca3 = Math.max(1.5, retE3 * 0.25 + 2);
-    bsData.push({ y, eAmt: +eAmt.toFixed(2), ret: +retE3.toFixed(2), debt: +ob3.toFixed(2), nfa: +bookWdv3.toFixed(2), ca: +ca3.toFixed(2), total: +(bookWdv3 + ca3).toFixed(2) });
-    if (y < 5) { tC3 *= (1 + taresc / 100); oC3 *= (1 + oaesc / 100); }
-    omC3 *= (1 + ome); insC3 *= 1.03;
-  }
-  const bsColW = [600, 1200, 1400, 1400, 1200, 1300, 1260, 1400];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: bsColW,
-      rows: [
-        new TableRow({ children: ['Yr', 'Share Cap', 'Reserves', 'LT Debt', 'Total Liab', 'Net FA', 'Curr Assets', 'Total Assets'].map((h, ci) => tblHdrCell(h, BLUE, bsColW[ci])) }),
-        ...bsData.map(r => {
-          const tl = +(r.eAmt + Math.max(0, r.ret) + r.debt).toFixed(2);
-          const bg = r.y % 2 === 0 ? LGRAY : WHITE;
-          return new TableRow({ children: [
-            tblCell(r.y, bg, AlignmentType.CENTER, DKGRAY, true),
-            tblCell(r.eAmt, bg), tblCell(r.ret, bg, AlignmentType.RIGHT, r.ret >= 0 ? GREEN : '#DC2626'),
-            tblCell(r.debt, bg), tblCell(tl, bg),
-            tblCell(r.nfa, bg), tblCell(r.ca, bg), tblCell(r.total, bg, AlignmentType.RIGHT, DKGRAY, true),
-          ]});
-        }),
-      ]
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 12 — DSCR AND RATIOS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('12.  DSCR AND FINANCIAL RATIOS', PURPLE),
-    para('DSCR (Debt Service Coverage Ratio) = EBITDA ÷ (Interest + Principal). Banks typically require minimum DSCR of 1.20x; preferred ≥1.50x for project finance.'),
-  );
-  const dscrColW = [600, 900, 1000, 1000, 1100, 1100, 1200, 1260, 1200];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: dscrColW,
-      rows: [
-        new TableRow({ children: ['Yr', 'EBITDA', 'Interest', 'Principal', 'Debt Svc', 'DSCR', 'EBITDA %', 'Net Rev', 'Status'].map((h, ci) => tblHdrCell(h, PURPLE, dscrColW[ci])) }),
-        ...cfRows.filter(r => r.y <= tn).map(r => {
-          const ds = r.interest + r.prin;
-          const dscr = ds > 0 ? (r.ebd / ds) : 99;
-          const dscrColor = dscr >= 1.5 ? GREEN : dscr >= 1.2 ? YELLOW : '#DC2626';
-          const dscrStatus = dscr >= 1.5 ? 'Strong' : dscr >= 1.2 ? 'Acceptable' : 'Below';
-          const bg = r.y % 2 === 0 ? LGRAY : WHITE;
-          return new TableRow({ children: [
-            tblCell(r.y, bg, AlignmentType.CENTER, DKGRAY, true),
-            tblCell(r.ebd, bg, AlignmentType.RIGHT, GREEN),
-            tblCell(r.interest, bg), tblCell(r.prin, bg),
-            tblCell(ds.toFixed(2), bg), tblCell(dscr.toFixed(2), bg, AlignmentType.RIGHT, dscrColor, true),
-            tblCell((r.nR > 0 ? (r.ebd / r.nR * 100).toFixed(1) : '—') + '%', bg),
-            tblCell(r.nR, bg), tblCell(dscrStatus, bg, AlignmentType.CENTER, dscrColor, dscr < 1.2),
-          ]});
-        }),
-      ]
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 13 — REGULATORY FRAMEWORK
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('13.  REGULATORY FRAMEWORK — TAMIL NADU (TNERC)', ORANGE),
-    hdr2('13.1  Key Regulatory Orders', ORANGE),
-    para('The project operates under the following regulatory framework established by the Tamil Nadu Electricity Regulatory Commission (TNERC) and the Central Electricity Regulatory Commission (CERC):'),
-    ...[
-      ['TNERC T.O. No. 7 of 2022', 'Open Access charges, wheeling charges, technical loss norms. Effective 01-07-2023. Applicable for Group Captive CPP on Tamil Nadu STOA (Short-Term Open Access).'],
-      ['TNERC T.O. No. 6 of 2025', 'ToD (Time of Day) tariff structure — Peak window 6AM–10AM and 6PM–10PM carry +25% surcharge; off-peak −5%. Critical for solar project revenue computation.'],
-      ['CERC Captive Rules 2001', 'Rule 3: Minimum 26% collective equity by captive consumers. Rule 4: Minimum 51% of generation consumed by captive consumers. Rule 5: Proportional consumption ±10%.'],
-      ['CERC Green Energy OA Regulations 2022 (GEOA)', 'Additional Surcharge reduced to Rs 0.10/kWh for FY26 (from Rs 0.54/kWh), representing an 81.5% reduction. Significant improvement to project viability.'],
-      ['TANGEDCO MYT Order 2023', 'TNEB retail tariff for HT-I Industries: Rs 7.50–7.75/kWh. HT-III Commercial: Rs 9.40–9.76/kWh. Escalation pattern ~3–5%/yr.'],
-    ].map(([title, text]) => [hdr3(title, ORANGE), para(text)]).flat(),
-    hdr2('13.2  Open Access Charge Structure (Group Captive — 30% Concession)', ORANGE),
-  );
-  const oaRows = [
-    ['Component', 'Full Rate (Rs/kWh)', 'After 30% Concession', 'Remark'],
-    ['Wheeling Charge', '1.040', '0.728', 'TANTRANSCO — 110 kV EHT line'],
-    ['State Transmission Charge', '0.224', '0.157', 'Rs 223.57/MWh ÷ 1000'],
-    ['SLDC Scheduling Charge', '0.064', '0.045', 'Rs 172/day × 365 ÷ net MU'],
-    ['Additional Surcharge', '0.10', '0.10', 'CERC GEOA 2022 — FY26 rate (not waived for GC)'],
-    ['CSS (Cross-Subsidy Surcharge)', '2.41', 'ZERO', 'Fully waived for Group Captive CPP (T.O. 7/2022)'],
-    ['TOTAL OA (Model)', '—', `Rs ${oa}/kWh`, 'Used in this financial model'],
-  ];
-  const oaColW = [2500, 1700, 1700, 3360];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: oaColW,
-      rows: oaRows.map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 || ri === oaRows.length - 1 ? ORANGE : LGRAY, ri === 0 || ri === oaRows.length - 1 ? WHITE : DKGRAY, ri === 0 || ri === oaRows.length - 1),
-        tblCell(row[1], ri === 0 ? '#C05621' : WHITE, AlignmentType.CENTER, ri === 0 ? WHITE : DKGRAY),
-        tblCell(row[2], ri === 0 ? '#C05621' : (row[2] === 'ZERO' ? LTGREEN : LTORG), AlignmentType.CENTER, ri === 0 ? WHITE : (row[2] === 'ZERO' ? GREEN : ORANGE), row[2] === 'ZERO'),
-        tblCellL(row[3], ri === 0 ? '#C05621' : WHITE, ri === 0 ? WHITE : '6B7280'),
-      ]}))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 14 — GOVERNMENT THRUST AREAS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('14.  GOVERNMENT THRUST AREAS — SOLAR ENERGY', GREEN),
-    hdr2('14.1  National Mission for Solar Energy', GREEN),
-    para('India has set an ambitious target of 500 GW of non-fossil fuel-based electricity capacity by 2030, of which 280 GW is to come from solar energy (National Solar Mission, revised target under PM Surya Ghar Yojana and Panchamrit commitments at COP26). As of FY2026, India has crossed 100 GW of installed solar capacity, making it the world\'s third-largest solar market.'),
-    hdr2('14.2  Tamil Nadu Solar Policy and Incentives', GREEN),
-    ...[
-      'Tamil Nadu Solar Energy Policy 2019 targets 20,000 MW of solar capacity by 2030, including 10,000 MW of Open Access and Group Captive projects. The State has one of the best solar irradiation profiles in India (1,800–2,200 kWh/m²/year) and a mature Open Access regulatory framework.',
-      'Tamil Nadu stands as the leading state for industrial and commercial Open Access solar projects in South India, driven by high TNEB tariffs (HT-III: Rs 9.40–9.76/kWh), an industry-friendly TNERC, and a large base of HT industrial consumers.',
-      'Key government incentives applicable to this project: (1) CSS fully waived for Group Captive CPP, (2) Additional Surcharge reduced to Rs 0.10/kWh (FY26), (3) 30% OA concession for solar projects, (4) Accelerated depreciation (80% in Year 1 under IT Act) available for equity investors who hold the asset.',
-      'Under the PLI (Production Linked Incentive) scheme for Solar PV manufacturing, India now has 8 GW+ of ALMM-listed domestic module manufacturing capacity, ensuring the project can procure Approved List of Models and Manufacturers (ALMM) modules as required by MNRE.',
-    ].map(t => para(t)),
-    hdr2('14.3  Financial Incentives Summary', GREEN),
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: [3500, 5860],
-      rows: [
-        ['Incentive', 'Details / Applicability'],
-        ['Accelerated Depreciation (IT Act)', '40% WDV in Year 1 for solar — tax shield for equity investors'],
-        ['GST on equipment', '5% GST on solar panels (concessional rate)'],
-        ['Priority Sector Lending', 'Solar projects eligible — lower cost of debt from banks'],
-        ['TNERC 30% OA Concession', 'Directly reduces OA from ~Rs 1.36 to Rs 0.95/kWh for this project'],
-        ['CSS Waiver', 'Rs 2.41/kWh fully waived — equivalent to Rs 1,020 Lakhs/year savings (project-level)'],
-        ['REC (Renewable Energy Certificates)', 'Available post-commissioning: Rs 1,000–3,000 per MWh — pure upside not modelled'],
-      ].map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 ? GREEN : LGRAY, ri === 0 ? WHITE : DKGRAY, ri === 0),
-        tblCellL(row[1], ri === 0 ? DKGREEN : WHITE, ri === 0 ? WHITE : '374151'),
-      ]}))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 15 — SOLAR INDUSTRY FUTURE
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('15.  INDIA SOLAR INDUSTRY — PRESENT AND FUTURE', BLUE),
-    hdr2('15.1  Current Market Status', BLUE),
-    para('India crossed 100 GW of installed solar capacity in FY2026, a milestone reflecting the fastest capacity addition trajectory among large economies. The annual solar module manufacturing capacity has risen to 65 GW (FY2026), reducing import dependency and bringing module prices to Rs 18–22/Wp for ALMM-listed bifacial modules.'),
-    hdr2('15.2  Technology Trends', BLUE),
-    ...[
-      'Module Technology: Monocrystalline PERC is being superseded by TOPCon (Tunnel Oxide Passivated Contact) and HJT (Heterojunction) technology, with efficiencies reaching 23–26%. Bifacial modules now deliver 5–15% additional generation from reflected ground irradiance.',
-      'BESS Integration: Lithium Iron Phosphate (LFP) battery prices have fallen to Rs 60–80 Lakhs/MWh (FY2026), making co-located storage commercially viable for Group Captive projects to address the evening peak power gap.',
-      'Floating and Agrivoltaic Solar: New configurations on reservoir surfaces and integrated with agriculture are growing, with Tamil Nadu\'s large irrigation tanks offering significant potential.',
-      'Green Hydrogen: Large solar projects are increasingly co-located with electrolysers to produce green hydrogen for industry, particularly in the fertilizer, refinery, and steel sectors. Tamil Nadu\'s abundant solar resources position it as a future green hydrogen hub.',
-    ].map(t => para(t)),
-    hdr2('15.3  Market Outlook (2026–2030)', BLUE),
-    ...[
-      'India targets 280 GW solar by 2030 from ~100 GW in FY2026, implying a CAGR of ~23% over 4 years. This will require Rs 12–15 Lakh Crore of investment, of which Open Access and Group Captive projects are expected to contribute 25–30%.',
-      'Open Access tariff competitiveness is expected to remain strong as TNEB tariffs continue to escalate 3–5%/yr while solar equipment costs plateau or decline, widening the tariff differential and improving project economics.',
-      'Emerging revenue streams for Group Captive solar projects include: (1) REC sales on IEX/PXIL, (2) Carbon credits under Article 6 of Paris Agreement, (3) Green premium from ESG-conscious buyers, and (4) Peer-to-peer energy trading under enabling regulations.',
-    ].map(t => para(t)),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 16 — ENERGY CRISIS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('16.  ENERGY CRISIS — GLOBAL AND INDIAN PERSPECTIVE', ORANGE),
-    hdr2('16.1  Global Energy Landscape', ORANGE),
-    ...[
-      'The global energy crisis of 2021–2024, triggered by the COVID-19 recovery demand surge, the Russia-Ukraine conflict, and OPEC+ supply management, exposed the vulnerability of fossil-fuel-dependent economies. Coal prices spiked to USD 400/tonne, LNG to USD 70/MMBtu, and crude oil to USD 130/barrel, causing electricity tariff shocks across Europe, Asia, and the Americas.',
-      'The crisis accelerated the energy transition. Countries that had invested in renewable capacity — particularly solar and wind — were significantly insulated from fossil fuel price volatility. Germany, Japan, South Korea, and India are fast-tracking domestic renewable capacity as a strategic energy security measure.',
-      'The International Energy Agency (IEA) now projects renewables to account for over 60% of global electricity generation by 2030 (up from 30% in 2023), with solar PV as the single largest source of new capacity addition globally every year through 2030.',
-    ].map(t => para(t)),
-    hdr2('16.2  India\'s Energy Challenges', ORANGE),
-    ...[
-      'India faces a complex energy equation: a rapidly growing economy driving demand up 6–8% per year, domestic coal production unable to match demand, persistent state electricity board (SEB) financial stress (combined losses of SEBs: Rs 90,000+ Crores/year), and imported fuel price exposure.',
-      'Tamil Nadu in particular experiences power deficits during summer months (April–June), with peak demand exceeding 18,000 MW against available capacity of 16,000–17,000 MW. This deficit is met through costly imported power (Rs 10–15/kWh on exchanges), directly benefiting captive solar project economics.',
-      'Group Captive CPP solar projects directly address this challenge by reducing industrial consumers\' dependence on TNEB supply, improving grid reliability for remaining consumers, and contributing green energy to Tamil Nadu\'s power balance — aligning commercial interest with national energy security goals.',
-    ].map(t => para(t)),
-    hdr2('16.3  Why This Project Is Strategically Timely', ORANGE),
-    ...[
-      ['Tariff arbitrage window', `At Rs ${tariff}/kWh TNEB tariff and Rs ${sp1}/kWh solar selling price, the Rs ${(tariff - sp1).toFixed(2)}/kWh savings are locked in by long-term PSA, insulating buyers from future TNEB tariff escalation.`],
-      ['CSS exemption risk', 'The current CSS waiver for Group Captive CPP could be reduced in future TNERC orders. Projects commissioned before any revision will be protected by PSA terms for the contracted tenure.'],
-      ['Equipment cost plateau', 'Solar module prices are near a cost floor (Rs 18–22/Wp for TOPCon bifacial, FY2026). Waiting for further reduction is not justified against the opportunity cost of foregone tariff savings and the potential CSS window closing.'],
-      ['IEX exchange market risk', 'Open market power prices have averaged Rs 4–8/kWh on IEX. Group Captive CPP eliminates exchange exposure, providing price certainty over 25 years.'],
-    ].map(([title, text]) => [hdr3(title, ORANGE), para(text)]).flat(),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 17 — CUSTOMER SAVINGS
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('17.  CUSTOMER SAVINGS ANALYSIS', DKGREEN),
-    para(`The following table shows the financial benefit to the buyer (customer) under the Group Captive CPP structure versus continuing with direct TNEB supply at Rs ${tariff}/kWh (base tariff, HT-I Industry).`),
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: [800, 1200, 1200, 1200, 1300, 1200, 1300, 1660],
-      rows: [
-        new TableRow({ children: ['Yr', 'TNEB Tariff', 'Solar SP', 'Saving/kWh', 'Net Gen (MU)', 'Units (kWh)', 'Annual Saving', 'Cumul Saving'].map((h, ci) => tblHdrCell(h, DKGREEN, [800,1200,1200,1200,1300,1200,1300,1660][ci])) }),
-        ...cfRows.slice(0, 15).map(r => {
-          const tnebT = tariff * Math.pow(1 + taresc / 100, Math.min(4, r.y - 1));
-          const savKWh = +(tnebT - r.sp).toFixed(4);
-          const annSav = +(r.ng * 1e6 * savKWh / 1e7).toFixed(2);
-          const cumSav = cfRows.slice(0, r.y).reduce((s, rr) => {
-            const tt = tariff * Math.pow(1 + taresc / 100, Math.min(4, rr.y - 1));
-            return s + rr.ng * 1e6 * (tt - rr.sp) / 1e7;
-          }, 0);
-          const bg = r.y % 2 === 0 ? LGRAY : LTGREEN;
-          return new TableRow({ children: [
-            tblCell(r.y, bg, AlignmentType.CENTER, DKGRAY, true),
-            tblCell(tnebT.toFixed(2), bg), tblCell(r.sp, bg),
-            tblCell(savKWh, bg, AlignmentType.RIGHT, GREEN, true),
-            tblCell(r.ng, bg), tblCell((r.ng * 1e6).toLocaleString('en-IN', { maximumFractionDigits: 0 }), bg),
-            tblCell('Rs ' + annSav, bg, AlignmentType.RIGHT, GREEN),
-            tblCell('Rs ' + cumSav.toFixed(2) + ' Cr', bg, AlignmentType.RIGHT, DKGREEN, true),
-          ]});
-        }),
-      ]
-    }),
-    para('CSS waiver benefit: Rs 2.41/kWh — additional saving not shown above (Group Captive CPP vs open market purchase by customer).'),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 18 — ENVIRONMENTAL AND SOCIAL IMPACT
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('18.  ENVIRONMENTAL AND SOCIAL IMPACT', GREEN),
-    hdr2('18.1  Environmental Benefits', GREEN),
-    kv('CO₂ offset per year', `~${Number(co2yr).toLocaleString('en-IN')} tonnes (CEA grid emission factor: 0.82 kg CO₂/kWh)`),
-    kv('25-year total CO₂ offset', `~${(Number(co2yr) * 25).toLocaleString('en-IN')} tonnes`),
-    kv('Equivalent trees planted', `~${(Number(co2yr) * 45).toLocaleString('en-IN')} trees/year (MOEF equivalence)`),
-    kv('Water saving vs coal plant', `~${(netMU * 2500).toLocaleString('en-IN')} KL/year (zero water for generation)`),
-    para('The project eliminates dependence on coal-based grid power for participating industrial consumers. Solar PV is a zero-emission technology at the generation stage with a lifecycle carbon footprint of 20–50 g CO₂/kWh vs 820–1000 g CO₂/kWh for coal.'),
-    hdr2('18.2  Social and Economic Benefits', GREEN),
-    kv('Construction employment', q('q-jobs-const') || 'Approximately 100 persons during construction (skilled + unskilled)'),
-    kv('Permanent O&M jobs', q('q-jobs-perm') || '8 permanent technical and maintenance staff'),
-    kv('Local economy benefit', q('q-local') || 'Land lease income for host farmers / landowners; local vendor procurement for civil works'),
-    kv('CSR activities', q('q-csr') || 'Solar street lights for adjacent village; drinking water support'),
-    kv('ESG positioning', 'Participating industrial consumers achieve measurable Scope 2 emission reduction, supporting their sustainability reporting (GRI, BRSR, CDP)'),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 19 — RISK ASSESSMENT
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('19.  RISK ASSESSMENT AND MITIGANTS', ORANGE),
-  );
-  const riskRows = [
-    ['Risk Category', 'Description', 'Probability', 'Impact', 'Mitigant'],
-    ['Tariff / Regulatory', 'TNERC reduces OA concession or reinstates CSS for Group Captive', 'Low', 'High', 'PSA locks selling price; CSS waiver codified in T.O. 7/2022; Group Captive is policy-protected'],
-    ['Generation underperformance', 'Actual CUF < modelled 21.3% due to lower irradiation or panel degradation', 'Medium', 'Medium', 'P50 irradiation used; ALMM modules with 25-yr linear power warranty; 10% contingency buffer in model'],
-    ['Counterparty credit risk', 'Customer unable to pay solar bills or exits the project', 'Low', 'High', 'PSA with bank guarantee; LC/PBG from customer; 26% equity stake aligns incentives'],
-    ['Interest rate risk', 'Floating rate increases from ' + gv('ir') + '% to higher levels', 'Medium', 'Medium', 'Fix rate at financial closure; or model sensitivity at ' + (gv('ir') + 2).toFixed(0) + '% — project still viable above 1.2x DSCR'],
-    ['Construction cost overrun', 'EPC contract price escalation / equipment delay', 'Medium', 'Low', 'Fixed-price EPC contract; ALMM module price locked at contract signing; 3% contingency in TPC'],
-    ['OA curtailment', 'SLDC curtailment of solar injection during grid congestion', 'Medium', 'Low', 'BESS option to shift generation; morning peak 6AM–10AM has lower curtailment probability'],
-    ['Land and title risk', 'Land title dispute or conversion order delay', 'Low', 'High', 'Conduct title search; ensure patta / kambattam in name; get conversion order before financial closure'],
-    ['Compliance risk', '26% equity or 51% consumption not met — CSS triggered', 'Low', 'High', 'Monthly compliance monitoring in TNERC tracker; proportional allotment alerts; annual TNPDCL certificate'],
-  ];
-  const riskColW = [1400, 2600, 900, 900, 3560];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: riskColW,
-      rows: riskRows.map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 ? ORANGE : LGRAY, ri === 0 ? WHITE : DKGRAY, ri === 0),
-        tblCellL(row[1], ri === 0 ? '#C05621' : WHITE, ri === 0 ? WHITE : DKGRAY),
-        tblCell(row[2], ri === 0 ? '#C05621' : (row[2] === 'Low' ? LTGREEN : row[2] === 'High' ? '#FEE2E2' : LTORG), AlignmentType.CENTER, ri === 0 ? WHITE : (row[2] === 'Low' ? GREEN : row[2] === 'High' ? '#DC2626' : ORANGE), ri > 0),
-        tblCell(row[3], ri === 0 ? '#C05621' : (row[3] === 'Low' ? LTGREEN : row[3] === 'High' ? '#FEE2E2' : LTORG), AlignmentType.CENTER, ri === 0 ? WHITE : (row[3] === 'Low' ? GREEN : row[3] === 'High' ? '#DC2626' : ORANGE), ri > 0),
-        tblCellL(row[4], ri === 0 ? '#C05621' : WHITE, ri === 0 ? WHITE : '374151'),
-      ]}))
-    }),
-    pgBreak(),
-  );
-
-  // ──────────────────────────────────────────────────────────
-  // CH 20 — IMPLEMENTATION SCHEDULE
-  // ──────────────────────────────────────────────────────────
-  children.push(
-    hdr1('20.  IMPLEMENTATION SCHEDULE', BLUE),
-  );
-  const schedRows = [
-    ['Activity', 'Duration (months)', 'Key Milestone', 'Responsible'],
-    ['DPR finalisation and customer PSA signing', '1–2', 'Signed PSA + DPR', 'Developer + Legal'],
-    ['TNEB evacuation DPR filing and 110 kV bay allocation', '6–12', 'TANTRANSCO LOA', 'Developer + TANTRANSCO'],
-    ['TNERC Group Captive OA approval filing', '3–5', 'TNERC Order', 'Developer + TNERC'],
-    ['Land purchase / lease and conversion order', '6–15', 'Patta + Conversion', 'Developer + Dist. Coll.'],
-    ['Environmental & other statutory clearances', '3–6', 'MoEF / State clearance', 'Developer + Consultant'],
-    ['Financial closure (loan sanction + equity infusion)', '3–4', 'Term Loan Agreement', 'Developer + Bank'],
-    ['EPC contract award', '1', 'Signed EPC contract', 'Developer + EPC'],
-    ['Civil construction and equipment delivery', '6–8', 'Modules on site', 'EPC Contractor'],
-    ['Electrical work, cabling, inverter installation', '3–4', 'AC panel energised', 'EPC + TANTRANSCO'],
-    ['CEIG inspection and synchronisation', '1–2', 'First synchronisation', 'CEIG + SLDC TN'],
-    ['Commercial Operation Date (COD)', '1', 'COD declaration', 'Developer + TNPDCL'],
-    ['TOTAL PROJECT TIMELINE (parallel activities)', '18–24 months', 'COD', ''],
-  ];
-  const schedColW = [3000, 1700, 2300, 2360];
-  children.push(
-    new Table({
-      width: { size: pageW, type: WidthType.DXA }, columnWidths: schedColW,
-      rows: schedRows.map((row, ri) => new TableRow({ children: [
-        tblCellL(row[0], ri === 0 || ri === schedRows.length - 1 ? BLUE : LGRAY, ri === 0 || ri === schedRows.length - 1 ? WHITE : DKGRAY, ri === 0 || ri === schedRows.length - 1),
-        tblCell(row[1], ri === 0 || ri === schedRows.length - 1 ? '#1E40AF' : LTBLUE, AlignmentType.CENTER, ri === 0 || ri === schedRows.length - 1 ? WHITE : BLUE),
-        tblCell(row[2], ri === 0 || ri === schedRows.length - 1 ? '#1E40AF' : WHITE, AlignmentType.LEFT, ri === 0 || ri === schedRows.length - 1 ? WHITE : DKGRAY, ri === 0 || ri === schedRows.length - 1),
-        tblCellL(row[3], ri === 0 ? '#1E40AF' : WHITE, ri === 0 ? WHITE : '6B7280'),
-      ]}))
-    }),
-    new Paragraph({ spacing: { before: 240 } }),
-    para(`Report prepared by: ${q('q-prepby') || 'EIL Solar Pvt. Ltd.'}   |   Date: ${rpdate}   |   Ref: ${q('q-refno') || 'EIL/DPR/2026'}`, { align: AlignmentType.CENTER, italics: true, color: '6B7280' }),
-    para('Elango Industries Limited (BSE: 513452) | EIL Solar Ground PWA | © 2026', { align: AlignmentType.CENTER, size: 18, color: '9CA3AF' }),
-  );
-
-  // ────────────────────────────────────────────────────────────
-  // ASSEMBLE DOCUMENT
-  // ────────────────────────────────────────────────────────────
   try {
-    const doc = new Document({
-      styles: {
-        default: { document: { run: { font: 'Arial', size: 22 } } },
-        paragraphStyles: [
-          { id: 'Heading1', name: 'Heading 1', basedOn: 'Normal', next: 'Normal', quickFormat: true,
-            run: { size: 32, bold: true, font: 'Arial', color: WHITE },
-            paragraph: { spacing: { before: 360, after: 120 }, outlineLevel: 0 } },
-          { id: 'Heading2', name: 'Heading 2', basedOn: 'Normal', next: 'Normal', quickFormat: true,
-            run: { size: 26, bold: true, font: 'Arial' },
-            paragraph: { spacing: { before: 240, after: 100 }, outlineLevel: 1 } },
-        ]
-      },
-      sections: [{
-        properties: {
-          page: {
-            size: { width: 12240, height: 15840 },
-            margin: { top: 1080, right: 1080, bottom: 1080, left: 1080 }
-          }
-        },
-        children,
-      }]
+    const q  = id => { const el=document.getElementById(id); return el&&el.value.trim()?el.value.trim():''; };
+    const co = q('q-company')||'Solar Project SPV';
+    const site = q('q-site')||'Tamil Nadu';
+    const rpdate = q('q-rpdate')||new Date().toLocaleDateString('en-IN',{month:'long',year:'numeric'});
+
+    // ── Live model values ──────────────────────────────────────────
+    const acMW  = gv('ac'), dacR = gv('dac'), dcMW = +(acMW*dacR).toFixed(2);
+    const dc_kWp= Math.round(acMW*dacR*1000);
+    const plf   = gv('plf'), tloss = gv('tloss');
+    const tariff= gv('tariff'), disc = gv('disc')/100;
+    const peak  = gv('peak')/100, sur = gv('surcharge')/100;
+    const oa    = gv('oa'), taresc = gv('taresc'), oaesc = gv('oaesc');
+    const ir    = gv('ir')/100, tn = gv('tn'), moro = gv('moro');
+    const taxR  = gv('tax')/100, sv = gv('sv')/100, deg1 = gv('deg1')/100;
+    const om_pct= gv('om')/100, ins_pct = gv('ins')/100, ome = gv('ome')/100;
+    const sCap  = gv('epc')+gv('land')+gv('evac')+gv('misc');
+    const bessCap=(document.getElementById('i-batt')&&document.getElementById('i-batt').value==='1')?gv('bmwh')*gv('bc'):0;
+    const tCap  = sCap+bessCap;
+    const dfPct = gv('df')/100, dAmt = +(tCap*dfPct).toFixed(2), eAmt = +(tCap*(1-dfPct)).toFixed(2);
+    const ap    = dAmt/Math.max(1,tn-moro);
+    const wt1   = tariff*(1+peak*sur), sp1 = +(wt1*disc).toFixed(4), nr1 = +(sp1-oa).toFixed(4);
+    const grossKWh = acKWAC()*plf/100*8760;
+    const netMU = +(grossKWh*(1-tloss/100)/1e6).toFixed(2);
+    const gRev1 = +(grossKWh*(1-tloss/100)*sp1/1e7).toFixed(2);
+    const oAch1 = +(grossKWh*(1-tloss/100)*oa/1e7).toFixed(2);
+    const nRev1 = +(gRev1-oAch1).toFixed(2);
+    const om1   = +(sCap*om_pct).toFixed(2), ins1 = +(sCap*ins_pct).toFixed(2);
+    const ebd1  = +(nRev1-om1-ins1).toFixed(2);
+    const int1  = +(dAmt*ir).toFixed(2), fcf1 = +(ebd1-int1).toFixed(2);
+    const evacVolt = acMW<=5?'11 kV':acMW<=33?'33 kV':'110 kV EHT';
+    const co2yr = +(netMU*0.82*1000).toFixed(0);
+
+    // ── 25-yr CF ──────────────────────────────────────────────────
+    const cfRows=[];
+    let ob=dAmt,dF=1,tC=tariff,oC=oa,omC=sCap*om_pct,insC=sCap*ins_pct;
+    let wdv=sCap,cum=-eAmt,payY=null;
+    for(let y=1;y<=25;y++){
+      if(y===1)dF=1-deg1; else if(y<=10)dF*=0.9932; else dF*=0.993;
+      const ng=acKWAC()*plf/100*8760*dF*(1-tloss/100);
+      const wt=tC*(1+peak*sur),sp=wt*disc;
+      const gR=ng*sp/1e7,ocC=ng*oC/1e7,nR=gR-ocC,opx=omC+insC,ebd=nR-opx;
+      const interest=ob*ir,prin=(y<=moro?0:(y<=tn?ap:0));
+      ob=Math.max(0,ob-prin);
+      let itd=0;if(y>1){itd=wdv*0.15;wdv=Math.max(0,wdv-itd);}
+      const txbl=Math.max(0,ebd-interest-itd),txp=txbl*taxR*1.04;
+      const sal=y===25?tCap*sv:0,fcf=ebd-interest-prin-txp+sal;
+      cum+=fcf; if(cum>=0&&!payY)payY=y;
+      cfRows.push({y,ng:+(ng/1e6).toFixed(3),sp:+sp.toFixed(4),oC:+oC.toFixed(4),
+        nr:+(sp-oC).toFixed(4),gR:+gR.toFixed(2),ocC:+ocC.toFixed(2),nR:+nR.toFixed(2),
+        omC:+omC.toFixed(2),insC:+insC.toFixed(2),ebd:+ebd.toFixed(2),
+        interest:+interest.toFixed(2),prin:+prin.toFixed(2),itd:+itd.toFixed(2),
+        txp:+txp.toFixed(2),fcf:+fcf.toFixed(2),cum:+cum.toFixed(2),
+        ds:+(interest+prin).toFixed(2),dscr:+(interest+prin)>0?(ebd/(interest+prin)).toFixed(2):'—'});
+      if(y<5){tC*=(1+taresc/100);oC*=(1+oaesc/100);}
+      omC*=(1+ome);insC*=1.03;
+    }
+    const totalFCF=+cfRows.reduce((s,r)=>s+r.fcf,0).toFixed(2);
+    const retMul=eAmt>0?(totalFCF/eAmt).toFixed(2):'N/A';
+
+    const wb = XLSX.utils.book_new();
+
+    // helper: add sheet with styled header row
+    const addSheet = (name, headers, rows, colW) => {
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+      ws['!cols'] = colW.map(w=>({wch:w}));
+      XLSX.utils.book_append_sheet(wb, ws, name);
+    };
+
+    // ── SHEET 1: Cover & Executive Summary ─────────────────────
+    const coverData = [
+      ['DETAILED PROJECT REPORT — GROUP CAPTIVE CPP SOLAR POWER PROJECT','','',''],
+      [co,'','',''],
+      ['Site: '+site+'  |  '+acMW+' MW AC / '+dcMW+' MW DC  |  '+rpdate,'','',''],
+      ['Prepared by: '+(q('q-prepby')||'EIL Solar Pvt. Ltd.')+'  |  Ref: '+(q('q-refno')||'EIL/DPR/2026'),'','',''],
+      ['','','',''],
+      ['EXECUTIVE SUMMARY — KEY HIGHLIGHTS','','',''],
+      ['Parameter','Value','Unit','Remark'],
+      ['AC Installed Capacity',acMW,'MW AC','Inverter output side'],
+      ['DC Panel Capacity',dcMW,'MW DC',''+dc_kWp.toLocaleString('en-IN')+' kWp'],
+      ['DC:AC Ratio',dacR,'','Overdrive factor — TN standard'],
+      ['Plant Load Factor (CUF)',plf,'%','TNERC P50 for '+site],
+      ['Total Technical Loss',tloss,'%','DC+Inverter+Transformer+Grid'],
+      ['Evacuation Voltage',evacVolt,'','TANTRANSCO injection'],
+      ['Land Requirement',Math.round(dcMW*3),'acres','3 ac/MW DC standard'],
+      ['Total Project CAPEX',tCap.toFixed(2),'Rs Crores','All-in incl land & evacuation'],
+      ['Equity',eAmt.toFixed(2),'Rs Crores',(100-gv('df')).toFixed(0)+'% of TPC'],
+      ['Debt (Term Loan)',dAmt.toFixed(2),'Rs Crores',gv('df').toFixed(0)+'% of TPC @ '+gv('ir')+'% p.a.'],
+      ['Net Annual Generation Yr-1',netMU,'MU/year','After all losses'],
+      ['TNEB Base Tariff (Buyer)',tariff,'Rs/kWh','TNERC T.O. No.6/2025'],
+      ['Selling Price Yr-1',sp1,'Rs/kWh','Weighted tariff × '+gv('disc')+'% discount'],
+      ['OA Charge (Developer bears)',oa,'Rs/kWh','30% solar concession applied'],
+      ['Net Realisation to Developer',nr1,'Rs/kWh','SP minus OA — developer P&L'],
+      ['Customer Saving Yr-1',+(tariff-sp1).toFixed(2),'Rs/kWh','vs direct TNEB supply'],
+      ['CSS (Cross Subsidy Surcharge)','ZERO','','Fully waived — Group Captive CPP'],
+      ['Gross Revenue Yr-1',gRev1,'Rs Crores',''],
+      ['EBITDA Yr-1',ebd1,'Rs Crores','EBITDA margin ~'+Math.round(ebd1/nRev1*100)+'%'],
+      ['FCF Yr-1 (after interest)',fcf1,'Rs Crores','Pre-principal'],
+      ['Total 25-Year FCF',totalFCF,'Rs Crores',''],
+      ['Return Multiple on Equity',retMul+'x','',''],
+      ['Payback Period',payY?'Year '+payY:'After Yr 25','',''],
+      ['CO₂ Offset per Year',Number(co2yr).toLocaleString('en-IN'),'Tonnes/year','CEA grid factor 0.82 kg/kWh'],
+      ['','','',''],
+      ['COMPANY DETAILS','','',''],
+      ['Company / SPV',q('q-company')||'—','',''],
+      ['Promoter',q('q-promoter')||'—','',''],
+      ['Industry / Sector',q('q-industry')||'—','',''],
+      ['Annual Turnover',q('q-turnover')||'—','Rs Crores',''],
+      ['Annual Power Bill',q('q-powerbill')||'—','Rs Crores',''],
+      ['Annual Consumption',q('q-consumption')||'—','MU/year',''],
+      ['Site Location',q('q-site')||'—','',''],
+      ['Land Status',q('q-landstatus')||'—','',''],
+      ['Expected COD',q('q-cod')||'—','',''],
+      ['Financing Bank',q('q-bank')||'—','',''],
+    ];
+    const wsCover = XLSX.utils.aoa_to_sheet(coverData);
+    wsCover['!cols'] = [{wch:35},{wch:20},{wch:12},{wch:40}];
+    wsCover['!merges'] = [{s:{r:0,c:0},e:{r:0,c:3}},{s:{r:1,c:0},e:{r:1,c:3}},{s:{r:2,c:0},e:{r:2,c:3}}];
+    XLSX.utils.book_append_sheet(wb, wsCover, '1. Executive Summary');
+
+    // ── SHEET 2: Project Inputs ─────────────────────────────────
+    addSheet('2. Project Inputs', ['Parameter','Value','Unit','Basis / Remark'], [
+      ['AC Capacity',acMW,'MW AC','Design basis — inverter output'],
+      ['DC:AC Ratio',dacR,'','1.25–1.35 TN industry standard'],
+      ['DC Capacity',dcMW,'MW DC',dc_kWp.toLocaleString('en-IN')+' kWp'],
+      ['PLF / CUF',plf,'%','P50 irradiation for '+site],
+      ['Year-1 LID Degradation',gv('deg1'),'%','Light-induced degradation'],
+      ['Annual Degradation Yr2-10','0.68','%/yr','ALMM module warranty'],
+      ['Annual Degradation Yr11-25','0.70','%/yr','Post-warranty period'],
+      ['Total Technical Loss',tloss,'%','DC+Inverter+Transformer+Grid+Soiling'],
+      ['Evacuation Voltage',evacVolt,'','TNERC norm by MW capacity'],
+      ['TNEB Base Tariff Yr-1',tariff,'Rs/kWh','TNERC T.O. No.6/2025'],
+      ['ToD Peak Surcharge',gv('surcharge'),'%','+25% morning peak 6AM-10AM'],
+      ['Weighted TNEB Tariff',wt1.toFixed(4),'Rs/kWh','(4 peak hrs×1.25 + 8 normal hrs) ÷ 12'],
+      ['Discount to Buyer',gv('disc'),'%','85% Industrial / 80% Commercial'],
+      ['Selling Price Yr-1',sp1,'Rs/kWh','Weighted tariff × discount'],
+      ['OA All-in (30% concession)',oa,'Rs/kWh','Wheeling+Transmission+SLDC'],
+      ['Net Realisation Yr-1',nr1,'Rs/kWh','SP minus OA — developer net'],
+      ['Tariff Escalation (cap Yr5)',taresc,'%/yr','TNERC pattern'],
+      ['OA Escalation (cap Yr5)',oaesc,'%/yr','MYT cycle'],
+      ['O&M Cost',gv('om'),'% of capex/yr','Industry standard'],
+      ['O&M Escalation',gv('ome'),'%/yr','Annual increase'],
+      ['Insurance',gv('ins'),'% of capex/yr','Standard premium'],
+      ['Income Tax Rate',gv('tax'),'%','+ 4% cess'],
+      ['Salvage Value at Yr25',gv('sv'),'% of TPC','End-of-life asset value'],
+    ], [35,12,14,45]);
+
+    // ── SHEET 3: Project Cost ───────────────────────────────────
+    addSheet('3. Project Cost & Finance', ['Component','Rs Crores','% of TPC','Basis'], [
+      ['Solar EPC (panels+inverters+structures)',gv('epc').toFixed(2),(gv('epc')/tCap*100).toFixed(1)+'%','ALMM modules, string inverters, GI structure'],
+      ['Land (3 ac/MW DC × Rs 18L/ac)',gv('land').toFixed(2),(gv('land')/tCap*100).toFixed(1)+'%','3 acres per MW DC ground-mount norm'],
+      ['Evacuation ('+evacVolt+')',gv('evac').toFixed(2),(gv('evac')/tCap*100).toFixed(1)+'%','TANTRANSCO-approved substation & HT line'],
+      ['Electrical & AC-side',(gv('elec')||tCap*0.10).toFixed(2),'10.0%','HT panels, cabling, protection relay, metering'],
+      ['Civil & Infrastructure',(tCap*0.05).toFixed(2),'5.0%','Fencing, roads, drainage, civil works'],
+      ['SCADA & Monitoring',(tCap*0.02).toFixed(2),'2.0%','Data logger, SLDC communication'],
+      ['Preliminary & Contingency',(tCap*0.03).toFixed(2),'3.0%','DPR, approvals, env study, 2% contingency'],
+      ...(bessCap>0?[['BESS — LFP Storage',bessCap.toFixed(2),(bessCap/tCap*100).toFixed(1)+'%',gv('bmwh')+' MWh @ Rs '+gv('bc')+' Cr/MWh']]:[]),
+      ['TOTAL PROJECT COST',tCap.toFixed(2),'100%','All-in including land, evacuation, BESS'],
+      ['','','',''],
+      ['MEANS OF FINANCE','','',''],
+      ['Term Loan (Debt)',dAmt.toFixed(2),gv('df').toFixed(0)+'%',gv('ir')+'% p.a. | '+tn+' yr tenure | '+moro+' yr moratorium'],
+      ['Equity / Promoter',eAmt.toFixed(2),(100-gv('df')).toFixed(0)+'%','Internal accruals + promoter contribution'],
+      ['TOTAL',tCap.toFixed(2),'100%','Debt:Equity = '+gv('df')+':'+( 100-gv('df'))],
+    ], [40,12,10,45]);
+
+    // ── SHEET 4: Grid Losses ────────────────────────────────────
+    addSheet('4. Grid Losses', ['Loss Component','Rate (%)','Source / Basis'], [
+      ['DC cable losses (panels to inverter)','1.5','IEC 62548 — ground-mount string arrays'],
+      ['Inverter conversion losses','2.0','CEC-weighted efficiency 98% — manufacturer spec'],
+      ['Transformer (LT to HT) losses','0.5','Distribution transformer 99.5% efficiency'],
+      ['Soiling, mismatch & shading','2.0','TN condition, panel cleaning every 2 weeks'],
+      ['Grid transmission loss at 110 kV injection','0.0','TNERC T.O.7/2022 Table 5-12: NIL at 110 kV'],
+      ['Grid distribution loss 110 kV → 11 kV','1.5','TNERC T.O.7/2022 Table 5-12: 1.52%'],
+      ['Margin / other',''+Math.max(0,tloss-7.5).toFixed(1),'Project-specific additional margin'],
+      ['TOTAL MODELLED LOSS',''+tloss,'Of every 100 units generated, '+(100-tloss).toFixed(1)+' reach customer'],
+      ['','',''],
+      ['Net generation Yr-1',netMU+' MU','After '+tloss+'% total loss'],
+      ['Gross generation Yr-1',+(grossKWh/1e6).toFixed(2)+' MU','AC-based at PLF '+plf+'%'],
+    ], [42,12,55]);
+
+    // ── SHEET 5: 25-Year Cash Flow ──────────────────────────────
+    const cfH = ['Year','Net Gen (MU)','Selling Price','OA Charge','Net Realisation',
+      'Gross Revenue','OA Paid','Net Revenue','O&M','Insurance','EBITDA',
+      'Interest','Principal','IT Dep','Tax','FCF','Cumulative CF'];
+    const cfD = cfRows.map(r=>[r.y,r.ng,r.sp,r.oC,r.nr,r.gR,r.ocC,r.nR,r.omC,r.insC,
+      r.ebd,r.interest,r.prin,r.itd,r.txp,r.fcf,r.cum]);
+    cfD.push(['TOTAL','','','','',
+      +cfRows.reduce((s,r)=>s+r.gR,0).toFixed(2),+cfRows.reduce((s,r)=>s+r.ocC,0).toFixed(2),
+      +cfRows.reduce((s,r)=>s+r.nR,0).toFixed(2),+cfRows.reduce((s,r)=>s+r.omC,0).toFixed(2),
+      +cfRows.reduce((s,r)=>s+r.insC,0).toFixed(2),+cfRows.reduce((s,r)=>s+r.ebd,0).toFixed(2),
+      +cfRows.reduce((s,r)=>s+r.interest,0).toFixed(2),+cfRows.reduce((s,r)=>s+r.prin,0).toFixed(2),
+      +cfRows.reduce((s,r)=>s+r.itd,0).toFixed(2),+cfRows.reduce((s,r)=>s+r.txp,0).toFixed(2),
+      totalFCF,cfRows[24].cum]);
+    addSheet('5. 25-Year Cash Flow', cfH, cfD,
+      [5,12,14,12,14,14,10,14,10,10,12,12,12,10,10,12,14]);
+
+    // ── SHEET 6: Generation Details ─────────────────────────────
+    const genH = ['Year','Gross Gen (MU)','Loss (MU)','Net Gen (MU)','Degr Factor','SP (Rs/kWh)','Net Revenue (Rs Cr)','Cum Net Gen (MU)'];
+    let cumGen=0;
+    const genD=cfRows.map(r=>{
+      const grossMU=+(r.ng/(1-tloss/100)).toFixed(3);
+      const lossMU=+(grossMU-r.ng).toFixed(3);
+      cumGen=+(cumGen+r.ng).toFixed(3);
+      return [r.y,grossMU,lossMU,r.ng,'',''+r.sp,r.nR,cumGen];
     });
+    addSheet('6. Generation Details', genH, genD, [5,14,10,12,12,14,16,16]);
 
-    const buf = await Packer.toBlob(doc);
-    const url = URL.createObjectURL(buf);
-    const a   = document.createElement('a');
-    a.href    = url;
-    a.download = (co.replace(/[^a-zA-Z0-9]/g, '_') || 'EIL_Solar') + '_DPR_' + new Date().getFullYear() + '.docx';
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    // ── SHEET 7: Projected P&L ──────────────────────────────────
+    let ob2=dAmt,dF2=1,tC2=tariff,oC2=oa,omC2=sCap*om_pct,insC2=sCap*ins_pct;
+    let bookWdv2=sCap,retE2=0;
+    const plD=[];
+    for(let y=1;y<=25;y++){
+      if(y===1)dF2=1-deg1;else dF2*=(y<=10?0.9932:0.993);
+      const ng2=acKWAC()*plf/100*8760*dF2*(1-tloss/100);
+      const sp2=tC2*(1+peak*sur)*disc;
+      const nR2=(ng2*sp2/1e7)-(ng2*oC2/1e7);
+      const ebd2=nR2-omC2-insC2;
+      const bkD2=bookWdv2*0.15;bookWdv2=Math.max(0,bookWdv2-bkD2);
+      const int2=ob2*ir,prin2=(y<=moro?0:(y<=tn?ap:0));
+      ob2=Math.max(0,ob2-prin2);
+      let itd2=0;if(y>1){const wdvT2=sCap*Math.pow(1-0.15,y-1);itd2=wdvT2*0.15;}
+      const ebit2=ebd2-bkD2,pbt2=ebit2-int2;
+      const txp2=Math.max(0,ebd2-int2-itd2)*taxR*1.04,pat2=pbt2-txp2;
+      retE2+=pat2;
+      plD.push([y,+nR2.toFixed(2),+(omC2+insC2).toFixed(2),+ebd2.toFixed(2),+(ebd2/nR2*100).toFixed(1),
+        +bkD2.toFixed(2),+ebit2.toFixed(2),+int2.toFixed(2),+pbt2.toFixed(2),+txp2.toFixed(2),+pat2.toFixed(2),+retE2.toFixed(2)]);
+      if(y<5){tC2*=(1+taresc/100);oC2*=(1+oaesc/100);}
+      omC2*=(1+ome);insC2*=1.03;
+    }
+    addSheet('7. Projected P&L',['Year','Net Revenue','O&M+Ins','EBITDA','EBITDA%','Book Dep','EBIT','Interest','PBT','Tax','PAT','Retained Earnings'],plD,
+      [5,13,11,12,9,11,12,12,11,10,11,16]);
 
-    if (st) { st.style.display = 'block'; st.style.background = 'var(--g1)'; st.style.color = 'var(--g6)'; st.textContent = '✅ Word Report downloaded! Open in Microsoft Word for best rendering. All financial tables are live from your current inputs.'; }
-    setTimeout(() => { if (st) st.style.display = 'none'; }, 8000);
-  } catch (err) {
-    if (st) { st.style.display = 'block'; st.style.background = 'var(--r1)'; st.style.color = 'var(--r6)'; st.textContent = '❌ Error generating Word file: ' + err.message + '. Try refreshing and ensure internet connection for CDN library.'; }
-    console.error('Word report error:', err);
+    // ── SHEET 8: Balance Sheet ──────────────────────────────────
+    let ob3=dAmt,dF3=1,tC3=tariff,oC3=oa,omC3=sCap*om_pct,insC3=sCap*ins_pct;
+    let bookWdv3=sCap,retE3=0;
+    const bsD=[];
+    for(let y=1;y<=25;y++){
+      if(y===1)dF3=1-deg1;else dF3*=(y<=10?0.9932:0.993);
+      const ng3=acKWAC()*plf/100*8760*dF3*(1-tloss/100);
+      const sp3=tC3*(1+peak*sur)*disc;
+      const nR3=(ng3*sp3/1e7)-(ng3*oC3/1e7);
+      const ebd3=nR3-omC3-insC3;
+      const bkD3=bookWdv3*0.15;bookWdv3=Math.max(0,bookWdv3-bkD3);
+      const int3=ob3*ir,prin3=(y<=moro?0:(y<=tn?ap:0));
+      ob3=Math.max(0,ob3-prin3);
+      let itd3=0;if(y>1){const wdvT3=sCap*Math.pow(1-0.15,y-1);itd3=wdvT3*0.15;}
+      const txp3=Math.max(0,ebd3-int3-itd3)*taxR*1.04;
+      const pat3=(ebd3-bkD3-int3)-txp3;retE3+=pat3;
+      const ca3=Math.max(1.5,retE3*0.25+2);
+      const tl3=+(eAmt+Math.max(0,retE3)+ob3).toFixed(2);
+      bsD.push([y,+eAmt.toFixed(2),+retE3.toFixed(2),+ob3.toFixed(2),tl3,+bookWdv3.toFixed(2),+ca3.toFixed(2),+(bookWdv3+ca3).toFixed(2)]);
+      if(y<5){tC3*=(1+taresc/100);oC3*=(1+oaesc/100);}
+      omC3*=(1+ome);insC3*=1.03;
+    }
+    addSheet('8. Balance Sheet',['Year','Share Capital','Reserves','LT Debt','Total Liab','Net Fixed Assets','Current Assets','Total Assets'],bsD,
+      [5,13,13,12,12,16,15,14]);
+
+    // ── SHEET 9: DSCR & Ratios ──────────────────────────────────
+    const dscrD=cfRows.filter(r=>r.y<=tn).map(r=>{
+      const dscr=r.ds>0?(r.ebd/r.ds).toFixed(2):'—';
+      const status=r.ds>0?(r.ebd/r.ds>=1.5?'Strong':r.ebd/r.ds>=1.2?'Acceptable':'Below Threshold'):'Post-Loan';
+      return [r.y,r.ebd,r.interest,r.prin,r.ds,dscr,(r.nR>0?(r.ebd/r.nR*100).toFixed(1)+'%':'—'),status];
+    });
+    addSheet('9. DSCR & Ratios',['Year','EBITDA','Interest','Principal','Debt Service','DSCR','EBITDA%','Status'],dscrD,
+      [5,12,12,12,14,10,10,16]);
+
+    // ── SHEET 10: OA Charges ────────────────────────────────────
+    addSheet('10. OA Charge Breakdown',['Component','Full Rate (Rs/kWh)','After 30% Concession','Remark'],[
+      ['Wheeling Charge (HT)','1.040','0.728','TANTRANSCO — 110 kV EHT line'],
+      ['State Transmission Charge','0.224','0.157','Rs 223.57/MWh ÷ 1000'],
+      ['SLDC Scheduling','0.064','0.045','Rs 172/day × 365 ÷ net MU'],
+      ['Additional Surcharge','0.10','0.10','CERC GEOA 2022 FY26 rate — not waived for GC'],
+      ['CSS (Cross-Subsidy)','2.41','ZERO','Fully waived — Group Captive CPP'],
+      ['TOTAL OA (Model)','—','Rs '+oa+'/kWh','Used in this financial model'],
+      ['','','',''],
+      ['NOTE: OA is borne ENTIRELY by developer','','','Customer pays Selling Price only — OA not passed on'],
+      ['CSS waiver saves developer','Rs 2.41/kWh','','Equivalent to Rs '+(netMU*1e6*2.41/1e7).toFixed(1)+' Cr/year'],
+    ],[40,20,22,45]);
+
+    // ── SHEET 11: Customer Savings ──────────────────────────────
+    const savH=['Year','TNEB Tariff','Solar SP','Saving/kWh','Net Gen (MU)','Annual Saving (Rs Cr)','Cumul Saving (Rs Cr)'];
+    let cumSav=0;
+    const savD=cfRows.map(r=>{
+      const tnebT=+(tariff*Math.pow(1+taresc/100,Math.min(4,r.y-1))).toFixed(4);
+      const savKWh=+(tnebT-r.sp).toFixed(4);
+      const annSav=+(r.ng*1e6*savKWh/1e7).toFixed(2);
+      cumSav=+(cumSav+annSav).toFixed(2);
+      return [r.y,tnebT,r.sp,savKWh,r.ng,annSav,cumSav];
+    });
+    addSheet('11. Customer Savings', savH, savD, [5,13,13,13,12,18,18]);
+
+    // ── SHEET 12: Regulatory ────────────────────────────────────
+    addSheet('12. Regulatory Framework',['Item','Details','Source'],[
+      ['TNERC Tariff Order','T.O. No.7 of 2022 (eff. 01-07-2023) + T.O.6/2025 for ToD','TNERC'],
+      ['Applicable regulations','CERC Captive Rules 2001 + TNERC Group Captive OA Regulations','CERC/TNERC'],
+      ['Min collective equity','26% of SPV equity held by all captive consumers collectively','CERC Rule 3'],
+      ['Min captive consumption','51% of annual net generation consumed by captive consumers','CERC Rule 4'],
+      ['Proportional tolerance','±10% per customer per year','TNERC'],
+      ['Annual certificate due','30th April each year to TNPDCL CE (OA)','TNERC'],
+      ['CSS for Group Captive','ZERO — full exemption (Electricity Act 2003, Section 9)','TNERC T.O.7/2022'],
+      ['Additional Surcharge FY26','Rs 0.10/kWh (reduced 81.5% per CERC GEOA 2025)','CERC GEOA 2025'],
+      ['OA concession for solar','30% reduction on wheeling, transmission, SLDC charges','TNERC Intra-State OA Regs'],
+      ['Transmission loss 110kV','NIL — T.O.7/2022 Table 5-12','TNERC T.O.7/2022'],
+      ['Distribution loss to 11kV','1.52% — T.O.7/2022 Table 5-12','TNERC T.O.7/2022'],
+      ['HT tariff (HT-I Industry)','Rs 7.50/kWh (T.O.6/2025 eff. 01-07-2025)','TANGEDCO'],
+      ['HT tariff (HT-III Commercial)','Rs 9.40/kWh (T.O.6/2025)','TANGEDCO'],
+      ['Peak hour surcharge','+25% for 6AM–10AM and 6PM–10PM (ToD)','TNERC T.O.6/2025'],
+      ['REC availability','Rs 1,000–3,000 per MWh on IEX/PXIL — NOT modelled (upside)','CERC REC Regs 2022'],
+    ],[35,55,25]);
+
+    // ── SHEET 13: Risk Matrix ────────────────────────────────────
+    addSheet('13. Risk Assessment',['Risk','Description','Probability','Impact','Mitigant'],[
+      ['Tariff/Regulatory','TNERC reduces OA concession or reinstates CSS','Low','High','PSA locks price; CSS waiver codified in T.O.7/2022'],
+      ['Generation underperformance','Actual CUF < modelled '+plf+'%','Medium','Medium','P50 irradiation used; ALMM module 25-yr warranty; buffer in model'],
+      ['Customer credit risk','Customer exits or defaults on solar bills','Low','High','PSA with bank guarantee; equity stake aligns incentives'],
+      ['Interest rate risk','Floating rate increases from '+gv('ir')+'%','Medium','Medium','Fix rate at closure; model tested at +'+(gv('ir')+2)+'% — still viable'],
+      ['Construction overrun','EPC cost escalation or delay','Medium','Low','Fixed-price EPC contract; 3% contingency in TPC'],
+      ['OA curtailment','SLDC curtails solar injection','Medium','Low','BESS option; morning peak has lower curtailment probability'],
+      ['Land/title risk','Land title dispute or conversion delay','Low','High','Title search; conversion order before financial closure'],
+      ['Compliance risk','26% equity or 51% consumption not met','Low','High','Monthly TNERC tracker; proportional alerts; annual cert'],
+    ],[20,45,12,10,50]);
+
+    // ── SHEET 14: Implementation Schedule ──────────────────────
+    addSheet('14. Implementation Schedule',['Activity','Duration (months)','Key Milestone','Responsible'],[
+      ['DPR finalisation & customer PSA signing','1–2','Signed PSA + DPR','Developer + Legal'],
+      ['TNEB evacuation DPR & 110kV bay allocation','6–12','TANTRANSCO LOA','Developer + TANTRANSCO'],
+      ['TNERC Group Captive OA approval','3–5','TNERC Order','Developer + TNERC'],
+      ['Land purchase/lease & conversion order','6–15','Patta + Conversion','Developer + Dist Collector'],
+      ['Environmental & statutory clearances','3–6','MoEF/State clearance','Developer + Consultant'],
+      ['Financial closure (loan + equity)','3–4','Term Loan Agreement','Developer + Bank'],
+      ['EPC contract award','1','Signed EPC contract','Developer + EPC'],
+      ['Civil construction & equipment delivery','6–8','Modules on site','EPC Contractor'],
+      ['Electrical work & inverter installation','3–4','AC panel energised','EPC + TANTRANSCO'],
+      ['CEIG inspection & synchronisation','1–2','First synchronisation','CEIG + SLDC TN'],
+      ['Commercial Operation Date (COD)','1','COD declaration','Developer + TNPDCL'],
+      ['TOTAL (parallel activities)','18–24 months','COD',''],
+    ],[42,18,30,28]);
+
+    // ── SHEET 15: Environmental Impact ──────────────────────────
+    addSheet('15. Environmental & Social Impact',['Parameter','Value','Unit','Basis'],[
+      ['CO₂ offset per year',Number(co2yr).toLocaleString('en-IN'),'Tonnes/year','CEA grid emission factor 0.82 kg CO₂/kWh'],
+      ['25-year total CO₂ offset',(Number(co2yr)*25).toLocaleString('en-IN'),'Tonnes','Cumulative over project life'],
+      ['Equivalent trees planted',(Number(co2yr)*45).toLocaleString('en-IN'),'Trees/year','MoEF equivalence factor'],
+      ['Water saving vs coal plant',(netMU*2500).toLocaleString('en-IN'),'KL/year','Zero water for solar generation'],
+      ['Construction employment',q('q-jobs-const')||'~100 persons','','Skilled + unskilled'],
+      ['Permanent O&M jobs',q('q-jobs-perm')||'8 persons','','Technical and maintenance staff'],
+      ['Local economy benefit',q('q-local')||'Land lease income for host farmers','',''],
+      ['CSR activities',q('q-csr')||'Solar street lights for adjacent village','',''],
+      ['Lifecycle carbon (solar)','20–50','g CO₂/kWh','vs 820–1000 for coal (IPCC 2022)'],
+      ['Scope 2 emission reduction for buyers',+(netMU*0.82).toFixed(0),'Thousand kgCO₂/yr','Enables GRI/BRSR sustainability reporting'],
+    ],[35,25,14,50]);
+
+    // ── SHEET 16: Company Profile ───────────────────────────────
+    const cpData=[['COMPANY & PROJECT PROFILE — FOR DPR SECTION 1',''],['','']];
+    [['Company / SPV Name','q-company'],['Year of Incorporation','q-incorp'],['Promoter / Director','q-promoter'],
+     ['Industry / Sector','q-industry'],['Annual Turnover (Rs Cr)','q-turnover'],['Registered Address','q-addr'],
+     ['Business Activities','q-activities'],['Products / Services','q-products'],['Market Position','q-mktpos'],
+     ['Number of Employees','q-employees'],['Existing TNEB Connection','q-tneb'],['Tariff Category','q-category'],
+     ['Annual Power Bill (Rs Cr)','q-powerbill'],['Annual Consumption (MU)','q-consumption'],
+     ['Customer Base','q-customers'],['Competitors','q-competitors'],['Competitive Advantage','q-competitive'],
+     ['Site Location','q-site'],['Land Area (acres)','q-land'],['Land Status','q-landstatus'],
+     ['Distance to 110kV Substation','q-dist'],['EPC Contractor','q-epcname'],['Procurement Strategy','q-procure'],
+     ['Financing Bank','q-bank'],['Equity Source','q-eqsrc'],['Existing Loans','q-loans'],
+     ['Credit History','q-credit'],['Expected COD','q-cod'],['Approvals Status','q-approvals'],
+     ['Jobs — Construction','q-jobs-const'],['Jobs — Permanent O&M','q-jobs-perm'],
+     ['Local Economy Benefit','q-local'],['CSR Activities','q-csr'],['Social Benefits','q-social'],
+     ['Rationale for Project','q-rationale'],['Report Date','q-rpdate'],['Prepared By','q-prepby'],
+     ['DPR Reference Number','q-refno'],['Confidentiality','q-conf'],
+    ].forEach(([lbl,id])=>cpData.push([lbl, q(id)||'— (not filled)']));
+    const wsCp = XLSX.utils.aoa_to_sheet(cpData);
+    wsCp['!cols'] = [{wch:32},{wch:55}];
+    XLSX.utils.book_append_sheet(wb, wsCp, '16. Company Profile');
+
+    // ── Download ─────────────────────────────────────────────────
+    const filename = (co.replace(/[^a-zA-Z0-9]/g,'_')||'EIL_Solar')+'_DPR_Workbook_'+new Date().getFullYear()+'.xlsx';
+    XLSX.writeFile(wb, filename);
+
+    done('✅ DPR Workbook downloaded! Open in Excel — 16 sheets covering all chapters. Fill Company Profile sheet then regenerate for complete data.');
+
+  } catch(err) {
+    show('❌ Error: '+err.message+'. Please try again.', false);
+    console.error('DPR workbook error:', err);
   }
 }
 
@@ -6170,11 +5580,35 @@ COMPLIANCE (CERC Captive Rules 2001 + TNERC):
 - Minimum captive consumption: 51% of annual net generation
 - Proportional tolerance per customer: ±10%
 - Annual certificate: Due to TNPDCL by 30 April each year
+
+${getQuestionnaireSummary()}
 === END PROJECT DATA ===
 `.trim();
   } catch(e){
     return 'Project: 26 MW DC / 20 MW AC Group Captive CPP | 3 acres/MW DC | 42.4 MU net gen Yr1 | Rs 9.165/kWh selling price | Rs 0.95/kWh OA | Rs 92 Cr capex | Tamil Nadu | TNERC T.O.6/2025';
   }
+}
+
+/* ── QUESTIONNAIRE SUMMARY FOR AI CONTEXT ────────────────────── */
+function getQuestionnaireSummary(){
+  const q = id => { const el = document.getElementById(id); return el && el.value.trim() ? el.value.trim() : ''; };
+  const fields = [
+    ['Company / SPV', 'q-company'], ['Promoter', 'q-promoter'], ['Industry / Sector', 'q-industry'],
+    ['Annual Turnover', 'q-turnover'], ['Registered Address', 'q-addr'], ['Business Activities', 'q-activities'],
+    ['Products / Services', 'q-products'], ['Employees', 'q-employees'], ['Existing TNEB Connection', 'q-tneb'],
+    ['Tariff Category', 'q-category'], ['Annual Power Bill (Rs Cr)', 'q-powerbill'],
+    ['Annual Consumption (MU)', 'q-consumption'], ['Customer Base', 'q-customers'],
+    ['Competitive Advantage from Solar', 'q-competitive'], ['Site Location', 'q-site'],
+    ['Land Area (acres)', 'q-land'], ['Land Status', 'q-landstatus'],
+    ['Distance to 110kV Substation', 'q-dist'], ['Financing Bank', 'q-bank'],
+    ['Equity Source', 'q-eqsrc'], ['Existing Loans', 'q-loans'], ['Expected COD', 'q-cod'],
+    ['Approvals Status', 'q-approvals'], ['Jobs Construction', 'q-jobs-const'],
+    ['Jobs Permanent', 'q-jobs-perm'], ['CSR Activities', 'q-csr'], ['Rationale', 'q-rationale'],
+    ['Report Date', 'q-rpdate'], ['Prepared By', 'q-prepby'],
+  ];
+  const filled = fields.filter(([,id]) => q(id)).map(([lbl,id]) => `- ${lbl}: ${q(id)}`);
+  if (filled.length === 0) return '';
+  return `\nCOMPANY & PROJECT QUESTIONNAIRE (filled by user — use in answers):\n${filled.join('\n')}`;
 }
 
 /* ── BUBBLE / TYPING HELPERS ──────────────────────────────────── */
@@ -6598,10 +6032,14 @@ const PAGE_AI_QA = {
   pr: {
     label: 'Project Report',
     qs: [
+      { q: 'Explain all the fields I need to fill in this form',
+        a: '**Questionnaire — field-by-field guide:**\n\n**Company details:**\n- Company/SPV name — the solar project company (e.g. "ABC Solar Power Pvt. Ltd.")\n- Promoter — director/owner name for the DPR cover page\n- Industry/sector — what business the power consumer runs\n\n**Financial profile:**\n- Annual turnover & power bill — lender uses this to assess repayment capacity\n- Annual consumption (MU) — must match your solar allotment\n\n**Site details:**\n- Site location, land area, land status — critical for evacuation & TANTRANSCO approval\n- Distance to 110 kV substation — determines evacuation cost\n\n**Project details:**\n- Expected COD, financing bank, approvals status — for DPR timeline section\n\n**Social/CSR:**\n- Jobs, CO₂, local benefits — mandatory for environmental clearance application\n\nFill all fields → click **Save** → click **Generate Word Report** for full bankable DPR.' },
       { q: 'What is the DPR and who needs it?',
-        a: '**DPR (Detailed Project Report)** is the bankable feasibility report submitted to:\n1. **Financing banks** — for project loan sanction\n2. **TANTRANSCO** — for 110 kV bay allocation and evacuation approval\n3. **TNERC** — for Group Captive CPP registration\n4. **Investors / customers** — for equity commitment\n\nThis app generates a full DPR with: project background, technical parameters, financial projections, regulatory framework, O&M plan, risk analysis, and compliance structure.\n\nGenerate → Download → Open in Word/Google Docs → Format → Submit.' },
-      { q: 'Which banks typically finance Group Captive CPP solar projects?',
-        a: '**Banks active in TN solar project finance (2025):**\n\n| Bank | Typical terms |\n|---|---|\n| State Bank of India | 9–10% p.a., 10–12 yr, DSCR 1.25x |\n| Indian Renewable Energy Dev Agency (IREDA) | 8.5–9.5%, 15 yr |\n| Punjab National Bank | 9–9.5%, 10 yr |\n| Bank of Baroda | 9–9.5%, 10 yr |\n| Axis Bank / HDFC Bank | 9.5–10.5%, 8–10 yr |\n\n**Documents needed (besides DPR):**\n- Land documents (patta, EC)\n- TNERC in-principle approval\n- Power Supply Agreements (PSAs) with customers\n- Customer financial statements (for captive consumption guarantee)' },
+        a: '**DPR (Detailed Project Report)** is the bankable feasibility report submitted to:\n1. **Financing banks** — for project loan sanction\n2. **TANTRANSCO** — for 110 kV bay allocation and evacuation approval\n3. **TNERC** — for Group Captive CPP registration\n4. **Investors / customers** — for equity commitment\n\nThis app generates a full DPR with all 20 chapters — technical parameters, financial projections, regulatory framework, risk analysis, and compliance structure.\n\nFill questionnaire → Save → Generate Word Report (.docx) → Open in Word → Add letterhead → Submit.' },
+      { q: 'Which banks finance solar Group Captive projects?',
+        a: '**Banks active in TN solar project finance (FY2026):**\n\n| Bank | Rate | Tenure | Min DSCR |\n|---|---|---|---|\n| SBI (Solar) | 9–9.5% | 12 yr | 1.25x |\n| IREDA | 8.5–9% | 15 yr | 1.20x |\n| PNB / BOB | 9–9.5% | 10 yr | 1.25x |\n| Indian Bank | 9–9.5% | 10 yr | 1.25x |\n| Axis / HDFC | 9.5–10.5% | 8–10 yr | 1.30x |\n\n**Key documents banks require besides DPR:**\n- Land documents (patta, EC)\n- TNERC in-principle approval\n- Signed PSAs with captive consumers\n- Customer financial statements' },
+      { q: 'What documents are needed after the DPR?',
+        a: '**Post-DPR approval sequence:**\n\n1. **DPR + Financial model** → Bank for in-principle sanction\n2. **Land patta + conversion order** → District Collector\n3. **Evacuation DPR** → TANTRANSCO for 110 kV bay allocation\n4. **Group Captive OA application** → TNERC (file PSA, equity structure, plant details)\n5. **Environmental clearance** → State Environment Impact Assessment Authority (SEIAA) for >50 MW; for ≤50 MW, only forest/ecology NOC\n6. **CEIG approval** → Chief Electrical Inspector, Govt of TN — for HT installation above 11 kV\n7. **Financial closure** → Loan agreement + equity contribution\n8. **EPC contract** → Award only after land + evacuation LOA in hand\n9. **SLDC registration** → Tamil Nadu SLDC for OA scheduling\n10. **COD declaration** → After CEIG inspection + first synchronisation' },
     ]
   },
   tn: {
