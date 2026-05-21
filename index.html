@@ -23519,6 +23519,25 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .sec,.dev-sec,.cust-sec{display:block!important;page-break-after:always;}
   .card{break-inside:avoid;}
 }
+
+/* SA number inputs — clearly editable */
+input[id$="-num"] {
+  cursor: text !important;
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+input[id$="-num"]:focus {
+  outline: 2px solid #22C55E !important;
+  outline-offset: 1px !important;
+  background: #F0FDF4 !important;
+}
+input[id$="-num"]:hover {
+  border-color: #22C55E !important;
+  background: #F0FDF4 !important;
+}
+/* ══ SA number input focus style ══ */
 </style>
 </head>
 <body>
@@ -24466,7 +24485,143 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 <div id="s-sa" class="sec dev-sec">
   <div class="sec-h"><div class="sec-h-left"><div class="sec-ic">&#128200;</div><div><div class="sec-ti">Sensitivity Analysis</div><div class="sec-su">Scenario modelling with bar charts, detailed workings &amp; 110kV vs 11kV comparison</div></div></div><button class="page-ai-btn" onclick="paiOpen('sa')"><div class="pai-dot"></div>🤖 Ask AI</button></div>
 
-  <div class="alert info" style="font-size:12.5px">&#128270; Every variable has a slider with fine-grained steps, a number input you can type into, and preset buttons. Charts are bar charts for clarity. Every section has its own Export button. <strong>Payback = equity payback</strong> (year cumulative FCF crosses equity invested — not simple payback on capex).</div>
+
+  <!-- ══ HELP MODAL ══════════════════════════════════════════ -->
+  <div id="sa-help-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,15,30,0.72);backdrop-filter:blur(4px);overflow-y:auto;" onclick="if(event.target===this)saHelpClose()">
+    <div style="max-width:780px;margin:20px auto;background:#fff;border-radius:14px;box-shadow:0 24px 80px rgba(0,0,0,0.35);overflow:hidden;width:calc(100% - 32px);">
+      <!-- Modal header -->
+      <div style="background:linear-gradient(135deg,#1B2A4A,#243B6E);padding:18px 16px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:22px;font-weight:700;color:#C8973A;font-family:'Inter',sans-serif;letter-spacing:-0.3px;">📊 How to Use: Sensitivity Analysis</div>
+          <div style="font-size:13px;color:#A5B4CC;margin-top:4px;font-family:'Inter',sans-serif;">Everything you need to explore scenarios and find viability thresholds</div>
+        </div>
+        <button onclick="saHelpClose()" style="background:rgba(255,255,255,0.12);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div style="padding:18px 16px;font-family:'Inter',sans-serif;font-size:13.5px;color:#1F2937;line-height:1.7;">
+
+        <!-- Purpose -->
+        <div style="background:#EEF2FA;border-left:4px solid #C8973A;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:20px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:14px;margin-bottom:4px;">🎯 What This Page Does</div>
+          <div>This page lets you ask <em>"What if?"</em> questions about your project — changing one variable at a time to see how it affects profitability, cash flow, and loan viability. Most importantly, it shows you the <strong style="color:#9B1C1C;">exact break-even threshold</strong> — the point below (or above) which the project cannot service its debt.</div>
+        </div>
+
+        <!-- Section A -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">🎮 Section A — Scenario Variables (The Controls)</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
+            <div style="background:#F9FAFB;border-radius:8px;padding:12px;">
+              <div style="font-weight:700;color:#243B6E;margin-bottom:4px;">6 Variables You Can Change:</div>
+              <div>🟠 <strong>Selling Price</strong> — Rs/kWh charged to customer<br>🔵 <strong>OA Charge</strong> — Open Access levy you bear<br>🔵 <strong>Interest Rate</strong> — Bank loan rate %<br>🟢 <strong>Debt Fraction</strong> — % of capex as loan<br>🟣 <strong>Technical Loss</strong> — % generation lost<br>🟢 <strong>PLF / CUF</strong> — Plant Load Factor %</div>
+            </div>
+            <div style="background:#F9FAFB;border-radius:8px;padding:12px;">
+              <div style="font-weight:700;color:#243B6E;margin-bottom:4px;">3 Ways to Change Each Value:</div>
+              <div>1️⃣ <strong>Drag the slider</strong> — real-time update as you drag<br>2️⃣ <strong>Type a number</strong> in the box — press <kbd style="background:#E5E7EB;border-radius:3px;padding:1px 5px;font-size:11px;">Enter</kbd> or click away<br>3️⃣ <strong>Click a preset button</strong> — e.g. "Best", "Base", "Stress"<br><br><span style="color:#6B7280;font-size:12px;">💡 Click <strong>Reset All to Base</strong> to return everything to your model defaults</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section B -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">📈 Section B — Tornado Chart (Most Important Variables)</div>
+          <div>The <strong>tornado chart</strong> shows which variables have the biggest impact on your project when changed by 10%. The longest bar = the variable your project is most sensitive to. <strong>Focus your risk mitigation on the top 2–3 bars.</strong></div>
+          <div style="background:#FDF5E6;border-radius:8px;padding:10px;margin-top:8px;">
+            <strong>How to read it:</strong> Each bar shows the swing in Year 1 FCF (Free Cash Flow) when that variable changes ±10%. A wide swing means high sensitivity — small changes in that variable have large financial consequences.
+          </div>
+        </div>
+
+        <!-- Section C — Viability thresholds -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">🚦 Section C — Viability Threshold Table (Break-Even)</div>
+          <div style="margin-bottom:8px;">This is the most critical section. For each variable, it shows <strong style="color:#9B1C1C;">the exact value at which the project DSCR falls to 1.20×</strong> — the minimum your bank will accept for loan approval.</div>
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;">
+          <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:12.5px;">
+            <tr style="background:#1B2A4A;color:#fff;">
+              <th style="padding:8px 10px;text-align:left;white-space:nowrap;">Column</th>
+              <th style="padding:8px 10px;text-align:left;">What It Means</th>
+              <th style="padding:8px 10px;text-align:left;">Action</th>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:8px 10px;font-weight:700;color:#1B2A4A;">Base Value</td>
+              <td style="padding:8px 10px;">Your current model value</td>
+              <td style="padding:8px 10px;">This is what you entered in the main model</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 10px;font-weight:700;color:#9B1C1C;">Break-Even Threshold</td>
+              <td style="padding:8px 10px;"><strong>The danger line.</strong> If the variable crosses this, DSCR &lt; 1.20× and the bank will not lend</td>
+              <td style="padding:8px 10px;">Negotiate contracts to stay well clear of this</td>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:8px 10px;font-weight:700;">Safety Headroom</td>
+              <td style="padding:8px 10px;">Distance between your base value and the break-even line</td>
+              <td style="padding:8px 10px;"><span style="color:#1A7A4A;font-weight:700;">Green &gt;3</span> = safe · <span style="color:#B45309;font-weight:700;">Amber 1–3</span> = watch · <span style="color:#9B1C1C;font-weight:700;">Red &lt;1</span> = critical</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 10px;font-weight:700;">DSCR at ±10%</td>
+              <td style="padding:8px 10px;">DSCR in Year 2 (first full repayment year) when the variable changes by 10%</td>
+              <td style="padding:8px 10px;">Must stay above 1.20× even in stress</td>
+            </tr>
+          </table>
+          </div><!-- end overflow wrapper -->
+        </div>
+
+        <!-- Section D -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">📊 Sections D & E — Selling Price Curve & Net Revenue Matrix</div>
+          <div>These charts show how your key financial metrics change <em>across a range</em> of values — not just at ±10%. Use them to find the <strong>optimal selling price</strong> that maximises your return while staying competitive against TNEB rates.</div>
+        </div>
+
+        <!-- Section F — DSCR matrix -->
+        <div style="margin-bottom:20px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">🏦 Section F — DSCR Matrix (For Your Banker)</div>
+          <div>Shows DSCR across a grid of <strong>PLF × Interest Rate</strong> combinations. Green cells = bankable, Amber = borderline, Red = below lender floor. <strong>Take this to your bank meeting</strong> — it shows the project is viable even under stress scenarios.</div>
+        </div>
+
+        <!-- Key definitions -->
+        <div style="background:#EEF2FA;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
+          <div style="font-weight:700;color:#1B2A4A;margin-bottom:8px;">📖 Key Terms Explained</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px;font-size:12.5px;">
+            <div><strong>DSCR</strong> — Debt Service Coverage Ratio. EBITDA ÷ (Interest + Principal). Bank minimum = 1.20×. Higher is better.</div>
+            <div><strong>FCF</strong> — Free Cash Flow. Cash left for the promoter after all expenses, interest, and tax. Year 1 = moratorium (interest only).</div>
+            <div><strong>Break-Even Threshold</strong> — the exact variable value where DSCR = 1.20×. Computed by binary search — not estimated.</div>
+            <div><strong>Equity Payback</strong> — the year when cumulative FCF equals the equity invested. NOT simple capex payback.</div>
+            <div><strong>PLF / CUF</strong> — Plant Load Factor = actual annual generation ÷ maximum possible. Higher = better solar resource utilisation.</div>
+            <div><strong>OA Charge</strong> — Open Access wheeling + transmission + SLDC fee. Borne by developer. Customer pays SP only.</div>
+          </div>
+        </div>
+
+        <!-- Quick workflow -->
+        <div style="background:#E8F5EE;border-left:4px solid #1A7A4A;border-radius:0 10px 10px 0;padding:14px 16px;">
+          <div style="font-weight:700;color:#1A7A4A;margin-bottom:6px;">✅ Recommended Workflow (5 Steps)</div>
+          <ol style="margin:0;padding-left:18px;color:#374151;">
+            <li style="margin-bottom:4px;">Click <strong>Reset All to Base</strong> first — ensures you start from your model's actual values</li>
+            <li style="margin-bottom:4px;">Check the <strong>Break-Even Threshold table</strong> — note which variables have Red or Amber headroom</li>
+            <li style="margin-bottom:4px;">Use sliders to test your <strong>worst-case scenario</strong> — e.g. lower PLF + higher OA simultaneously</li>
+            <li style="margin-bottom:4px;">Check the <strong>DSCR Matrix</strong> (Section F) — confirm the project is still bankable under stress</li>
+            <li>Click <strong>Export Full Excel</strong> to download all scenario tables for your banker or board presentation</li>
+          </ol>
+        </div>
+
+      </div>
+      <div style="padding:12px 16px;border-top:1px solid #E5E7EB;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <button onclick="saHelpPrint()" style="background:#F9FAFB;color:#1B2A4A;border:1.5px solid #E5E7EB;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">🖨️ Print / Save as PDF</button>
+        <button onclick="saHelpClose()" style="background:#1B2A4A;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">Got it — Start Exploring ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HELP BUTTON + INFO STRIP ═══════════════════════════ -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+    <button onclick="saHelpOpen()" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1B2A4A,#243B6E);color:#C8973A;border:none;border-radius:10px;padding:11px 20px;font-size:13.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(27,42,74,0.25);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      ❓ How to Use This Page
+    </button>
+    <div style="flex:1;background:#EEF2FA;border-left:3px solid #C8973A;border-radius:0 8px 8px 0;padding:9px 14px;font-size:12.5px;color:#374151;font-family:'Inter',sans-serif;">
+      <strong style="color:#1B2A4A;">Quick guide:</strong> Drag sliders or type values → charts update live. 
+      The <span style="color:#9B1C1C;font-weight:700;">Break-Even Threshold</span> column shows the danger line — cross it and your bank loan becomes unviable. 
+      <strong>Payback</strong> = equity payback year (not capex payback). 
+      Click <strong>❓ How to Use This Page</strong> for the full guide.
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════════════════════════ -->
   <!-- SECTION A: SCENARIO CONTROLS                          -->
@@ -24481,7 +24636,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <label class="flbl" style="color:var(--a6);font-size:11.5px">&#9654; Selling Price to Customer <span style="font-weight:400">(Rs/kWh — step Rs 0.05)</span></label>
         <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
           <input type="range" id="sa-sp" min="5.50" max="8.50" step="0.05" value="6.90" oninput="saSliderSync('sp')" style="flex:1;accent-color:var(--a6)">
-          <input type="number" id="sa-sp-num" min="5.50" max="8.50" step="0.05" value="6.90" oninput="saNumSync('sp')" style="width:62px;font-size:12px;font-weight:700;color:var(--a6);border:1.5px solid var(--a6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
+          <input type="number" id="sa-sp-num" title="Type Selling Price (5.50 – 8.50) then press Enter" min="5.50" max="8.50" step="0.01" value="6.90" onchange="saNumSync('sp')" style="width:72px;font-size:12px;font-weight:700;color:var(--a6);border:1.5px solid var(--a6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
         </div>
         <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">
           <button onclick="saSet('sp',5.50)" class="sa-preset" style="background:#fff;color:var(--r6);border-color:var(--r6)">5.50</button>
@@ -24501,7 +24656,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <label class="flbl" style="color:var(--o6);font-size:11.5px">&#9654; OA Charge <span style="font-weight:400">(Rs/kWh — step 10 paise)</span></label>
         <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
           <input type="range" id="sa-oa" min="0.50" max="2.00" step="0.05" value="0.95" oninput="saSliderSync('oa')" style="flex:1;accent-color:var(--o6)">
-          <input type="number" id="sa-oa-num" min="0.50" max="2.00" step="0.05" value="0.95" oninput="saNumSync('oa')" style="width:62px;font-size:12px;font-weight:700;color:var(--o6);border:1.5px solid var(--o6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
+          <input type="number" id="sa-oa-num" title="Type OA Charge (0.50 – 2.00) then press Enter" min="0.50" max="2.00" step="0.01" value="0.95" onchange="saNumSync('oa')" style="width:72px;font-size:12px;font-weight:700;color:var(--o6);border:1.5px solid var(--o6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
         </div>
         <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">
           <button onclick="saSet('oa',0.70)" class="sa-preset" style="background:#fff;color:var(--g6);border-color:var(--g6)">0.70</button>
@@ -24521,7 +24676,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <label class="flbl" style="color:var(--b6);font-size:11.5px">&#9654; Interest Rate <span style="font-weight:400">(% p.a. — step 0.25%)</span></label>
         <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
           <input type="range" id="sa-ir" min="6.00" max="14.00" step="0.25" value="9.00" oninput="saSliderSync('ir')" style="flex:1;accent-color:var(--b6)">
-          <input type="number" id="sa-ir-num" min="6.00" max="14.00" step="0.25" value="9.00" oninput="saNumSync('ir')" style="width:62px;font-size:12px;font-weight:700;color:var(--b6);border:1.5px solid var(--b6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
+          <input type="number" id="sa-ir-num" title="Type Interest Rate (6 – 14) then press Enter" min="6.00" max="14.00" step="0.01" value="9.00" onchange="saNumSync('ir')" style="width:72px;font-size:12px;font-weight:700;color:var(--b6);border:1.5px solid var(--b6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
         </div>
         <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">
           <button onclick="saSet('ir',7.00)" class="sa-preset" style="background:#fff;color:var(--g6);border-color:var(--g6)">7.00%</button>
@@ -24542,7 +24697,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <label class="flbl" style="color:var(--g6);font-size:11.5px">&#9654; Debt Ratio <span style="font-weight:400">(% of TPC — 0% = full equity)</span></label>
         <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
           <input type="range" id="sa-df" min="0" max="90" step="5" value="70" oninput="saSliderSync('df')" style="flex:1;accent-color:var(--g6)">
-          <input type="number" id="sa-df-num" min="0" max="90" step="5" value="70" oninput="saNumSync('df')" style="width:62px;font-size:12px;font-weight:700;color:var(--g6);border:1.5px solid var(--g6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
+          <input type="number" id="sa-df-num" title="Type Debt Fraction % (0 – 90) then press Enter" min="0" max="90" step="1" value="70" onchange="saNumSync('df')" style="width:72px;font-size:12px;font-weight:700;color:var(--g6);border:1.5px solid var(--g6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
         </div>
         <div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px">
           <button onclick="saSet('df',0)" class="sa-preset" style="background:#fff;color:var(--p6);border-color:var(--p6)">0% (equity)</button>
@@ -24561,7 +24716,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <label class="flbl" style="color:var(--p6);font-size:11.5px">&#9654; Total Technical Loss <span style="font-weight:400">(% — build from components below)</span></label>
         <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
           <input type="range" id="sa-tloss" min="4" max="18" step="0.5" value="9" oninput="saSliderSync('tloss')" style="flex:1;accent-color:var(--p6)">
-          <input type="number" id="sa-tloss-num" min="4" max="18" step="0.5" value="9" oninput="saNumSync('tloss')" style="width:62px;font-size:12px;font-weight:700;color:var(--p6);border:1.5px solid var(--p6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
+          <input type="number" id="sa-tloss-num" title="Type Total Loss % (4 – 18) then press Enter" min="4" max="18" step="0.1" value="9" onchange="saNumSync('tloss')" style="width:72px;font-size:12px;font-weight:700;color:var(--p6);border:1.5px solid var(--p6);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
         </div>
         <!-- Loss component builder -->
         <div style="background:rgba(83,74,183,0.06);border-radius:7px;padding:8px;margin-top:6px">
@@ -24590,7 +24745,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <label class="flbl" style="color:var(--g6);font-size:11.5px">&#9654; Plant Load Factor — CUF <span style="font-weight:400">(% — step 0.5%)</span></label>
         <div style="display:flex;align-items:center;gap:6px;margin:6px 0">
           <input type="range" id="sa-plf" min="15.0" max="30.0" step="0.1" value="21.3" oninput="saSliderSync('plf')" style="flex:1;accent-color:var(--g5)">
-          <input type="number" id="sa-plf-num" min="15.0" max="30.0" step="0.1" value="21.3" oninput="saNumSync('plf')" style="width:62px;font-size:12px;font-weight:700;color:var(--g5);border:1.5px solid var(--g5);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
+          <input type="number" id="sa-plf-num" title="Type Plant Load Factor % (15 – 30) then press Enter" min="15.0" max="30.0" step="0.1" value="21.3" onchange="saNumSync('plf')" style="width:72px;font-size:12px;font-weight:700;color:var(--g5);border:1.5px solid var(--g5);border-radius:6px;padding:4px 5px;font-family:'JetBrains Mono',monospace;background:#fff">
         </div>
         <!-- PLF visual bar -->
         <div style="background:#E5E7EB;border-radius:4px;height:6px;margin:6px 0;position:relative">
@@ -24658,6 +24813,48 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
     <canvas id="sa-tornado-chart" height="220"></canvas>
     <div class="fhint" style="margin-top:5px">Horizontal bars show how much FCF changes when that variable is +10% (green) or −10% (red) from base. Longest bar = most sensitive variable. Values in Rs Crores.</div>
   </div>
+
+  <!-- Jump to results button -->
+  <div style="text-align:center;margin:6px 0 2px;">
+    <button onclick="document.getElementById('sa-be-card').scrollIntoView({behavior:'smooth',block:'start'})" style="background:linear-gradient(135deg,#1B2A4A,#243B6E);color:#C8973A;border:none;border-radius:20px;padding:9px 22px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(27,42,74,.2);">&#9660; See Results &amp; Charts</button>
+  </div>
+
+
+  <!-- ══ BREAK-EVEN THRESHOLD CARD ═══════════════════════════ -->
+  <div class="card" id="sa-be-card" style="scroll-margin-top:60px;">
+    <div class="chdr" style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <span>&#128680; C. Viability Threshold — Break-Even Analysis</span>
+      <button onclick="exportBEtoCSV()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">&#128196; Export CSV</button>
+    </div>
+    <div class="fhint" style="background:#FEF2F2;border-left:3px solid #9B1C1C;border-radius:0 6px 6px 0;padding:8px 12px;margin-bottom:10px;font-size:12.5px;color:#1F2937;">
+      <strong style="color:#9B1C1C;">The Break-Even Threshold</strong> is the exact point where DSCR = 1.20× — the minimum your bank requires. Cross it and the project cannot get a loan. Computed live from your current model values.
+    </div>
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+      <table id="sa-be-table" style="width:100%;min-width:640px;border-collapse:collapse;font-size:12.5px;">
+        <thead>
+          <tr style="background:#1B2A4A;color:#fff;">
+            <th style="padding:9px 11px;text-align:left;white-space:nowrap;">Variable</th>
+            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">Base Value</th>
+            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">DSCR at −10%</th>
+            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">DSCR at +10%</th>
+            <th style="padding:9px 11px;text-align:center;white-space:nowrap;background:#7F1D1D;">⚠ Break-Even Threshold</th>
+            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">Safety Headroom</th>
+            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">Status</th>
+          </tr>
+        </thead>
+        <tbody id="sa-be-tbody">
+          <tr><td colspan="7" style="text-align:center;padding:20px;color:#6B7280;font-style:italic;">Loading… (adjust any slider to compute)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:11.5px;color:#6B7280;margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;">
+      <span><span style="display:inline-block;width:10px;height:10px;background:#1A7A4A;border-radius:2px;"></span> Green = &gt;3 unit headroom</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#B45309;border-radius:2px;"></span> Amber = 1–3 headroom</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#9B1C1C;border-radius:2px;"></span> Red = &lt;1 headroom — critical</span>
+      <span><strong>DSCR minimum = 1.20×</strong> (lender requirement)</span>
+    </div>
+  </div>
+
 
   <!-- ══ D: SELLING PRICE CURVE (bar chart) ════════════════════ -->
   <div class="card">
@@ -27319,7 +27516,64 @@ function exportCFtoXLSX() {
 let saChart = null;
 let saSpChart = null;
 let saVoltChart = null;
-const SA_VARS = {
+function saHelpOpen(){
+  const m=document.getElementById('sa-help-modal');
+  if(m){m.style.display='block';document.body.style.overflow='hidden';}
+}
+function saHelpClose(){
+  const m=document.getElementById('sa-help-modal');
+  if(m){m.style.display='none';document.body.style.overflow='';}
+}
+function saHelpPrint(){
+  // Print just the modal content as a clean PDF
+  const modal = document.getElementById('sa-help-modal');
+  if(!modal) return;
+  const content = modal.querySelector('div > div:nth-child(2)'); // body div
+  const header  = modal.querySelector('div > div:first-child');  // header div
+  const w = window.open('','_blank','width=850,height=700');
+  w.document.write(`<!DOCTYPE html><html><head>
+    <title>EIL Solar — Sensitivity Analysis Guide</title>
+    <style>
+      body{font-family:Arial,sans-serif;font-size:13px;color:#1F2937;margin:24px;line-height:1.6;}
+      h1{color:#1B2A4A;font-size:18px;margin-bottom:4px;}
+      h2{color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:4px;margin-top:18px;}
+      table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0;}
+      th{background:#1B2A4A;color:#fff;padding:7px 9px;text-align:left;}
+      td{padding:7px 9px;border-bottom:1px solid #E5E7EB;}
+      tr:nth-child(even) td{background:#F9FAFB;}
+      .gold{color:#C8973A;font-weight:700;}
+      .red{color:#9B1C1C;font-weight:700;}
+      .green{color:#1A7A4A;font-weight:700;}
+      ol,ul{padding-left:18px;} li{margin-bottom:4px;}
+      .box{background:#EEF2FA;border-left:3px solid #C8973A;padding:10px 12px;margin:8px 0;border-radius:0 6px 6px 0;}
+      .green-box{background:#E8F5EE;border-left:3px solid #1A7A4A;padding:10px 12px;margin:8px 0;border-radius:0 6px 6px 0;}
+      .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .grid-item{background:#F9FAFB;border-radius:6px;padding:10px;}
+      @media print{body{margin:12px;} button{display:none;}}
+    </style>
+  </head><body>
+    <h1>📊 EIL Solar Ground PWA — Sensitivity Analysis: User Guide</h1>
+    <p style="color:#6B7280;font-size:12px;margin-top:2px;">How to use the Sensitivity Analysis page to explore scenarios and find viability thresholds</p>
+    ${modal.querySelector('.modal-printable') ? modal.querySelector('.modal-printable').innerHTML : modal.querySelectorAll('div')[1].innerHTML}
+  </body></html>`);
+  w.document.close();
+  w.focus();
+  setTimeout(()=>{ w.print(); }, 400);
+}
+// Close modal on Escape key; Enter in SA number inputs triggers update
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') saHelpClose();
+  // Enter key in any SA number input → trigger saNumSync immediately
+  if(e.key==='Enter' && e.target && e.target.id && e.target.id.endsWith('-num')){
+    const id = e.target.id.replace('sa-','').replace('-num','');
+    if(SA_VARS && SA_VARS[id]) {
+      saNumSync(id);
+      e.target.blur(); // dismiss mobile keyboard
+    }
+  }
+});
+
+SA_VARS = {
   sp:{min:5.50,max:8.50,step:0.05,def:6.90},
   oa:{min:0.50,max:2.00,step:0.10,def:0.95},
   ir:{min:6.00,max:14.00,step:0.25,def:9.00},
@@ -27333,17 +27587,27 @@ function saSliderSync(id){
   const ni = document.getElementById('sa-'+id+'-num');
   if(ni) ni.value = v;
   if(id==='plf') updPlfBar(v);
+  window._saScrollEnabled = true;
   runSA();
 }
 function saNumSync(id){
-  const el = document.getElementById('sa-'+id+'-num');
+  // Called ONLY on onchange (Enter or blur) — never on oninput
+  // So the user can type freely without interruption
+  const el  = document.getElementById('sa-'+id+'-num');
   const cfg = SA_VARS[id];
   let v = parseFloat(el.value);
-  if(isNaN(v)) return;
+  if(isNaN(v)) { el.value = cfg.def; v = cfg.def; }
+  // Clamp to valid range
   v = Math.min(cfg.max, Math.max(cfg.min, v));
+  // Round to 2 decimal places to avoid floating point noise
+  v = Math.round(v * 100) / 100;
+  // Update both the number box and the slider
+  el.value = v;
   const sl = document.getElementById('sa-'+id);
   if(sl) sl.value = v;
   if(id==='plf') updPlfBar(v);
+  // Scroll to results after user explicitly enters a value
+  window._saScrollEnabled = true;
   runSA();
 }
 function saSet(id, v){
@@ -27512,6 +27776,7 @@ function runSA(){
     }).join('');
   }
 
+  buildBETable(spV,oaV,irV,dfV,tlossV,plfV);
   buildTornado();
   buildSPChart(spV,irV,dfV,oaV,plfV,tlossV);
   buildVoltChart(spV,irV,dfV,oaV,plfV);
@@ -27519,7 +27784,220 @@ function runSA(){
   buildNRMatrix(spV,oaV);
   buildDSCRMatrix(plfV,tlossV,oaV,spV,dfV,irV);
   buildRetMatrix(spV,oaV,irV,dfV);
+  // Scroll results into view after update
+  const resEl = document.getElementById('sa-be-card');
+  if(resEl && window._saScrollEnabled){
+    setTimeout(()=>{ resEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+  }
+  window._saScrollEnabled = false; // reset — only scroll on explicit user action
 }
+
+
+/* ══ BREAK-EVEN THRESHOLD TABLE ════════════════════════════════
+   Computes the exact threshold for each variable where DSCR = 1.20x
+   Uses binary search. Called from runSA() after every update.
+═══════════════════════════════════════════════════════════════ */
+function buildBETable(spV, oaV, irV, dfV, tlossV, plfV){
+  const tbody = document.getElementById('sa-be-tbody');
+  if(!tbody) return;
+
+  /* ── Read fixed project inputs ── */
+  const acMW_base  = gv('ac');               // MW AC from project input
+  const dacR       = gv('dac');              // DC:AC ratio
+  const epcBase    = gv('epc');              // EPC cost Rs Cr (scales with capacity)
+  const landBase   = gv('land');             // Land cost Rs Cr (scales with capacity)
+  const evacBase   = gv('evac');             // Evacuation — largely fixed for a given voltage level
+  const miscBase   = gv('misc');             // Misc — scales with capacity
+  const bCap_fixed = (document.getElementById('i-batt')&&document.getElementById('i-batt').value==='1')?gv('bmwh')*gv('bc'):0;
+  const tn   = gv('tn'), moro = gv('moro');
+  const deg1 = gv('deg1')/100, taresc = gv('taresc')/100, oaesc = gv('oaesc')/100, ome = gv('ome')/100;
+
+  /* ── Core DSCR calculator — Year 2 (first full debt service year)
+     acMW parameter lets capacity sensitivity vary generation AND cost together ── */
+  const calcDSCR2 = (sp, oa, ir, df, tloss, plf, acMW) => {
+    const kwac  = Math.round(acMW * 1000);
+    // Scale EPC, land, misc proportionally with AC capacity; evac is largely fixed per voltage level
+    const scale = acMW / acMW_base;
+    const sCap  = (epcBase + landBase + miscBase) * scale + evacBase;
+    const tCap  = sCap + bCap_fixed;
+    const dAmt  = tCap * (df/100);
+    const om1   = sCap * gv('om')/100;
+    const ins1  = sCap * gv('ins')/100;
+    const ap    = dAmt / Math.max(1, tn - moro);
+    // Year 2 net kWh (after Year 1 LID degradation)
+    const net2  = kwac * (plf/100) * 8760 * (1-deg1) * (1-tloss/100);
+    const sp2   = sp * (1+taresc), oa2 = oa * (1+oaesc);
+    const ebd2  = net2*(sp2-oa2)/1e7 - om1*(1+ome) - ins1*1.03;
+    const ds2   = dAmt*(ir/100) + ap;
+    return ds2 > 0 ? ebd2/ds2 : 99;
+  };
+
+  /* ── Binary search: find value where DSCR = 1.20 ── */
+  const findBE = (fn, lo, hi, dir) => {
+    for(let i=0;i<80;i++){
+      const mid=(lo+hi)/2;
+      if(dir==='up'){ if(fn(mid)>=1.20)hi=mid; else lo=mid; }
+      else          { if(fn(mid)>=1.20)lo=mid; else hi=mid; }
+    }
+    return (lo+hi)/2;
+  };
+
+  /* ── Capex break-even: vary EPC cost per MW (keeps evacuation fixed) ── */
+  const calcDSCR2_epc = (epcPerMW) => {
+    const sCap2 = epcPerMW*acMW_base + landBase + evacBase + miscBase;
+    const tCap2 = sCap2 + bCap_fixed;
+    const dAmt2 = tCap2*(dfV/100), ap2 = dAmt2/Math.max(1,tn-moro);
+    const om2   = sCap2*gv('om')/100, ins2 = sCap2*gv('ins')/100;
+    const kwac  = Math.round(acMW_base*1000);
+    const net2  = kwac*(plfV/100)*8760*(1-deg1)*(1-tlossV/100);
+    const sp2   = spV*(1+taresc), oa2 = oaV*(1+oaesc);
+    const ebd2  = net2*(sp2-oa2)/1e7 - om2*(1+ome) - ins2*1.03;
+    const ds2   = dAmt2*(irV/100) + ap2;
+    return ds2 > 0 ? ebd2/ds2 : 99;
+  };
+  const epcPerMW_base = epcBase / acMW_base;
+
+  /* ── Define all variables including AC Capacity ── */
+  const vars = [
+    {
+      name:'AC Capacity (MW)',
+      base: acMW_base, unit:' MW AC', fmt: v=>v.toFixed(1),
+      dscr_lo: calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV,acMW_base*0.9),
+      dscr_hi: calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV,acMW_base*1.1),
+      be: findBE(v=>calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV,v), 0.5, acMW_base, 'up'),
+      note: 'min MW AC for viability',
+      headroomDir:'above',
+      headUnit:' MW',
+      context:'Scales both generation AND capex (EPC+land+misc). Evac cost fixed.',
+    },
+    {
+      name:'Selling Price (Rs/kWh)',
+      base: spV, unit:' Rs/kWh', fmt: v=>v.toFixed(3),
+      dscr_lo: calcDSCR2(spV*0.9,oaV,irV,dfV,tlossV,plfV,acMW_base),
+      dscr_hi: calcDSCR2(spV*1.1,oaV,irV,dfV,tlossV,plfV,acMW_base),
+      be: findBE(v=>calcDSCR2(v,oaV,irV,dfV,tlossV,plfV,acMW_base), oaV+0.01, spV*2, 'up'),
+      note: 'min SP for viability',
+      headroomDir:'above',
+      headUnit:' Rs/kWh',
+      context:'Weighted tariff × discount. Buyer price — OA separate.',
+    },
+    {
+      name:'CUF / PLF (%)',
+      base: plfV, unit:'%', fmt: v=>v.toFixed(1),
+      dscr_lo: calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV*0.9,acMW_base),
+      dscr_hi: calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV*1.1,acMW_base),
+      be: findBE(v=>calcDSCR2(spV,oaV,irV,dfV,tlossV,v,acMW_base), 5, plfV, 'up'),
+      note: 'min PLF for viability',
+      headroomDir:'above',
+      headUnit:'%',
+      context:'Irradiation-driven. Poor monsoon or soiling = lower CUF.',
+    },
+    {
+      name:'EPC Cost (Rs Cr/MW)',
+      base: epcPerMW_base, unit:' Cr/MW', fmt: v=>v.toFixed(2),
+      dscr_lo: calcDSCR2_epc(epcPerMW_base*1.1),  // higher EPC = lower DSCR
+      dscr_hi: calcDSCR2_epc(epcPerMW_base*0.9),
+      be: findBE(calcDSCR2_epc, epcPerMW_base, epcPerMW_base*5, 'down'),
+      note: 'max EPC/MW before unviable',
+      headroomDir:'below',
+      headUnit:' Cr/MW',
+      context:'EPC overrun raises debt, reduces DSCR. Fix price at contract.',
+    },
+    {
+      name:'OA Charge (Rs/kWh)',
+      base: oaV, unit:' Rs/kWh', fmt: v=>v.toFixed(3),
+      dscr_lo: calcDSCR2(spV,oaV*0.9,irV,dfV,tlossV,plfV,acMW_base),
+      dscr_hi: calcDSCR2(spV,oaV*1.1,irV,dfV,tlossV,plfV,acMW_base),
+      be: findBE(v=>calcDSCR2(spV,v,irV,dfV,tlossV,plfV,acMW_base), oaV, spV*0.99, 'down'),
+      note: 'max OA before unviable',
+      headroomDir:'below',
+      headUnit:' Rs/kWh',
+      context:'Developer bears OA. If TNERC removes 30% concession (Rs 1.37), check threshold.',
+    },
+    {
+      name:'Interest Rate (%)',
+      base: irV, unit:'%', fmt: v=>v.toFixed(2),
+      dscr_lo: calcDSCR2(spV,oaV,irV*0.9,dfV,tlossV,plfV,acMW_base),
+      dscr_hi: calcDSCR2(spV,oaV,irV*1.1,dfV,tlossV,plfV,acMW_base),
+      be: findBE(v=>calcDSCR2(spV,oaV,v,dfV,tlossV,plfV,acMW_base), irV, 35, 'down'),
+      note: 'max IR before unviable',
+      headroomDir:'below',
+      headUnit:'%',
+      context:'Fix rate at financial closure. RBI rate changes affect floating-rate loans.',
+    },
+    {
+      name:'Debt Fraction (%)',
+      base: dfV, unit:'%', fmt: v=>v.toFixed(1),
+      dscr_lo: calcDSCR2(spV,oaV,irV,dfV*0.9,tlossV,plfV,acMW_base),
+      dscr_hi: calcDSCR2(spV,oaV,irV,dfV*1.1,tlossV,plfV,acMW_base),
+      be: findBE(v=>calcDSCR2(spV,oaV,irV,v,tlossV,plfV,acMW_base), dfV, 99, 'down'),
+      note: 'max debt % before unviable',
+      headroomDir:'below',
+      headUnit:'%',
+      context:'Higher debt = higher debt service. Do not exceed threshold.',
+    },
+    {
+      name:'Technical Loss (%)',
+      base: tlossV, unit:'%', fmt: v=>v.toFixed(1),
+      dscr_lo: calcDSCR2(spV,oaV,irV,dfV,tlossV*0.9,plfV,acMW_base),
+      dscr_hi: calcDSCR2(spV,oaV,irV,dfV,tlossV*1.1,plfV,acMW_base),
+      be: findBE(v=>calcDSCR2(spV,oaV,irV,dfV,v,plfV,acMW_base), tlossV, 99, 'down'),
+      note: 'max loss % before unviable',
+      headroomDir:'below',
+      headUnit:'%',
+      context:'Inverter, transformer, soiling losses. Quarterly washing critical.',
+    },
+  ];
+
+  /* Build table rows */
+  const dscrCell = (v) => {
+    const bg = v>=1.50?'#DCFCE7':v>=1.20?'#FEF9C3':'#FEE2E2';
+    const col= v>=1.50?'#166534':v>=1.20?'#92400E':'#991B1B';
+    return `<td style="text-align:center;padding:8px 10px;background:${bg};font-weight:700;color:${col};">${v.toFixed(2)}×</td>`;
+  };
+
+  const rows = vars.map((v,i)=>{
+    const alt = i%2===0 ? '#F9FAFB' : '#FFFFFF';
+    const headroom = v.headroomDir==='above' ? v.base - v.be : v.be - v.base;
+    const hu = v.headUnit || v.unit;
+    // Thresholds: capacity/price/plf use absolute headroom; rates use % points
+    const hThresh1 = (v.unit===' MW AC'||v.unit===' Rs/kWh'||v.unit===' Cr/MW') ? 0.5 : 1;
+    const hThresh2 = (v.unit===' MW AC'||v.unit===' Rs/kWh'||v.unit===' Cr/MW') ? 2   : 3;
+    const hGood = headroom > hThresh2, hWarn = headroom > hThresh1;
+    const hBg  = hGood?'#DCFCE7':hWarn?'#FEF9C3':'#FEE2E2';
+    const hCol = hGood?'#166534':hWarn?'#92400E':'#991B1B';
+    const hIcon= hGood?'✔':hWarn?'⚠':'✘';
+    const interpretation = v.context || (
+      v.headroomDir==='above'
+        ? `Must stay above ${v.fmt(v.be)}${v.unit}`
+        : `Must stay below ${v.fmt(v.be)}${v.unit}`);
+
+    return `<tr style="background:${alt};">
+      <td style="padding:8px 11px;font-weight:700;color:#1B2A4A;white-space:nowrap;">${v.name}</td>
+      <td style="text-align:center;padding:8px 10px;">${v.fmt(v.base)}${v.unit}</td>
+      ${dscrCell(v.dscr_lo)}
+      ${dscrCell(v.dscr_hi)}
+      <td style="text-align:center;padding:8px 10px;background:#FEF2F2;font-weight:700;color:#991B1B;white-space:nowrap;">${v.fmt(v.be)}${v.unit}<br><span style="font-size:10.5px;font-weight:400;color:#6B7280;">${v.note}</span></td>
+      <td style="text-align:center;padding:8px 10px;background:${hBg};font-weight:700;color:${hCol};">${hIcon} ${v.fmt(Math.abs(headroom))}${hu}</td>
+      <td style="padding:8px 10px;font-size:11.5px;color:#374151;">${interpretation}</td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = rows.join('');
+}
+
+function exportBEtoCSV(){
+  const tbl = document.getElementById('sa-be-table');
+  if(!tbl) return;
+  const rows = [...tbl.querySelectorAll('tr')];
+  const csv = rows.map(r=>[...r.querySelectorAll('th,td')].map(c=>'"'+c.innerText.replace(/\n/g,' ').replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='EIL_Solar_BreakEven_Thresholds.csv';
+  a.click();
+}
+
 
 /* ─── C: TORNADO (horizontal bar) ──────────────────────────── */
 function buildTornado(){
@@ -29421,6 +29899,298 @@ function generateWordReport() {
         ['Total 25-Year FCF','Rs '+totalFCF+' Crore','Project life accumulation'],
         ['Salvage Value (Year 25)','Rs '+(tCap*gv('sv')/100).toFixed(2)+' Crore',''+gv('sv')+'% of total capex'],
       ],[3400,2200,4120]),
+      SP(1),
+      SH('7.5  Sensitivity Analysis — Viability Thresholds'),
+      LEAD('For each key variable, the table below shows: the base value, the impact of a ±10% change on Year 1 FCF and Year 2 DSCR, and — most critically — the exact break-even threshold below (or above) which the project DSCR falls below the lender minimum of 1.20× (i.e. the project becomes unviable for bank financing).'),
+      SP(1),
+
+      (() => {
+        /* ═══ INLINE SCENARIO CALCULATOR ═══════════════════════
+           Mirrors saCalcFCF logic from the SA page exactly.
+           Returns { fcf1, dscr2 } for any combination of inputs.
+        ════════════════════════════════════════════════════════ */
+        const calc = (spV, plfV, oaV, irV, dfV) => {
+          const kwac   = acKWAC();
+          const grossKWh_ = kwac * (plfV/100) * 8760;
+          const netKWh_   = grossKWh_ * (1 - tloss/100);
+          const dAmt_  = +(tCap * (dfV/100)).toFixed(2);
+          const om1_   = +(sCap * om_pct).toFixed(2);
+          const ins1_  = +(sCap * ins_pct).toFixed(2);
+          const nRev1_ = +(netKWh_ * (spV - oaV) / 1e7).toFixed(2);
+          const ebd1_  = +(nRev1_ - om1_ - ins1_).toFixed(2);
+          const int1_  = +(dAmt_ * (irV/100)).toFixed(2);
+          const fcf1_  = +(ebd1_ - int1_).toFixed(2);
+          const ap_    = dAmt_ / Math.max(1, tn - moro);
+          // Year 2 DSCR (first full debt service year)
+          const netKWh2_ = kwac*(plfV/100)*8760*(1-deg1)*(1-tloss/100);
+          const sp2_   = spV * (1 + taresc/100);
+          const oa2_   = oaV * (1 + oaesc/100);
+          const ebd2_  = netKWh2_*(sp2_-oa2_)/1e7 - om1_*(1+ome) - ins1_*1.03;
+          const ds2_   = int1_ + ap_;
+          const dscr2_ = +(ds2_ > 0 ? ebd2_/ds2_ : 99).toFixed(2);
+          return { fcf1: fcf1_, dscr2: dscr2_ };
+        };
+
+        /* ═══ BINARY-SEARCH BREAK-EVEN ══════════════════════════
+           Finds the exact value of a variable where DSCR2 = 1.20.
+           fn(v) → dscr2 for that variable value.
+           search direction: 'up' = higher v → higher DSCR (find lower bound)
+                             'down' = lower v → higher DSCR (find upper bound)
+        ════════════════════════════════════════════════════════ */
+        const breakEven = (fn, lo, hi, dir='up') => {
+          // dir='up': we want the minimum v where DSCR >= 1.20 → search upward
+          // dir='down': we want the maximum v where DSCR >= 1.20 → search downward
+          for (let i = 0; i < 80; i++) {
+            const mid = (lo + hi) / 2;
+            const d = fn(mid);
+            if (dir === 'up') {
+              if (d >= 1.20) hi = mid; else lo = mid;
+            } else {
+              if (d >= 1.20) lo = mid; else hi = mid;
+            }
+          }
+          return (lo + hi) / 2;
+        };
+
+        /* Base values */
+        const base    = calc(sp1, plf, oa, gv('ir'), gv('df'));
+        const baseFCF = base.fcf1;
+        const baseDS  = base.dscr2;
+
+        /* ─── 1. CUF / PLF ───────────────────────────────────── */
+        const cufLo   = calc(sp1, plf*0.9, oa, gv('ir'), gv('df'));
+        const cufHi   = calc(sp1, plf*1.1, oa, gv('ir'), gv('df'));
+        const cufBE   = breakEven(v => calc(sp1,v,oa,gv('ir'),gv('df')).dscr2, 5, plf, 'up');
+        const cufMgn  = +(plf - cufBE).toFixed(1);
+
+        /* ─── 2. Selling Price ───────────────────────────────── */
+        const spLo    = calc(sp1*0.9, plf, oa, gv('ir'), gv('df'));
+        const spHi    = calc(sp1*1.1, plf, oa, gv('ir'), gv('df'));
+        const spBE    = breakEven(v => calc(v,plf,oa,gv('ir'),gv('df')).dscr2, oa+0.01, sp1*2, 'up');
+        const spMgn   = +(sp1 - spBE).toFixed(3);
+
+        /* ─── 3. OA Charge ───────────────────────────────────── */
+        const oaLo    = calc(sp1, plf, oa*0.9, gv('ir'), gv('df'));
+        const oaHi    = calc(sp1, plf, oa*1.1, gv('ir'), gv('df'));
+        const oaBE    = breakEven(v => calc(sp1,plf,v,gv('ir'),gv('df')).dscr2, oa, sp1*0.99, 'down');
+        const oaMgn   = +(oaBE - oa).toFixed(3);
+
+        /* ─── 4. Interest Rate ───────────────────────────────── */
+        const irLo    = calc(sp1, plf, oa, gv('ir')*0.9, gv('df'));
+        const irHi    = calc(sp1, plf, oa, gv('ir')*1.1, gv('df'));
+        const irBE    = breakEven(v => calc(sp1,plf,oa,v,gv('df')).dscr2, gv('ir'), 30, 'down');
+        const irMgn   = +(irBE - gv('ir')).toFixed(2);
+
+        /* ─── 5. Debt Fraction ───────────────────────────────── */
+        const dfBase  = gv('df');
+        const dfLo    = calc(sp1, plf, oa, gv('ir'), dfBase*0.9);
+        const dfHi    = calc(sp1, plf, oa, gv('ir'), dfBase*1.1);
+        const dfBE    = breakEven(v => calc(sp1,plf,oa,gv('ir'),v).dscr2, dfBase, 99, 'down');
+        const dfMgn   = +(dfBE - dfBase).toFixed(1);
+
+        /* ─── 6. Total Capex (via EPC proxy) ─────────────────── */
+        // Capex affects dAmt, hence debt service. Model via a capex multiplier.
+        const capCalc = (mult) => {
+          const tCapM  = tCap * mult;
+          const dAmtM  = +(tCapM * dfPct).toFixed(2);
+          const ebd1M  = +(netMU*1e6*(sp1-oa)/1e7 - sCap*mult*om_pct - sCap*mult*ins_pct).toFixed(2);
+          const int1M  = +(dAmtM * ir).toFixed(2);
+          const ap_M   = dAmtM / Math.max(1, tn - moro);
+          const netKWh2M = acKWAC()*(plf/100)*8760*(1-deg1)*(1-tloss/100);
+          const ebd2M  = netKWh2M*(sp1*(1+taresc/100) - oa*(1+oaesc/100))/1e7 - sCap*mult*om_pct*(1+ome) - sCap*mult*ins_pct*1.03;
+          const ds2M   = int1M + ap_M;
+          return ds2M > 0 ? ebd2M/ds2M : 99;
+        };
+        const capLo   = { dscr2: +capCalc(0.9).toFixed(2), fcf1: +(ebd1 - tCap*0.9*dfPct*ir).toFixed(2) };
+        const capHi   = { dscr2: +capCalc(1.1).toFixed(2), fcf1: +(ebd1 - tCap*1.1*dfPct*ir).toFixed(2) };
+        const capMultBE = breakEven(capCalc, 1.0, 5.0, 'down');
+        const capBE   = +(tCap * capMultBE).toFixed(1);
+        const capMgn  = +(capBE - tCap).toFixed(1);
+
+        /* ─── Traffic light helper ─────────────────────────── */
+        // For 'lower bound' vars (CUF, SP): margin = base - threshold (positive = safe)
+        // For 'upper bound' vars (OA, IR, Capex): margin = threshold - base (positive = safe)
+        const tlight = (margin, unit) => {
+          const isStrong = margin > 3;
+          const isOk     = margin > 1;
+          const bg  = isStrong ? C.greenLt : isOk ? C.amberLt : C.redLt;
+          const col = isStrong ? C.green   : isOk ? C.amber   : C.red;
+          const icon= isStrong ? '✔ ' : isOk ? '⚠ ' : '✘ ';
+          return CC(icon + margin.toFixed(margin<2?2:1) + unit + ' headroom', bg, col, true);
+        };
+
+        /* ─── FCF delta cell ───────────────────────────────── */
+        const dCell = (scenario_fcf) => {
+          const d = +(scenario_fcf - baseFCF).toFixed(2);
+          if (d >= 0) return CC('+Rs '+d+' Cr', C.greenLt, C.green);
+          return CC('Rs '+d+' Cr', C.redLt, C.red);
+        };
+
+        /* ─── DSCR cell ────────────────────────────────────── */
+        const dscrCell = (v) => {
+          const n = parseFloat(v);
+          if (n >= 1.50) return CC(v+'×', C.greenLt, C.green, true);
+          if (n >= 1.20) return CC(v+'×', C.amberLt, C.amber, true);
+          return CC(v+'×', C.redLt, C.red, true);
+        };
+
+        /* ─── Break-even cell (always red — it IS the danger line) ── */
+        const beCell = (val, note) => CC(val + '  ← ' + note, C.redLt, C.red, true);
+
+        return TBL(
+          ['Variable','Base Value','FCF Yr1 at −10%','DSCR Yr2 at −10%','FCF Yr1 at +10%','DSCR Yr2 at +10%','Break-Even Threshold','Safety Headroom'],
+          [
+            /* CUF — lower is worse */
+            [CC('CUF / PLF',C.navy,C.gold,true,'left'),
+             plf+'%',
+             dCell(cufLo.fcf1), dscrCell(cufLo.dscr2+''),
+             dCell(cufHi.fcf1), dscrCell(cufHi.dscr2+''),
+             beCell(cufBE.toFixed(1)+'%', 'min viable CUF'),
+             tlight(cufMgn,'%')],
+
+            /* Selling Price — lower is worse */
+            [CC('Selling Price',C.navy,C.gold,true,'left'),
+             'Rs '+sp1+'/kWh',
+             dCell(spLo.fcf1), dscrCell(spLo.dscr2+''),
+             dCell(spHi.fcf1), dscrCell(spHi.dscr2+''),
+             beCell('Rs '+spBE.toFixed(3)+'/kWh', 'min viable SP'),
+             tlight(spMgn,' Rs/kWh')],
+
+            /* OA Charge — higher is worse */
+            [CC('OA Charge',C.navy,C.gold,true,'left'),
+             'Rs '+oa+'/kWh',
+             dCell(oaLo.fcf1), dscrCell(oaLo.dscr2+''),
+             dCell(oaHi.fcf1), dscrCell(oaHi.dscr2+''),
+             beCell('Rs '+oaBE.toFixed(3)+'/kWh', 'max viable OA'),
+             tlight(oaMgn,' Rs/kWh')],
+
+            /* Interest Rate — higher is worse */
+            [CC('Interest Rate',C.navy,C.gold,true,'left'),
+             gv('ir')+'% p.a.',
+             dCell(irLo.fcf1), dscrCell(irLo.dscr2+''),
+             dCell(irHi.fcf1), dscrCell(irHi.dscr2+''),
+             beCell(irBE.toFixed(2)+'% p.a.', 'max viable IR'),
+             tlight(irMgn,'%')],
+
+            /* Debt Fraction — higher is worse */
+            [CC('Debt Fraction',C.navy,C.gold,true,'left'),
+             dfBase+'%',
+             dCell(dfLo.fcf1), dscrCell(dfLo.dscr2+''),
+             dCell(dfHi.fcf1), dscrCell(dfHi.dscr2+''),
+             beCell(dfBE.toFixed(1)+'%', 'max viable debt %'),
+             tlight(dfMgn,'%')],
+
+            /* Capex — higher is worse */
+            [CC('Total Capex',C.navy,C.gold,true,'left'),
+             'Rs '+tCap.toFixed(1)+' Cr',
+             dCell(capLo.fcf1), dscrCell(capLo.dscr2+''),
+             dCell(capHi.fcf1), dscrCell(capHi.dscr2+''),
+             beCell('Rs '+capBE+' Cr', 'max viable capex'),
+             tlight(capMgn,' Rs Cr')],
+          ],
+          [1700,1400,1500,1400,1500,1400,2400,1420],
+          {hdrBg:C.navyMid}
+        );
+      })(),
+
+      SP(1),
+      /* Colour legend */
+      new Paragraph({
+        children:[
+          R('Viability criterion: Year 2 DSCR ≥ 1.20×  (first full debt service year after moratorium)     ', {size:19,color:C.gray4}),
+          R('✔ Green = >3% headroom  ', {size:19,bold:true,color:C.green}),
+          R('⚠ Amber = 1–3% headroom  ', {size:19,bold:true,color:C.amber}),
+          R('✘ Red = <1% headroom', {size:19,bold:true,color:C.red}),
+        ],
+        spacing:{before:60,after:80},
+        border:{top:{style:BorderStyle.SINGLE,size:3,color:C.rule,space:2}},
+      }),
+      SP(1),
+
+      /* Break-even narrative summary */
+      SH('7.6  Break-Even Summary'),
+      (() => {
+        // Re-compute for the summary table (all functions are in scope from 7.5 above)
+        const calc2 = (spV, plfV, oaV, irV, dfV) => {
+          const kwac   = acKWAC();
+          const netKWh_   = kwac*(plfV/100)*8760*(1-tloss/100);
+          const dAmt_  = tCap*(dfV/100);
+          const om1_   = sCap*om_pct, ins1_ = sCap*ins_pct;
+          const ebd1_  = netKWh_*(spV-oaV)/1e7 - om1_ - ins1_;
+          const ap_    = dAmt_/Math.max(1,tn-moro);
+          const netKWh2_ = kwac*(plfV/100)*8760*(1-deg1)*(1-tloss/100);
+          const ebd2_  = netKWh2_*(spV*(1+taresc/100)-oaV*(1+oaesc/100))/1e7 - om1_*(1+ome) - ins1_*1.03;
+          const ds2_   = dAmt_*ir + ap_;
+          return ds2_ > 0 ? ebd2_/ds2_ : 99;
+        };
+        const beSearch = (fn, lo, hi, dir) => {
+          for(let i=0;i<80;i++){const mid=(lo+hi)/2;if(dir==='up'){if(fn(mid)>=1.20)hi=mid;else lo=mid;}else{if(fn(mid)>=1.20)lo=mid;else hi=mid;}}
+          return (lo+hi)/2;
+        };
+        const cufBE2  = +beSearch(v=>calc2(sp1,v,oa,gv('ir'),gv('df')),5,plf,'up').toFixed(1);
+        const spBE2   = +beSearch(v=>calc2(v,plf,oa,gv('ir'),gv('df')),oa+0.01,sp1*2,'up').toFixed(3);
+        const oaBE2   = +beSearch(v=>calc2(sp1,plf,v,gv('ir'),gv('df')),oa,sp1*0.99,'down').toFixed(3);
+        const irBE2   = +beSearch(v=>calc2(sp1,plf,oa,v,gv('df')),gv('ir'),30,'down').toFixed(2);
+        const dfBE2   = +beSearch(v=>calc2(sp1,plf,oa,gv('ir'),v),gv('df'),99,'down').toFixed(1);
+
+        const statusBg  = (margin, dir) => {
+          const m = dir==='above' ? margin : margin;
+          return m > 3 ? C.greenLt : m > 1 ? C.amberLt : C.redLt;
+        };
+        const statusCol = (margin) => margin > 3 ? C.green : margin > 1 ? C.amber : C.red;
+        const statusTxt = (margin) => margin > 3 ? 'STRONG' : margin > 1 ? 'WATCH' : 'CRITICAL';
+
+        const cufMgn2 = +(plf - cufBE2).toFixed(1);
+        const spMgn2  = +(sp1 - spBE2).toFixed(3);
+        const oaMgn2  = +(oaBE2 - oa).toFixed(3);
+        const irMgn2  = +(irBE2 - gv('ir')).toFixed(2);
+        const dfMgn2  = +(dfBE2 - gv('df')).toFixed(1);
+
+        return TBL(
+          ['Variable','Base Value','Break-Even Point','Current Headroom','Risk Level','Interpretation'],
+          [
+            [CC('CUF / PLF',C.navy,C.gold,true,'left'),
+             plf+'%',
+             CC(cufBE2+'%', C.redLt, C.red, true),
+             cufMgn2+'% above threshold',
+             CC(statusTxt(cufMgn2), statusBg(cufMgn2,'above'), statusCol(cufMgn2), true),
+             'CUF must stay above '+cufBE2+'%. Project unviable if PLF < '+cufBE2+'%'],
+
+            [CC('Selling Price',C.navy,C.gold,true,'left'),
+             'Rs '+sp1+'/kWh',
+             CC('Rs '+spBE2+'/kWh', C.redLt, C.red, true),
+             'Rs '+spMgn2+'/kWh above floor',
+             CC(statusTxt(spMgn2), statusBg(spMgn2,'above'), statusCol(spMgn2), true),
+             'SP must not fall below Rs '+spBE2+'. Discount must stay above '+(spBE2/wt1*100).toFixed(1)+'% of weighted tariff'],
+
+            [CC('OA Charge',C.navy,C.gold,true,'left'),
+             'Rs '+oa+'/kWh',
+             CC('Rs '+oaBE2+'/kWh', C.redLt, C.red, true),
+             'Rs '+oaMgn2+'/kWh below ceiling',
+             CC(statusTxt(oaMgn2), statusBg(oaMgn2,'below'), statusCol(oaMgn2), true),
+             'OA must not exceed Rs '+oaBE2+'. If TNERC removes 30% concession (Rs 1.37), reassess'],
+
+            [CC('Interest Rate',C.navy,C.gold,true,'left'),
+             gv('ir')+'% p.a.',
+             CC(irBE2+'% p.a.', C.redLt, C.red, true),
+             irMgn2+'% above base rate',
+             CC(statusTxt(irMgn2), statusBg(irMgn2,'below'), statusCol(irMgn2), true),
+             'IR can rise to '+irBE2+'% before DSCR breaches 1.20×. Fix rate at closure'],
+
+            [CC('Debt Fraction',C.navy,C.gold,true,'left'),
+             gv('df')+'%',
+             CC(dfBE2+'%', C.redLt, C.red, true),
+             dfMgn2+'% below ceiling',
+             CC(statusTxt(dfMgn2), statusBg(dfMgn2,'below'), statusCol(dfMgn2), true),
+             'Can raise debt to '+dfBE2+'% of capex and still service it. Do not exceed'],
+          ],
+          [1800,1500,1900,2000,1200,2320],
+          {hdrBg:C.navyMid}
+        );
+      })(),
+
+      SP(1),
+      LEAD('The break-even thresholds above are computed by binary search — each variable is varied while all others are held at base. The project is most sensitive to CUF and Selling Price (smallest headroom) and most resilient to interest rate changes (largest headroom).'),
       PBR(),
     ];
 
