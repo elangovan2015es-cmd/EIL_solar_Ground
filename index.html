@@ -23520,6 +23520,12 @@ tr.tot td{background:var(--n1);font-weight:600;border-top:1px solid var(--n3)}
   .card{break-inside:avoid;}
 }
 
+/* SA controls responsive on mobile */
+@media (max-width: 500px) {
+  #sa-controls-card .fld { padding: 8px !important; }
+  #sa-controls-card label { font-size: 11px !important; }
+  .sa-preset { font-size: 10px !important; padding: 3px 7px !important; }
+}
 /* SA number inputs — clearly editable */
 input[id$="-num"] {
   cursor: text !important;
@@ -24554,7 +24560,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
             <tr style="background:#F9FAFB;">
               <td style="padding:8px 10px;font-weight:700;">Safety Headroom</td>
               <td style="padding:8px 10px;">Distance between your base value and the break-even line</td>
-              <td style="padding:8px 10px;"><span style="color:#1A7A4A;font-weight:700;">Green &gt;3</span> = safe · <span style="color:#B45309;font-weight:700;">Amber 1–3</span> = watch · <span style="color:#9B1C1C;font-weight:700;">Red &lt;1</span> = critical</td>
+              <td style="padding:8px 10px;"><span style="color:#1A7A4A;font-weight:700;">Green</span> = comfortable headroom · <span style="color:#B45309;font-weight:700;">Amber</span> = watch closely · <span style="color:#9B1C1C;font-weight:700;">Red</span> = act immediately</td>
             </tr>
             <tr>
               <td style="padding:8px 10px;font-weight:700;">DSCR at ±10%</td>
@@ -24629,7 +24635,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <div class="card" id="sa-controls-card">
     <div class="chdr pu">&#127922; A. Scenario Variables — Adjust &amp; Explore</div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
 
       <!-- 1. SELLING PRICE Rs/kWh (step 0.05, 5.50–8.50) -->
       <div class="fld" style="margin:0;background:var(--a1);border-radius:10px;padding:10px">
@@ -24820,38 +24826,176 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   </div>
 
 
+
+  <!-- ══ BREAK-EVEN HELP MODAL ═══════════════════════════════════ -->
+  <div id="be-help-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(10,15,30,0.75);backdrop-filter:blur(4px);overflow-y:auto;" onclick="if(event.target===this)beHelpClose()">
+    <div style="max-width:700px;margin:24px auto;background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.35);overflow:hidden;width:calc(100% - 32px);">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);padding:18px 20px 16px;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div style="font-size:17px;font-weight:700;color:#fff;font-family:'Inter',sans-serif;">📊 How to Read the Break-Even Table</div>
+          <div style="font-size:12px;color:#F5B0B0;margin-top:3px;font-family:'Inter',sans-serif;">Section C — Viability Threshold Analysis</div>
+        </div>
+        <button onclick="beHelpClose()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>
+      </div>
+      <!-- Body -->
+      <div style="padding:18px 18px 12px;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.65;overflow-x:hidden;">
+
+        <!-- One-liner purpose -->
+        <div style="background:#FEF2F2;border-left:4px solid #9B1C1C;border-radius:0 8px 8px 0;padding:11px 14px;margin-bottom:14px;">
+          <strong style="color:#9B1C1C;">The danger line.</strong> Each row shows the exact point at which your project DSCR falls to 1.20× — the minimum your bank requires. Cross it and the loan gets rejected.
+        </div>
+
+        <!-- What is DSCR -->
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:5px;font-size:13.5px;">What is DSCR?</div>
+        <div style="margin-bottom:12px;">DSCR = Operating Profit (EBITDA) ÷ Annual Loan Repayment. If DSCR = 1.50×, you earn Rs 1.50 for every Rs 1.00 you owe the bank. Banks require at least 1.20×. <strong>Year 2</strong> is used — the first full repayment year after the moratorium ends.</div>
+
+        <!-- Column guide -->
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:8px;font-size:13.5px;">What Each Column Means:</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;margin-bottom:12px;">
+          <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#1B2A4A;color:#fff;">
+              <th style="padding:7px 9px;text-align:left;white-space:nowrap;">Column</th>
+              <th style="padding:7px 9px;text-align:left;">What It Tells You</th>
+              <th style="padding:7px 9px;text-align:left;">Action</th>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:7px 9px;font-weight:700;white-space:nowrap;">Base Value</td>
+              <td style="padding:7px 9px;">Your current model value — live from Project Inputs</td>
+              <td style="padding:7px 9px;">Change inputs → this updates automatically</td>
+            </tr>
+            <tr>
+              <td style="padding:7px 9px;font-weight:700;white-space:nowrap;">DSCR at −10%</td>
+              <td style="padding:7px 9px;">DSCR if this variable worsens by 10%</td>
+              <td style="padding:7px 9px;">Must stay above 1.20× even under stress</td>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:7px 9px;font-weight:700;white-space:nowrap;">DSCR at +10%</td>
+              <td style="padding:7px 9px;">DSCR if this variable improves by 10%</td>
+              <td style="padding:7px 9px;">Shows upside potential</td>
+            </tr>
+            <tr>
+              <td style="padding:7px 9px;font-weight:700;color:#9B1C1C;white-space:nowrap;">⚠ Break-Even</td>
+              <td style="padding:7px 9px;"><strong>The danger line</strong> — exact value where DSCR = 1.20×. Computed by 80-iteration binary search. Not an estimate.</td>
+              <td style="padding:7px 9px;">Negotiate contracts to stay well above this</td>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:7px 9px;font-weight:700;white-space:nowrap;">Safety Headroom</td>
+              <td style="padding:7px 9px;">Distance between your current value and the danger line</td>
+              <td style="padding:7px 9px;"><span style="color:#166534;font-weight:700;">Green</span>: &gt;Rs 2/kWh · &gt;2 MW · &gt;3% &nbsp;|&nbsp; <span style="color:#854D0E;font-weight:700;">Amber</span>: Rs 0.5–2 · 0.5–2 MW · 1–3% &nbsp;|&nbsp; <span style="color:#991B1B;font-weight:700;">Red</span>: &lt;Rs 0.50 · &lt;0.5 MW · &lt;1%</td>
+            </tr>
+            <tr>
+              <td style="padding:7px 9px;font-weight:700;white-space:nowrap;">Why It Matters</td>
+              <td style="padding:7px 9px;">Plain-English context for each variable</td>
+              <td style="padding:7px 9px;">Tells you what drives the risk</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- Colour meaning per variable type -->
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:6px;font-size:13.5px;">What "Headroom" Means — by Variable:</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-bottom:14px;">
+          <table style="width:100%;min-width:380px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#1B2A4A;color:#fff;">
+              <th style="padding:6px 9px;text-align:left;">Variable</th>
+              <th style="padding:6px 9px;text-align:center;background:#166534;">🟢 Green (safe)</th>
+              <th style="padding:6px 9px;text-align:center;background:#854D0E;">🟡 Amber (watch)</th>
+              <th style="padding:6px 9px;text-align:center;background:#991B1B;">🔴 Red (act now)</th>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:6px 9px;font-weight:700;">Selling Price · OA Charge</td>
+              <td style="padding:6px 9px;text-align:center;color:#166534;font-weight:700;">&gt; Rs 2.00/kWh above danger line</td>
+              <td style="padding:6px 9px;text-align:center;color:#854D0E;font-weight:700;">Rs 0.50 – Rs 2.00/kWh</td>
+              <td style="padding:6px 9px;text-align:center;color:#991B1B;font-weight:700;">&lt; Rs 0.50/kWh</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 9px;font-weight:700;">AC Capacity</td>
+              <td style="padding:6px 9px;text-align:center;color:#166534;font-weight:700;">&gt; 2 MW above danger line</td>
+              <td style="padding:6px 9px;text-align:center;color:#854D0E;font-weight:700;">0.5 – 2 MW</td>
+              <td style="padding:6px 9px;text-align:center;color:#991B1B;font-weight:700;">&lt; 0.5 MW</td>
+            </tr>
+            <tr style="background:#F9FAFB;">
+              <td style="padding:6px 9px;font-weight:700;">EPC Cost</td>
+              <td style="padding:6px 9px;text-align:center;color:#166534;font-weight:700;">&gt; Rs 2 Cr/MW below danger line</td>
+              <td style="padding:6px 9px;text-align:center;color:#854D0E;font-weight:700;">Rs 0.5 – 2 Cr/MW</td>
+              <td style="padding:6px 9px;text-align:center;color:#991B1B;font-weight:700;">&lt; Rs 0.5 Cr/MW</td>
+            </tr>
+            <tr>
+              <td style="padding:6px 9px;font-weight:700;">CUF / PLF · Tech Loss · Debt % · Interest Rate</td>
+              <td style="padding:6px 9px;text-align:center;color:#166534;font-weight:700;">&gt; 3 percentage points</td>
+              <td style="padding:6px 9px;text-align:center;color:#854D0E;font-weight:700;">1 – 3 percentage points</td>
+              <td style="padding:6px 9px;text-align:center;color:#991B1B;font-weight:700;">&lt; 1 percentage point</td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- 8 variables quick ref -->
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:8px;font-size:13.5px;">The 8 Variables — Direction of Risk:</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-bottom:14px;font-size:12px;">
+          <div style="background:#FEF2F2;border-radius:7px;padding:9px 11px;">
+            <div style="font-weight:700;color:#9B1C1C;margin-bottom:4px;">Lower = worse (revenue side)</div>
+            <div>📐 AC Capacity — less MW = less revenue AND lower capex</div>
+            <div>💰 Selling Price — minimum price customer can pay</div>
+            <div>☀ CUF / PLF — poor sun or soiling reduces this</div>
+          </div>
+          <div style="background:#FEF2F2;border-radius:7px;padding:9px 11px;">
+            <div style="font-weight:700;color:#9B1C1C;margin-bottom:4px;">Higher = worse (cost side)</div>
+            <div>🏗 EPC Cost — overrun raises debt, squeezes DSCR</div>
+            <div>🔌 OA Charge — TNERC may remove 30% concession</div>
+            <div>🏦 Interest Rate — fix at financial closure</div>
+            <div>📊 Debt Fraction — too much debt kills DSCR</div>
+            <div>⚡ Technical Loss — soiling, inverter, cable losses</div>
+          </div>
+        </div>
+
+        <!-- Live link note -->
+        <div style="background:#E8F5EE;border-left:4px solid #1A7A4A;border-radius:0 8px 8px 0;padding:10px 13px;font-size:12.5px;">
+          <strong style="color:#1A7A4A;">🔗 Linked to Project Inputs:</strong> All base values in this table are read live from your Project Inputs, Debt &amp; Equity, and Grid Losses pages. Change capacity, tariff, EPC cost or interest rate — and this table recalculates automatically when you visit the Sensitivity page. No manual reset needed.
+        </div>
+
+      </div>
+      <!-- Footer -->
+      <div style="padding:11px 18px;border-top:1px solid #E5E7EB;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;">
+        <button onclick="beHelpPrint()" style="background:#F9FAFB;color:#1B2A4A;border:1.5px solid #E5E7EB;border-radius:7px;padding:8px 16px;font-size:12.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">🖨️ Print / Save PDF</button>
+        <button onclick="beHelpClose()" style="background:#1B2A4A;color:#fff;border:none;border-radius:7px;padding:8px 20px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">Got it ✓</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ══ BREAK-EVEN THRESHOLD CARD ═══════════════════════════ -->
   <div class="card" id="sa-be-card" style="scroll-margin-top:60px;">
     <div class="chdr" style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
       <span>&#128680; C. Viability Threshold — Break-Even Analysis</span>
-      <button onclick="exportBEtoCSV()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">&#128196; Export CSV</button>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button onclick="beHelpOpen()" title="How to read this table" style="background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:50%;width:28px;height:28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;line-height:1;" aria-label="Help">?</button>
+        <button onclick="exportBEtoCSV()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">&#128196; Export CSV</button>
+      </div>
     </div>
     <div class="fhint" style="background:#FEF2F2;border-left:3px solid #9B1C1C;border-radius:0 6px 6px 0;padding:8px 12px;margin-bottom:10px;font-size:12.5px;color:#1F2937;">
       <strong style="color:#9B1C1C;">The Break-Even Threshold</strong> is the exact point where DSCR = 1.20× — the minimum your bank requires. Cross it and the project cannot get a loan. Computed live from your current model values.
     </div>
     <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
-      <table id="sa-be-table" style="width:100%;min-width:640px;border-collapse:collapse;font-size:12.5px;">
+      <table id="sa-be-table" style="width:100%;min-width:520px;border-collapse:collapse;font-size:12.5px;">
         <thead>
           <tr style="background:#1B2A4A;color:#fff;">
-            <th style="padding:9px 11px;text-align:left;white-space:nowrap;">Variable</th>
-            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">Base Value</th>
-            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">DSCR at −10%</th>
-            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">DSCR at +10%</th>
-            <th style="padding:9px 11px;text-align:center;white-space:nowrap;background:#7F1D1D;">⚠ Break-Even Threshold</th>
-            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">Safety Headroom</th>
-            <th style="padding:9px 11px;text-align:center;white-space:nowrap;">Status</th>
+            <th style="padding:9px 10px;text-align:left;white-space:nowrap;">Variable</th>
+            <th style="padding:9px 10px;text-align:center;white-space:nowrap;">🎛 Adjust</th>
+            <th style="padding:9px 10px;text-align:center;white-space:nowrap;">DSCR −10%</th>
+            <th style="padding:9px 10px;text-align:center;white-space:nowrap;">DSCR +10%</th>
+            <th style="padding:9px 10px;text-align:center;white-space:nowrap;background:#7F1D1D;">⚠ Danger Line</th>
+            <th style="padding:9px 10px;text-align:center;white-space:nowrap;">Headroom</th>
           </tr>
         </thead>
         <tbody id="sa-be-tbody">
-          <tr><td colspan="7" style="text-align:center;padding:20px;color:#6B7280;font-style:italic;">Loading… (adjust any slider to compute)</td></tr>
+          <tr><td colspan="6" style="text-align:center;padding:20px;color:#6B7280;font-style:italic;">Adjust any slider or ▼▲ button to compute…</td></tr>
         </tbody>
       </table>
     </div>
     <div style="font-size:11.5px;color:#6B7280;margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;">
-      <span><span style="display:inline-block;width:10px;height:10px;background:#1A7A4A;border-radius:2px;"></span> Green = &gt;3 unit headroom</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#B45309;border-radius:2px;"></span> Amber = 1–3 headroom</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#9B1C1C;border-radius:2px;"></span> Red = &lt;1 headroom — critical</span>
-      <span><strong>DSCR minimum = 1.20×</strong> (lender requirement)</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#1A7A4A;border-radius:2px;"></span> <strong>Green</strong> = Safe: &gt;Rs 2/kWh or &gt;2 MW or &gt;3% above danger line</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#B45309;border-radius:2px;"></span> <strong>Amber</strong> = Watch: Rs 0.5–2/kWh or 0.5–2 MW or 1–3% from danger line</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#9B1C1C;border-radius:2px;"></span> <strong>Red</strong> = Critical: &lt;Rs 0.50/kWh or &lt;0.5 MW or &lt;1% — act now</span>
+      <span><strong>DSCR minimum = 1.20×</strong> (lender requirement, Year 2)</span>
     </div>
   </div>
 
@@ -25351,7 +25495,7 @@ function apportionCost(){
   s('pct-prelim',prelimPct.toFixed(1)); s('ct-prelim', prelimCr.toFixed(2));
   s('ct-total',  tpc.toFixed(2));
 
-  calc();
+  calc(); // calc() calls syncSABase() — SA page auto-updates
 }
 function syncTloss(){
   const total=PM['tloss_trans'].v+PM['tloss_dist'].v+PM['tloss_int'].v;
@@ -26266,6 +26410,9 @@ function calc(){
 
   // Compliance
   calcCompliance();
+
+  // ── Sync SA base values so Sensitivity page always reflects current inputs ──
+  syncSABase();
 }
 
 function buildReport(cfD,dSch,sCap,tCap,sv,taxR,tloss,peak,sur,disc,tarE,oaE,omE,om1,ins1,bOM,bOMC,hasBatt,bSt,bDeg,rte,evP,grossGen,deg1,eAmt,payY,tFCF,retMult){
@@ -27516,6 +27663,24 @@ function exportCFtoXLSX() {
 let saChart = null;
 let saSpChart = null;
 let saVoltChart = null;
+function beHelpOpen(){
+  const m=document.getElementById('be-help-modal');
+  if(m){m.style.display='block';document.body.style.overflow='hidden';}
+}
+function beHelpClose(){
+  const m=document.getElementById('be-help-modal');
+  if(m){m.style.display='none';document.body.style.overflow='';}
+}
+function beHelpPrint(){
+  const m=document.getElementById('be-help-modal');
+  if(!m) return;
+  const body=m.querySelector('div>div:nth-child(2)');
+  const w=window.open('','_blank','width=780,height=650');
+  w.document.write('<!DOCTYPE html><html><head><title>EIL Solar — Break-Even Guide</title><style>body{font-family:Arial,sans-serif;font-size:13px;color:#1F2937;margin:24px;line-height:1.6;}table{width:100%;border-collapse:collapse;font-size:12px;}th{background:#1B2A4A;color:#fff;padding:6px 8px;text-align:left;}td{padding:6px 8px;border-bottom:1px solid #E5E7EB;}@media print{body{margin:10px;}button{display:none;}}</style></head><body>'+
+    '<h2 style="color:#1B2A4A">EIL Solar — Break-Even Viability Threshold Guide</h2>'+
+    (body?body.innerHTML:'')+'</body></html>');
+  w.document.close();w.focus();setTimeout(()=>{w.print();},400);
+}
 function saHelpOpen(){
   const m=document.getElementById('sa-help-modal');
   if(m){m.style.display='block';document.body.style.overflow='hidden';}
@@ -27562,7 +27727,7 @@ function saHelpPrint(){
 }
 // Close modal on Escape key; Enter in SA number inputs triggers update
 document.addEventListener('keydown',function(e){
-  if(e.key==='Escape') saHelpClose();
+  if(e.key==='Escape'){ saHelpClose(); beHelpClose(); }
   // Enter key in any SA number input → trigger saNumSync immediately
   if(e.key==='Enter' && e.target && e.target.id && e.target.id.endsWith('-num')){
     const id = e.target.id.replace('sa-','').replace('-num','');
@@ -27572,6 +27737,72 @@ document.addEventListener('keydown',function(e){
     }
   }
 });
+
+/* ══ syncSABase — called by calc() whenever ANY project input changes ══
+   Updates SA slider defaults, SA_VARS.def values, and base hint labels
+   so the Sensitivity page always reflects current model inputs.
+   Does NOT redraw charts — zero performance cost on non-SA pages.
+═══════════════════════════════════════════════════════════════════ */
+function syncSABase(){
+  // Re-read all live values
+  const bSP  = saBaseCalcSP();
+  const bOA  = gv('oa');
+  const bIR  = gv('ir');
+  const bDF  = Math.round(gv('df'));
+  const bTL  = gv('tloss');
+  const bPLF = gv('plf');
+
+  // Update SA_VARS defaults so resetSA() always restores to current model
+  if(typeof SA_VARS !== 'undefined'){
+    SA_VARS.sp.def  = bSP;
+    SA_VARS.oa.def  = bOA;
+    SA_VARS.ir.def  = bIR;
+    SA_VARS.df.def  = bDF;
+    SA_VARS.tloss.def = bTL;
+    SA_VARS.plf.def = bPLF;
+    // Clamp mins/maxes so current value is always within range
+    SA_VARS.sp.min  = Math.min(SA_VARS.sp.min,  bSP  - 1.5);
+    SA_VARS.sp.max  = Math.max(SA_VARS.sp.max,  bSP  + 1.5);
+    SA_VARS.ir.min  = Math.min(SA_VARS.ir.min,  bIR  - 2);
+    SA_VARS.ir.max  = Math.max(SA_VARS.ir.max,  bIR  + 4);
+    SA_VARS.plf.min = Math.min(SA_VARS.plf.min, bPLF - 5);
+    SA_VARS.plf.max = Math.max(SA_VARS.plf.max, bPLF + 5);
+    SA_VARS.tloss.min = Math.min(SA_VARS.tloss.min, bTL - 3);
+    SA_VARS.tloss.max = Math.max(SA_VARS.tloss.max, bTL + 5);
+  }
+
+  // Update base-value hint spans on SA page (if visible)
+  const sb=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  sb('sa-sp-base',   bSP.toFixed(2));
+  sb('sa-oa-base',   bOA.toFixed(2));
+  sb('sa-ir-base',   bIR.toFixed(2));
+  sb('sa-df-base',   bDF.toFixed(0));
+  sb('sa-tloss-base',bTL.toFixed(1));
+  sb('sa-plf-base',  bPLF.toFixed(1));
+
+  // Update base button labels so they always show the live value
+  const updateBaseBtn = (id, val, isRate) => {
+    const b = document.getElementById('sa-'+id+'-base-btn');
+    if(!b) return;
+    const suf = id==='sp'||id==='oa' ? '✦' : '%✦';
+    const disp = id==='sp'||id==='oa'
+      ? 'Rs '+parseFloat(val).toFixed(2)+suf
+      : parseFloat(val).toFixed(id==='ir'?2:id==='plf'?1:1)+suf;
+    b.textContent = disp;
+    b.setAttribute('onclick', "saSet('"+id+"',"+val+")");
+  };
+  updateBaseBtn('sp',    bSP);
+  updateBaseBtn('oa',    bOA);
+  updateBaseBtn('ir',    bIR);
+  updateBaseBtn('df',    bDF);
+  updateBaseBtn('tloss', bTL);
+  updateBaseBtn('plf',   bPLF);
+
+  // If SA page is currently open, run a live refresh (charts + BE table)
+  if(typeof currentPage !== 'undefined' && currentPage === 'sa'){
+    runSA();
+  }
+}
 
 SA_VARS = {
   sp:{min:5.50,max:8.50,step:0.05,def:6.90},
@@ -27956,34 +28187,131 @@ function buildBETable(spV, oaV, irV, dfV, tlossV, plfV){
     return `<td style="text-align:center;padding:8px 10px;background:${bg};font-weight:700;color:${col};">${v.toFixed(2)}×</td>`;
   };
 
+  /* ── Step sizes for interactive ± buttons ── */
+  const stepFor = (unit) => {
+    if(unit===' Rs/kWh') return 0.05;
+    if(unit===' MW AC')  return 1;
+    if(unit===' Cr/MW')  return 0.05;
+    if(unit==='%')       return 0.5;
+    return 0.5;
+  };
+
+  /* ── SA slider IDs for each variable ── */
+  const saIdFor = {
+    'Selling Price (Rs/kWh)': 'sp',
+    'CUF / PLF (%)':          'plf',
+    'OA Charge (Rs/kWh)':     'oa',
+    'Interest Rate (%)':      'ir',
+    'Debt Fraction (%)':      'df',
+    'Technical Loss (%)':     'tloss',
+    // AC Capacity and EPC Cost are project inputs — direct link
+    'AC Capacity (MW)':       null,
+    'EPC Cost (Rs Cr/MW)':    null,
+  };
+
   const rows = vars.map((v,i)=>{
     const alt = i%2===0 ? '#F9FAFB' : '#FFFFFF';
     const headroom = v.headroomDir==='above' ? v.base - v.be : v.be - v.base;
     const hu = v.headUnit || v.unit;
-    // Thresholds: capacity/price/plf use absolute headroom; rates use % points
     const hThresh1 = (v.unit===' MW AC'||v.unit===' Rs/kWh'||v.unit===' Cr/MW') ? 0.5 : 1;
     const hThresh2 = (v.unit===' MW AC'||v.unit===' Rs/kWh'||v.unit===' Cr/MW') ? 2   : 3;
     const hGood = headroom > hThresh2, hWarn = headroom > hThresh1;
     const hBg  = hGood?'#DCFCE7':hWarn?'#FEF9C3':'#FEE2E2';
     const hCol = hGood?'#166534':hWarn?'#92400E':'#991B1B';
     const hIcon= hGood?'✔':hWarn?'⚠':'✘';
+
+    /* ── Current DSCR bar — shows live position vs danger line ── */
+    const baseDSCR = parseFloat(calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV,acMW_base).toFixed(2));
+    const dscrPct  = Math.min(100, Math.max(0, (baseDSCR - 0.8) / (2.5 - 0.8) * 100));
+    const dangerPct= Math.min(100, Math.max(0, (1.20 - 0.8) / (2.5 - 0.8) * 100)); // 1.20 on same scale
+    const barCol   = baseDSCR >= 1.50 ? '#1A7A4A' : baseDSCR >= 1.20 ? '#B45309' : '#991B1B';
+
+    /* ── Interactive control ── */
+    const saId   = saIdFor[v.name];
+    const step   = stepFor(v.unit);
+    const minVal = v.headroomDir==='above' ? v.be * 0.8 : v.base * 0.5;
+    const maxVal = v.headroomDir==='above' ? v.base * 1.5 : v.be * 1.5;
+
+    // For SA-linked variables: show ▼/▲ steppers that move the SA slider
+    // For project inputs (AC, EPC): show a "→ Go to Inputs" link
+    let controlCell;
+    if(saId) {
+      controlCell = `<td style="padding:6px 8px;white-space:nowrap;">
+        <div style="display:flex;align-items:center;gap:4px;justify-content:center;">
+          <button onclick="beStep('${saId}',${-step})" title="Decrease by ${step}${v.unit}"
+            style="background:#1B2A4A;color:#C8973A;border:none;border-radius:6px;width:28px;height:28px;font-size:15px;font-weight:700;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;">▼</button>
+          <span style="font-size:12px;font-weight:700;color:#1B2A4A;min-width:54px;text-align:center;font-family:'JetBrains Mono',monospace;">${v.fmt(v.base)}${v.unit}</span>
+          <button onclick="beStep('${saId}',${step})" title="Increase by ${step}${v.unit}"
+            style="background:#1B2A4A;color:#C8973A;border:none;border-radius:6px;width:28px;height:28px;font-size:15px;font-weight:700;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;">▲</button>
+        </div>
+        <div style="font-size:10px;color:#9CA3AF;text-align:center;margin-top:2px;">step ${step}${v.unit}</div>
+      </td>`;
+    } else {
+      // Project input variables — link to inputs page
+      const goPage = v.name.includes('EPC') ? 'in' : 'in';
+      controlCell = `<td style="padding:6px 8px;text-align:center;">
+        <button onclick="go('${goPage}')" title="Change in Project Inputs"
+          style="background:#EEF2FA;color:#1B2A4A;border:1px solid #C8D3E8;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">
+          ✏ Inputs
+        </button>
+        <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${v.fmt(v.base)}${v.unit}</div>
+      </td>`;
+    }
+
+    /* ── Mini DSCR progress bar ── */
+    const miniBar = `<div style="position:relative;height:6px;background:#E5E7EB;border-radius:3px;margin-top:4px;min-width:60px;">
+      <div style="position:absolute;left:0;top:0;height:6px;width:${dscrPct.toFixed(1)}%;background:${barCol};border-radius:3px;transition:width .3s;"></div>
+      <div style="position:absolute;left:${dangerPct.toFixed(1)}%;top:-3px;width:2px;height:12px;background:#991B1B;border-radius:1px;" title="1.20× minimum"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:9px;color:#9CA3AF;margin-top:1px;"><span>0.8×</span><span style="color:#991B1B;">1.20×</span><span>2.5×</span></div>`;
+
     const interpretation = v.context || (
       v.headroomDir==='above'
         ? `Must stay above ${v.fmt(v.be)}${v.unit}`
         : `Must stay below ${v.fmt(v.be)}${v.unit}`);
 
     return `<tr style="background:${alt};">
-      <td style="padding:8px 11px;font-weight:700;color:#1B2A4A;white-space:nowrap;">${v.name}</td>
-      <td style="text-align:center;padding:8px 10px;">${v.fmt(v.base)}${v.unit}</td>
+      <td style="padding:8px 10px;font-weight:700;color:#1B2A4A;white-space:nowrap;font-size:12.5px;">${v.name}</td>
+      ${controlCell}
       ${dscrCell(v.dscr_lo)}
       ${dscrCell(v.dscr_hi)}
-      <td style="text-align:center;padding:8px 10px;background:#FEF2F2;font-weight:700;color:#991B1B;white-space:nowrap;">${v.fmt(v.be)}${v.unit}<br><span style="font-size:10.5px;font-weight:400;color:#6B7280;">${v.note}</span></td>
-      <td style="text-align:center;padding:8px 10px;background:${hBg};font-weight:700;color:${hCol};">${hIcon} ${v.fmt(Math.abs(headroom))}${hu}</td>
-      <td style="padding:8px 10px;font-size:11.5px;color:#374151;">${interpretation}</td>
+      <td style="text-align:center;padding:8px 9px;background:#FEF2F2;font-weight:700;color:#991B1B;white-space:nowrap;font-size:12px;">${v.fmt(v.be)}${v.unit}<br><span style="font-size:10px;font-weight:400;color:#9CA3AF;">${v.note}</span></td>
+      <td style="text-align:center;padding:8px 9px;background:${hBg};font-weight:700;color:${hCol};font-size:12px;">${hIcon} ${v.fmt(Math.abs(headroom))}${hu}<br>${miniBar}</td>
+      <td style="padding:8px 9px;font-size:11.5px;color:#374151;display:none;" class="be-context-col">${interpretation}</td>
     </tr>`;
   });
 
   tbody.innerHTML = rows.join('');
+}
+
+/* ── beStep: called by ▼/▲ buttons in the BE table ──
+   Moves the SA slider for that variable by one step and rebuilds
+   both the SA charts AND the BE table immediately ── */
+function beStep(saId, delta){
+  const cfg = SA_VARS[saId];
+  if(!cfg) return;
+  const sl  = document.getElementById('sa-'+saId);
+  const ni  = document.getElementById('sa-'+saId+'-num');
+  if(!sl) return;
+  let v = parseFloat(sl.value) + delta;
+  v = Math.round(Math.min(cfg.max, Math.max(cfg.min, v)) * 1000) / 1000;
+  sl.value = v;
+  if(ni) ni.value = v;
+  if(saId==='plf') updPlfBar(v);
+  // Scroll flag so page jumps to results
+  window._saScrollEnabled = true;
+  runSA();
+  // Briefly highlight the row that changed
+  const rows = document.querySelectorAll('#sa-be-tbody tr');
+  const idToRow = {sp:1, plf:2, oa:4, ir:5, df:6, tloss:7}; // 1-based index
+  const rowIdx  = idToRow[saId];
+  if(rowIdx) {
+    const tr = document.querySelector(`#sa-be-tbody tr:nth-child(${rowIdx})`);
+    if(tr){
+      tr.style.outline = '2px solid #C8973A';
+      setTimeout(()=>{ tr.style.outline=''; }, 600);
+    }
+  }
 }
 
 function exportBEtoCSV(){
@@ -30098,9 +30426,9 @@ function generateWordReport() {
       new Paragraph({
         children:[
           R('Viability criterion: Year 2 DSCR ≥ 1.20×  (first full debt service year after moratorium)     ', {size:19,color:C.gray4}),
-          R('✔ Green = >3% headroom  ', {size:19,bold:true,color:C.green}),
-          R('⚠ Amber = 1–3% headroom  ', {size:19,bold:true,color:C.amber}),
-          R('✘ Red = <1% headroom', {size:19,bold:true,color:C.red}),
+          R('✔ Green = comfortable headroom  ', {size:19,bold:true,color:C.green}),
+          R('⚠ Amber = watch closely  ', {size:19,bold:true,color:C.amber}),
+          R('✘ Red = act immediately', {size:19,bold:true,color:C.red}),
         ],
         spacing:{before:60,after:80},
         border:{top:{style:BorderStyle.SINGLE,size:3,color:C.rule,space:2}},
