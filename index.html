@@ -24504,111 +24504,177 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <button onclick="saHelpClose()" style="background:rgba(255,255,255,0.12);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;">&times;</button>
       </div>
       <!-- Modal body -->
-      <div style="padding:18px 16px;font-family:'Inter',sans-serif;font-size:13.5px;color:#1F2937;line-height:1.7;">
+      <div style="padding:16px;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.65;overflow-x:hidden;">
 
         <!-- Purpose -->
-        <div style="background:#EEF2FA;border-left:4px solid #C8973A;border-radius:0 10px 10px 0;padding:14px 16px;margin-bottom:20px;">
-          <div style="font-weight:700;color:#1B2A4A;font-size:14px;margin-bottom:4px;">🎯 What This Page Does</div>
-          <div>This page lets you ask <em>"What if?"</em> questions about your project — changing one variable at a time to see how it affects profitability, cash flow, and loan viability. Most importantly, it shows you the <strong style="color:#9B1C1C;">exact break-even threshold</strong> — the point below (or above) which the project cannot service its debt.</div>
+        <div style="background:#EEF2FA;border-left:4px solid #C8973A;border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:16px;">
+          <strong style="color:#1B2A4A;">🎯 What This Page Does:</strong> Ask "What if?" questions — change one variable at a time and instantly see the impact on cash flow, DSCR, and the break-even danger line. All values are live from your Project Inputs.
         </div>
 
         <!-- Section A -->
-        <div style="margin-bottom:20px;">
-          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">🎮 Section A — Scenario Variables (The Controls)</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">
-            <div style="background:#F9FAFB;border-radius:8px;padding:12px;">
-              <div style="font-weight:700;color:#243B6E;margin-bottom:4px;">6 Variables You Can Change:</div>
-              <div>🟠 <strong>Selling Price</strong> — Rs/kWh charged to customer<br>🔵 <strong>OA Charge</strong> — Open Access levy you bear<br>🔵 <strong>Interest Rate</strong> — Bank loan rate %<br>🟢 <strong>Debt Fraction</strong> — % of capex as loan<br>🟣 <strong>Technical Loss</strong> — % generation lost<br>🟢 <strong>PLF / CUF</strong> — Plant Load Factor %</div>
+        <div style="margin-bottom:16px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:13.5px;border-bottom:2px solid #C8973A;padding-bottom:5px;margin-bottom:10px;">🎮 Section A — Scenario Controls</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-bottom:10px;">
+            <div style="background:#F9FAFB;border-radius:8px;padding:10px;">
+              <div style="font-weight:700;color:#243B6E;margin-bottom:6px;font-size:12.5px;">6 Sliders You Can Adjust:</div>
+              <div style="font-size:12px;">
+                🟠 <strong>Selling Price</strong> — Rs/kWh to customer<br>
+                🔵 <strong>OA Charge</strong> — Open Access levy (developer bears)<br>
+                🔵 <strong>Interest Rate</strong> — Bank loan rate %<br>
+                🟢 <strong>Debt Fraction</strong> — % of capex as loan<br>
+                🟣 <strong>Technical Loss</strong> — % generation lost<br>
+                🟢 <strong>PLF / CUF</strong> — Plant Load Factor %
+              </div>
             </div>
-            <div style="background:#F9FAFB;border-radius:8px;padding:12px;">
-              <div style="font-weight:700;color:#243B6E;margin-bottom:4px;">3 Ways to Change Each Value:</div>
-              <div>1️⃣ <strong>Drag the slider</strong> — real-time update as you drag<br>2️⃣ <strong>Type a number</strong> in the box — press <kbd style="background:#E5E7EB;border-radius:3px;padding:1px 5px;font-size:11px;">Enter</kbd> or click away<br>3️⃣ <strong>Click a preset button</strong> — e.g. "Best", "Base", "Stress"<br><br><span style="color:#6B7280;font-size:12px;">💡 Click <strong>Reset All to Base</strong> to return everything to your model defaults</span></div>
+            <div style="background:#F9FAFB;border-radius:8px;padding:10px;">
+              <div style="font-weight:700;color:#243B6E;margin-bottom:6px;font-size:12.5px;">3 Ways to Change Each:</div>
+              <div style="font-size:12px;">
+                1️⃣ <strong>Drag the slider</strong> — live update as you drag<br>
+                2️⃣ <strong>Type a number</strong> — press Enter or click away<br>
+                3️⃣ <strong>Click a preset</strong> — Best / Base / Stress<br><br>
+                <span style="color:#6B7280;">2 project inputs (AC Capacity, EPC Cost) are changed via <strong>Project Inputs page</strong> — use the ✏ Inputs button in Section C.</span>
+              </div>
             </div>
+          </div>
+          <div style="background:#FDF5E6;border-radius:7px;padding:9px 12px;font-size:12px;">
+            💡 Click <strong>Reset All to Base</strong> to restore all sliders to your current project model values.
           </div>
         </div>
 
         <!-- Section B -->
-        <div style="margin-bottom:20px;">
-          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">📈 Section B — Tornado Chart (Most Important Variables)</div>
-          <div>The <strong>tornado chart</strong> shows which variables have the biggest impact on your project when changed by 10%. The longest bar = the variable your project is most sensitive to. <strong>Focus your risk mitigation on the top 2–3 bars.</strong></div>
-          <div style="background:#FDF5E6;border-radius:8px;padding:10px;margin-top:8px;">
-            <strong>How to read it:</strong> Each bar shows the swing in Year 1 FCF (Free Cash Flow) when that variable changes ±10%. A wide swing means high sensitivity — small changes in that variable have large financial consequences.
+        <div style="margin-bottom:16px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:13.5px;border-bottom:2px solid #C8973A;padding-bottom:5px;margin-bottom:8px;">📈 Section B — Tornado Chart</div>
+          <div style="font-size:12.5px;">Shows which variables have the <strong>biggest impact</strong> on Year 1 FCF when changed ±10%. Longest bar = highest sensitivity = where you must focus risk mitigation. Check the top 2 bars — those are your most critical variables.</div>
+        </div>
+
+        <!-- Section C -->
+        <div style="margin-bottom:16px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:13.5px;border-bottom:2px solid #C8973A;padding-bottom:5px;margin-bottom:8px;">🚦 Section C — Break-Even Viability Table <span style="font-weight:400;font-size:12px;color:#6B7280;">(most important)</span></div>
+          <div style="font-size:12.5px;margin-bottom:10px;">Shows the <strong style="color:#9B1C1C;">exact danger line</strong> for all <strong>8 variables</strong> — 6 sliders + AC Capacity + EPC Cost from Project Inputs.</div>
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-bottom:10px;">
+            <table style="width:100%;min-width:400px;border-collapse:collapse;font-size:11.5px;">
+              <tr style="background:#1B2A4A;color:#fff;">
+                <th style="padding:7px 9px;text-align:left;">Column</th>
+                <th style="padding:7px 9px;text-align:left;">What It Shows</th>
+                <th style="padding:7px 9px;text-align:left;">Action</th>
+              </tr>
+              <tr style="background:#F9FAFB;">
+                <td style="padding:6px 9px;font-weight:700;white-space:nowrap;">🎛 Adjust</td>
+                <td style="padding:6px 9px;">▼ ▲ buttons change the value directly — SA sliders update instantly. AC Capacity and EPC Cost link to Project Inputs page.</td>
+                <td style="padding:6px 9px;">Use this to stress-test without scrolling up</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 9px;font-weight:700;white-space:nowrap;">DSCR −10% / +10%</td>
+                <td style="padding:6px 9px;">DSCR in Year 2 (first full repayment year) when variable worsens or improves by 10%</td>
+                <td style="padding:6px 9px;">Must stay above 1.20× even at −10%</td>
+              </tr>
+              <tr style="background:#F9FAFB;">
+                <td style="padding:6px 9px;font-weight:700;color:#9B1C1C;white-space:nowrap;">⚠ Danger Line</td>
+                <td style="padding:6px 9px;"><strong>The exact break-even threshold</strong> — where DSCR = 1.20×. Computed by 80-iteration binary search. Cross it = bank rejects loan.</td>
+                <td style="padding:6px 9px;">Negotiate all contracts to stay clear of this</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 9px;font-weight:700;white-space:nowrap;">Headroom + DSCR bar</td>
+                <td style="padding:6px 9px;">Distance to danger line with traffic-light colour. Mini bar shows current DSCR position vs 1.20× marker.</td>
+                <td style="padding:6px 9px;"><span style="color:#1A7A4A;font-weight:700;">Green</span> = safe · <span style="color:#D97706;font-weight:700;">Amber</span> = watch · <span style="color:#B91C1C;font-weight:700;">Red</span> = act now</td>
+              </tr>
+            </table>
+          </div>
+          <!-- 8 variables table -->
+          <div style="font-weight:700;color:#1B2A4A;margin-bottom:6px;font-size:12.5px;">All 8 Variables and Their Direction of Risk:</div>
+          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-bottom:10px;">
+            <table style="width:100%;min-width:400px;border-collapse:collapse;font-size:11.5px;">
+              <tr style="background:#1B2A4A;color:#fff;">
+                <th style="padding:6px 9px;text-align:left;">Variable</th>
+                <th style="padding:6px 9px;text-align:center;">Risk Direction</th>
+                <th style="padding:6px 9px;text-align:left;">Danger Scenario</th>
+              </tr>
+              <tr style="background:#F9FAFB;">
+                <td style="padding:6px 9px;font-weight:700;">📐 AC Capacity (MW)</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Lower = worse</td>
+                <td style="padding:6px 9px;">Fewer modules than planned — scales both revenue AND capex (EPC, land, misc). Evac cost stays fixed.</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 9px;font-weight:700;">💰 Selling Price</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Lower = worse</td>
+                <td style="padding:6px 9px;">Over-discounting or TNEB tariff revision reduces what customer pays you.</td>
+              </tr>
+              <tr style="background:#F9FAFB;">
+                <td style="padding:6px 9px;font-weight:700;">☀ CUF / PLF</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Lower = worse</td>
+                <td style="padding:6px 9px;">Bad monsoon, soiling, or equipment faults reduce generation directly.</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 9px;font-weight:700;">🏗 EPC Cost (Rs Cr/MW)</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Higher = worse</td>
+                <td style="padding:6px 9px;">EPC overrun raises total capex → higher debt → higher repayment → lower DSCR.</td>
+              </tr>
+              <tr style="background:#F9FAFB;">
+                <td style="padding:6px 9px;font-weight:700;">🔌 OA Charge</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Higher = worse</td>
+                <td style="padding:6px 9px;">Developer bears OA. If TNERC removes 30% solar concession, OA jumps from Rs 0.95 to Rs 1.37/kWh.</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 9px;font-weight:700;">🏦 Interest Rate</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Higher = worse</td>
+                <td style="padding:6px 9px;">Floating rate risk. Fix rate at financial closure — don't leave it open.</td>
+              </tr>
+              <tr style="background:#F9FAFB;">
+                <td style="padding:6px 9px;font-weight:700;">📊 Debt Fraction</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Higher = worse</td>
+                <td style="padding:6px 9px;">More debt = larger annual repayment. Do not exceed the break-even threshold.</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 9px;font-weight:700;">⚡ Technical Loss</td>
+                <td style="padding:6px 9px;text-align:center;color:#B91C1C;font-weight:700;">Higher = worse</td>
+                <td style="padding:6px 9px;">Inverter, cable, soiling, grid losses. Quarterly panel washing is critical.</td>
+              </tr>
+            </table>
+          </div>
+          <!-- Headroom thresholds -->
+          <div style="background:#E8F5EE;border-left:4px solid #1A7A4A;border-radius:0 7px 7px 0;padding:9px 12px;font-size:12px;">
+            <strong style="color:#1A7A4A;">Headroom thresholds (per variable type):</strong><br>
+            Price variables (Rs/kWh): <span style="color:#1A7A4A;font-weight:700;">Green &gt;Rs 2</span> · <span style="color:#D97706;font-weight:700;">Amber Rs 0.5–2</span> · <span style="color:#B91C1C;font-weight:700;">Red &lt;Rs 0.50</span><br>
+            Capacity (MW): <span style="color:#1A7A4A;font-weight:700;">Green &gt;2 MW</span> · <span style="color:#D97706;font-weight:700;">Amber 0.5–2 MW</span> · <span style="color:#B91C1C;font-weight:700;">Red &lt;0.5 MW</span><br>
+            EPC (Rs Cr/MW): <span style="color:#1A7A4A;font-weight:700;">Green &gt;Rs 2 Cr/MW</span> · <span style="color:#D97706;font-weight:700;">Amber Rs 0.5–2</span> · <span style="color:#B91C1C;font-weight:700;">Red &lt;Rs 0.5</span><br>
+            Rate variables (%): <span style="color:#1A7A4A;font-weight:700;">Green &gt;3 pp</span> · <span style="color:#D97706;font-weight:700;">Amber 1–3 pp</span> · <span style="color:#B91C1C;font-weight:700;">Red &lt;1 pp</span> (pp = percentage points)
           </div>
         </div>
 
-        <!-- Section C — Viability thresholds -->
-        <div style="margin-bottom:20px;">
-          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">🚦 Section C — Viability Threshold Table (Break-Even)</div>
-          <div style="margin-bottom:8px;">This is the most critical section. For each variable, it shows <strong style="color:#9B1C1C;">the exact value at which the project DSCR falls to 1.20×</strong> — the minimum your bank will accept for loan approval.</div>
-          <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;">
-          <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:12.5px;">
-            <tr style="background:#1B2A4A;color:#fff;">
-              <th style="padding:8px 10px;text-align:left;white-space:nowrap;">Column</th>
-              <th style="padding:8px 10px;text-align:left;">What It Means</th>
-              <th style="padding:8px 10px;text-align:left;">Action</th>
-            </tr>
-            <tr style="background:#F9FAFB;">
-              <td style="padding:8px 10px;font-weight:700;color:#1B2A4A;">Base Value</td>
-              <td style="padding:8px 10px;">Your current model value</td>
-              <td style="padding:8px 10px;">This is what you entered in the main model</td>
-            </tr>
-            <tr>
-              <td style="padding:8px 10px;font-weight:700;color:#9B1C1C;">Break-Even Threshold</td>
-              <td style="padding:8px 10px;"><strong>The danger line.</strong> If the variable crosses this, DSCR &lt; 1.20× and the bank will not lend</td>
-              <td style="padding:8px 10px;">Negotiate contracts to stay well clear of this</td>
-            </tr>
-            <tr style="background:#F9FAFB;">
-              <td style="padding:8px 10px;font-weight:700;">Safety Headroom</td>
-              <td style="padding:8px 10px;">Distance between your base value and the break-even line</td>
-              <td style="padding:8px 10px;"><span style="color:#1A7A4A;font-weight:700;">Green</span> = comfortable headroom · <span style="color:#B45309;font-weight:700;">Amber</span> = watch closely · <span style="color:#9B1C1C;font-weight:700;">Red</span> = act immediately</td>
-            </tr>
-            <tr>
-              <td style="padding:8px 10px;font-weight:700;">DSCR at ±10%</td>
-              <td style="padding:8px 10px;">DSCR in Year 2 (first full repayment year) when the variable changes by 10%</td>
-              <td style="padding:8px 10px;">Must stay above 1.20× even in stress</td>
-            </tr>
-          </table>
-          </div><!-- end overflow wrapper -->
-        </div>
-
-        <!-- Section D -->
-        <div style="margin-bottom:20px;">
-          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">📊 Sections D & E — Selling Price Curve & Net Revenue Matrix</div>
-          <div>These charts show how your key financial metrics change <em>across a range</em> of values — not just at ±10%. Use them to find the <strong>optimal selling price</strong> that maximises your return while staying competitive against TNEB rates.</div>
-        </div>
-
-        <!-- Section F — DSCR matrix -->
-        <div style="margin-bottom:20px;">
-          <div style="font-weight:700;color:#1B2A4A;font-size:14px;border-bottom:2px solid #C8973A;padding-bottom:6px;margin-bottom:10px;">🏦 Section F — DSCR Matrix (For Your Banker)</div>
-          <div>Shows DSCR across a grid of <strong>PLF × Interest Rate</strong> combinations. Green cells = bankable, Amber = borderline, Red = below lender floor. <strong>Take this to your bank meeting</strong> — it shows the project is viable even under stress scenarios.</div>
-        </div>
-
-        <!-- Key definitions -->
-        <div style="background:#EEF2FA;border-radius:10px;padding:14px 16px;margin-bottom:16px;">
-          <div style="font-weight:700;color:#1B2A4A;margin-bottom:8px;">📖 Key Terms Explained</div>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:6px;font-size:12.5px;">
-            <div><strong>DSCR</strong> — Debt Service Coverage Ratio. EBITDA ÷ (Interest + Principal). Bank minimum = 1.20×. Higher is better.</div>
-            <div><strong>FCF</strong> — Free Cash Flow. Cash left for the promoter after all expenses, interest, and tax. Year 1 = moratorium (interest only).</div>
-            <div><strong>Break-Even Threshold</strong> — the exact variable value where DSCR = 1.20×. Computed by binary search — not estimated.</div>
-            <div><strong>Equity Payback</strong> — the year when cumulative FCF equals the equity invested. NOT simple capex payback.</div>
-            <div><strong>PLF / CUF</strong> — Plant Load Factor = actual annual generation ÷ maximum possible. Higher = better solar resource utilisation.</div>
-            <div><strong>OA Charge</strong> — Open Access wheeling + transmission + SLDC fee. Borne by developer. Customer pays SP only.</div>
+        <!-- Sections D/E/F -->
+        <div style="margin-bottom:16px;">
+          <div style="font-weight:700;color:#1B2A4A;font-size:13.5px;border-bottom:2px solid #C8973A;padding-bottom:5px;margin-bottom:8px;">📊 Sections D, E, F — Charts & Matrices</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:7px;font-size:12px;">
+            <div style="background:#F9FAFB;border-radius:7px;padding:9px;">
+              <div style="font-weight:700;color:#1B2A4A;margin-bottom:3px;">D. Selling Price Curve</div>
+              Each bar = FCF at one selling price. Orange = your current price. Shows optimal pricing zone.
+            </div>
+            <div style="background:#F9FAFB;border-radius:7px;padding:9px;">
+              <div style="font-weight:700;color:#1B2A4A;margin-bottom:3px;">E. Net Revenue Matrix</div>
+              Grid of SP × OA combinations. Find the safe zone where net realisation stays positive.
+            </div>
+            <div style="background:#F9FAFB;border-radius:7px;padding:9px;">
+              <div style="font-weight:700;color:#1B2A4A;margin-bottom:3px;">F. DSCR Matrix</div>
+              PLF × Interest Rate grid. Green cells = bankable. Take this to your bank meeting.
+            </div>
           </div>
         </div>
 
-        <!-- Quick workflow -->
-        <div style="background:#E8F5EE;border-left:4px solid #1A7A4A;border-radius:0 10px 10px 0;padding:14px 16px;">
+        <!-- 5-step workflow -->
+        <div style="background:#E8F5EE;border-left:4px solid #1A7A4A;border-radius:0 8px 8px 0;padding:11px 14px;font-size:12.5px;">
           <div style="font-weight:700;color:#1A7A4A;margin-bottom:6px;">✅ Recommended Workflow (5 Steps)</div>
-          <ol style="margin:0;padding-left:18px;color:#374151;">
-            <li style="margin-bottom:4px;">Click <strong>Reset All to Base</strong> first — ensures you start from your model's actual values</li>
-            <li style="margin-bottom:4px;">Check the <strong>Break-Even Threshold table</strong> — note which variables have Red or Amber headroom</li>
-            <li style="margin-bottom:4px;">Use sliders to test your <strong>worst-case scenario</strong> — e.g. lower PLF + higher OA simultaneously</li>
-            <li style="margin-bottom:4px;">Check the <strong>DSCR Matrix</strong> (Section F) — confirm the project is still bankable under stress</li>
-            <li>Click <strong>Export Full Excel</strong> to download all scenario tables for your banker or board presentation</li>
+          <ol style="margin:0;padding-left:16px;color:#374151;">
+            <li style="margin-bottom:4px;">Click <strong>Reset All to Base</strong> — starts from your actual model values</li>
+            <li style="margin-bottom:4px;">Check Section C — note which rows are Red or Amber (those need attention)</li>
+            <li style="margin-bottom:4px;">Use <strong>▼ ▲ buttons</strong> in Section C to stress-test directly in the table</li>
+            <li style="margin-bottom:4px;">Check Section F (DSCR Matrix) — confirm still bankable under stress</li>
+            <li>Export CSV → take to bank or board meeting</li>
           </ol>
         </div>
 
       </div>
+
+
       <div style="padding:12px 16px;border-top:1px solid #E5E7EB;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
         <button onclick="saHelpPrint()" style="background:#F9FAFB;color:#1B2A4A;border:1.5px solid #E5E7EB;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:6px;">🖨️ Print / Save as PDF</button>
         <button onclick="saHelpClose()" style="background:#1B2A4A;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">Got it — Start Exploring ✓</button>
@@ -24992,9 +25058,9 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
       </table>
     </div>
     <div style="font-size:11.5px;color:#6B7280;margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;">
-      <span><span style="display:inline-block;width:10px;height:10px;background:#1A7A4A;border-radius:2px;"></span> <strong>Green</strong> = Safe: &gt;Rs 2/kWh or &gt;2 MW or &gt;3% above danger line</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#B45309;border-radius:2px;"></span> <strong>Amber</strong> = Watch: Rs 0.5–2/kWh or 0.5–2 MW or 1–3% from danger line</span>
-      <span><span style="display:inline-block;width:10px;height:10px;background:#9B1C1C;border-radius:2px;"></span> <strong>Red</strong> = Critical: &lt;Rs 0.50/kWh or &lt;0.5 MW or &lt;1% — act now</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#1A7A4A;border-radius:2px;"></span> <strong style="color:#166534;">Green</strong> = Safe: &gt;Rs 2/kWh or &gt;2 MW or &gt;3% above danger line</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#D97706;border-radius:2px;"></span> <strong style="color:#92400E;">Amber</strong> = Watch: Rs 0.5–2/kWh or 0.5–2 MW or 1–3% from danger line</span>
+      <span><span style="display:inline-block;width:10px;height:10px;background:#B91C1C;border-radius:2px;"></span> <strong style="color:#991B1B;">Red</strong> = Critical: &lt;Rs 0.50/kWh or &lt;0.5 MW or &lt;1% — act now</span>
       <span><strong>DSCR minimum = 1.20×</strong> (lender requirement, Year 2)</span>
     </div>
   </div>
@@ -25003,7 +25069,17 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ D: SELLING PRICE CURVE (bar chart) ════════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--a6)">&#128181; D. Selling Price vs FCF &amp; DSCR — Bar Chart (Rs 5.50 to Rs 8.50 in Rs 0.50 steps)</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-d')" title="What is this chart?" style="background:transparent;border:1.5px solid var(--a6);color:var(--a6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--a6)">&#128181; D. Selling Price vs FCF &amp; DSCR</span>
+      </div>
+      <div id="sh-d" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">📊 D. What is the Selling Price vs FCF Chart?</div>
+        <div><strong>What it shows:</strong> Each bar shows your <strong>Free Cash Flow (FCF) in Year 1</strong> at a different selling price — from Rs 5.50 to Rs 8.50 in Rs 0.50 steps. The orange bar is your <strong>current selling price</strong>. The line shows DSCR (right axis).</div>
+        <div style="margin-top:8px;"><strong>How to read it:</strong> Bars below zero = the project loses money at that price. The red dashed line at DSCR 1.20× shows the lender minimum — any bar whose line point is below that is non-bankable.</div>
+        <div style="margin-top:8px;"><strong>What to do:</strong> Find the lowest price where FCF stays positive and DSCR stays above 1.20×. That is your minimum viable selling price. Do not sign a PSA below that price.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-d')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <div style="display:flex;gap:6px">
         <button onclick="downloadSPChart()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128247; PNG</button>
         <button onclick="exportSPChartCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128196; CSV</button>
@@ -25016,7 +25092,18 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ E: 110kV vs 33kV vs 11kV COMPARISON ════════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--p6)">&#9889; E. Injection Voltage Comparison — 110kV vs 33kV vs 11kV</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-e')" title="What is this chart?" style="background:transparent;border:1.5px solid var(--p6);color:var(--p6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--p6)">&#9889; E. Injection Voltage Comparison — 110kV vs 33kV vs 11kV</span>
+      </div>
+      <div id="sh-e" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">⚡ E. What is the Voltage Comparison Chart?</div>
+        <div><strong>What it shows:</strong> A side-by-side bar chart comparing Year 1 FCF and DSCR at three different grid injection voltages — <strong>110 kV, 33 kV, and 11 kV</strong>. All other inputs stay the same.</div>
+        <div style="margin-top:8px;"><strong>Why voltage matters:</strong> Higher injection voltage = <strong>lower transmission loss</strong>. At 110 kV, TNERC T.O.7/2022 allows zero transmission loss charge. At 11 kV, losses can be 8–12%, cutting your revenue significantly.</div>
+        <div style="margin-top:8px;"><strong>TNERC rule:</strong> 20 MW and above must inject at 110 kV via a dedicated substation bay. Below 20 MW can use 33 kV. 11 kV is only for small projects — very high losses.</div>
+        <div style="margin-top:8px;"><strong>What to do:</strong> The tallest bar shows your best voltage option. If 110 kV shows significantly better FCF, invest in a dedicated bay — it pays back quickly through lower losses over 25 years.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-e')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <div style="display:flex;gap:6px">
         <button onclick="downloadVoltChart()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128247; PNG</button>
         <button onclick="exportVoltCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128196; CSV</button>
@@ -25030,7 +25117,17 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ F: FCF × LOSS × IR TABLE ══════════════════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--p6)">&#128202; F. Sensitivity Matrix — Loss% (rows) × Interest Rate% (columns) → FCF &amp; EBITDA</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-f')" title="What is this chart?" style="background:transparent;border:1.5px solid var(--p6);color:var(--p6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--p6)">&#128202; F. Sensitivity Matrix — Loss% × Interest Rate → FCF &amp; EBITDA</span>
+      </div>
+      <div id="sh-f" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">📊 F. What is the FCF Sensitivity Matrix?</div>
+        <div><strong>What it shows:</strong> A grid where each <strong>row = a different technical loss %</strong> (e.g. 4%, 6%, 8%…) and each <strong>column = a different interest rate %</strong> (e.g. 7%, 8%, 9%…). Each cell shows Year 1 FCF and EBITDA at that combination.</div>
+        <div style="margin-top:8px;"><strong>How to read it:</strong> Green cells = positive FCF (project earns money). Red cells = negative FCF (project loses money). Find where your current loss % row meets your current interest rate column — that is your base case cell.</div>
+        <div style="margin-top:8px;"><strong>What to do:</strong> Check how many rows and columns away from your base case turn red. If the cell immediately to the right (higher rate) or below (higher loss) turns red, your project has very little cushion. Negotiate a fixed interest rate and invest in loss reduction.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-f')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <button onclick="exportFCFMatrixCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128196; Export CSV</button>
     </div>
     <div class="tw" id="sa-table-wrap">
@@ -25042,7 +25139,18 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ G: NET REALISATION MATRIX (actual Rs) ══════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--b6)">&#128181; G. Net Realisation — Selling Price (rows, Rs/kWh) × OA Charge (columns)</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-g')" title="What is this chart?" style="background:transparent;border:1.5px solid var(--b6);color:var(--b6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--b6)">&#128181; G. Net Realisation — Selling Price × OA Charge</span>
+      </div>
+      <div id="sh-g" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">💰 G. What is the Net Realisation Matrix?</div>
+        <div><strong>What it shows:</strong> A grid where each <strong>row = a selling price (Rs/kWh)</strong> and each <strong>column = an OA charge (Rs/kWh)</strong>. Each cell shows <strong>Net Realisation = Selling Price minus OA Charge</strong> — the actual Rs per unit the developer keeps.</div>
+        <div style="margin-top:8px;"><strong>Why it matters:</strong> The developer bears the OA charge — not the customer. So if OA rises (e.g. TNERC removes the 30% solar concession), your net realisation drops even though the selling price stays the same. This matrix shows exactly how much you keep at every combination.</div>
+        <div style="margin-top:8px;"><strong>How to read it:</strong> Green cells = healthy net realisation (&gt;Rs 5/kWh). Red cells = dangerously low. Find your current SP row and OA column — that cell is your current net realisation. Check how many steps in any direction before it turns red.</div>
+        <div style="margin-top:8px;"><strong>Minimum viable:</strong> Net realisation must be high enough to cover O&amp;M, insurance, and debt service. Any cell below Rs 4/kWh is a warning — check DSCR immediately.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-g')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <button onclick="exportNRCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128196; Export CSV</button>
     </div>
     <div class="tw" id="sa-nr-wrap">
@@ -25054,7 +25162,18 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ H: DSCR MATRIX ═══════════════════════════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g6)">&#127974; H. DSCR Matrix — Debt Ratio% (rows) × Interest Rate% (columns)</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-h')" title="What is this chart?" style="background:transparent;border:1.5px solid var(--g6);color:var(--g6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g6)">&#127974; H. DSCR Matrix — Debt Ratio% × Interest Rate%</span>
+      </div>
+      <div id="sh-h" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">🏦 H. What is the DSCR Matrix?</div>
+        <div><strong>What it shows:</strong> A grid where each <strong>row = a debt fraction %</strong> (how much of capex is borrowed) and each <strong>column = an interest rate %</strong>. Each cell shows the <strong>Year 2 DSCR</strong> — the first full repayment year.</div>
+        <div style="margin-top:8px;"><strong>Colour coding:</strong> <span style="color:#4ADE80;font-weight:700;">Green ≥ 1.50×</span> = strong, lender is comfortable. <span style="color:#FCD34D;font-weight:700;">Amber 1.20–1.49×</span> = acceptable, bank will lend. <span style="color:#F87171;font-weight:700;">Red &lt; 1.20×</span> = non-bankable — bank rejects loan.</div>
+        <div style="margin-top:8px;"><strong>How to use it:</strong> Find your current debt % row and interest rate column. That cell is your project's current DSCR. The cells around it show what happens if the bank charges a higher rate or requires less debt. Take this matrix to your bank meeting — it demonstrates the project is robust across a range of lending conditions.</div>
+        <div style="margin-top:8px;"><strong>Negotiating with the bank:</strong> If the banker says they want 75% debt at 10.5%, find that cell. If it is green, the project is fine. If amber, you can still proceed. If red, you must either reduce the debt amount or negotiate a lower rate.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-h')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <button onclick="exportDSCRCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128196; Export CSV</button>
     </div>
     <div class="tw" id="sa-dscr-wrap">
@@ -25066,7 +25185,18 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ I: RETURN MULTIPLE TABLE ═══════════════════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--o6)">&#127919; I. 25-Year Return Multiple — PLF% (rows) × Total Loss% (columns)</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-i')" title="What is this chart?" style="background:transparent;border:1.5px solid var(--o6);color:var(--o6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--o6)">&#127919; I. 25-Year Return Multiple — PLF% × Total Loss%</span>
+      </div>
+      <div id="sh-i" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">🎯 I. What is the 25-Year Return Multiple Table?</div>
+        <div><strong>What it shows:</strong> A grid where each <strong>row = a PLF/CUF %</strong> and each <strong>column = a total technical loss %</strong>. Each cell shows the <strong>Return Multiple</strong> — total 25-year cumulative FCF divided by equity invested. A multiple of 8× means Rs 8 back for every Rs 1 invested over 25 years.</div>
+        <div style="margin-top:8px;"><strong>Why 25 years:</strong> Solar projects have a 25-year PPA or design life. The return multiple tells the equity investor (the promoter) how many times they get their money back over the full project life — including the final salvage value.</div>
+        <div style="margin-top:8px;"><strong>How to read it:</strong> <span style="color:#4ADE80;font-weight:700;">Green cells ≥ 8×</span> = excellent return. <span style="color:#FCD34D;font-weight:700;">Amber 5–8×</span> = good. <span style="color:#F87171;font-weight:700;">Red &lt; 5×</span> = marginal — reconsider the project structure. Find where your current PLF row meets your current loss % column.</div>
+        <div style="margin-top:8px;"><strong>Simple example:</strong> If your equity is Rs 10 Crore and the cell shows 9×, you get back Rs 90 Crore over 25 years = Rs 80 Crore profit. A bad monsoon region (low PLF) or high losses can bring this down to 5× or below.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-i')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <button onclick="exportRetCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans=serif;color:var(--n7)">&#128196; Export CSV</button>
     </div>
     <div class="tw" id="sa-ret-wrap">
@@ -27663,6 +27793,28 @@ function exportCFtoXLSX() {
 let saChart = null;
 let saSpChart = null;
 let saVoltChart = null;
+/* ── shToggle: toggle inline section help popover ── */
+function shToggle(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const isOpen = el.style.display !== 'none';
+  // Close all other open popovers first
+  ['sh-d','sh-e','sh-f','sh-g','sh-h','sh-i'].forEach(pid=>{
+    const p=document.getElementById(pid);
+    if(p && pid!==id) p.style.display='none';
+  });
+  el.style.display = isOpen ? 'none' : 'block';
+}
+// Close popovers when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest('[id^="sh-"]') && !e.target.closest('button[onclick^="shToggle"]')){
+    ['sh-d','sh-e','sh-f','sh-g','sh-h','sh-i'].forEach(pid=>{
+      const p=document.getElementById(pid);
+      if(p) p.style.display='none';
+    });
+  }
+});
+
 function beHelpOpen(){
   const m=document.getElementById('be-help-modal');
   if(m){m.style.display='block';document.body.style.overflow='hidden';}
@@ -28182,9 +28334,8 @@ function buildBETable(spV, oaV, irV, dfV, tlossV, plfV){
 
   /* Build table rows */
   const dscrCell = (v) => {
-    const bg = v>=1.50?'#DCFCE7':v>=1.20?'#FEF9C3':'#FEE2E2';
-    const col= v>=1.50?'#166534':v>=1.20?'#92400E':'#991B1B';
-    return `<td style="text-align:center;padding:8px 10px;background:${bg};font-weight:700;color:${col};">${v.toFixed(2)}×</td>`;
+    const bg = v>=1.50?'#1A7A4A':v>=1.20?'#D97706':'#B91C1C';
+    return `<td style="text-align:center;padding:8px 10px;background:${bg};font-weight:700;color:#fff;border-radius:4px;">${v.toFixed(2)}×</td>`;
   };
 
   /* ── Step sizes for interactive ± buttons ── */
@@ -28216,15 +28367,15 @@ function buildBETable(spV, oaV, irV, dfV, tlossV, plfV){
     const hThresh1 = (v.unit===' MW AC'||v.unit===' Rs/kWh'||v.unit===' Cr/MW') ? 0.5 : 1;
     const hThresh2 = (v.unit===' MW AC'||v.unit===' Rs/kWh'||v.unit===' Cr/MW') ? 2   : 3;
     const hGood = headroom > hThresh2, hWarn = headroom > hThresh1;
-    const hBg  = hGood?'#DCFCE7':hWarn?'#FEF9C3':'#FEE2E2';
-    const hCol = hGood?'#166534':hWarn?'#92400E':'#991B1B';
+    const hBg  = hGood?'#1A7A4A':hWarn?'#D97706':'#B91C1C';
+    const hCol = '#FFFFFF';
     const hIcon= hGood?'✔':hWarn?'⚠':'✘';
 
     /* ── Current DSCR bar — shows live position vs danger line ── */
     const baseDSCR = parseFloat(calcDSCR2(spV,oaV,irV,dfV,tlossV,plfV,acMW_base).toFixed(2));
     const dscrPct  = Math.min(100, Math.max(0, (baseDSCR - 0.8) / (2.5 - 0.8) * 100));
     const dangerPct= Math.min(100, Math.max(0, (1.20 - 0.8) / (2.5 - 0.8) * 100)); // 1.20 on same scale
-    const barCol   = baseDSCR >= 1.50 ? '#1A7A4A' : baseDSCR >= 1.20 ? '#B45309' : '#991B1B';
+    const barCol   = baseDSCR >= 1.50 ? '#1A7A4A' : baseDSCR >= 1.20 ? '#D97706' : '#B91C1C';
 
     /* ── Interactive control ── */
     const saId   = saIdFor[v.name];
@@ -28251,10 +28402,10 @@ function buildBETable(spV, oaV, irV, dfV, tlossV, plfV){
       const goPage = v.name.includes('EPC') ? 'in' : 'in';
       controlCell = `<td style="padding:6px 8px;text-align:center;">
         <button onclick="go('${goPage}')" title="Change in Project Inputs"
-          style="background:#EEF2FA;color:#1B2A4A;border:1px solid #C8D3E8;border-radius:6px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">
+          style="background:#1B2A4A;color:#C8973A;border:none;border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">
           ✏ Inputs
         </button>
-        <div style="font-size:10px;color:#9CA3AF;margin-top:2px;">${v.fmt(v.base)}${v.unit}</div>
+        <div style="font-size:11px;color:#374151;font-weight:600;margin-top:3px;">${v.fmt(v.base)}${v.unit}</div>
       </td>`;
     }
 
@@ -28275,7 +28426,7 @@ function buildBETable(spV, oaV, irV, dfV, tlossV, plfV){
       ${controlCell}
       ${dscrCell(v.dscr_lo)}
       ${dscrCell(v.dscr_hi)}
-      <td style="text-align:center;padding:8px 9px;background:#FEF2F2;font-weight:700;color:#991B1B;white-space:nowrap;font-size:12px;">${v.fmt(v.be)}${v.unit}<br><span style="font-size:10px;font-weight:400;color:#9CA3AF;">${v.note}</span></td>
+      <td style="text-align:center;padding:8px 9px;background:#7F1D1D;font-weight:700;color:#FCA5A5;white-space:nowrap;font-size:12px;">${v.fmt(v.be)}${v.unit}<br><span style="font-size:10px;font-weight:400;color:#FCA5A5;opacity:0.8;">${v.note}</span></td>
       <td style="text-align:center;padding:8px 9px;background:${hBg};font-weight:700;color:${hCol};font-size:12px;">${hIcon} ${v.fmt(Math.abs(headroom))}${hu}<br>${miniBar}</td>
       <td style="padding:8px 9px;font-size:11.5px;color:#374151;display:none;" class="be-context-col">${interpretation}</td>
     </tr>`;
