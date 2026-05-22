@@ -23576,6 +23576,7 @@ input[id$="-num"]:hover {
   <div class="sb-title" id="sb-title-dev">Developer Sections</div>
   <div id="sb-dev-items">
     <button class="sb-item on" id="sb-db" onclick="go('db')"><div class="sb-ic">&#128202;</div><div><div class="sb-lbl">Dashboard</div><div class="sb-dsc">Key metrics &amp; results</div></div></button>
+    <button class="sb-item" id="sb-vb" onclick="go('vb')"><div class="sb-ic">&#9971;</div><div><div class="sb-lbl">Viability</div><div class="sb-dsc">What makes projects succeed</div></div></button>
     <button class="sb-item" id="sb-in" onclick="go('in')"><div class="sb-ic">&#9889;</div><div><div class="sb-lbl">Project Inputs</div><div class="sb-dsc">Capacity, tariff &amp; costs</div></div></button>
     <button class="sb-item" id="sb-cu" onclick="go('cu')"><div class="sb-ic">&#128100;</div><div><div class="sb-lbl">Customers</div><div class="sb-dsc">Multi-customer management</div></div><span class="sb-badge gn">Multi</span></button>
     <button class="sb-item" id="sb-gl" onclick="go('gl')"><div class="sb-ic">&#128268;</div><div><div class="sb-lbl">Grid Losses</div><div class="sb-dsc">TNERC deemed loss inputs</div></div><span class="sb-badge pu">TNERC</span></button>
@@ -23660,6 +23661,315 @@ input[id$="-num"]:hover {
     <div class="chdr">Net realisation vs OA charge</div>
     <div style="position:relative;height:180px"><canvas id="sChart"></canvas></div>
   </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════════════════════ -->
+<!-- VIABILITY PAGE                                                 -->
+<!-- ══════════════════════════════════════════════════════════════ -->
+<div id="s-vb" class="sec dev-sec">
+  <div class="sec-h">
+    <div class="sec-h-left">
+      <div class="sec-ic">&#9971;</div>
+      <div>
+        <div class="sec-title">Project Viability</div>
+        <div class="sec-sub">What makes a Group Captive CPP solar project succeed or fail</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── INTRO BANNER ───────────────────────────────────────────── -->
+  <div style="background:linear-gradient(135deg,#1B2A4A,#243B6E);border-radius:14px;padding:20px 22px;margin-bottom:18px;color:#fff;font-family:'Inter',sans-serif;">
+    <div style="font-size:17px;font-weight:700;color:#C8973A;margin-bottom:6px;">⚡ The Four Pillars of a Viable Group Captive Solar Project</div>
+    <div style="font-size:13px;color:#CBD5E1;line-height:1.7;">A Group Captive CPP solar project is not just an engineering exercise — it is a 25-year financial commitment. The difference between a project that delivers 16% equity IRR and one that struggles to service its debt comes down to four fundamentals. Click any question below to read the full explanation.</div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PILLAR 1 — PROJECT COST & EXECUTION
+  ═══════════════════════════════════════════════════════ -->
+  <div class="card" style="margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,#1A4731,#166534);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb1')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏗</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 1 — Low Project Cost & Fast Execution</div>
+          <div style="font-size:12px;color:#BBF7D0;margin-top:2px;">Why does a Rs 10 Lakh per MW saving matter more than you think?</div>
+        </div>
+      </div>
+      <div id="vb1-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+    </div>
+    <div id="vb1" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+
+      <!-- Q1 -->
+      <div style="border-left:3px solid #1A7A4A;padding:10px 14px;background:#F0FDF4;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#1A7A4A;margin-bottom:5px;font-size:13.5px;">Q. Why does keeping project cost low matter so much?</div>
+        <div>In a solar project, <strong>all revenue is fixed by the tariff</strong> — you cannot sell more units than the sun gives you, and you cannot charge more than what the customer agreed. The only lever you have full control over is <strong>what you spend to build it</strong>.</div>
+        <div style="margin-top:8px;">Every Rs 1 Crore saved in project cost reduces your debt by Rs 70 Lakhs (at 70% debt). That cuts your annual interest by Rs 6–7 Lakhs for 10 years. Over the project life, Rs 1 Crore saved at construction = Rs 60–80 Lakhs saved in debt service.</div>
+        <div style="background:#DCFCE7;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12.5px;">
+          <strong style="color:#1A7A4A;">Rule of thumb:</strong> For a 20 MW project, a Rs 10 Lakh/MW saving = Rs 2 Crore total saving = Rs 1.4 Crore less debt = ~Rs 12 Lakh/year less interest payment = DSCR improves by 0.05–0.08×. That can be the difference between a bankable and non-bankable project.
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div style="border-left:3px solid #1A7A4A;padding:10px 14px;background:#F0FDF4;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#1A7A4A;margin-bottom:5px;font-size:13.5px;">Q. Why does project schedule matter for viability?</div>
+        <div>Every month of delay is a month of <strong>no revenue while interest meter is running</strong>. If your term loan disbursal starts in Month 1 but the plant commissions in Month 8 instead of Month 6, you pay 2 extra months of interest on the full loan amount — for a Rs 80 Crore loan at 9.5%, that is Rs 1.27 Crore wasted.</div>
+        <div style="margin-top:8px;">Beyond interest, delay means:</div>
+        <ul style="margin:6px 0 8px 20px;padding:0;font-size:12.5px;">
+          <li>Customer's TNEB bill keeps running — eroding goodwill before even one unit is supplied</li>
+          <li>Your equity is locked up and not earning — opportunity cost for the promoter</li>
+          <li>If delay pushes commissioning past a TNERC tariff revision date, your Year 1 tariff could be lower than projected</li>
+          <li>Monsoon delay = first 3–4 months of low-generation summer lost = Year 1 PLF drops significantly</li>
+        </ul>
+        <div style="background:#DCFCE7;border-radius:7px;padding:10px 12px;font-size:12.5px;">
+          <strong style="color:#1A7A4A;">Target:</strong> Financial closure to commissioning in 9–12 months for a 20 MW ground mount. Key milestones: Land registration (M1), EPC contract (M2), equipment order (M3), civil works (M4–M6), module installation (M6–M8), TNERC inspection & metering (M9–M10), first injection (M10–M11).
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div style="border-left:3px solid #1A7A4A;padding:10px 14px;background:#F0FDF4;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;color:#1A7A4A;margin-bottom:5px;font-size:13.5px;">Q. What cost heads should be watched most carefully?</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-top:6px;">
+          <table style="width:100%;min-width:380px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#1A7A4A;color:#fff;">
+              <th style="padding:7px 10px;text-align:left;">Cost Head</th>
+              <th style="padding:7px 10px;text-align:center;">Typical % of Total</th>
+              <th style="padding:7px 10px;text-align:left;">Key Risk</th>
+            </tr>
+            <tr style="background:#F9FAFB;"><td style="padding:6px 10px;font-weight:700;">EPC (Modules + Inverters + BOS)</td><td style="padding:6px 10px;text-align:center;">60–65%</td><td style="padding:6px 10px;">Module price volatility, import duty changes</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Land</td><td style="padding:6px 10px;text-align:center;">10–15%</td><td style="padding:6px 10px;">Title disputes, patta conversion delays</td></tr>
+            <tr style="background:#F9FAFB;"><td style="padding:6px 10px;font-weight:700;">Evacuation (110 kV bay)</td><td style="padding:6px 10px;text-align:center;">8–12%</td><td style="padding:6px 10px;">TANGEDCO bay slot availability — biggest delay risk</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Civil & Structural</td><td style="padding:6px 10px;text-align:center;">5–7%</td><td style="padding:6px 10px;">Soil condition surprises, monsoon delays</td></tr>
+            <tr style="background:#F9FAFB;"><td style="padding:6px 10px;font-weight:700;">SCADA, Metering, Fees</td><td style="padding:6px 10px;text-align:center;">3–5%</td><td style="padding:6px 10px;">TNERC approval timelines</td></tr>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PILLAR 2 — BANKABLE CUSTOMERS
+  ═══════════════════════════════════════════════════════ -->
+  <div class="card" style="margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,#1B2A4A,#243B6E);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb2')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏦</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 2 — Bankable Customers</div>
+          <div style="font-size:12px;color:#BFDBFE;margin-top:2px;">Why 1–2 months invoice advance or equity stake is non-negotiable</div>
+        </div>
+      </div>
+      <div id="vb2-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+    </div>
+    <div id="vb2" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+
+      <div style="border-left:3px solid #1B2A4A;padding:10px 14px;background:#EEF2FA;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:5px;font-size:13.5px;">Q. What makes a customer "bankable"?</div>
+        <div>Your solar project's entire revenue depends on customers paying their monthly electricity invoice on time. If one large customer defaults for 3 months, your project may miss a loan EMI — and that triggers a bank penalty or NPA classification.</div>
+        <div style="margin-top:8px;">A bankable customer has:</div>
+        <ul style="margin:6px 0 8px 20px;padding:0;font-size:12.5px;">
+          <li><strong>Audited financials</strong> — can they demonstrate ability to pay Rs X Crore/year in electricity bills?</li>
+          <li><strong>Credit history</strong> — no defaults with TNEB, vendors, or banks</li>
+          <li><strong>Long-term business stability</strong> — is their industry cyclical? Can they survive a downturn and still pay?</li>
+          <li><strong>Legal standing</strong> — GST-registered, ROC-compliant, no regulatory show-cause notices</li>
+        </ul>
+      </div>
+
+      <div style="border-left:3px solid #1B2A4A;padding:10px 14px;background:#EEF2FA;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:5px;font-size:13.5px;">Q. Why ask for 1–2 months invoice as advance or equity?</div>
+        <div>This serves two purposes simultaneously:</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:8px;">
+          <div style="background:#DBEAFE;border-radius:8px;padding:10px 12px;font-size:12.5px;">
+            <div style="font-weight:700;color:#1B2A4A;margin-bottom:4px;">As Advance (Security Deposit)</div>
+            <div>Works like TNEB's own advance deposit. If the customer delays payment, you deduct from the advance. This gives you 1–2 months of runway before a payment crisis hits your EMI. It is standard practice in group captive contracts — most customers accept it because it mirrors TNEB's terms.</div>
+          </div>
+          <div style="background:#DBEAFE;border-radius:8px;padding:10px 12px;font-size:12.5px;">
+            <div style="font-weight:700;color:#1B2A4A;margin-bottom:4px;">As Equity (Skin in the Game)</div>
+            <div>If the customer takes even 1–2% equity in the SPV, they become a co-owner, not just a buyer. Co-owners do not walk away from their own project. Their equity stake aligns their interest with yours for 25 years — and it counts toward the 26% collective equity compliance under TNERC Group Captive rules.</div>
+          </div>
+        </div>
+        <div style="background:#DBEAFE;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12.5px;">
+          <strong style="color:#1B2A4A;">Practical example:</strong> A customer consuming 5 MW allocation has a monthly bill of ~Rs 45 Lakhs. Two months advance = Rs 90 Lakhs as security. Even if they default for 6 weeks, you are protected. Their 2% equity at Rs 1 Crore also gives them board representation alignment.
+        </div>
+      </div>
+
+      <div style="border-left:3px solid #1B2A4A;padding:10px 14px;background:#EEF2FA;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;color:#1B2A4A;margin-bottom:5px;font-size:13.5px;">Q. What should the Power Sale Agreement (PSA) include to protect viability?</div>
+        <ul style="margin:4px 0 0 20px;padding:0;font-size:12.5px;">
+          <li><strong>Floor price clause</strong> — selling price cannot fall below the break-even threshold shown in the Sensitivity page</li>
+          <li><strong>Minimum offtake obligation</strong> — customer must consume at least 80% of their allocated units or pay for them anyway</li>
+          <li><strong>Escalation clause</strong> — price escalates at CPI or TNEB tariff revision, whichever is higher</li>
+          <li><strong>Exit penalty</strong> — minimum 12 months notice with financial penalty equal to 6 months billing if they exit early</li>
+          <li><strong>Dispute resolution</strong> — arbitration clause to avoid court delays</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PILLAR 3 — CUSTOMER MIX
+  ═══════════════════════════════════════════════════════ -->
+  <div class="card" style="margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,#7C2D12,#9A3412);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb3')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏭</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 3 — Right Mix of Customers</div>
+          <div style="font-size:12px;color:#FED7AA;margin-top:2px;">Industrial, Commercial, Exchange — why diversification protects your revenue</div>
+        </div>
+      </div>
+      <div id="vb3-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+    </div>
+    <div id="vb3" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+
+      <div style="border-left:3px solid #9A3412;padding:10px 14px;background:#FFF7ED;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#9A3412;margin-bottom:5px;font-size:13.5px;">Q. Why not just find one large industrial customer and sign a full 20 MW PSA?</div>
+        <div>It is tempting — simpler to manage, one contract, one payment. But it creates a <strong>single-point-of-failure risk</strong>. If that one customer shuts a plant, restructures, or goes bankrupt, your entire 20 MW revenue stream collapses overnight. Your EMI does not stop. Your O&amp;M does not stop. Only their payment stops.</div>
+        <div style="margin-top:8px;">A well-structured portfolio protects against this. Even TNEB — the largest distribution company in Tamil Nadu — does not rely on one industrial consumer for 100% of its revenue.</div>
+      </div>
+
+      <div style="border-left:3px solid #9A3412;padding:10px 14px;background:#FFF7ED;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#9A3412;margin-bottom:5px;font-size:13.5px;">Q. What is the ideal customer mix for a 20 MW project?</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-top:6px;">
+          <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#9A3412;color:#fff;">
+              <th style="padding:7px 10px;text-align:left;">Customer Type</th>
+              <th style="padding:7px 10px;text-align:center;">Suggested % of Allocation</th>
+              <th style="padding:7px 10px;text-align:left;">Why Include</th>
+              <th style="padding:7px 10px;text-align:left;">Risk to Watch</th>
+            </tr>
+            <tr style="background:#FFF7ED;"><td style="padding:6px 10px;font-weight:700;">Large Industrial (HT-I)</td><td style="padding:6px 10px;text-align:center;">40–50%</td><td style="padding:6px 10px;">Highest bill, largest saving, easiest metering</td><td style="padding:6px 10px;">Cyclical industry shutdowns, shift to captive generation</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Commercial (HT-III)</td><td style="padding:6px 10px;text-align:center;">25–35%</td><td style="padding:6px 10px;">Higher tariff (Rs 9.40/kWh) = larger savings = stickier customers</td><td style="padding:6px 10px;">Lower consumption — need multiple smaller accounts</td></tr>
+            <tr style="background:#FFF7ED;"><td style="padding:6px 10px;font-weight:700;">Exchange / Short-term PPA</td><td style="padding:6px 10px;text-align:center;">10–15%</td><td style="padding:6px 10px;">Fills capacity during customer shutdowns, IEX gives transparent price</td><td style="padding:6px 10px;">IEX price volatility — do not rely on this as base revenue</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Medium Industrial (HT-II)</td><td style="padding:6px 10px;text-align:center;">10–15%</td><td style="padding:6px 10px;">Stable 3-shift operations, lower default risk</td><td style="padding:6px 10px;">Smaller allocation per customer — more contracts to manage</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div style="border-left:3px solid #9A3412;padding:10px 14px;background:#FFF7ED;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;color:#9A3412;margin-bottom:5px;font-size:13.5px;">Q. What is the IEX / Exchange route and when should it be used?</div>
+        <div>The <strong>Indian Energy Exchange (IEX)</strong> allows you to sell surplus generation in the day-ahead market at real-time prices. This is a safety valve — not a primary revenue source.</div>
+        <div style="margin-top:8px;"><strong>Use it when:</strong> A customer goes offline for a planned shutdown (annual maintenance, festive holidays, market slowdown). Instead of wasting generation, sell it on IEX at the prevailing DAM rate.</div>
+        <div style="margin-top:8px;"><strong>Do not rely on it:</strong> IEX prices are volatile — they can fall to Rs 2–3/kWh in high-generation months (March–May when all solar projects peak together). Your PSA price is typically Rs 6.50–7.50/kWh. The difference is significant.</div>
+        <div style="background:#FFEDD5;border-radius:7px;padding:9px 12px;margin-top:8px;font-size:12.5px;">
+          <strong style="color:#9A3412;">Key insight:</strong> Design your PSA portfolio to cover 85–90% of generation. The remaining 10–15% can go to exchange as upside. If you design for 100% PSA coverage, a single customer shutdown creates a crisis. If you design for 85%, the same event is just a minor variance.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PILLAR 4 — ACTUAL vs PROJECTED MONITORING
+  ═══════════════════════════════════════════════════════ -->
+  <div class="card" style="margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,#4A1D96,#5B21B6);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb4')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📊</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 4 — Actual vs Projected Monitoring</div>
+          <div style="font-size:12px;color:#DDD6FE;margin-top:2px;">Constant comparison: generation, cash flow, deviations — and acting on them</div>
+        </div>
+      </div>
+      <div id="vb4-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+    </div>
+    <div id="vb4" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+
+      <div style="border-left:3px solid #5B21B6;padding:10px 14px;background:#F5F3FF;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#5B21B6;margin-bottom:5px;font-size:13.5px;">Q. Why is monitoring actual vs projected so critical?</div>
+        <div>Your financial model (built in this app) is a <strong>projection based on assumptions</strong> — assumed PLF, assumed tariff, assumed O&amp;M cost, assumed customer payments. Reality will always differ. The question is: <strong>by how much, and in which direction?</strong></div>
+        <div style="margin-top:8px;">A project that hits 19% CUF instead of projected 21.3% loses ~10% of revenue every year. Over 25 years, that is the difference between 9× return multiple and 6× return multiple. But if you catch the deviation in Month 3 and trace it to soiling or inverter underperformance, you can fix it. If you notice it in Year 3, you have lost Rs 2–3 Crore unnecessarily.</div>
+      </div>
+
+      <div style="border-left:3px solid #5B21B6;padding:10px 14px;background:#F5F3FF;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#5B21B6;margin-bottom:5px;font-size:13.5px;">Q. What should be tracked monthly?</div>
+        <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-top:6px;">
+          <table style="width:100%;min-width:400px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#5B21B6;color:#fff;">
+              <th style="padding:7px 10px;text-align:left;">Metric</th>
+              <th style="padding:7px 10px;text-align:left;">What to Compare</th>
+              <th style="padding:7px 10px;text-align:left;">If Deviation Exceeds 5% — Do This</th>
+            </tr>
+            <tr style="background:#F5F3FF;"><td style="padding:6px 10px;font-weight:700;">Generation (MU)</td><td style="padding:6px 10px;">Actual kWh vs projected kWh for that month</td><td style="padding:6px 10px;">Check inverter logs, soiling level, shading, PR ratio</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">PLF / CUF %</td><td style="padding:6px 10px;">Actual CUF vs projected CUF (from this model)</td><td style="padding:6px 10px;">Compare with irradiation data (SOLARGIS/NASA). If irradiation is normal but CUF is low — equipment issue</td></tr>
+            <tr style="background:#F5F3FF;"><td style="padding:6px 10px;font-weight:700;">Net Revenue (Rs Cr)</td><td style="padding:6px 10px;">Actual invoices raised vs projected revenue</td><td style="padding:6px 10px;">Check if any customer disputed units, if metering is correct, if OA billing matches TANGEDCO statement</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Collections</td><td style="padding:6px 10px;">Invoices raised vs cash actually received</td><td style="padding:6px 10px;">Any customer overdue beyond 30 days — invoke advance deposit. Overdue beyond 60 days — legal notice</td></tr>
+            <tr style="background:#F5F3FF;"><td style="padding:6px 10px;font-weight:700;">O&amp;M Cost</td><td style="padding:6px 10px;">Actual spend vs projected O&amp;M budget</td><td style="padding:6px 10px;">If overspending — identify if it is preventive or corrective maintenance. Corrective = equipment issue to fix</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">DSCR (trailing 12m)</td><td style="padding:6px 10px;">Actual EBITDA ÷ Actual debt service</td><td style="padding:6px 10px;">If below 1.30×, alert your lender proactively. Do not let them discover it first</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div style="border-left:3px solid #5B21B6;padding:10px 14px;background:#F5F3FF;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#5B21B6;margin-bottom:5px;font-size:13.5px;">Q. What are the early warning signs that a project is drifting into trouble?</div>
+        <ul style="margin:4px 0 0 20px;padding:0;font-size:12.5px;">
+          <li><strong>CUF drops &gt;2% below projection for 2 consecutive months</strong> — check Performance Ratio (PR). Normal PR: 75–82%. Below 72% = serious equipment or soiling issue.</li>
+          <li><strong>One customer delays payment twice</strong> — do not wait for third default. Send formal notice and invoke advance.</li>
+          <li><strong>O&amp;M cost exceeds budget by 15%+</strong> — usually signals a warranty claim situation. Escalate to EPC contractor immediately.</li>
+          <li><strong>TANGEDCO wheeling statement shows different units than SCADA</strong> — metering dispute. Resolve before it compounds into a billing problem.</li>
+          <li><strong>IEX prices crash below Rs 3/kWh for 3+ months</strong> — do not rely on exchange. Accelerate finding a PSA customer for that unallocated capacity.</li>
+        </ul>
+      </div>
+
+      <div style="border-left:3px solid #5B21B6;padding:10px 14px;background:#F5F3FF;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;color:#5B21B6;margin-bottom:5px;font-size:13.5px;">Q. This app has an "Actual vs Projected" page — how does it help?</div>
+        <div>The <strong>Actual vs Projected</strong> page (in the sidebar) lets you enter your real monthly generation, revenue, and payments and compare them against this model's projections. It computes variance automatically and flags deviations in red.</div>
+        <div style="margin-top:8px;">Use it every month on the 5th — once all TANGEDCO statements and customer payments are in. It takes 10 minutes to update and gives you a complete picture of where the project stands vs where it should be. That 10-minute discipline over 25 years is what separates a 9× return project from a 5× one.</div>
+        <div style="background:#EDE9FE;border-radius:7px;padding:9px 12px;margin-top:8px;font-size:12.5px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:20px;">📋</span>
+          <div><strong style="color:#5B21B6;">Go to Actual vs Projected →</strong> <button onclick="go('av')" style="background:#5B21B6;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-left:6px;">Open Page</button></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SUMMARY SCORECARD ──────────────────────────────────────── -->
+  <div class="card">
+    <div class="chdr" style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);">&#9971; Viability Scorecard — Quick Reference</div>
+    <div style="font-family:'Inter',sans-serif;font-size:12.5px;color:#1F2937;margin-top:8px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
+        <div style="background:#DCFCE7;border-radius:8px;padding:12px;border-left:4px solid #1A7A4A;">
+          <div style="font-weight:700;color:#1A7A4A;margin-bottom:6px;">✔ Strong Viability Signals</div>
+          <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+            <li>EPC cost ≤ Rs 3.5 Cr/MW (AC basis)</li>
+            <li>Commissioning within 10 months</li>
+            <li>≥3 customers, no single customer &gt;50%</li>
+            <li>All customers with 2-month advance</li>
+            <li>Actual CUF ≥ projected −1%</li>
+            <li>Collections within 30 days consistently</li>
+            <li>DSCR ≥ 1.40× in first 3 years</li>
+          </ul>
+        </div>
+        <div style="background:#FEE2E2;border-radius:8px;padding:12px;border-left:4px solid #B91C1C;">
+          <div style="font-weight:700;color:#B91C1C;margin-bottom:6px;">✘ Red Flags — Act Immediately</div>
+          <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+            <li>Single customer &gt;60% of allocation</li>
+            <li>No advance or equity from customer</li>
+            <li>Delay beyond 14 months to commission</li>
+            <li>Actual CUF &gt;2% below projection</li>
+            <li>Any customer overdue &gt;45 days</li>
+            <li>O&amp;M cost &gt;115% of budget</li>
+            <li>DSCR below 1.25× — inform lender now</li>
+          </ul>
+        </div>
+        <div style="background:#FEF9C3;border-radius:8px;padding:12px;border-left:4px solid #D97706;">
+          <div style="font-weight:700;color:#92400E;margin-bottom:6px;">⚠ Watch Closely</div>
+          <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+            <li>IEX price below Rs 4/kWh &gt;2 months</li>
+            <li>TNERC tariff revision pending</li>
+            <li>Module degradation above 0.8%/yr</li>
+            <li>Customer asking to reduce allocation</li>
+            <li>OA charge revision announced by TNERC</li>
+            <li>Interest rate floating and RBI hiking</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- PROJECT INPUTS -->
@@ -25404,7 +25714,7 @@ function setRole(r){
 }
 
 /* ── NAVIGATION ── */
-const DEV_SECS=['db','in','cu','gl','bt','fi','cf','rp','av','pr','sa','tn','rg','gd','pnl','rat','ai'];
+const DEV_SECS=['db','vb','in','cu','gl','bt','fi','cf','rp','av','pr','sa','tn','rg','gd','pnl','rat','ai'];
 const CUST_SECS=['ci','cs','cc','ca','ai'];
 let currentPage = 'db';
 function go(id){
@@ -27794,6 +28104,28 @@ let saChart = null;
 let saSpChart = null;
 let saVoltChart = null;
 /* ── shToggle: toggle inline section help popover ── */
+/* ── vbToggle: accordion for Viability page pillars ── */
+function vbToggle(id){
+  const el   = document.getElementById(id);
+  const icon = document.getElementById(id+'-icon');
+  if(!el) return;
+  const isOpen = el.style.display !== 'none';
+  // Close all pillars
+  ['vb1','vb2','vb3','vb4'].forEach(pid=>{
+    const p=document.getElementById(pid);
+    const ic=document.getElementById(pid+'-icon');
+    if(p){ p.style.display='none'; }
+    if(ic){ ic.textContent='＋'; }
+  });
+  // Open the clicked one (if it was closed)
+  if(!isOpen){
+    el.style.display='block';
+    if(icon) icon.textContent='－';
+    // Scroll into view smoothly
+    setTimeout(()=>{ el.scrollIntoView({behavior:'smooth',block:'nearest'}); },80);
+  }
+}
+
 function shToggle(id){
   const el = document.getElementById(id);
   if(!el) return;
