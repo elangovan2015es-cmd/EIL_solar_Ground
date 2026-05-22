@@ -25186,7 +25186,18 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ C: TORNADO BAR CHART ═══════════════════════════════════ -->
   <div class="card">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:6px">
-      <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--o6)">&#127781; C. Tornado Chart — FCF Yr-1 Impact ±10% each variable (Rs Crores)</span>
+      <div style="display:flex;align-items:center;gap:6px;flex:1;min-width:0;">
+        <button onclick="shToggle('sh-c1')" title="What is the Tornado chart?" style="background:transparent;border:1.5px solid var(--o6);color:var(--o6);border-radius:50%;width:22px;height:22px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Inter',sans-serif;line-height:1;">?</button>
+        <span style="font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--o6)">&#127781; C1. Tornado — Which Variable Hurts Most? (FCF Impact ±10%)</span>
+      </div>
+      <div id="sh-c1" style="display:none;position:relative;z-index:999;margin:4px 0 8px 0;background:#1B2A4A;color:#fff;border-radius:10px;padding:14px 16px;font-size:12.5px;line-height:1.65;box-shadow:0 8px 24px rgba(0,0,0,.35);font-family:'Inter',sans-serif;width:100%;">
+        <div style="font-weight:700;color:#C8973A;margin-bottom:6px;font-size:13px;">🌪 C1. What is the Tornado Chart?</div>
+        <div><strong>What it shows:</strong> Each horizontal bar shows how much Year 1 Free Cash Flow (FCF) changes if that variable moves by ±10% from its current value. <span style="color:#4ADE80;font-weight:700;">Green bar (right)</span> = FCF improves when variable goes up 10%. <span style="color:#F87171;font-weight:700;">Red bar (left)</span> = FCF falls when variable goes down 10%.</div>
+        <div style="margin-top:8px;"><strong>Longest bar = biggest risk.</strong> The variable with the longest bar affects your cash flow the most. Focus your negotiations and risk management on the top 2–3 longest bars.</div>
+        <div style="margin-top:8px;"><strong>Example:</strong> If Selling Price has the longest bar, a 10% drop in your selling price hurts you more than a 10% rise in interest rate. That means your PSA floor price clause is more important than fixing the loan rate.</div>
+        <div style="margin-top:8px;"><strong>All values in Rs Crore (Year 1 FCF change).</strong> The chart updates live every time you move a slider above.</div>
+        <div style="margin-top:10px;text-align:right;"><button onclick="shToggle('sh-c1')" style="background:#C8973A;color:#1B2A4A;border:none;border-radius:6px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Close ✕</button></div>
+      </div>
       <div style="display:flex;gap:6px">
         <button onclick="downloadTornadoChart()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128247; PNG</button>
         <button onclick="exportTornadoCSV()" style="background:var(--n1);border:1px solid var(--n3);border-radius:6px;padding:4px 9px;font-size:10.5px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--n7)">&#128196; CSV</button>
@@ -25215,7 +25226,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <button onclick="beHelpClose()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>
       </div>
       <!-- Body -->
-      <div style="padding:18px 18px 12px;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.65;overflow-x:hidden;">
+      <div style="padding:14px 14px 10px;font-family:'Inter',sans-serif;font-size:12.5px;color:#1F2937;line-height:1.6;overflow-x:hidden;overflow-y:auto;max-height:75vh;">
 
         <!-- One-liner purpose -->
         <div style="background:#FEF2F2;border-left:4px solid #9B1C1C;border-radius:0 8px 8px 0;padding:11px 14px;margin-bottom:14px;">
@@ -25229,7 +25240,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <!-- Column guide -->
         <div style="font-weight:700;color:#1B2A4A;margin-bottom:8px;font-size:13.5px;">What Each Column Means:</div>
         <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;margin-bottom:12px;">
-          <table style="width:100%;min-width:420px;border-collapse:collapse;font-size:12px;">
+          <table style="width:100%;min-width:300px;border-collapse:collapse;font-size:11.5px;">
             <tr style="background:#1B2A4A;color:#fff;">
               <th style="padding:7px 9px;text-align:left;white-space:nowrap;">Column</th>
               <th style="padding:7px 9px;text-align:left;">What It Tells You</th>
@@ -25271,7 +25282,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
         <!-- Colour meaning per variable type -->
         <div style="font-weight:700;color:#1B2A4A;margin-bottom:6px;font-size:13.5px;">What "Headroom" Means — by Variable:</div>
         <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;margin-bottom:14px;">
-          <table style="width:100%;min-width:380px;border-collapse:collapse;font-size:12px;">
+          <table style="width:100%;min-width:260px;border-collapse:collapse;font-size:11px;">
             <tr style="background:#1B2A4A;color:#fff;">
               <th style="padding:6px 9px;text-align:left;">Variable</th>
               <th style="padding:6px 9px;text-align:center;background:#166534;">🟢 Green (safe)</th>
@@ -25307,7 +25318,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
         <!-- 8 variables quick ref -->
         <div style="font-weight:700;color:#1B2A4A;margin-bottom:8px;font-size:13.5px;">The 8 Variables — Direction of Risk:</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:6px;margin-bottom:14px;font-size:12px;">
+        <div style="display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:12px;font-size:12px;">
           <div style="background:#FEF2F2;border-radius:7px;padding:9px 11px;">
             <div style="font-weight:700;color:#9B1C1C;margin-bottom:4px;">Lower = worse (revenue side)</div>
             <div>📐 AC Capacity — less MW = less revenue AND lower capex</div>
@@ -25341,7 +25352,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
   <!-- ══ BREAK-EVEN THRESHOLD CARD ═══════════════════════════ -->
   <div class="card" id="sa-be-card" style="scroll-margin-top:60px;">
     <div class="chdr" style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-      <span>&#128680; C. Viability Threshold — Break-Even Analysis</span>
+      <span>&#128680; C2. Break-Even Thresholds — Danger Line per Variable</span>
       <div style="display:flex;gap:6px;align-items:center;">
         <button onclick="beHelpOpen()" title="How to read this table" style="background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:50%;width:28px;height:28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;line-height:1;" aria-label="Help">?</button>
         <button onclick="exportBEtoCSV()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">&#128196; Export CSV</button>
@@ -28131,7 +28142,7 @@ function shToggle(id){
   if(!el) return;
   const isOpen = el.style.display !== 'none';
   // Close all other open popovers first
-  ['sh-d','sh-e','sh-f','sh-g','sh-h','sh-i'].forEach(pid=>{
+  ['sh-c1','sh-d','sh-e','sh-f','sh-g','sh-h','sh-i'].forEach(pid=>{
     const p=document.getElementById(pid);
     if(p && pid!==id) p.style.display='none';
   });
@@ -28140,7 +28151,7 @@ function shToggle(id){
 // Close popovers when clicking outside
 document.addEventListener('click', function(e){
   if(!e.target.closest('[id^="sh-"]') && !e.target.closest('button[onclick^="shToggle"]')){
-    ['sh-d','sh-e','sh-f','sh-g','sh-h','sh-i'].forEach(pid=>{
+    ['sh-c1','sh-d','sh-e','sh-f','sh-g','sh-h','sh-i'].forEach(pid=>{
       const p=document.getElementById(pid);
       if(p) p.style.display='none';
     });
