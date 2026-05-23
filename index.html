@@ -1,7 +1,11 @@
 <!DOCTYPE html>
+<!-- EIL Solar Ground v12.1 | Build: 20260523-1900 IST | cache-bust: 20260523190000 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23545,6 +23549,19 @@ input[id$="-num"]:hover {
 }
 /* ══ SA number input focus style ══ */
 </style>
+<script>
+// Force reload if cached version is older than this build
+(function(){
+  var BUILD = '20260523190000';
+  var stored = localStorage.getItem('eil_build');
+  if(stored && stored !== BUILD){
+    localStorage.setItem('eil_build', BUILD);
+    window.location.reload(true);
+  } else {
+    localStorage.setItem('eil_build', BUILD);
+  }
+})();
+</script>
 </head>
 <body>
 <!-- HEADER -->
