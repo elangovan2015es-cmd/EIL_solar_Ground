@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- EIL Solar Ground v12.1 | Build: 20260523-2000 IST | cache-bust: 20260523200000 -->
+<!-- EIL Solar Ground v12.1 | Build: 20260523-2100 IST | cache-bust: 20260523210000 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2780,7 +2780,7 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
 
 <script>
-const BUILD='v12.1 | Build: 20260523-2000 IST';
+const BUILD='v12.1 | Build: 20260523-2100 IST';
 // version set in HTML
 
 /* ── PWA ── */
@@ -2788,7 +2788,11 @@ let dP=null;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;document.getElementById('inst-ban').style.display='flex';});
 window.addEventListener('appinstalled',()=>{document.getElementById('inst-ban').style.display='none';});
 function installApp(){if(dP){dP.prompt();dP.userChoice.then(()=>{dP=null;});}}
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.getRegistrations().then(regs=>{
+    regs.forEach(r=>r.unregister());
+  });
+}
 
 /* ── ROLE ── */
 let ROLE='dev';
