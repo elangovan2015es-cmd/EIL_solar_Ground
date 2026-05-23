@@ -23681,24 +23681,46 @@ input[id$="-num"]:hover {
   <!-- ── INTRO BANNER ───────────────────────────────────────────── -->
   <div style="background:linear-gradient(135deg,#1B2A4A,#243B6E);border-radius:14px;padding:20px 22px;margin-bottom:18px;color:#fff;font-family:'Inter',sans-serif;">
     <div style="font-size:17px;font-weight:700;color:#C8973A;margin-bottom:6px;">⚡ The Four Pillars of a Viable Group Captive Solar Project</div>
-    <div style="font-size:13px;color:#CBD5E1;line-height:1.7;">A Group Captive CPP solar project is not just an engineering exercise — it is a 25-year financial commitment. The difference between a project that delivers 16% equity IRR and one that struggles to service its debt comes down to four fundamentals. Click any question below to read the full explanation.</div>
+    <div style="font-size:13px;color:#CBD5E1;line-height:1.7;">A Group Captive CPP solar project is not just an engineering exercise — it is a 25-year financial commitment. The difference between a project that delivers 16% equity IRR and one that struggles to service its debt comes down to five fundamentals. Click any pillar below to read the full explanation.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;font-size:12px;font-family:'Inter',sans-serif;">
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;border:1px solid rgba(200,151,58,0.4);">
+            <span style="color:#CBD5E1;">Current Debt Fraction:</span>
+            <strong id="vb-live-df" style="color:#C8973A;margin-left:6px;">—</strong>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;border:1px solid rgba(200,151,58,0.4);">
+            <span style="color:#CBD5E1;">AC Capacity:</span>
+            <strong id="vb-live-ac" style="color:#C8973A;margin-left:6px;">—</strong>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;border:1px solid rgba(200,151,58,0.4);">
+            <span style="color:#CBD5E1;">Interest Rate:</span>
+            <strong id="vb-live-ir" style="color:#C8973A;margin-left:6px;">—</strong>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;border:1px solid rgba(200,151,58,0.4);">
+            <span style="color:#CBD5E1;">Year 2 DSCR:</span>
+            <strong id="vb-live-dscr" style="color:#C8973A;margin-left:6px;">—</strong>
+          </div>
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;border:1px solid rgba(200,151,58,0.4);">
+            <span style="color:#CBD5E1;">Total Capex:</span>
+            <strong id="vb-live-capex" style="color:#C8973A;margin-left:6px;">—</strong>
+          </div>
+        </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════
        PILLAR 1 — PROJECT COST & EXECUTION
   ═══════════════════════════════════════════════════════ -->
   <div class="card" style="margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,#1A4731,#166534);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb1')">
+    <div style="background:linear-gradient(135deg,#1A4731,#166534);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb2')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏗</div>
         <div>
-          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 1 — Low Project Cost & Fast Execution</div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 2 — Low Project Cost & Fast Execution</div>
           <div style="font-size:12px;color:#BBF7D0;margin-top:2px;">Why does a Rs 10 Lakh per MW saving matter more than you think?</div>
         </div>
       </div>
-      <div id="vb1-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+      <div id="vb2-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
     </div>
-    <div id="vb1" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+    <div id="vb2" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
 
       <!-- Q1 -->
       <div style="border-left:3px solid #1A7A4A;padding:10px 14px;background:#F0FDF4;border-radius:0 8px 8px 0;margin-bottom:12px;">
@@ -23752,17 +23774,17 @@ input[id$="-num"]:hover {
        PILLAR 2 — BANKABLE CUSTOMERS
   ═══════════════════════════════════════════════════════ -->
   <div class="card" style="margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,#1B2A4A,#243B6E);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb2')">
+    <div style="background:linear-gradient(135deg,#1B2A4A,#243B6E);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb3')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏦</div>
         <div>
-          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 2 — Bankable Customers</div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 3 — Bankable Customers</div>
           <div style="font-size:12px;color:#BFDBFE;margin-top:2px;">Why 1–2 months invoice advance or equity stake is non-negotiable</div>
         </div>
       </div>
-      <div id="vb2-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+      <div id="vb3-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
     </div>
-    <div id="vb2" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+    <div id="vb3" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
 
       <div style="border-left:3px solid #1B2A4A;padding:10px 14px;background:#EEF2FA;border-radius:0 8px 8px 0;margin-bottom:12px;">
         <div style="font-weight:700;color:#1B2A4A;margin-bottom:5px;font-size:13.5px;">Q. What makes a customer "bankable"?</div>
@@ -23808,21 +23830,155 @@ input[id$="-num"]:hover {
     </div>
   </div>
 
+
+  <!-- ══════════════════════════════════════════════════
+       PILLAR 5 — DEBT: THE SILENT RISK
+  ═══════════════════════════════════════════════════════ -->
+  <div class="card" style="margin-bottom:14px;">
+    <div style="background:linear-gradient(135deg,#7F1D1D,#B91C1C);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb1')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚠</div>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 1 — Debt: The Silent Risk</div>
+          <div style="font-size:12px;color:#FCA5A5;margin-top:2px;">Like stress in health — hard to define, but too much kills the project</div>
+        </div>
+      </div>
+      <div id="vb1-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+    </div>
+    <div id="vb1" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+
+      <!-- The health analogy intro -->
+      <div style="background:linear-gradient(135deg,#FFF1F2,#FFE4E6);border-radius:10px;padding:14px 16px;margin-bottom:14px;border:1px solid #FECDD3;">
+        <div style="font-weight:700;color:#9B1C1C;font-size:14px;margin-bottom:8px;">🏥 Think of Your Project Like a Human Body</div>
+        <div style="font-size:13px;color:#374151;line-height:1.8;">
+          A solar project has measurable vital signs — just like your annual health checkup. Most parameters have a normal range, a warning range, and a danger zone. <strong style="color:#9B1C1C;">Debt is like stress</strong> — unlike blood pressure or cholesterol, there is no single number that defines "too much." But everyone who has lived with excessive stress knows what it does over time. So does a project with excessive debt.
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:12px;font-size:12px;">
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #B91C1C;">
+            <div style="font-weight:700;color:#B91C1C;margin-bottom:3px;">Debt ↔ Stress</div>
+            <div>Difficult to define a safe limit. Too much is clearly bad. It compounds silently — small shocks become crises when debt is high. Keep it low.</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #B45309;">
+            <div style="font-weight:700;color:#B45309;margin-bottom:3px;">DSCR ↔ Blood Pressure</div>
+            <div>Measurable, trackable, with a clear danger threshold (1.20×). Like BP 120/80 is normal, DSCR 1.40× is healthy. Below 1.20× — the system is under strain.</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #1A7A4A;">
+            <div style="font-weight:700;color:#1A7A4A;margin-bottom:3px;">CUF / PLF ↔ Cholesterol</div>
+            <div>Higher is generally better for the project (more generation = more revenue), but must be realistic. Overstating CUF in projections is like ignoring a cholesterol report.</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #1B2A4A;">
+            <div style="font-weight:700;color:#1B2A4A;margin-bottom:3px;">Collections ↔ Blood Sugar</div>
+            <div>Cash coming in on time = healthy glucose levels. Delayed payments = elevated sugar. Chronic delay (diabetes) = project cannot function normally without intervention.</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #5B21B6;">
+            <div style="font-weight:700;color:#5B21B6;margin-bottom:3px;">O&amp;M Cost ↔ Weight</div>
+            <div>Slightly above target is manageable. Significantly overweight (O&amp;M running 30% above budget) signals equipment failure or poor maintenance discipline — fix it before it becomes critical.</div>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:10px 12px;border-left:3px solid #9A3412;">
+            <div style="font-weight:700;color:#9A3412;margin-bottom:3px;">Imponderables ↔ Sudden Illness</div>
+            <div>Macro events — RBI rate cycles, TNERC policy reversals, a global supply chain shock, or a once-in-a-decade weather event. Science cannot predict these. Build resilience, not dependence on perfect conditions.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Q1: How much debt -->
+      <div style="border-left:3px solid #B91C1C;padding:10px 14px;background:#FFF1F2;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#9B1C1C;margin-bottom:5px;font-size:13.5px;">Q. How much debt is safe for a Group Captive solar project?</div>
+        <div>The industry standard is 70:30 (70% debt, 30% equity). Banks push for higher equity; developers push for lower. <strong>The right answer depends on your DSCR headroom</strong> — not a fixed percentage.</div>
+        <div style="margin-top:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;">
+          <table style="width:100%;min-width:360px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#7F1D1D;color:#fff;">
+              <th style="padding:7px 10px;text-align:left;">Debt Level</th>
+              <th style="padding:7px 10px;text-align:center;">Typical DSCR Impact</th>
+              <th style="padding:7px 10px;text-align:left;">Verdict</th>
+            </tr>
+            <tr style="background:#DCFCE7;"><td style="padding:6px 10px;font-weight:700;">Below 50%</td><td style="padding:6px 10px;text-align:center;font-weight:700;color:#166534;">DSCR ≥ 1.60×</td><td style="padding:6px 10px;color:#166534;font-weight:700;">✔ Excellent. Very comfortable. Project can absorb shocks.</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">50% – 65%</td><td style="padding:6px 10px;text-align:center;font-weight:700;color:#1A7A4A;">DSCR 1.40–1.60×</td><td style="padding:6px 10px;color:#166534;">✔ Good. Standard for well-structured projects.</td></tr>
+            <tr style="background:#FEF9C3;"><td style="padding:6px 10px;font-weight:700;">65% – 75%</td><td style="padding:6px 10px;text-align:center;font-weight:700;color:#92400E;">DSCR 1.25–1.40×</td><td style="padding:6px 10px;color:#92400E;">⚠ Acceptable. Watch closely. Limited cushion.</td></tr>
+            <tr style="background:#FEE2E2;"><td style="padding:6px 10px;font-weight:700;">75% – 80%</td><td style="padding:6px 10px;text-align:center;font-weight:700;color:#991B1B;">DSCR 1.20–1.28×</td><td style="padding:6px 10px;color:#991B1B;">⚠ Danger zone. Any adverse event breaks the DSCR floor.</td></tr>
+            <tr style="background:#FEE2E2;"><td style="padding:6px 10px;font-weight:700;color:#7F1D1D;">Above 80%</td><td style="padding:6px 10px;text-align:center;font-weight:700;color:#7F1D1D;">DSCR &lt; 1.20×</td><td style="padding:6px 10px;color:#7F1D1D;font-weight:700;">✘ Non-bankable. No responsible lender should approve this.</td></tr>
+          </table>
+        </div>
+        <div style="background:#FEE2E2;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12.5px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
+            <span><strong style="color:#9B1C1C;">Your current debt fraction:</strong> <strong id="vb-debt-status" style="color:#9B1C1C;">—</strong></span>
+            <button onclick="go('fi')" style="background:#1B2A4A;color:#C8973A;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">✏ Change in Debt &amp; Equity</button>
+          </div>
+          <strong style="color:#9B1C1C;">Rule of Thumb:</strong> Target debt at or below 65% of total project cost. The 5–15% extra equity you put in buys you enormous resilience — it is the difference between a project that survives a bad monsoon year and one that goes into lender workout proceedings.
+        </div>
+      </div>
+
+      <!-- Q2: Guarantees -->
+      <div style="border-left:3px solid #B91C1C;padding:10px 14px;background:#FFF1F2;border-radius:0 8px 8px 0;margin-bottom:12px;">
+        <div style="font-weight:700;color:#9B1C1C;margin-bottom:5px;font-size:13.5px;">Q. What about personal guarantees and corporate guarantees — how dangerous are they?</div>
+        <div><strong style="color:#9B1C1C;">This is one of the most underappreciated risks in project finance.</strong> When you sign a personal guarantee for a project loan, you are no longer just an equity investor — you are the lender's insurance policy. If the project defaults, the bank comes after your personal assets.</div>
+        <div style="margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;font-size:12.5px;">
+          <div style="background:#fff;border-radius:8px;padding:11px 13px;border:1.5px solid #FECDD3;">
+            <div style="font-weight:700;color:#9B1C1C;margin-bottom:5px;">Personal Guarantee Risk</div>
+            <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+              <li>Bank can attach personal property — home, investments, savings</li>
+              <li>Applies even if the project underperforms due to external factors (TNERC order, bad monsoon)</li>
+              <li>Continues until loan is fully repaid — typically 10–12 years</li>
+              <li>Cannot be withdrawn unilaterally once signed</li>
+            </ul>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:11px 13px;border:1.5px solid #FECDD3;">
+            <div style="font-weight:700;color:#9B1C1C;margin-bottom:5px;">Corporate Guarantee Risk</div>
+            <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+              <li>The listed parent company becomes contingent liable for the SPV loan</li>
+              <li>Shows up in your balance sheet as a contingent liability — affects credit rating</li>
+              <li>If SPV defaults, the guarantee is invoked — impacts the parent company's borrowing capacity</li>
+              <li>SEBI and stock exchange disclosure obligations triggered</li>
+            </ul>
+          </div>
+        </div>
+        <div style="background:#FEE2E2;border-radius:7px;padding:10px 12px;margin-top:10px;font-size:12.5px;">
+          <strong style="color:#9B1C1C;">Caution:</strong> Never give a personal or corporate guarantee unless the project's DSCR is comfortably above 1.40× across all stress scenarios (see <button onclick="go('sa')" style="background:#9B1C1C;color:#fff;border:none;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">Section C2 in Sensitivity</button>). The guarantee is not just paperwork — it is a mortgage on your future. Negotiate hard to limit it: offer a pledge of project assets and cash flows instead, and cap the guarantee at 1× the outstanding loan balance.
+        </div>
+      </div>
+
+      <!-- Q3: Imponderables -->
+      <div style="border-left:3px solid #B91C1C;padding:10px 14px;background:#FFF1F2;border-radius:0 8px 8px 0;">
+        <div style="font-weight:700;color:#9B1C1C;margin-bottom:5px;font-size:13.5px;">Q. What about risks that no model can predict — the imponderables?</div>
+        <div>Science and financial modelling can calculate DSCR, break-even thresholds, and return multiples with precision. <strong>What they cannot predict are the macro shocks</strong> — the events that change the rules of the game entirely.</div>
+        <div style="margin-top:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:7px;">
+          <table style="width:100%;min-width:340px;border-collapse:collapse;font-size:12px;">
+            <tr style="background:#7F1D1D;color:#fff;">
+              <th style="padding:7px 10px;text-align:left;">Imponderable Risk</th>
+              <th style="padding:7px 10px;text-align:left;">Why It Cannot Be Modelled</th>
+              <th style="padding:7px 10px;text-align:left;">How to Build Resilience</th>
+            </tr>
+            <tr style="background:#FFF1F2;"><td style="padding:6px 10px;font-weight:700;">RBI interest rate cycle</td><td style="padding:6px 10px;">Depends on global inflation, geopolitics, US Fed decisions</td><td style="padding:6px 10px;">Fix your loan rate at financial closure. Never leave it floating.</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">TNERC policy reversal</td><td style="padding:6px 10px;">Regulatory changes can eliminate OA concession, add new levies, or restrict group captive rules</td><td style="padding:6px 10px;">Sign 25-year PSAs. Lobby through ISMA/industry bodies. Diversify customer categories.</td></tr>
+            <tr style="background:#FFF1F2;"><td style="padding:6px 10px;font-weight:700;">Climate extremes</td><td style="padding:6px 10px;">10-year cloud cover anomalies, cyclones, dust storms — no model predicts with certainty</td><td style="padding:6px 10px;">Use P90 irradiation data (not P50) for conservative projections. Keep 3-month O&M reserve fund.</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Industrial slowdown</td><td style="padding:6px 10px;">Recession hits your customers — they reduce shifts, consume less, ask to exit PSAs</td><td style="padding:6px 10px;">Customer mix diversification (Pillar 3). Exit penalty clauses in PSA. IEX as backup offtake.</td></tr>
+            <tr style="background:#FFF1F2;"><td style="padding:6px 10px;font-weight:700;">Technology disruption</td><td style="padding:6px 10px;">Battery storage becomes cheap enough that customers prefer own rooftop — your PSA customers may not renew</td><td style="padding:6px 10px;">Build 25-year PSAs with renewal options. Stay ahead — offer battery storage add-ons yourself.</td></tr>
+            <tr><td style="padding:6px 10px;font-weight:700;">Module degradation surprise</td><td style="padding:6px 10px;">Manufacturer warranty claims are valid but enforcement is difficult if company exits India</td><td style="padding:6px 10px;">Buy from Tier 1 manufacturers with Indian presence. Insist on bankable warranties. Get module insurance.</td></tr>
+          </table>
+        </div>
+        <div style="background:#FFF1F2;border-radius:7px;padding:11px 13px;margin-top:10px;font-size:12.5px;border:1px solid #FECDD3;">
+          <strong style="color:#9B1C1C;">The right mindset:</strong> You cannot eliminate imponderable risk. You can only build a project so robust that it survives even when two or three imponderables happen simultaneously. <strong>Low debt, diversified customers, fixed interest rate, and strong PSA contracts</strong> — these four together give your project the immune system it needs to survive what the model cannot predict.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ══════════════════════════════════════════════════
        PILLAR 3 — CUSTOMER MIX
   ═══════════════════════════════════════════════════════ -->
   <div class="card" style="margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,#7C2D12,#9A3412);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb3')">
+    <div style="background:linear-gradient(135deg,#7C2D12,#9A3412);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb4')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏭</div>
         <div>
-          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 3 — Right Mix of Customers</div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 4 — Right Mix of Customers</div>
           <div style="font-size:12px;color:#FED7AA;margin-top:2px;">Industrial, Commercial, Exchange — why diversification protects your revenue</div>
         </div>
       </div>
-      <div id="vb3-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+      <div id="vb4-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
     </div>
-    <div id="vb3" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+    <div id="vb4" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
 
       <div style="border-left:3px solid #9A3412;padding:10px 14px;background:#FFF7ED;border-radius:0 8px 8px 0;margin-bottom:12px;">
         <div style="font-weight:700;color:#9A3412;margin-bottom:5px;font-size:13.5px;">Q. Why not just find one large industrial customer and sign a full 20 MW PSA?</div>
@@ -23865,17 +24021,17 @@ input[id$="-num"]:hover {
        PILLAR 4 — ACTUAL vs PROJECTED MONITORING
   ═══════════════════════════════════════════════════════ -->
   <div class="card" style="margin-bottom:14px;">
-    <div style="background:linear-gradient(135deg,#4A1D96,#5B21B6);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb4')">
+    <div style="background:linear-gradient(135deg,#4A1D96,#5B21B6);border-radius:10px 10px 0 0;padding:14px 18px;margin:-16px -16px 16px -16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;" onclick="vbToggle('vb5')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="background:rgba(255,255,255,0.15);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📊</div>
         <div>
-          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 4 — Actual vs Projected Monitoring</div>
+          <div style="font-size:15px;font-weight:700;color:#fff;">Pillar 5 — Actual vs Projected Monitoring</div>
           <div style="font-size:12px;color:#DDD6FE;margin-top:2px;">Constant comparison: generation, cash flow, deviations — and acting on them</div>
         </div>
       </div>
-      <div id="vb4-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
+      <div id="vb5-icon" style="color:#fff;font-size:20px;font-weight:700;flex-shrink:0;">＋</div>
     </div>
-    <div id="vb4" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
+    <div id="vb5" style="display:none;font-family:'Inter',sans-serif;font-size:13px;color:#1F2937;line-height:1.75;">
 
       <div style="border-left:3px solid #5B21B6;padding:10px 14px;background:#F5F3FF;border-radius:0 8px 8px 0;margin-bottom:12px;">
         <div style="font-weight:700;color:#5B21B6;margin-bottom:5px;font-size:13.5px;">Q. Why is monitoring actual vs projected so critical?</div>
@@ -23934,6 +24090,9 @@ input[id$="-num"]:hover {
         <div style="background:#DCFCE7;border-radius:8px;padding:12px;border-left:4px solid #1A7A4A;">
           <div style="font-weight:700;color:#1A7A4A;margin-bottom:6px;">✔ Strong Viability Signals</div>
           <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+            <li><strong>Debt ≤ 65% of total project cost</strong></li>
+            <li>Interest rate fixed at financial closure</li>
+            <li>No personal guarantee — project assets as security only</li>
             <li>EPC cost ≤ Rs 3.5 Cr/MW (AC basis)</li>
             <li>Commissioning within 10 months</li>
             <li>≥3 customers, no single customer &gt;50%</li>
@@ -23946,6 +24105,9 @@ input[id$="-num"]:hover {
         <div style="background:#FEE2E2;border-radius:8px;padding:12px;border-left:4px solid #B91C1C;">
           <div style="font-weight:700;color:#B91C1C;margin-bottom:6px;">✘ Red Flags — Act Immediately</div>
           <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+            <li><strong>Debt above 75% of project cost</strong></li>
+            <li>Personal or corporate guarantee given</li>
+            <li>Floating interest rate — not fixed</li>
             <li>Single customer &gt;60% of allocation</li>
             <li>No advance or equity from customer</li>
             <li>Delay beyond 14 months to commission</li>
@@ -23958,6 +24120,7 @@ input[id$="-num"]:hover {
         <div style="background:#FEF9C3;border-radius:8px;padding:12px;border-left:4px solid #D97706;">
           <div style="font-weight:700;color:#92400E;margin-bottom:6px;">⚠ Watch Closely</div>
           <ul style="margin:0;padding-left:16px;color:#374151;line-height:1.8;">
+            <li>Debt between 65–75% — watch DSCR closely</li>
             <li>IEX price below Rs 4/kWh &gt;2 months</li>
             <li>TNERC tariff revision pending</li>
             <li>Module degradation above 0.8%/yr</li>
@@ -24994,14 +25157,14 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
   <!-- ══ HELP BUTTON + INFO STRIP ═══════════════════════════ -->
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-    <button onclick="saHelpOpen()" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1B2A4A,#243B6E);color:#C8973A;border:none;border-radius:10px;padding:11px 20px;font-size:13.5px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(27,42,74,0.25);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
-      ❓ How to Use This Page
+    <button onclick="saHelpOpen()" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#1B2A4A,#243B6E);color:#C8973A;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(27,42,74,0.25);transition:opacity .15s;" onmouseover="this.style.opacity='.88'" onmouseout="this.style.opacity='1'">
+      &#128218; Page Guide
     </button>
     <div style="flex:1;background:#EEF2FA;border-left:3px solid #C8973A;border-radius:0 8px 8px 0;padding:9px 14px;font-size:12.5px;color:#374151;font-family:'Inter',sans-serif;">
       <strong style="color:#1B2A4A;">Quick guide:</strong> Drag sliders or type values → charts update live. 
       The <span style="color:#9B1C1C;font-weight:700;">Break-Even Threshold</span> column shows the danger line — cross it and your bank loan becomes unviable. 
       <strong>Payback</strong> = equity payback year (not capex payback). 
-      Click <strong>❓ How to Use This Page</strong> for the full guide.
+      Click <strong>📖 Page Guide</strong> for the full guide.
     </div>
   </div>
 
@@ -25351,11 +25514,11 @@ Annual compliance certificate due to TNPDCL by 30 April each year.</textarea>
 
   <!-- ══ BREAK-EVEN THRESHOLD CARD ═══════════════════════════ -->
   <div class="card" id="sa-be-card" style="scroll-margin-top:60px;">
-    <div class="chdr" style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-      <span>&#128680; C2. Break-Even Thresholds — Danger Line per Variable</span>
-      <div style="display:flex;gap:6px;align-items:center;">
-        <button onclick="beHelpOpen()" title="How to read this table" style="background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:50%;width:28px;height:28px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;line-height:1;" aria-label="Help">?</button>
-        <button onclick="exportBEtoCSV()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;">&#128196; Export CSV</button>
+    <div class="chdr" style="background:linear-gradient(135deg,#1B2A4A,#9B1C1C);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:nowrap;">
+      <span style="flex:1;min-width:0;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">&#128680; C2. Break-Even Thresholds</span>
+      <div style="display:flex;gap:5px;align-items:center;flex-shrink:0;">
+        <button onclick="beHelpOpen()" title="How to read this table" style="background:rgba(255,255,255,0.18);color:#fff;border:1px solid rgba(255,255,255,0.35);border-radius:6px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;">&#128218; Guide</button>
+        <button onclick="exportBEtoCSV()" style="background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:6px;padding:4px 9px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;white-space:nowrap;">&#128196; CSV</button>
       </div>
     </div>
     <div class="fhint" style="background:#FEF2F2;border-left:3px solid #9B1C1C;border-radius:0 6px 6px 0;padding:8px 12px;margin-bottom:10px;font-size:12.5px;color:#1F2937;">
@@ -25748,6 +25911,7 @@ function go(id){
   closeD();
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='ca')buildActualCustRows();
+  if(id==='vb')syncVBPage();
   if(id==='gd'){buildGenDetails();}
   if(id==='pnl'||id==='rat'){buildPnLBS();}
   if(id==='ci'||id==='cs'||id==='cc')calcCustomer();
@@ -28122,7 +28286,7 @@ function vbToggle(id){
   if(!el) return;
   const isOpen = el.style.display !== 'none';
   // Close all pillars
-  ['vb1','vb2','vb3','vb4'].forEach(pid=>{
+  ['vb1','vb2','vb3','vb4','vb5'].forEach(pid=>{
     const p=document.getElementById(pid);
     const ic=document.getElementById(pid+'-icon');
     if(p){ p.style.display='none'; }
@@ -28296,6 +28460,45 @@ function syncSABase(){
   // If SA page is currently open, run a live refresh (charts + BE table)
   if(typeof currentPage !== 'undefined' && currentPage === 'sa'){
     runSA();
+  }
+  // Always update Viability page live metrics
+  syncVBPage();
+}
+
+/* ── syncVBPage: update live metrics on Viability page ── */
+function syncVBPage(){
+  const df   = gv('df');
+  const ac   = gv('ac');
+  const ir   = gv('ir');
+  const sCap = gv('epc')+gv('land')+gv('evac')+gv('misc');
+  const bCap = (document.getElementById('i-batt')&&document.getElementById('i-batt').value==='1')?gv('bmwh')*gv('bc'):0;
+  const tCap = sCap+bCap;
+  const dAmt = tCap*(df/100);
+  const ap   = dAmt/Math.max(1,gv('tn')-gv('moro'));
+  const kwac = Math.round(ac*1000);
+  const plf  = gv('plf'), tloss=gv('tloss'), deg1=gv('deg1')/100;
+  const taresc=gv('taresc')/100, oaesc=gv('oaesc')/100, ome=gv('ome')/100;
+  const sp1  = saBaseCalcSP(), oa=gv('oa');
+  const om1  = sCap*gv('om')/100, ins1=sCap*gv('ins')/100;
+  const net2 = kwac*(plf/100)*8760*(1-deg1)*(1-tloss/100);
+  const ebd2 = net2*(sp1*(1+taresc)-oa*(1+oaesc))/1e7 - om1*(1+ome) - ins1*1.03;
+  const ds2  = dAmt*(ir/100)+ap;
+  const dscr2= ds2>0 ? (ebd2/ds2).toFixed(2)+'×' : '—';
+  // Debt status colour
+  const dfCol = df<=65?'#4ADE80':df<=75?'#FCD34D':'#F87171';
+  const dscrCol = parseFloat(dscr2)>=1.40?'#4ADE80':parseFloat(dscr2)>=1.20?'#FCD34D':'#F87171';
+  const set=(id,val,col)=>{const e=document.getElementById(id);if(e){e.textContent=val;if(col)e.style.color=col;}};
+  set('vb-live-df',   df.toFixed(0)+'%', dfCol);
+  set('vb-live-ac',   ac+' MW AC', '#C8973A');
+  set('vb-live-ir',   ir+'% p.a.', '#C8973A');
+  set('vb-live-dscr', dscr2, dscrCol);
+  set('vb-live-capex','Rs '+tCap.toFixed(1)+' Cr', '#C8973A');
+  // Update the EIL Rule of Thumb in Pillar 1 debt section with live values
+  const debtRisk = df<=65?'✔ Within safe range':df<=75?'⚠ Watch — approaching danger':'✘ Above danger zone';
+  const drEl = document.getElementById('vb-debt-status');
+  if(drEl){
+    drEl.textContent = debtRisk;
+    drEl.style.color = dfCol;
   }
 }
 
